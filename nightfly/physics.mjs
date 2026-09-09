@@ -4,6 +4,9 @@ export const TAU=Math.PI*2, LIFT_ANGLE=-28*Math.PI/180;
 // mainAngle is ONLY the additional powered swing around the boom-mounted axis.
 // Zero therefore means no artificial lateral lean in ride position.
 export const RIDE_LIFT=1, MAX_LIFT=1, HOLD_ANGLE=Math.PI, INVERSION_THRESHOLD=181*Math.PI/180, MAX_COMMAND=220*Math.PI/180;
+// The real machine must keep a recognisable pendulum character. These caps stop
+// the inversion programme from becoming an unrealistic continuously accelerating spinner.
+export const MAX_MAIN_RATE=78*Math.PI/180, CRUISE_INVERSION_RATE=64*Math.PI/180;
 export const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 export const wrap=v=>Math.atan2(Math.sin(v),Math.cos(v));
 const add=(a,b)=>a.map((v,i)=>v+b[i]),sub=(a,b)=>a.map((v,i)=>v-b[i]),mul=(a,s)=>a.map(v=>v*s),dot=(a,b)=>a.reduce((n,v,i)=>n+v*b[i],0);
@@ -19,7 +22,7 @@ export class RidePhysics{
  get safeAmplitude(){return MAX_COMMAND;}
  get swingMode(){const a=Math.min(Math.abs(this.amplitude),MAX_COMMAND);if(Math.abs(a-HOLD_ANGLE)<=.5*Math.PI/180)return 'hold';if(a>=INVERSION_THRESHOLD)return 'invert';return 'swing';}
  setLift(target){target=clamp(target,0,MAX_LIFT);if(target<RIDE_LIFT-.035&&(this.swingOn||this.spinOn||Math.abs(this.mainAngle)>.015||Math.abs(wrap(this.spinAngle))>.015||this.gondolas.some(g=>Math.abs(wrap(g.angle))>.025))){this.parking=true;this.afterPark=target;this.swingOn=false;this.spinOn=false;this.inverting=false;}else{this.liftTarget=target;this.parking=false;}}
- setSwing(on){if(on&&!this.canDrive)return false;this.swingOn=on;if(on){this.phase=0;this.swingEnvelope=Math.min(Math.abs(this.mainAngle),170*Math.PI/180);this.inverting=false;}return true;}
+ setSwing(on){if(on&&!this.canDrive)return false;this.swingOn=on;if(on){this.phase=0;this.swingEnvelope=Math.min(Math.abs(wrap(this.mainAngle)),170*Math.PI/180);this.inverting=false;}return true;}
  setSpin(on){if(on&&!this.canDrive)return false;this.spinOn=on;return true;}
  setBrakes(brake){if(this.parking)return;for(const g of this.gondolas)g.brake=brake;}
  liftAngle(){return LIFT_ANGLE*this.lift;}
@@ -34,38 +37,43 @@ export class RidePhysics{
   const command=Math.min(Math.abs(this.amplitude),MAX_COMMAND),mode=this.swingMode;
   const prevMain=this.mainVelocity;
   if(this.parking||!this.swingOn){
-   this.inverting=false;this.swingEnvelope=approach(this.swingEnvelope,0,35*Math.PI/180*dt);
-   this.mainAccel=clamp(-this.mainAngle*9-this.mainVelocity*6,-4.6,4.6);
+   this.inverting=false;this.swingEnvelope=approach(this.swingEnvelope,0,28*Math.PI/180*dt);
+   this.mainAccel=clamp(-wrap(this.mainAngle)*7.5-this.mainVelocity*5.4,-2.5,2.5);
   }else if(mode==='hold'){
-   this.inverting=false;this.swingEnvelope=approach(this.swingEnvelope,HOLD_ANGLE,30*Math.PI/180*dt);
-   // Hold the nearest upside-down equivalent so a running inversion does not rewind multiple turns.
+   this.inverting=false;this.swingEnvelope=approach(this.swingEnvelope,HOLD_ANGLE,24*Math.PI/180*dt);
    const holdTarget=HOLD_ANGLE+Math.round((this.mainAngle-HOLD_ANGLE)/TAU)*TAU;
-   this.mainAccel=clamp((holdTarget-this.mainAngle)*8-this.mainVelocity*5.5,-5.2,5.2);
+   this.mainAccel=clamp((holdTarget-this.mainAngle)*6.5-this.mainVelocity*5.2,-2.8,2.8);
   }else if(mode==='invert'){
    if(!this.inverting){
-    // First build a recognisable swing. Only after enough energy is present do we pass the top dead centre.
+    // Pump like a real swing first. The drive adds energy near the bottom, rather
+    // than commanding a huge positional jump to an angle above 180 degrees.
     const pumpLimit=170*Math.PI/180;
-    this.swingEnvelope=approach(this.swingEnvelope,pumpLimit,18*Math.PI/180*dt);
-    this.phase+=dt*this.swingSpeed/Math.max(.25,this.swingEnvelope);
+    this.swingEnvelope=approach(this.swingEnvelope,pumpLimit,14*Math.PI/180*dt);
+    this.phase+=dt*this.swingSpeed/Math.max(.30,this.swingEnvelope);
     const target=this.swingEnvelope*Math.sin(this.phase);
-    this.mainAccel=clamp((target-this.mainAngle)*9-this.mainVelocity*4.5,-4.8,4.8);
-    if(this.swingEnvelope>164*Math.PI/180&&this.mainAngle>150*Math.PI/180&&this.mainVelocity>0){this.inverting=true;this.mainVelocity=Math.max(this.mainVelocity,Math.max(this.swingSpeed*1.8,55*Math.PI/180));}
+    this.mainAccel=clamp((target-this.mainAngle)*7.2-this.mainVelocity*4.6,-2.6,2.6);
+    if(this.swingEnvelope>164*Math.PI/180&&wrap(this.mainAngle)>148*Math.PI/180&&this.mainVelocity>24*Math.PI/180){
+      this.inverting=true;
+      this.mainVelocity=Math.max(this.mainVelocity,50*Math.PI/180);
+    }
    }else{
-    // Once over the top, gravity still acts as a pendulum restoring torque while the drive supplies just enough energy to keep full rotations going.
-    const desiredRate=clamp(this.swingSpeed*2.25,55*Math.PI/180,125*Math.PI/180);
-    const gravity=-1.35*Math.sin(wrap(this.mainAngle));
-    const motor=clamp((desiredRate-this.mainVelocity)*1.8,-2.8,2.8);
-    this.mainAccel=clamp(gravity+motor-.055*this.mainVelocity,-5.5,5.5);
+    // After passing top dead centre, gravity remains dominant. The motor only
+    // replaces losses and gently regulates a realistic full-loop speed.
+    const requested=clamp(this.swingSpeed*1.55,56*Math.PI/180,72*Math.PI/180);
+    const desiredRate=Math.min(requested,CRUISE_INVERSION_RATE+(command-INVERSION_THRESHOLD)*.08);
+    const gravity=-1.15*Math.sin(wrap(this.mainAngle));
+    const motor=clamp((desiredRate-this.mainVelocity)*.85,-1.15,1.15);
+    this.mainAccel=clamp(gravity+motor-.10*this.mainVelocity,-2.25,2.25);
    }
   }else{
    this.inverting=false;
-   // Normal ride programme: slowly build the requested amplitude instead of teleporting to it.
-   this.swingEnvelope=approach(this.swingEnvelope,command,22*Math.PI/180*dt);
-   this.phase+=dt*this.swingSpeed/Math.max(.20,this.swingEnvelope);
+   this.swingEnvelope=approach(this.swingEnvelope,command,18*Math.PI/180*dt);
+   this.phase+=dt*this.swingSpeed/Math.max(.24,this.swingEnvelope);
    const target=this.swingEnvelope*Math.sin(this.phase);
-   this.mainAccel=clamp((target-this.mainAngle)*9.5-this.mainVelocity*5,-4.4,4.4);
+   this.mainAccel=clamp((target-this.mainAngle)*8-this.mainVelocity*4.8,-2.5,2.5);
   }
-  this.mainVelocity+=this.mainAccel*dt;this.mainAngle+=this.mainVelocity*dt;this.mainAccel=(this.mainVelocity-prevMain)/dt;
+  this.mainVelocity=clamp(this.mainVelocity+this.mainAccel*dt,-MAX_MAIN_RATE,MAX_MAIN_RATE);
+  this.mainAngle+=this.mainVelocity*dt;this.mainAccel=(this.mainVelocity-prevMain)/dt;
   if(Math.abs(this.mainAngle)>TAU*12)this.mainAngle=wrap(this.mainAngle);
 
   let wantSpin=this.spinOn?this.spinRPM*TAU/60:0;if(this.parking)wantSpin=clamp(-wrap(this.spinAngle)*1.7,-.8,.8);
@@ -87,7 +95,7 @@ export class RidePhysics{
    const acceleration=clamp(dot(rq,effective)/(length*length)-.28*g.velocity,-90,90);
    g.velocity=clamp(g.velocity+acceleration*dt,-18,18);g.angle+=g.velocity*dt;if(Math.abs(g.angle)>Math.PI*20)g.angle=wrap(g.angle);
   }
-  if(this.parking&&Math.abs(this.mainAngle)<.008&&Math.abs(this.mainVelocity)<.014&&Math.abs(wrap(this.spinAngle))<.008&&Math.abs(this.spinVelocity)<.014&&this.gondolas.every(g=>Math.abs(wrap(g.angle))<.012&&Math.abs(g.velocity)<.02)){
+  if(this.parking&&Math.abs(wrap(this.mainAngle))<.008&&Math.abs(this.mainVelocity)<.014&&Math.abs(wrap(this.spinAngle))<.008&&Math.abs(this.spinVelocity)<.014&&this.gondolas.every(g=>Math.abs(wrap(g.angle))<.012&&Math.abs(g.velocity)<.02)){
    this.mainAngle=0;this.mainVelocity=0;this.spinAngle=0;this.spinVelocity=0;for(const g of this.gondolas){g.angle=0;g.velocity=0;g.brake=true;}this.parking=false;this.liftTarget=this.afterPark;
   }
  }
