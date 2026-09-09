@@ -1,8 +1,9 @@
 // Z-up articulated ride model. Fixed timestep; simplified rigid pendulum dynamics.
 export const TAU=Math.PI*2, LIFT_ANGLE=-28*Math.PI/180;
-// The real ride position is intentionally a little off vertical. Together with
-// the amplitude limit this also keeps the arm away from a visually exact 90° pose.
-export const RIDE_TILT=6*Math.PI/180, MAX_SIDE_ANGLE=86*Math.PI/180;
+// Photo-reference ride position: the lifting boom does not travel to a perfectly
+// upright/full-stroke pose. It stops slightly short, leaving the whole mechanism
+// visibly inclined as on the real Pegasus 16.
+export const RIDE_LIFT=.88, MAX_LIFT=.90, MAX_SIDE_ANGLE=86*Math.PI/180;
 export const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 export const wrap=v=>Math.atan2(Math.sin(v),Math.cos(v));
 const add=(a,b)=>a.map((v,i)=>v+b[i]),sub=(a,b)=>a.map((v,i)=>v-b[i]),mul=(a,s)=>a.map(v=>v*s),dot=(a,b)=>a.reduce((n,v,i)=>n+v*b[i],0);
@@ -14,9 +15,9 @@ const approach=(a,b,step)=>a+clamp(b-a,-step,step);
 export class RidePhysics{
  constructor(origins){this.origins=origins;this.reset();}
  reset(){this.lift=0;this.liftVelocity=0;this.liftTarget=0;this.mainAngle=0;this.mainVelocity=0;this.mainAccel=0;this.spinAngle=0;this.spinVelocity=0;this.spinAccel=0;this.phase=0;this.swingOn=false;this.spinOn=false;this.amplitude=78*Math.PI/180;this.swingSpeed=20*Math.PI/180;this.spinRPM=6;this.parking=false;this.afterPark=0;this.time=0;this.gondolas=Array.from({length:4},()=>({angle:0,velocity:0,brake:true,previous:null,prevVelocity:[0,0,0],acc:[0,0,0]}));}
- get canDrive(){return this.lift>.94&&!this.parking;}
- get safeAmplitude(){return Math.max(0,MAX_SIDE_ANGLE-Math.abs(RIDE_TILT));}
- setLift(target){target=clamp(target,0,1);if(target<.95&&(this.swingOn||this.spinOn||Math.abs(this.mainAngle)>.015||Math.abs(wrap(this.spinAngle))>.015||this.gondolas.some(g=>Math.abs(wrap(g.angle))>.025))){this.parking=true;this.afterPark=target;this.swingOn=false;this.spinOn=false;}else{this.liftTarget=target;this.parking=false;}}
+ get canDrive(){return this.lift>RIDE_LIFT-.035&&!this.parking;}
+ get safeAmplitude(){return MAX_SIDE_ANGLE;}
+ setLift(target){target=clamp(target,0,MAX_LIFT);if(target<RIDE_LIFT-.035&&(this.swingOn||this.spinOn||Math.abs(this.mainAngle)>.015||Math.abs(wrap(this.spinAngle))>.015||this.gondolas.some(g=>Math.abs(wrap(g.angle))>.025))){this.parking=true;this.afterPark=target;this.swingOn=false;this.spinOn=false;}else{this.liftTarget=target;this.parking=false;}}
  setSwing(on){if(on&&!this.canDrive)return false;this.swingOn=on;if(on)this.phase=0;return true;}
  setSpin(on){if(on&&!this.canDrive)return false;this.spinOn=on;return true;}
  setBrakes(brake){if(this.parking)return;for(const g of this.gondolas)g.brake=brake;}
@@ -24,20 +25,17 @@ export class RidePhysics{
  support(k){const local=sub(this.origins['gondola'+k],this.origins.crown);return add(this.pivot(),ry(add(sub(this.origins.crown,this.origins.rotor),rz(local,this.spinAngle)),this.mainAngle));}
  step(dt){
   this.time+=dt;
-  const desiredLift=clamp((this.liftTarget-this.lift)*1.9,-.18,.18);this.liftVelocity=approach(this.liftVelocity,desiredLift,.30*dt);this.lift=clamp(this.lift+this.liftVelocity*dt,0,1);
+  const desiredLift=clamp((this.liftTarget-this.lift)*1.9,-.18,.18);this.liftVelocity=approach(this.liftVelocity,desiredLift,.30*dt);this.lift=clamp(this.lift+this.liftVelocity*dt,0,MAX_LIFT);
   if(Math.abs(this.liftTarget-this.lift)<.0002&&Math.abs(this.liftVelocity)<.002){this.lift=this.liftTarget;this.liftVelocity=0;}
   if(this.swingOn&&!this.canDrive)this.swingOn=false;if(this.spinOn&&!this.canDrive)this.spinOn=false;
   if(this.swingOn)this.phase+=dt*this.swingSpeed/Math.max(.1,Math.min(this.amplitude,this.safeAmplitude));
-  const center=this.canDrive?RIDE_TILT:0;
   const amplitude=Math.min(Math.abs(this.amplitude),this.safeAmplitude);
-  const target=this.parking?0:center+(this.swingOn?amplitude*Math.sin(this.phase):0);
+  const target=this.parking?0:(this.swingOn?amplitude*Math.sin(this.phase):0);
   const prevMain=this.mainVelocity;this.mainAccel=clamp((target-this.mainAngle)*10-this.mainVelocity*6,-1.9,1.9);this.mainVelocity+=this.mainAccel*dt;this.mainAngle+=this.mainVelocity*dt;this.mainAccel=(this.mainVelocity-prevMain)/dt;
-  // Hard safety envelope: even aggressive slider/programmatic values cannot drive
-  // the arm into/through the exact horizontal 90° pose.
   if(!this.parking&&this.canDrive){const bounded=clamp(this.mainAngle,-MAX_SIDE_ANGLE,MAX_SIDE_ANGLE);if(bounded!==this.mainAngle){this.mainAngle=bounded;this.mainVelocity=0;}}
   let wantSpin=this.spinOn?this.spinRPM*TAU/60:0;if(this.parking)wantSpin=clamp(-wrap(this.spinAngle)*1.7,-.8,.8);
   const prevSpin=this.spinVelocity;this.spinVelocity=approach(this.spinVelocity,wantSpin,.42*dt);this.spinAngle+=this.spinVelocity*dt;this.spinAccel=(this.spinVelocity-prevSpin)/dt;
-  // Main arm now swings around world Y (side-to-side in the front camera), while
+  // Main arm swings around world Y (side-to-side in the front camera), while
   // the gondola carrier continues to rotate around the arm's local Z axis.
   const axisSpin=ry([0,0,this.spinVelocity],this.mainAngle);const omega=add([0,this.mainVelocity,0],axisSpin);const alpha=add(add([0,this.mainAccel,0],ry([0,0,this.spinAccel],this.mainAngle)),cross([0,this.mainVelocity,0],axisSpin));
   for(let k=0;k<4;k++){
