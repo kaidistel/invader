@@ -14,7 +14,7 @@ function enlargeRearClearance(){
  const root=window.nightfly?.groups?.static;
  if(!root){requestAnimationFrame(enlargeRearClearance);return;}
  for(const mesh of root.children){
-  if(mesh.name?.startsWith('Scenery_')){mesh.position.y+=2.35;mesh.scale.x*=1.14;}
+  if(mesh.name?.includes('Scenery_')){mesh.position.y+=2.35;mesh.scale.x*=1.14;}
  }
 }
 enlargeRearClearance();
