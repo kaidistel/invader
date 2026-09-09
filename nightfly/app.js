@@ -53,11 +53,10 @@ function enhanceGondolas(){
 function syncPose(){
  const liftAngle=LIFT_ANGLE*engine.lift;
  groups.lift.rotation.x=liftAngle;
- // Cancel the lifting boom's parent rotation, then apply the powered swing axis
- // in world Y. In ride hold this axis itself stays at the fixed angled position.
- const parentQ=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),liftAngle);
- const desiredQ=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),engine.mainAngle);
- groups.rotor.quaternion.copy(parentQ.invert().multiply(desiredQ));
+ // Pegasus 16 geometry: the swing axle is rigidly mounted to the lifting boom.
+ // Do NOT cancel the parent's X rotation. Local Y therefore tilts together with
+ // the boom and the long arm naturally sits oblique in the raised ride pose.
+ groups.rotor.rotation.set(0,engine.mainAngle,0);
  groups.crown.rotation.z=engine.spinAngle;
  for(let k=0;k<4;k++)groups['gondola'+k].quaternion.setFromAxisAngle(hingeVectors[k],engine.gondolas[k].angle);
  scene.updateMatrixWorld(true);
@@ -72,7 +71,7 @@ function syncUI(){
  let count=0;for(let k=0;k<4;k++){const g=engine.gondolas[k];if(g.brake)count++;$('gangle'+k).textContent=`${Math.round(deg(wrap(g.angle)))}°`;$('gbrake'+k).textContent=g.brake?'Fest':'Frei';$('gbrake'+k).classList.toggle('free',!g.brake);$('gbrake'+k).setAttribute('aria-pressed',String(g.brake));$('gbrake'+k).disabled=engine.parking;}
  $('brake-count').textContent=`${count} / 4 fest`;$('brake').textContent=count===4?'Alle Gondeln freigeben':'Alle Gondeln bremsen';$('brake').classList.toggle('released',count<4);
  $('mode').textContent=paused?'Simulation pausiert':engine.parking?'Richtet sich zur Beladung aus':engine.lift<.01?'Ladeposition':!engine.canDrive?'Hubarm bewegt sich':engine.swingOn||engine.spinOn?'Fahrt läuft':'Fahrposition';
- $('lift-hint').textContent=engine.parking?'Schaukelachse auf 0°, Gondeln ausrichten, dann absenken.':engine.canDrive?'Fahrposition erreicht – die Schaukelachse hält den Hauptarm schräg.':'Zum Starten zuerst in Fahrposition anheben.';
+ $('lift-hint').textContent=engine.parking?'Schaukelbewegung neutralisieren, Gondeln ausrichten, dann absenken.':engine.canDrive?'Fahrposition erreicht – die Schaukelachse bleibt starr am geneigten Hubarm.':'Zum Starten zuerst in Fahrposition anheben.';
 }
 function setCamera(preset){cameraPreset=preset;document.querySelectorAll('[data-camera]').forEach(b=>b.classList.toggle('selected',b.dataset.camera===preset));const center=groups.crown?groups.crown.getWorldPosition(new THREE.Vector3()):new THREE.Vector3(0,-2.8,2.4);
  if(preset==='front'){camera.position.set(0,-32,10);orbit.target.set(0,-1,6);}else if(preset==='seats'){camera.position.copy(center).add(new THREE.Vector3(5.2,-7.5,3.8));orbit.target.copy(center);}else{camera.position.set(17,-29,16);orbit.target.set(0,-1.5,5.5);}orbit.update();}
