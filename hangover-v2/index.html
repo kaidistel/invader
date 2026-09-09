@@ -20,6 +20,10 @@
 <div id="dataPanel" class="panel left"><div class="section"><h3>Live telemetry</h3><div class="grid"><div class="metric"><span>Höhe</span><b id="height">3.2 m</b></div><div class="metric"><span>Speed</span><b id="speed">0.0 m/s</b></div><div class="metric"><span>G-Force</span><b id="gforce">1.00 g</b></div><div class="metric"><span>Rotation</span><b id="rpm">1.2 rpm</b></div></div></div><div class="section"><h3>Systems</h3><div class="row"><span><i class="lamp on"></i> PLC</span><b>READY</b></div><div class="row"><span><i id="restLamp" class="lamp"></i> Bügelkreis</span><b id="restTxt">OPEN</b></div><div class="row"><span><i id="brakeLamp" class="lamp on"></i> Magnetbremse</span><b id="brakeTxt">READY</b></div></div><div class="section"><h3>Kamera</h3><select id="cameraSel"><option value="orbit">Freie Kamera</option><option value="ground">Bodenansicht</option><option value="onride">Onride</option><option value="tower">Turmkamera</option></select></div></div>
 <div id="controlPanel" class="panel right"><div class="section"><h3>Operator panel</h3><div class="controls"><button id="lock">Bügel schließen</button><button id="unlock">Bügel öffnen</button><button id="cycle" class="primary full">Automatikzyklus starten</button><button id="lift">Lift manuell</button><button id="drop">Drop freigeben</button><button id="return">Return</button><button id="rotate">Rotation</button><button id="estop" class="danger full">NOT-AUS</button></div></div><div class="section"><h3>Parameter</h3><div class="row"><span>Top Hold</span><b id="holdVal">2.5 s</b></div><input id="hold" type="range" min="0.5" max="8" step="0.5" value="2.5"><div class="row"><span>Lift Speed</span><b id="liftVal">1.9 m/s</b></div><input id="liftSpeed" type="range" min="0.7" max="3.2" step="0.1" value="1.9"><div class="row"><span>Rotation</span><b id="rotVal">1.2 rpm</b></div><input id="rotSpeed" type="range" min="0" max="2.5" step="0.1" value="1.2"></div></div>
 <div class="bottom"><button data-cam="orbit">ORBIT</button><button data-cam="ground">GROUND</button><button data-cam="onride">ONRIDE</button><button data-cam="tower">TOWER</button><button id="resetView">RESET</button></div>
-<script type="module" src="./app.js"></script>
+<script type="module">
+import './capture.js';
+import './app.js';
+import './gondola-detail.js';
+</script>
 </body>
 </html>
