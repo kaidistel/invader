@@ -16,12 +16,12 @@ export const rz=(v,a)=>[v[0]*Math.cos(a)-v[1]*Math.sin(a),v[0]*Math.sin(a)+v[1]*
 const approach=(a,b,step)=>a+clamp(b-a,-step,step);
 export class RidePhysics{
  constructor(origins){this.origins=origins;this.reset();}
- reset(){this.lift=0;this.liftVelocity=0;this.liftTarget=0;this.mainAngle=0;this.mainVelocity=0;this.mainAccel=0;this.spinAngle=0;this.spinVelocity=0;this.spinAccel=0;this.phase=0;this.swingEnvelope=0;this.inverting=false;this.inversionStart=0;this.swingOn=false;this.spinOn=false;this.amplitude=78*Math.PI/180;this.swingSpeed=20*Math.PI/180;this.spinRPM=6;this.parking=false;this.afterPark=0;this.time=0;this.gondolas=Array.from({length:4},()=>({angle:0,velocity:0,brake:true,previous:null,prevVelocity:[0,0,0],acc:[0,0,0]}));}
+ reset(){this.lift=0;this.liftVelocity=0;this.liftTarget=0;this.mainAngle=0;this.mainVelocity=0;this.mainAccel=0;this.spinAngle=0;this.spinVelocity=0;this.spinAccel=0;this.phase=0;this.swingEnvelope=0;this.inverting=false;this.inversionStart=0;this.inversionArmed=true;this.swingOn=false;this.spinOn=false;this.amplitude=78*Math.PI/180;this.swingSpeed=20*Math.PI/180;this.spinRPM=6;this.parking=false;this.afterPark=0;this.time=0;this.gondolas=Array.from({length:4},()=>({angle:0,velocity:0,brake:true,previous:null,prevVelocity:[0,0,0],acc:[0,0,0]}));}
  get canDrive(){return this.lift>RIDE_LIFT-.035&&!this.parking;}
  get safeAmplitude(){return MAX_COMMAND;}
  get swingMode(){const a=Math.min(Math.abs(this.amplitude),MAX_COMMAND);if(Math.abs(a-HOLD_ANGLE)<=.5*Math.PI/180)return 'hold';if(a>=INVERSION_THRESHOLD)return 'invert';return 'swing';}
  setLift(target){target=clamp(target,0,MAX_LIFT);if(target<RIDE_LIFT-.035&&(this.swingOn||this.spinOn||Math.abs(wrap(this.mainAngle))>.015||Math.abs(wrap(this.spinAngle))>.015||this.gondolas.some(g=>Math.abs(wrap(g.angle))>.025))){this.parking=true;this.afterPark=target;this.swingOn=false;this.spinOn=false;this.inverting=false;}else{this.liftTarget=target;this.parking=false;}}
- setSwing(on){if(on&&!this.canDrive)return false;this.swingOn=on;if(on){this.phase=0;this.swingEnvelope=Math.min(Math.abs(wrap(this.mainAngle)),165*Math.PI/180);this.inverting=false;this.inversionStart=0;}return true;}
+ setSwing(on){if(on&&!this.canDrive)return false;this.swingOn=on;if(on){this.phase=0;this.swingEnvelope=Math.min(Math.abs(wrap(this.mainAngle)),165*Math.PI/180);this.inverting=false;this.inversionStart=0;this.inversionArmed=true;}return true;}
  setSpin(on){if(on&&!this.canDrive)return false;this.spinOn=on;return true;}
  setBrakes(brake){if(this.parking)return;for(const g of this.gondolas)g.brake=brake;}
  liftAngle(){return LIFT_ANGLE*this.lift;}
@@ -44,9 +44,6 @@ export class RidePhysics{
    this.mainAccel=clamp((holdTarget-this.mainAngle)*6.5-this.mainVelocity*5.2,-2.8,2.8);
   }else if(mode==='invert'){
    if(!this.inverting){
-    // Continue behaving like a swing between inversions. Work only with the
-    // wrapped physical arm orientation so a completed loop does not break the
-    // pendulum controller with a multi-turn positional error.
     const pumpLimit=166*Math.PI/180;
     this.swingEnvelope=approach(this.swingEnvelope,pumpLimit,18*Math.PI/180*dt);
     this.phase+=dt*this.swingSpeed/Math.max(.28,this.swingEnvelope);
@@ -55,15 +52,22 @@ export class RidePhysics{
     const error=wrap(target-localAngle);
     const pump=error*7.6-this.mainVelocity*4.35;
     this.mainAccel=clamp(pump,-2.85,2.85);
-    if(localAngle>138*Math.PI/180&&this.mainVelocity>18*Math.PI/180&&this.swingEnvelope>154*Math.PI/180){
+
+    // After a loop, force a visible return swing before another loop is allowed.
+    // Rearm only after the arm has travelled into the opposite half of the arc
+    // with a negative velocity, so the machine keeps its pendulum character.
+    if(!this.inversionArmed&&localAngle<-35*Math.PI/180&&this.mainVelocity<-10*Math.PI/180)this.inversionArmed=true;
+
+    if(this.inversionArmed&&localAngle>138*Math.PI/180&&this.mainVelocity>18*Math.PI/180&&this.swingEnvelope>154*Math.PI/180){
       this.inverting=true;
       this.inversionStart=this.mainAngle;
+      this.inversionArmed=false;
       this.mainVelocity=Math.max(this.mainVelocity,48*Math.PI/180);
     }
    }else{
     // One physical loop at a time. Gravity shapes the speed around the loop and
     // the drive only replaces losses. After 360 degrees, return to pendulum mode
-    // with the existing velocity instead of locking into permanent rotation.
+    // with the existing energy instead of locking into permanent rotation.
     const a=wrap(this.mainAngle);
     const desiredRate=clamp(CRUISE_INVERSION_RATE+(command-INVERSION_THRESHOLD)*.025,58*Math.PI/180,66*Math.PI/180);
     const gravity=-1.28*Math.sin(a);
@@ -74,9 +78,7 @@ export class RidePhysics{
       this.mainAngle=wrap(this.mainAngle);
       this.inverting=false;
       this.inversionStart=0;
-      // Keep most of the remaining energy so the machine visibly continues to
-      // pendulum after the loop; damping/motor control will shape the next arc.
-      this.mainVelocity*=.94;
+      this.mainVelocity*=.90;
       this.phase=Math.asin(clamp(this.mainAngle/Math.max(this.swingEnvelope,.25),-1,1));
     }
    }
