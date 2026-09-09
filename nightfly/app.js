@@ -26,7 +26,14 @@ function makeHydraulics(){for(const x of [-.72,.72]){
  }}
 function makeMarker(k){const canvas=document.createElement('canvas');canvas.width=canvas.height=96;const ctx=canvas.getContext('2d');ctx.fillStyle='#111a22';ctx.beginPath();ctx.arc(48,48,35,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#ffcd32';ctx.lineWidth=3;ctx.stroke();ctx.fillStyle='#ffcd32';ctx.font='bold 38px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(String(k+1),48,49);const tex=new THREE.CanvasTexture(canvas),sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,depthTest:false,transparent:true}));sprite.scale.set(.56,.56,.56);sprite.position.set(0,0,1.15);groups['gondola'+k].add(sprite);markers.push(sprite);}
 function syncPose(){
- groups.lift.rotation.x=LIFT_ANGLE*engine.lift;groups.rotor.rotation.x=engine.mainAngle-groups.lift.rotation.x;groups.crown.rotation.z=engine.spinAngle;
+ const liftAngle=LIFT_ANGLE*engine.lift;
+ groups.lift.rotation.x=liftAngle;
+ // The lift boom rotates around X, but the passenger arm must swing sideways in
+ // world space. Cancel the lift parent's rotation, then apply the desired world-Y tilt.
+ const parentQ=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),liftAngle);
+ const desiredQ=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),engine.mainAngle);
+ groups.rotor.quaternion.copy(parentQ.invert().multiply(desiredQ));
+ groups.crown.rotation.z=engine.spinAngle;
  for(let k=0;k<4;k++)groups['gondola'+k].quaternion.setFromAxisAngle(hingeVectors[k],engine.gondolas[k].angle);
  scene.updateMatrixWorld(true);
  for(const h of hydraulic){const b=groups.lift.localToWorld(h.tip.clone()),delta=b.clone().sub(h.a);const middle=h.a.clone().addScaledVector(delta,.58);positionBetween(h.barrel,h.a,middle);positionBetween(h.piston,middle,b);}
@@ -55,9 +62,9 @@ try{
 }catch(error){console.error(error);fail(error.message||'Bitte lade die Seite erneut.');}
 $('load').onclick=()=>{if(!ready)return;engine.setLift(0);$('lift').value=0;};$('ride').onclick=()=>{if(!ready)return;engine.setLift(1);$('lift').value=100;};$('lift').oninput=e=>{if(ready)engine.setLift(Number(e.target.value)/100);};
 $('swing').onclick=()=>{if(ready)engine.setSwing(!engine.swingOn);};$('spin').onclick=()=>{if(ready)engine.setSpin(!engine.spinOn);};$('brake').onclick=()=>{if(ready){engine.setBrakes(!engine.gondolas.every(g=>g.brake));syncUI();}};
-$('amplitude').oninput=e=>{const v=Number(e.target.value);$('amplitude-out').value=v+'°';if(ready)engine.amplitude=v*Math.PI/180;};$('swing-speed').oninput=e=>{const v=Number(e.target.value);$('swing-speed-out').value=v+'°/s';if(ready)engine.swingSpeed=v*Math.PI/180;};$('spin-speed').oninput=e=>{const v=Number(e.target.value);$('spin-speed-out').value=v+' U/min';if(ready)engine.spinRPM=v;};
+$('amplitude').oninput=e=>{let v=Number(e.target.value);if(ready){const max=Math.floor(deg(engine.safeAmplitude));v=Math.min(v,max);e.target.value=v;engine.amplitude=v*Math.PI/180;}$('amplitude-out').value=v+'°';};$('swing-speed').oninput=e=>{const v=Number(e.target.value);$('swing-speed-out').value=v+'°/s';if(ready)engine.swingSpeed=v*Math.PI/180;};$('spin-speed').oninput=e=>{const v=Number(e.target.value);$('spin-speed-out').value=v+' U/min';if(ready)engine.spinRPM=v;};
 $('pause').onclick=()=>{paused=!paused;$('pause').textContent=paused?'Fortsetzen':'Pause';if(ready)syncUI();};
-$('reset').onclick=()=>{if(!ready)return;engine.reset();paused=false;$('pause').textContent='Pause';$('lift').value=0;$('amplitude').value=85;$('amplitude-out').value='85°';$('swing-speed').value=20;$('swing-speed-out').value='20°/s';$('spin-speed').value=6;$('spin-speed-out').value='6 U/min';syncPose();syncUI();setCamera('overview');};
+$('reset').onclick=()=>{if(!ready)return;engine.reset();paused=false;$('pause').textContent='Pause';$('lift').value=0;$('amplitude').value=78;$('amplitude-out').value='78°';$('swing-speed').value=20;$('swing-speed-out').value='20°/s';$('spin-speed').value=6;$('spin-speed-out').value='6 U/min';syncPose();syncUI();setCamera('overview');};
 $('download').onclick=async()=>{const button=$('download');button.disabled=true;try{const response=await inflate('./assets/Nightfly_korrigiert.glb.gz'),blob=await response.blob(),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Nightfly_korrigiert.glb';a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);}catch(error){button.textContent='Download erneut versuchen';}finally{button.disabled=false;}};
 for(const button of document.querySelectorAll('[data-camera]'))button.onclick=()=>setCamera(button.dataset.camera);
 new ResizeObserver(()=>{const w=viewport.clientWidth,h=viewport.clientHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();}).observe(viewport);
