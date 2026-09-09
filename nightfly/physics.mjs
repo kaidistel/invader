@@ -1,10 +1,8 @@
 // Z-up articulated ride model. Fixed timestep; simplified rigid pendulum dynamics.
 export const TAU=Math.PI*2, LIFT_ANGLE=-28*Math.PI/180;
-// The swing joint stays mechanically fixed to the lifting boom while lifting.
-// mainAngle is ONLY the additional powered swing around the boom-mounted axis.
 export const RIDE_LIFT=1, MAX_LIFT=1, HOLD_ANGLE=Math.PI, INVERSION_THRESHOLD=181*Math.PI/180, MAX_COMMAND=220*Math.PI/180;
-// Keep a recognisable pendulum character while still guaranteeing that an
-// inversion programme can cross top dead centre reliably.
+// Hard cap prevents the old unrealistic turbo mode. The loop programme may use
+// the motor around top dead centre, but the arm must always return to pendulum motion.
 export const MAX_MAIN_RATE=78*Math.PI/180, CRUISE_INVERSION_RATE=61*Math.PI/180;
 export const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 export const wrap=v=>Math.atan2(Math.sin(v),Math.cos(v));
@@ -16,102 +14,92 @@ export const rz=(v,a)=>[v[0]*Math.cos(a)-v[1]*Math.sin(a),v[0]*Math.sin(a)+v[1]*
 const approach=(a,b,step)=>a+clamp(b-a,-step,step);
 export class RidePhysics{
  constructor(origins){this.origins=origins;this.reset();}
- reset(){this.lift=0;this.liftVelocity=0;this.liftTarget=0;this.mainAngle=0;this.mainVelocity=0;this.mainAccel=0;this.spinAngle=0;this.spinVelocity=0;this.spinAccel=0;this.phase=0;this.swingEnvelope=0;this.inverting=false;this.inversionStart=0;this.inversionArmed=true;this.swingOn=false;this.spinOn=false;this.amplitude=78*Math.PI/180;this.swingSpeed=20*Math.PI/180;this.spinRPM=6;this.parking=false;this.afterPark=0;this.time=0;this.gondolas=Array.from({length:4},()=>({angle:0,velocity:0,brake:true,previous:null,prevVelocity:[0,0,0],acc:[0,0,0]}));}
+ reset(){
+  this.lift=0;this.liftVelocity=0;this.liftTarget=0;
+  this.mainAngle=0;this.mainVelocity=0;this.mainAccel=0;
+  this.spinAngle=0;this.spinVelocity=0;this.spinAccel=0;
+  this.phase=0;this.swingEnvelope=0;this.inverting=false;this.recovering=false;this.recoveryPeak=false;this.inversionStart=0;this.inversionArmed=true;
+  this.swingOn=false;this.spinOn=false;this.amplitude=78*Math.PI/180;this.swingSpeed=20*Math.PI/180;this.spinRPM=6;
+  this.parking=false;this.afterPark=0;this.time=0;
+  this.gondolas=Array.from({length:4},()=>({angle:0,velocity:0,brake:true,previous:null,prevVelocity:[0,0,0],acc:[0,0,0]}));
+ }
  get canDrive(){return this.lift>RIDE_LIFT-.035&&!this.parking;}
  get safeAmplitude(){return MAX_COMMAND;}
  get swingMode(){const a=Math.min(Math.abs(this.amplitude),MAX_COMMAND);if(Math.abs(a-HOLD_ANGLE)<=.5*Math.PI/180)return 'hold';if(a>=INVERSION_THRESHOLD)return 'invert';return 'swing';}
- setLift(target){target=clamp(target,0,MAX_LIFT);if(target<RIDE_LIFT-.035&&(this.swingOn||this.spinOn||Math.abs(wrap(this.mainAngle))>.015||Math.abs(wrap(this.spinAngle))>.015||this.gondolas.some(g=>Math.abs(wrap(g.angle))>.025))){this.parking=true;this.afterPark=target;this.swingOn=false;this.spinOn=false;this.inverting=false;}else{this.liftTarget=target;this.parking=false;}}
- setSwing(on){if(on&&!this.canDrive)return false;this.swingOn=on;if(on){this.phase=0;this.swingEnvelope=Math.min(Math.abs(wrap(this.mainAngle)),165*Math.PI/180);this.inverting=false;this.inversionStart=0;this.inversionArmed=true;}return true;}
+ setLift(target){target=clamp(target,0,MAX_LIFT);if(target<RIDE_LIFT-.035&&(this.swingOn||this.spinOn||Math.abs(wrap(this.mainAngle))>.015||Math.abs(wrap(this.spinAngle))>.015||this.gondolas.some(g=>Math.abs(wrap(g.angle))>.025))){this.parking=true;this.afterPark=target;this.swingOn=false;this.spinOn=false;this.inverting=false;this.recovering=false;}else{this.liftTarget=target;this.parking=false;}}
+ setSwing(on){if(on&&!this.canDrive)return false;this.swingOn=on;if(on){this.phase=0;this.swingEnvelope=Math.min(Math.abs(wrap(this.mainAngle)),165*Math.PI/180);this.inverting=false;this.recovering=false;this.recoveryPeak=false;this.inversionStart=0;this.inversionArmed=true;}return true;}
  setSpin(on){if(on&&!this.canDrive)return false;this.spinOn=on;return true;}
  setBrakes(brake){if(this.parking)return;for(const g of this.gondolas)g.brake=brake;}
  liftAngle(){return LIFT_ANGLE*this.lift;}
  pivot(){return add(this.origins.lift,rx(sub(this.origins.rotor,this.origins.lift),this.liftAngle()));}
  support(k){const local=sub(this.origins['gondola'+k],this.origins.crown),arm=add(sub(this.origins.crown,this.origins.rotor),rz(local,this.spinAngle));return add(this.pivot(),rx(ry(arm,this.mainAngle),this.liftAngle()));}
+ syncPhaseToMotion(){const a=wrap(this.mainAngle),omega=Math.max(.18,this.swingSpeed/Math.max(.28,this.swingEnvelope));this.phase=Math.atan2(a,this.mainVelocity/omega);}
  step(dt){
   this.time+=dt;
   const desiredLift=clamp((this.liftTarget-this.lift)*1.9,-.18,.18);this.liftVelocity=approach(this.liftVelocity,desiredLift,.30*dt);this.lift=clamp(this.lift+this.liftVelocity*dt,0,MAX_LIFT);
   if(Math.abs(this.liftTarget-this.lift)<.0002&&Math.abs(this.liftVelocity)<.002){this.lift=this.liftTarget;this.liftVelocity=0;}
   if(this.swingOn&&!this.canDrive)this.swingOn=false;if(this.spinOn&&!this.canDrive)this.spinOn=false;
 
-  const command=Math.min(Math.abs(this.amplitude),MAX_COMMAND),mode=this.swingMode;
-  const prevMain=this.mainVelocity;
+  const command=Math.min(Math.abs(this.amplitude),MAX_COMMAND),mode=this.swingMode,prevMain=this.mainVelocity;
   if(this.parking||!this.swingOn){
-   this.inverting=false;this.swingEnvelope=approach(this.swingEnvelope,0,28*Math.PI/180*dt);
+   this.inverting=false;this.recovering=false;this.swingEnvelope=approach(this.swingEnvelope,0,28*Math.PI/180*dt);
    this.mainAccel=clamp(-wrap(this.mainAngle)*7.5-this.mainVelocity*5.4,-2.5,2.5);
   }else if(mode==='hold'){
-   this.inverting=false;this.swingEnvelope=approach(this.swingEnvelope,HOLD_ANGLE,24*Math.PI/180*dt);
+   this.inverting=false;this.recovering=false;this.swingEnvelope=approach(this.swingEnvelope,HOLD_ANGLE,24*Math.PI/180*dt);
    const holdTarget=HOLD_ANGLE+Math.round((this.mainAngle-HOLD_ANGLE)/TAU)*TAU;
    this.mainAccel=clamp((holdTarget-this.mainAngle)*6.5-this.mainVelocity*5.2,-2.8,2.8);
   }else if(mode==='invert'){
-   if(!this.inverting){
-    const pumpLimit=166*Math.PI/180;
-    this.swingEnvelope=approach(this.swingEnvelope,pumpLimit,18*Math.PI/180*dt);
-    this.phase+=dt*this.swingSpeed/Math.max(.28,this.swingEnvelope);
-    const target=this.swingEnvelope*Math.sin(this.phase);
-    const localAngle=wrap(this.mainAngle);
-    const error=wrap(target-localAngle);
-    const pump=error*7.6-this.mainVelocity*4.35;
-    this.mainAccel=clamp(pump,-2.85,2.85);
-
-    // After a loop, force a visible return swing before another loop is allowed.
-    // Rearm only after the arm has travelled into the opposite half of the arc
-    // with a negative velocity, so the machine keeps its pendulum character.
-    if(!this.inversionArmed&&localAngle<-35*Math.PI/180&&this.mainVelocity<-10*Math.PI/180)this.inversionArmed=true;
-
-    if(this.inversionArmed&&localAngle>138*Math.PI/180&&this.mainVelocity>18*Math.PI/180&&this.swingEnvelope>154*Math.PI/180){
-      this.inverting=true;
-      this.inversionStart=this.mainAngle;
-      this.inversionArmed=false;
-      this.mainVelocity=Math.max(this.mainVelocity,48*Math.PI/180);
-    }
-   }else{
-    // One physical loop at a time. Gravity shapes the speed around the loop and
-    // the drive only replaces losses. After 360 degrees, return to pendulum mode
-    // with the existing energy instead of locking into permanent rotation.
-    const a=wrap(this.mainAngle);
-    const desiredRate=clamp(CRUISE_INVERSION_RATE+(command-INVERSION_THRESHOLD)*.025,58*Math.PI/180,66*Math.PI/180);
-    const gravity=-1.28*Math.sin(a);
-    const topAssist=Math.abs(a)>135*Math.PI/180?0.42:0;
-    const motor=clamp((desiredRate-this.mainVelocity)*.62+topAssist,-.70,.92);
+   if(this.inverting){
+    // One loop only. Gravity shapes the speed; the motor only helps through the top.
+    const a=wrap(this.mainAngle),desiredRate=clamp(CRUISE_INVERSION_RATE+(command-INVERSION_THRESHOLD)*.025,58*Math.PI/180,66*Math.PI/180);
+    const gravity=-1.28*Math.sin(a),topAssist=Math.abs(a)>135*Math.PI/180?.42:0,motor=clamp((desiredRate-this.mainVelocity)*.62+topAssist,-.70,.92);
     this.mainAccel=clamp(gravity+motor-.115*this.mainVelocity,-2.15,2.15);
     if(this.mainAngle-this.inversionStart>=TAU){
-      this.mainAngle=wrap(this.mainAngle);
-      this.inverting=false;
-      this.inversionStart=0;
-      this.mainVelocity*=.90;
-      this.phase=Math.asin(clamp(this.mainAngle/Math.max(this.swingEnvelope,.25),-1,1));
+     this.mainAngle=wrap(this.mainAngle);this.inverting=false;this.recovering=true;this.recoveryPeak=false;this.inversionStart=0;this.inversionArmed=false;
+     // Preserve the exit energy. The recovery branch, not a position servo, now decides the next arc.
+     this.mainVelocity=Math.max(this.mainVelocity*.94,46*Math.PI/180);
+    }
+   }else if(this.recovering){
+    // True post-loop pendulum recovery. The arm must climb, reverse and swing back
+    // before the normal pump controller is allowed to take over again.
+    const a=wrap(this.mainAngle),dir=Math.sign(this.mainVelocity||1),bottom=Math.max(0,1-Math.abs(a)/(95*Math.PI/180));
+    const gravity=-1.72*Math.sin(a),loss=-.075*this.mainVelocity,motor=dir*.34*bottom;
+    this.mainAccel=clamp(gravity+loss+motor,-2.05,2.05);
+    if(!this.recoveryPeak&&a>20*Math.PI/180&&this.mainVelocity<-5*Math.PI/180)this.recoveryPeak=true;
+    if(this.recoveryPeak&&a<-32*Math.PI/180&&this.mainVelocity<-8*Math.PI/180){
+     this.recovering=false;this.inversionArmed=true;this.swingEnvelope=Math.max(this.swingEnvelope,70*Math.PI/180);this.syncPhaseToMotion();
+    }
+   }else{
+    // Normal swing-up between loops.
+    const pumpLimit=166*Math.PI/180;this.swingEnvelope=approach(this.swingEnvelope,pumpLimit,18*Math.PI/180*dt);
+    this.phase+=dt*this.swingSpeed/Math.max(.28,this.swingEnvelope);
+    const target=this.swingEnvelope*Math.sin(this.phase),localAngle=wrap(this.mainAngle),error=wrap(target-localAngle);
+    this.mainAccel=clamp(error*7.6-this.mainVelocity*4.35,-2.85,2.85);
+    if(this.inversionArmed&&localAngle>138*Math.PI/180&&this.mainVelocity>18*Math.PI/180&&this.swingEnvelope>154*Math.PI/180){
+     this.inverting=true;this.inversionStart=this.mainAngle;this.inversionArmed=false;this.mainVelocity=Math.max(this.mainVelocity,48*Math.PI/180);
     }
    }
   }else{
-   this.inverting=false;
-   this.swingEnvelope=approach(this.swingEnvelope,command,18*Math.PI/180*dt);
+   this.inverting=false;this.recovering=false;this.swingEnvelope=approach(this.swingEnvelope,command,18*Math.PI/180*dt);
    this.phase+=dt*this.swingSpeed/Math.max(.24,this.swingEnvelope);
-   const target=this.swingEnvelope*Math.sin(this.phase);
-   const error=wrap(target-wrap(this.mainAngle));
+   const target=this.swingEnvelope*Math.sin(this.phase),error=wrap(target-wrap(this.mainAngle));
    this.mainAccel=clamp(error*8-this.mainVelocity*4.8,-2.5,2.5);
   }
-  this.mainVelocity=clamp(this.mainVelocity+this.mainAccel*dt,-MAX_MAIN_RATE,MAX_MAIN_RATE);
-  this.mainAngle+=this.mainVelocity*dt;this.mainAccel=(this.mainVelocity-prevMain)/dt;
+  this.mainVelocity=clamp(this.mainVelocity+this.mainAccel*dt,-MAX_MAIN_RATE,MAX_MAIN_RATE);this.mainAngle+=this.mainVelocity*dt;this.mainAccel=(this.mainVelocity-prevMain)/dt;
   if(Math.abs(this.mainAngle)>TAU*12)this.mainAngle=wrap(this.mainAngle);
 
   let wantSpin=this.spinOn?this.spinRPM*TAU/60:0;if(this.parking)wantSpin=clamp(-wrap(this.spinAngle)*1.7,-.8,.8);
   const prevSpin=this.spinVelocity;this.spinVelocity=approach(this.spinVelocity,wantSpin,.42*dt);this.spinAngle+=this.spinVelocity*dt;this.spinAccel=(this.spinVelocity-prevSpin)/dt;
-  const liftA=this.liftAngle();
-  const mainAxis=rx([0,1,0],liftA),mainOmega=mul(mainAxis,this.mainVelocity),mainAlpha=mul(mainAxis,this.mainAccel);
-  const axisSpin=rx(ry([0,0,this.spinVelocity],this.mainAngle),liftA),spinAlpha=rx(ry([0,0,this.spinAccel],this.mainAngle),liftA);
-  const omega=add(mainOmega,axisSpin),alpha=add(add(mainAlpha,spinAlpha),cross(mainOmega,axisSpin));
+  const liftA=this.liftAngle(),mainAxis=rx([0,1,0],liftA),mainOmega=mul(mainAxis,this.mainVelocity),mainAlpha=mul(mainAxis,this.mainAccel);
+  const axisSpin=rx(ry([0,0,this.spinVelocity],this.mainAngle),liftA),spinAlpha=rx(ry([0,0,this.spinAccel],this.mainAngle),liftA),omega=add(mainOmega,axisSpin),alpha=add(add(mainAlpha,spinAlpha),cross(mainOmega,axisSpin));
   for(let k=0;k<4;k++){
    const g=this.gondolas[k],p=this.support(k);let velocity=[0,0,0];
    if(g.previous){velocity=mul(sub(p,g.previous),1/dt);const raw=mul(sub(velocity,g.prevVelocity),1/dt);g.acc=add(mul(g.acc,.65),mul(raw,.35));}g.previous=p;g.prevVelocity=velocity;
    if(this.parking){const aa=clamp(-wrap(g.angle)*14-g.velocity*7,-15,15);g.velocity+=aa*dt;g.angle+=g.velocity*dt;continue;}
    if(g.brake){g.velocity=approach(g.velocity,0,24*dt);g.angle+=g.velocity*dt;continue;}
-   const t=k*Math.PI/2,hinge=rx(ry(rz([-Math.sin(t),Math.cos(t),0],this.spinAngle),this.mainAngle),liftA);
-   const down=rx(ry([0,0,-1],this.mainAngle),liftA),side=cross(hinge,down),length=.62;
-   const r=mul(add(mul(down,Math.cos(g.angle)),mul(side,Math.sin(g.angle))),length),rq=cross(hinge,r);
-   const inertial=add(add(cross(alpha,r),cross(omega,cross(omega,r))),mul(cross(omega,rq),2*g.velocity));
-   const effective=sub(sub([0,0,-9.81],g.acc),inertial);
-   const acceleration=clamp(dot(rq,effective)/(length*length)-.28*g.velocity,-90,90);
-   g.velocity=clamp(g.velocity+acceleration*dt,-18,18);g.angle+=g.velocity*dt;if(Math.abs(g.angle)>Math.PI*20)g.angle=wrap(g.angle);
+   const t=k*Math.PI/2,hinge=rx(ry(rz([-Math.sin(t),Math.cos(t),0],this.spinAngle),this.mainAngle),liftA),down=rx(ry([0,0,-1],this.mainAngle),liftA),side=cross(hinge,down),length=.62;
+   const r=mul(add(mul(down,Math.cos(g.angle)),mul(side,Math.sin(g.angle))),length),rq=cross(hinge,r),inertial=add(add(cross(alpha,r),cross(omega,cross(omega,r))),mul(cross(omega,rq),2*g.velocity)),effective=sub(sub([0,0,-9.81],g.acc),inertial);
+   const acceleration=clamp(dot(rq,effective)/(length*length)-.28*g.velocity,-90,90);g.velocity=clamp(g.velocity+acceleration*dt,-18,18);g.angle+=g.velocity*dt;if(Math.abs(g.angle)>Math.PI*20)g.angle=wrap(g.angle);
   }
   if(this.parking&&Math.abs(wrap(this.mainAngle))<.008&&Math.abs(this.mainVelocity)<.014&&Math.abs(wrap(this.spinAngle))<.008&&Math.abs(this.spinVelocity)<.014&&this.gondolas.every(g=>Math.abs(wrap(g.angle))<.012&&Math.abs(g.velocity)<.02)){
    this.mainAngle=0;this.mainVelocity=0;this.spinAngle=0;this.spinVelocity=0;for(const g of this.gondolas){g.angle=0;g.velocity=0;g.brake=true;}this.parking=false;this.liftTarget=this.afterPark;
