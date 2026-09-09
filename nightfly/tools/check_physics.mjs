@@ -13,18 +13,16 @@ p.amplitude=120*Math.PI/180;assert.ok(p.setSwing(true));let lo=Infinity,hi=-Infi
 
 p.amplitude=HOLD_ANGLE;run(18);assert.equal(p.swingMode,'hold');assert.ok(Math.abs(Math.abs(wrap(p.mainAngle))-Math.PI)<.04,'180 degree command must hold the arm upside down');assert.ok(Math.abs(p.mainVelocity)<.06,'top hold must settle');
 
-// 181°+ must loop once, then physically keep moving through a recovery arc.
-p.setSwing(false);run(8);p.amplitude=INVERSION_THRESHOLD;assert.ok(p.setSwing(true));let entered=false,completed=false,recovery=false,positiveClimb=false,reverse=false,negativeReturn=false,maxRate=0,wasInverting=false;
-run(90,s=>{
- maxRate=Math.max(maxRate,Math.abs(s.mainVelocity));
+// 181°+ restores the first reliable behaviour: swing up, cross the top and keep
+// producing complete rotations without stalling, while staying below the speed cap.
+p.setSwing(false);run(8);p.amplitude=INVERSION_THRESHOLD;assert.ok(p.setSwing(true));let entered=false,maxUnwrapped=-Infinity,minRate=Infinity,maxRate=0;
+run(55,s=>{
  if(s.inverting)entered=true;
- if(wasInverting&&!s.inverting){completed=true;recovery=s.recovering;}
- if(completed&&s.recovering&&wrap(s.mainAngle)>20*Math.PI/180)positiveClimb=true;
- if(positiveClimb&&s.mainVelocity<0)reverse=true;
- if(reverse&&wrap(s.mainAngle)<-30*Math.PI/180&&s.mainVelocity<0)negativeReturn=true;
- wasInverting=s.inverting;
+ maxUnwrapped=Math.max(maxUnwrapped,s.mainAngle);
+ if(s.inverting)minRate=Math.min(minRate,Math.abs(s.mainVelocity));
+ maxRate=Math.max(maxRate,Math.abs(s.mainVelocity));
 });
-assert.equal(p.swingMode,'invert');assert.ok(entered,'181 degree command must enter inversion mode');assert.ok(completed,'loop must finish');assert.ok(recovery,'loop must enter free pendulum recovery');assert.ok(positiveClimb,'after loop the arm must keep climbing');assert.ok(reverse,'post-loop arc must reverse direction');assert.ok(negativeReturn,'arm must visibly swing back through the opposite side');assert.ok(maxRate<=MAX_MAIN_RATE+1e-9,'inversion must remain below speed cap');
+assert.equal(p.swingMode,'invert');assert.ok(entered,'181 degree command must enter inversion mode');assert.ok(maxUnwrapped>TAU*2,'inversion programme must continue beyond one full loop');assert.ok(minRate>8*Math.PI/180,'inversion programme must not stall after the first loop');assert.ok(maxRate<=MAX_MAIN_RATE+1e-9,'inversion must remain below speed cap');
 
 p.setSpin(true);p.setBrakes(false);run(6);assert.ok(p.gondolas.some(g=>Math.abs(g.angle)>.08));p.setBrakes(true);run(1);const locked=p.gondolas.map(g=>g.angle);run(2);p.gondolas.forEach((g,k)=>assert.ok(Math.abs(g.angle-locked[k])<1e-9));
-console.log('PASS: progressive swing; 180° hold; inversion; physical post-loop recovery; speed cap; independent gondola dynamics.');
+console.log('PASS: progressive swing; 180° hold; reliable non-stalling inversions; speed cap; independent gondola dynamics.');
