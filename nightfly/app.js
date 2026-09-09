@@ -40,18 +40,21 @@ function enhanceGondolas(){
    g.add(makeTube(pts,.026,steel));
    for(const f of [.22,.42,.62,.82]){const a=-.55+f*Math.PI*1.32,p=end.clone().add(radial.clone().multiplyScalar(.62*Math.sin(a))).add(up.clone().multiplyScalar(.72*Math.cos(a)-.05));const q=p.clone().add(radial.clone().multiplyScalar(-.25));g.add(makeTube([p,q],.012,steel));}
   }
-  // Dark high-back inserts make the four seats read much more like the reference
-  // photograph without replacing the existing detailed seat geometry.
+  // Reference-photo pass: yellow outer shells with narrower black padded backs.
+  // This gives the four high-back seats the strong yellow outline visible on Nightfly.
+  const right=axle.clone().multiplyScalar(-1),basis=new THREE.Matrix4().makeBasis(right,radial,up),seatQ=new THREE.Quaternion().setFromRotationMatrix(basis);
   for(let j=0;j<4;j++){
-   const seat=new THREE.Mesh(new THREE.BoxGeometry(.48,.11,.70),dark);seat.position.copy(axle).multiplyScalar((j-1.5)*.68).add(radial.clone().multiplyScalar(-.12)).add(up.clone().multiplyScalar(-.10));seat.castShadow=true;g.add(seat);
+   const center=axle.clone().multiplyScalar((j-1.5)*.68).add(radial.clone().multiplyScalar(-.12)).add(up.clone().multiplyScalar(-.10));
+   const shell=new THREE.Mesh(new THREE.BoxGeometry(.55,.16,.78),yellow);shell.position.copy(center).add(radial.clone().multiplyScalar(-.015));shell.quaternion.copy(seatQ);shell.castShadow=true;g.add(shell);
+   const pad=new THREE.Mesh(new THREE.BoxGeometry(.46,.115,.68),dark);pad.position.copy(center).add(radial.clone().multiplyScalar(.035));pad.quaternion.copy(seatQ);pad.castShadow=true;g.add(pad);
   }
  }
 }
 function syncPose(){
  const liftAngle=LIFT_ANGLE*engine.lift;
  groups.lift.rotation.x=liftAngle;
- // The parent lifting boom moves in Y/Z. Cancel that parent rotation so the
- // passenger arm's powered motion remains a true sideways world-Y swing.
+ // Cancel the lifting boom's parent rotation, then apply the powered swing axis
+ // in world Y. In ride hold this axis itself stays at the fixed angled position.
  const parentQ=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),liftAngle);
  const desiredQ=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),engine.mainAngle);
  groups.rotor.quaternion.copy(parentQ.invert().multiply(desiredQ));
@@ -69,7 +72,7 @@ function syncUI(){
  let count=0;for(let k=0;k<4;k++){const g=engine.gondolas[k];if(g.brake)count++;$('gangle'+k).textContent=`${Math.round(deg(wrap(g.angle)))}°`;$('gbrake'+k).textContent=g.brake?'Fest':'Frei';$('gbrake'+k).classList.toggle('free',!g.brake);$('gbrake'+k).setAttribute('aria-pressed',String(g.brake));$('gbrake'+k).disabled=engine.parking;}
  $('brake-count').textContent=`${count} / 4 fest`;$('brake').textContent=count===4?'Alle Gondeln freigeben':'Alle Gondeln bremsen';$('brake').classList.toggle('released',count<4);
  $('mode').textContent=paused?'Simulation pausiert':engine.parking?'Richtet sich zur Beladung aus':engine.lift<.01?'Ladeposition':!engine.canDrive?'Hubarm bewegt sich':engine.swingOn||engine.spinOn?'Fahrt läuft':'Fahrposition';
- $('lift-hint').textContent=engine.parking?'Antriebe stoppen, Gondeln ausrichten, dann absenken.':engine.canDrive?'Fahrposition erreicht – der Hubarm bleibt wie beim Vorbild leicht schräg.':'Zum Starten zuerst in Fahrposition anheben.';
+ $('lift-hint').textContent=engine.parking?'Schaukelachse auf 0°, Gondeln ausrichten, dann absenken.':engine.canDrive?'Fahrposition erreicht – die Schaukelachse hält den Hauptarm schräg.':'Zum Starten zuerst in Fahrposition anheben.';
 }
 function setCamera(preset){cameraPreset=preset;document.querySelectorAll('[data-camera]').forEach(b=>b.classList.toggle('selected',b.dataset.camera===preset));const center=groups.crown?groups.crown.getWorldPosition(new THREE.Vector3()):new THREE.Vector3(0,-2.8,2.4);
  if(preset==='front'){camera.position.set(0,-32,10);orbit.target.set(0,-1,6);}else if(preset==='seats'){camera.position.copy(center).add(new THREE.Vector3(5.2,-7.5,3.8));orbit.target.copy(center);}else{camera.position.set(17,-29,16);orbit.target.set(0,-1.5,5.5);}orbit.update();}
@@ -92,5 +95,4 @@ for(const button of document.querySelectorAll('[data-camera]'))button.onclick=()
 new ResizeObserver(()=>{const w=viewport.clientWidth,h=viewport.clientHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();}).observe(viewport);
 let previous=performance.now(),accumulator=0,lastUI=0;function animate(now){requestAnimationFrame(animate);const elapsed=Math.min((now-previous)/1000,.075);previous=now;if(ready&&!paused){accumulator+=elapsed;while(accumulator>=1/120){engine.step(1/120);accumulator-=1/120;}syncPose();}if(ready&&now-lastUI>90){syncUI();lastUI=now;}orbit.update();renderer.render(scene,camera);}requestAnimationFrame(animate);
 document.addEventListener('visibilitychange',()=>{previous=performance.now();accumulator=0;});
-// Read-only diagnostics for checking the articulated model.
 window.nightfly={get state(){return engine;},groups,scene};
