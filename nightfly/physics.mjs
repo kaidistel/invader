@@ -1,3 +1,4 @@
+import './operations.mjs';
 export const TAU=Math.PI*2, LIFT_ANGLE=-28*Math.PI/180;
 export const RIDE_LIFT=1, MAX_LIFT=1, MAX_MAIN_RATE=88*Math.PI/180;
 export const PROGRAMS={
