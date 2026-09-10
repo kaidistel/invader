@@ -3,126 +3,112 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#080b0f">
+<meta name="theme-color" content="#090b0d">
 <title>Nightfly · Operator Simulator</title>
 <link rel="stylesheet" href="./style.css">
 <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/"}}</script>
 </head>
 <body>
 <header class="topbar">
-  <a class="brand" href="./" aria-label="Nightfly Simulator Startseite">
+  <a class="brand" href="./" aria-label="Nightfly Simulator">
     <span class="brand-mark">N</span>
-    <span class="brand-copy"><b>NIGHTFLY</b><small>PEGASUS 16 · OPERATOR SIM</small></span>
+    <span class="brand-copy"><b>NIGHTFLY</b><small>PEGASUS 16 · DIGITAL TWIN</small></span>
   </a>
-  <div class="top-status" aria-label="Systemstatus">
-    <span><i class="status-dot live"></i>SIM ONLINE</span>
-    <span><i class="status-dot"></i>120 HZ PHYSICS</span>
-    <span class="version">BUILD 05</span>
+  <div class="system-strip">
+    <span><i class="lamp lamp-green"></i>SIM ONLINE</span>
+    <span><i class="lamp lamp-yellow"></i>DRIVE READY</span>
+    <span>120 HZ</span>
+    <span class="build">BUILD 06</span>
   </div>
-  <button id="pause" class="top-action">Pause</button>
+  <button id="pause" class="top-action">PAUSE</button>
 </header>
 
 <main class="sim-layout">
   <section class="stage" aria-label="Interaktives 3D-Modell">
     <div id="viewport"></div>
     <div class="stage-grade"></div>
-    <div class="scanlines"></div>
 
-    <div class="hud-top">
-      <div class="machine-card">
-        <span class="eyebrow">DIGITAL TWIN</span>
-        <strong>NIGHTFLY</strong>
-        <small id="mode" role="status">Modell wird geladen</small>
-      </div>
-      <div class="hud-status">
-        <span class="status-pill"><i></i>RIDE SYSTEM</span>
-        <span id="loop-state" class="status-pill muted">LOOP IDLE</span>
-      </div>
+    <div class="hud hud-left">
+      <span class="eyebrow">NIGHTFLY / LIVE VIEW</span>
+      <strong id="mode">Modell wird geladen</strong>
     </div>
 
-    <div class="cameras" aria-label="Kameraansicht">
-      <button data-camera="overview" class="selected">Overview</button>
-      <button data-camera="front">Operator</button>
-      <button data-camera="seats">Gondeln</button>
-      <button data-camera="onride">Onride</button>
-      <button id="showlights">Show Lights</button>
+    <div class="hud hud-right">
+      <span id="loop-state" class="loop-state">LOOP IDLE</span>
+      <span class="ride-state"><i></i>RIDE SYSTEM ACTIVE</span>
     </div>
+
+    <nav class="camera-bar" aria-label="Kameraansicht">
+      <button data-camera="overview" class="selected">GESAMT</button>
+      <button data-camera="front">FRONT</button>
+      <button data-camera="seats">GONDELN</button>
+      <button data-camera="onride">ONRIDE</button>
+      <button id="showlights">LICHTER</button>
+    </nav>
 
     <div class="telemetry" aria-label="Live-Telemetrie">
-      <div><span>ARM POSITION</span><strong id="tele-angle">0°</strong></div>
-      <div><span>ARM SPEED</span><strong id="tele-speed">0°/s</strong></div>
-      <div><span>STAR SPEED</span><strong id="tele-rotor">0.0 rpm</strong></div>
-      <div><span>DRIVE LOAD</span><strong id="tele-drive">0%</strong></div>
-      <div><span>G-FORCE*</span><strong id="tele-g">1.00 g</strong></div>
-      <div><span>PROGRAM</span><strong id="tele-program">STOP</strong></div>
+      <div><span>ARM</span><strong id="tele-angle">0°</strong><small>POSITION</small></div>
+      <div><span>SPEED</span><strong id="tele-speed">0°/s</strong><small>HAUPTARM</small></div>
+      <div><span>STAR</span><strong id="tele-rotor">0.0</strong><small>RPM</small></div>
+      <div><span>DRIVE</span><strong id="tele-drive">0%</strong><small>LAST</small></div>
+      <div><span>G-FORCE*</span><strong id="tele-g">1.00 g</strong><small>SCHÄTZUNG</small></div>
+      <div><span>PROGRAM</span><strong id="tele-program">STOP</strong><small>AKTIV</small></div>
     </div>
 
-    <div class="stage-footer">
-      <span>Drag: Kamera · Scroll: Zoom · *vereinfachtes Fahrgastmodell</span>
-      <button id="download" class="ghost-action">GLB exportieren</button>
-    </div>
-
-    <div id="loading"><span class="loader"></span><strong>Nightfly wird initialisiert …</strong><p>Mesh, Materialien und Fahrphysik werden geladen.</p></div>
+    <div class="stage-footer"><span>Drag: Kamera · Scroll: Zoom</span><button id="download" class="ghost-action">GLB EXPORT</button></div>
+    <div id="loading"><span class="loader"></span><strong>NIGHTFLY INITIALISIERT …</strong><p>Modell, Materialien und Fahrphysik werden geladen.</p></div>
     <div id="error" hidden role="alert"><h2>3D-System konnte nicht gestartet werden.</h2><p id="error-text"></p><button onclick="location.reload()">Neu laden</button></div>
   </section>
 
   <aside class="console" aria-label="Nightfly Fahrpult">
-    <section class="console-head">
-      <div>
-        <span class="eyebrow">OPERATOR CONSOLE</span>
-        <h1>NIGHTFLY</h1>
-      </div>
-      <div class="ready-lamp"><i></i><span>READY</span></div>
-    </section>
+    <div class="console-head">
+      <div><span class="eyebrow">OPERATOR PANEL</span><h1>NIGHTFLY</h1></div>
+      <div class="ready-badge"><i></i><span>READY</span></div>
+    </div>
 
-    <section class="machine-overview">
-      <div><span>CAPACITY</span><strong>16</strong><small>4 × 4</small></div>
-      <div><span>HEIGHT</span><strong>17 m</strong><small>Fahrzeug</small></div>
-      <div><span>STAR</span><strong>12</strong><small>rpm max.</small></div>
-      <div><span>PHYSICS</span><strong>120</strong><small>steps/s</small></div>
-    </section>
+    <div class="quick-status">
+      <div><span>CAPACITY</span><b>16</b><small>4 × 4</small></div>
+      <div><span>HEIGHT</span><b>17 m</b><small>MAX</small></div>
+      <div><span>STAR</span><b>12</b><small>RPM</small></div>
+    </div>
 
-    <section class="control-card lift-card">
-      <div class="card-title"><div><span class="card-index">01</span><h2>Maschinenposition</h2></div><output id="lift-out">0 %</output></div>
-      <div class="segmented position-select"><button id="load" class="selected">Ladeposition</button><button id="ride">Fahrposition</button></div>
+    <section class="control-card">
+      <header class="card-title"><div><span class="card-index">01</span><h2>Hubarm</h2></div><output id="lift-out">0 %</output></header>
+      <div class="segmented"><button id="load" class="selected">LOAD</button><button id="ride">RIDE</button></div>
       <label class="sr-only" for="lift">Hubarmstellung</label>
       <input id="lift" type="range" min="0" max="100" value="0" step="1">
-      <div class="range-labels"><span>LOAD</span><span>RIDE</span></div>
+      <div class="range-labels"><span>ABGESENKT</span><span>FAHRPOSITION</span></div>
       <p id="lift-hint" class="hint">Zum Starten zuerst in Fahrposition anheben.</p>
     </section>
 
     <section class="control-card drive-card">
-      <div class="card-title"><div><span class="card-index">02</span><h2>Hauptarm · Drive</h2></div><output id="swing-out">0°</output></div>
+      <header class="card-title"><div><span class="card-index">02</span><h2>Hauptarm</h2></div><output id="swing-out">0°</output></header>
       <div class="program-grid" id="programs">
-        <button data-program="p30" disabled><span class="program-number">30</span><span class="program-text"><b>LOW SWING</b><small>ruhiges Schaukeln</small></span></button>
-        <button data-program="p50" disabled><span class="program-number">50</span><span class="program-text"><b>MID SWING</b><small>mittlere Höhe</small></span></button>
-        <button data-program="p80" disabled><span class="program-number">80</span><span class="program-text"><b>HIGH SWING</b><small>nahe Überschlag</small></span></button>
-        <button data-program="p100" class="loop-program" disabled><span class="program-number">100</span><span class="program-text"><b>CONTINUOUS LOOP</b><small>dauerhafte Überschläge</small></span></button>
-        <button data-program="hold" class="hold-program" disabled><span class="program-number">180°</span><span class="program-text"><b>TOP HOLD</b><small>Arm oben halten</small></span></button>
-        <button data-program="stop" class="stop-program" disabled><span class="program-number">■</span><span class="program-text"><b>STOP DRIVE</b><small>kontrolliert ausrichten</small></span></button>
+        <button data-program="p30" disabled><b>30%</b><span>LOW SWING</span></button>
+        <button data-program="p50" disabled><b>50%</b><span>MID SWING</span></button>
+        <button data-program="p80" disabled><b>80%</b><span>HIGH SWING</span></button>
+        <button data-program="p100" class="loop-program" disabled><b>100%</b><span>CONTINUOUS LOOP</span></button>
+        <button data-program="hold" class="hold-program" disabled><b>180°</b><span>TOP HOLD</span></button>
+        <button data-program="stop" class="stop-program" disabled><b>■</b><span>STOP / HOME</span></button>
       </div>
-      <p class="hint">Das 100%-Programm fährt jetzt mit eigener Beschleunigungsphase in eine geregelte Dauerrotation und kompensiert die Schwerkraft über den kompletten Loop.</p>
+      <div class="drive-note"><i></i><span>100 % beschleunigt in eine geregelte Dauerrotation und hält die Drehrichtung stabil.</span></div>
     </section>
 
-    <section class="control-card rotor-card">
-      <div class="card-title"><div><span class="card-index">03</span><h2>Gondelstern</h2></div><output id="spin-out">0 U/min</output></div>
-      <button id="spin" class="motor-button" disabled><span>Drehung starten</span><b>⟳</b></button>
-      <label for="spin-speed"><span>Drehzahl / Richtung</span><output id="spin-speed-out">12 U/min</output></label>
+    <section class="control-card">
+      <header class="card-title"><div><span class="card-index">03</span><h2>Gondelstern</h2></div><output id="spin-out">0 U/min</output></header>
+      <button id="spin" class="motor-button" disabled><span>STERN STARTEN</span><b>⟳</b></button>
+      <label for="spin-speed"><span>DREHZAHL / RICHTUNG</span><output id="spin-speed-out">12 U/min</output></label>
       <input id="spin-speed" type="range" min="-12" max="12" value="12" step=".5">
       <div class="range-labels"><span>−12</span><span>0</span><span>+12 RPM</span></div>
     </section>
 
-    <section class="control-card brake-card">
-      <div class="card-title"><div><span class="card-index">04</span><h2>Gondelbremse</h2></div><output id="brake-count">4 / 4 fest</output></div>
-      <button id="brake" class="brake-button">Alle Gondeln freigeben</button>
+    <section class="control-card">
+      <header class="card-title"><div><span class="card-index">04</span><h2>Gondelbremse</h2></div><output id="brake-count">4 / 4 fest</output></header>
+      <button id="brake" class="brake-button">ALLE GONDELN FREIGEBEN</button>
       <div class="gondolas" id="gondolas"></div>
-      <p class="hint">Freigegeben reagieren die vier Gondeln individuell auf Gravitation, Hauptarmbewegung und Rotation des Gondelsterns.</p>
     </section>
 
-    <footer class="console-footer">
-      <button id="reset" class="reset-action">System Reset</button>
-      <span>Nightfly Digital Twin · v05</span>
-    </footer>
+    <footer class="console-footer"><button id="reset" class="reset-action">SYSTEM RESET</button><span>DIGITAL TWIN · V06</span></footer>
   </aside>
 </main>
 
@@ -130,64 +116,69 @@
 <script type="module">
 import * as THREE from 'three';
 let lightsOn=false,showLights=[],bulbs=[],initialized=false;
-const mat=(color,metalness=.4,roughness=.35,emissive=null)=>new THREE.MeshStandardMaterial({color,metalness,roughness,emissive:emissive||'#000000',emissiveIntensity:emissive?1.5:0});
+const makeMat=(color,metalness=.45,roughness=.34,emissive=null)=>new THREE.MeshStandardMaterial({color,metalness,roughness,emissive:emissive||'#000000',emissiveIntensity:emissive?1.3:0});
 
-function tubeBetween(a,b,r=.045,material=mat('#242a30',.8,.3)){
- const delta=b.clone().sub(a),mesh=new THREE.Mesh(new THREE.CylinderGeometry(r,r,delta.length(),10),material);
- mesh.position.copy(a).add(b).multiplyScalar(.5);mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),delta.clone().normalize());mesh.castShadow=true;return mesh;
-}
-function addTruss(scene){
- const trussMat=mat('#252b31',.82,.26),yellow=mat('#d6a91c',.6,.28);
- for(const x of [-8.2,8.2]){
-  const frame=new THREE.Group();
-  const a=new THREE.Vector3(x,-1.5,0),b=new THREE.Vector3(x,-1.5,11.2);
-  frame.add(tubeBetween(a,b,.075,trussMat));
-  for(let z=.8;z<10.8;z+=1.15){
-    frame.add(tubeBetween(new THREE.Vector3(x,-1.5,z),new THREE.Vector3(x+(x<0?.65:-.65),-1.5,z+.58),.025,trussMat));
-    frame.add(tubeBetween(new THREE.Vector3(x+(x<0?.65:-.65),-1.5,z+.58),new THREE.Vector3(x,-1.5,z+1.15),.025,trussMat));
-  }
-  const foot=new THREE.Mesh(new THREE.BoxGeometry(.8,.8,.18),yellow);foot.position.set(x,-1.5,.09);frame.add(foot);scene.add(frame);
- }
- scene.add(tubeBetween(new THREE.Vector3(-8.2,-1.5,11.2),new THREE.Vector3(8.2,-1.5,11.2),.08,trussMat));
-}
 function addVisualPass(){
- const nf=window.nightfly;if(!nf?.groups?.static||!nf?.groups?.crown||!nf?.scene){requestAnimationFrame(addVisualPass);return;}if(initialized)return;initialized=true;
- const root=nf.groups.static;
- for(const mesh of root.children){if(mesh.name?.includes('Scenery_')){mesh.position.y+=2.35;mesh.scale.x*=1.14;}}
+ const nf=window.nightfly;
+ if(!nf?.groups?.static||!nf?.groups?.crown||!nf?.scene){requestAnimationFrame(addVisualPass);return;}
+ if(initialized)return;initialized=true;
+
+ /* Fotoreferenz: Nightfly = warmes Senfgelb, Anthrazit/Schwarz, blankes Metall, kalte blau-violette Rückwand. */
+ nf.scene.background=new THREE.Color('#121922');
+ nf.scene.fog.color.set('#121922');
  nf.scene.traverse(obj=>{
-  if(!obj.isMesh||!obj.material)return;const name=obj.name||'';
-  if(/Rotor_passenger_arm|Rotor_counterweight_arm/.test(name)){obj.material=obj.material.clone();obj.material.color.set('#30363d');obj.material.metalness=.82;obj.material.roughness=.22;}
-  else if(/Maintenance_platform|Spoke_yellow_tip|Seat_yellow_contour/.test(name)){obj.material=obj.material.clone();obj.material.color.set('#f0b719');obj.material.metalness=.52;obj.material.roughness=.25;}
-  else if(/Gear_tooth|Rotor_drive|Gondola_axle/.test(name)){obj.material=obj.material.clone();obj.material.color.set('#aeb7bf');obj.material.metalness=.94;obj.material.roughness=.16;}
-  else if(/bulb|LED|light/i.test(name)){obj.material=obj.material.clone();if(obj.material.emissive){obj.material.emissive.set('#fff0ae');obj.material.emissiveIntensity=1.8;}}
+   if(!obj.isMesh||!obj.material)return;
+   const name=(obj.name||'').toLowerCase();
+   obj.material=obj.material.clone();
+   if(/rotor_passenger_arm|rotor_counterweight_arm|main_arm|boom/.test(name)){
+     obj.material.color.set('#2a2e31');obj.material.metalness=.78;obj.material.roughness=.29;
+   }else if(/maintenance_platform|spoke_yellow_tip|seat_yellow_contour|yellow|guard/.test(name)){
+     obj.material.color.set('#e6b11e');obj.material.metalness=.48;obj.material.roughness=.31;
+   }else if(/gear_tooth|rotor_drive|gondola_axle|piston|steel|chrome/.test(name)){
+     obj.material.color.set('#b9bec2');obj.material.metalness=.92;obj.material.roughness=.18;
+   }else if(/seat|gondola/.test(name)){
+     obj.material.color.multiply(new THREE.Color('#d9c48b'));obj.material.roughness=Math.max(.28,obj.material.roughness);
+   }
+   if(/bulb|led|light|lamp/.test(name)&&obj.material.emissive){obj.material.emissive.set('#ffd875');obj.material.emissiveIntensity=1.7;}
  });
+
+ /* Kein zusätzlicher Bogen/Truss mehr: der freie Gondelbereich bleibt komplett kollisionsfrei. */
  const crown=nf.groups.crown;
- const hub=new THREE.Mesh(new THREE.CylinderGeometry(.94,.94,.46,40),mat('#12161a',.88,.18));hub.rotation.x=Math.PI/2;hub.castShadow=true;crown.add(hub);
- const ring=new THREE.Mesh(new THREE.TorusGeometry(1.08,.085,12,48),mat('#efb91f',.65,.22));crown.add(ring);
- for(let i=0;i<40;i++){const a=i/40*Math.PI*2,b=new THREE.Mesh(new THREE.SphereGeometry(.043,8,6),mat('#fff8dc',.05,.2,'#ffd66b'));b.position.set(Math.cos(a)*1.08,Math.sin(a)*1.08,0);crown.add(b);bulbs.push(b);}
- addTruss(nf.scene);
- const stripMat=mat('#15191d',.4,.5,'#e9af26');
- for(const x of [-6,-3,0,3,6]){const strip=new THREE.Mesh(new THREE.BoxGeometry(2.25,.08,.035),stripMat.clone());strip.position.set(x,-7.1,.06);nf.scene.add(strip);bulbs.push(strip);}
- const lightData=[[-7,-4,4,'#ffc74c'],[7,-4,4,'#ffc74c'],[-4,1,8,'#59a9ff'],[4,1,8,'#59a9ff'],[0,-1,12,'#fff0bd']];
- for(const [x,y,z,c] of lightData){const p=new THREE.PointLight(c,0,20,2);p.position.set(x,y,z);nf.scene.add(p);showLights.push(p);}
+ const hub=new THREE.Mesh(new THREE.CylinderGeometry(.91,.91,.42,40),makeMat('#171a1d',.88,.2));hub.rotation.x=Math.PI/2;hub.castShadow=true;crown.add(hub);
+ const ring=new THREE.Mesh(new THREE.TorusGeometry(1.06,.07,10,48),makeMat('#e3ad1c',.62,.25));crown.add(ring);
+ for(let i=0;i<36;i++){
+   const a=i/36*Math.PI*2;
+   const b=new THREE.Mesh(new THREE.SphereGeometry(.04,8,6),makeMat('#fff1bd',.05,.22,'#ffc84e'));
+   b.position.set(Math.cos(a)*1.06,Math.sin(a)*1.06,0);crown.add(b);bulbs.push(b);
+ }
+
+ /* Flache Boden-/Podiumsbeleuchtung statt kollidierender Deko im Bewegungsraum. */
+ const edgeMat=makeMat('#2a2210',.25,.55,'#d99d14');
+ for(const [x,y,w,h] of [[0,-7.2,12,.055],[-6.1,-4.8,.055,4.8],[6.1,-4.8,.055,4.8]]){
+   const edge=new THREE.Mesh(new THREE.BoxGeometry(w,h,.035),edgeMat.clone());edge.position.set(x,y,.05);nf.scene.add(edge);bulbs.push(edge);
+ }
+ const lightData=[[-6,-5,3.2,'#ffd05b'],[6,-5,3.2,'#ffd05b'],[-4,2,7.5,'#607dff'],[4,2,7.5,'#8f67ff'],[0,-2,11,'#f6d78b']];
+ for(const [x,y,z,c] of lightData){const p=new THREE.PointLight(c,0,19,2);p.position.set(x,y,z);nf.scene.add(p);showLights.push(p);}
  document.getElementById('showlights').onclick=()=>{lightsOn=!lightsOn;document.getElementById('showlights').classList.toggle('selected',lightsOn);};
  requestAnimationFrame(updateVisuals);
 }
+
 function updateVisuals(t){
- const nf=window.nightfly,s=nf?.state;
+ const s=window.nightfly?.state;
  if(s){
-  for(let i=0;i<showLights.length;i++)showLights[i].intensity=lightsOn?(i===showLights.length-1?3.8:2.2):0;
-  for(let i=0;i<bulbs.length;i++){const m=bulbs[i].material;if(!m?.emissive)continue;m.emissiveIntensity=lightsOn?1.2+1.4*Math.sin(t*.006+i*.53)**2:.42;}
-  const d=Math.abs(s.motorTorque||0),angle=Math.atan2(Math.sin(s.mainAngle),Math.cos(s.mainAngle))*180/Math.PI;
-  document.getElementById('tele-angle').textContent=`${Math.round(angle)}°`;
-  document.getElementById('tele-speed').textContent=`${Math.round(s.mainVelocity*180/Math.PI)}°/s`;
-  document.getElementById('tele-rotor').textContent=`${(s.spinVelocity*60/(Math.PI*2)).toFixed(1)} rpm`;
-  document.getElementById('tele-drive').textContent=`${Math.min(100,Math.round(d/3.65*100))}%`;
-  const g=1+Math.abs(s.mainVelocity*s.mainVelocity*.72/9.81)+Math.abs(s.spinVelocity*s.spinVelocity*1.8/9.81);
-  document.getElementById('tele-g').textContent=`${g.toFixed(2)} g`;
-  document.getElementById('tele-program').textContent=(s.program||'stop').toUpperCase();
-  const loop=document.getElementById('loop-state');
-  if(s.program==='p100'){loop.textContent=s.rotating?'LOOP LOCKED':'LOOP ACCEL';loop.classList.toggle('active',true);}else{loop.textContent='LOOP IDLE';loop.classList.toggle('active',false);}
+   showLights.forEach((l,i)=>l.intensity=lightsOn?(i===4?3.4:2):0);
+   bulbs.forEach((b,i)=>{if(b.material?.emissive)b.material.emissiveIntensity=lightsOn?.9+1.2*Math.sin(t*.0055+i*.47)**2:.32;});
+   const angle=Math.atan2(Math.sin(s.mainAngle),Math.cos(s.mainAngle))*180/Math.PI;
+   document.getElementById('tele-angle').textContent=`${Math.round(angle)}°`;
+   document.getElementById('tele-speed').textContent=`${Math.round(s.mainVelocity*180/Math.PI)}°/s`;
+   document.getElementById('tele-rotor').textContent=(s.spinVelocity*60/(Math.PI*2)).toFixed(1);
+   document.getElementById('tele-drive').textContent=`${Math.min(100,Math.round(Math.abs(s.motorTorque||0)/3.65*100))}%`;
+   const g=1+Math.abs(s.mainVelocity*s.mainVelocity*.72/9.81)+Math.abs(s.spinVelocity*s.spinVelocity*1.8/9.81);
+   document.getElementById('tele-g').textContent=`${g.toFixed(2)} g`;
+   document.getElementById('tele-program').textContent=(s.program||'stop').toUpperCase();
+   const loop=document.getElementById('loop-state');
+   if(s.program==='p100'){loop.textContent=s.rotating?'LOOP LOCKED':'LOOP ACCEL';loop.classList.add('active');}
+   else{loop.textContent='LOOP IDLE';loop.classList.remove('active');}
  }
  requestAnimationFrame(updateVisuals);
 }
