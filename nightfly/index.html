@@ -1,31 +1,197 @@
 <!doctype html>
-<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0b0f13"><title>Nightfly · Pegasus 16 Simulator</title><link rel="stylesheet" href="./style.css"><script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/"}}</script></head>
-<body><header><a class="brand" href="./"><span class="brand-mark">N</span><span>NIGHTFLY<small>PEGASUS 16 · KRAMERHOFER</small></span></a><div class="head-meta">OPERATOR CONSOLE <span class="version">04</span></div><button id="pause" class="quiet">Pause</button></header>
-<main><section class="stage" aria-label="Interaktives 3D-Modell"><div id="viewport"></div><div class="vignette"></div><div class="stage-top"><span class="eyebrow">NIGHTFLY DIGITAL TWIN</span><span id="mode" role="status">Modell wird geladen</span></div><div id="loading"><span class="loader"></span><strong>Nightfly wird aufgebaut …</strong><p>Modell, Texturen und Physik laden.</p></div><div id="error" hidden role="alert"><h2>Die 3D-Ansicht konnte nicht starten.</h2><p id="error-text"></p><button onclick="location.reload()">Erneut versuchen</button></div>
-<div class="cameras" aria-label="Kameraansicht"><button data-camera="overview" class="selected">Gesamt</button><button data-camera="front">Front</button><button data-camera="seats">Gondeln</button><button data-camera="onride">Onride 🎥</button><button id="showlights">Show Lights ✦</button></div>
-<div class="telemetry" aria-label="Live-Telemetrie"><div><span>ARM</span><strong id="tele-angle">0°</strong></div><div><span>ARM SPEED</span><strong id="tele-speed">0°/s</strong></div><div><span>ROTOR</span><strong id="tele-rotor">0.0 rpm</strong></div><div><span>DRIVE</span><strong id="tele-drive">0%</strong></div><div><span>G-FORCE*</span><strong id="tele-g">1.00 g</strong></div></div>
-<div class="stage-bottom"><span>Ziehen: drehen · Scrollen: zoomen · *vereinfachte Schätzung</span><button id="download" class="text-button">GLB herunterladen ↗</button></div></section>
-<aside aria-label="Fahrpult"><div class="panel-title"><span class="eyebrow">FAHRPULT</span><h1>Pegasus 16 · Nightfly</h1><p class="subtitle">Simulation nach Fotoreferenz · feste 120-Hz-Physik</p></div>
-<div class="ride-specs" aria-label="Pegasus 16 technische Daten"><div><strong>16</strong><span>Fahrgäste · 4 × 4</span></div><div><strong>17 m</strong><span>max. Fahrzeughöhe</span></div><div><strong>12</strong><span>U/min Gondelstern</span></div><div><strong>140 cm</strong><span>Mindestgröße</span></div><div><strong>4</strong><span>frei schwingende Gondeln</span></div></div>
-<section class="control-block"><div class="block-heading"><h2><span>01</span> Hubarm</h2><output id="lift-out">0 %</output></div><div class="segmented"><button id="load" class="selected">Ladeposition</button><button id="ride">Fahrposition</button></div><label class="sr-only" for="lift">Hubarmstellung</label><input id="lift" type="range" min="0" max="100" value="0" step="1"><div class="scale"><span>Abgesenkt</span><span>Fahrposition</span></div><p id="lift-hint" class="hint">Zum Starten zuerst in Fahrposition anheben.</p></section>
-<section class="control-block"><div class="block-heading"><h2><span>02</span> Hauptarm</h2><output id="swing-out">0°</output></div><div class="program-grid" id="programs"><button data-program="p30" disabled><strong>30 %</strong><span>kleines Schaukeln</span></button><button data-program="p50" disabled><strong>50 %</strong><span>mittleres Schaukeln</span></button><button data-program="p80" disabled><strong>80 %</strong><span>großes Schaukeln</span></button><button data-program="p100" disabled><strong>100 %</strong><span>Überschläge</span></button><button data-program="hold" class="hold-program" disabled><strong>180°</strong><span>HOLD</span></button><button data-program="stop" class="stop-program" disabled><strong>STOP</strong><span>auspendeln</span></button></div><p class="hint">30–80 % pumpen Energie in ein physikalisches Pendel. 100 % baut Schwung auf und geht erst bei ausreichender Energie in den Überschlag.</p></section>
-<section class="control-block"><div class="block-heading"><h2><span>03</span> Gondelstern</h2><output id="spin-out">0 U/min</output></div><button id="spin" class="motor-button" disabled>Drehung starten <span>⟳</span></button><label for="spin-speed">Drehzahl & Richtung <output id="spin-speed-out">12 U/min</output></label><input id="spin-speed" type="range" min="-12" max="12" value="12" step=".5"><div class="scale"><span>−12 U/min</span><span>+12 U/min</span></div></section>
-<section class="control-block brake-block"><div class="block-heading"><h2><span>04</span> Gondelbremse</h2><output id="brake-count">4 / 4 fest</output></div><button id="brake" class="brake-button">Alle Gondeln freigeben</button><p class="hint">Gelöst reagieren die vier Sitzreihen eigenständig auf Schwerkraft, Hauptarm und Gondelstern.</p><div class="gondolas" id="gondolas"></div></section>
-<div class="panel-footer"><button id="reset" class="quiet">Zurücksetzen</button><span>Nightfly · Digital Twin v04</span></div></aside></main><script type="module" src="./app.js"></script>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080b0f">
+<title>Nightfly · Operator Simulator</title>
+<link rel="stylesheet" href="./style.css">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/"}}</script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="./" aria-label="Nightfly Simulator Startseite">
+    <span class="brand-mark">N</span>
+    <span class="brand-copy"><b>NIGHTFLY</b><small>PEGASUS 16 · OPERATOR SIM</small></span>
+  </a>
+  <div class="top-status" aria-label="Systemstatus">
+    <span><i class="status-dot live"></i>SIM ONLINE</span>
+    <span><i class="status-dot"></i>120 HZ PHYSICS</span>
+    <span class="version">BUILD 05</span>
+  </div>
+  <button id="pause" class="top-action">Pause</button>
+</header>
+
+<main class="sim-layout">
+  <section class="stage" aria-label="Interaktives 3D-Modell">
+    <div id="viewport"></div>
+    <div class="stage-grade"></div>
+    <div class="scanlines"></div>
+
+    <div class="hud-top">
+      <div class="machine-card">
+        <span class="eyebrow">DIGITAL TWIN</span>
+        <strong>NIGHTFLY</strong>
+        <small id="mode" role="status">Modell wird geladen</small>
+      </div>
+      <div class="hud-status">
+        <span class="status-pill"><i></i>RIDE SYSTEM</span>
+        <span id="loop-state" class="status-pill muted">LOOP IDLE</span>
+      </div>
+    </div>
+
+    <div class="cameras" aria-label="Kameraansicht">
+      <button data-camera="overview" class="selected">Overview</button>
+      <button data-camera="front">Operator</button>
+      <button data-camera="seats">Gondeln</button>
+      <button data-camera="onride">Onride</button>
+      <button id="showlights">Show Lights</button>
+    </div>
+
+    <div class="telemetry" aria-label="Live-Telemetrie">
+      <div><span>ARM POSITION</span><strong id="tele-angle">0°</strong></div>
+      <div><span>ARM SPEED</span><strong id="tele-speed">0°/s</strong></div>
+      <div><span>STAR SPEED</span><strong id="tele-rotor">0.0 rpm</strong></div>
+      <div><span>DRIVE LOAD</span><strong id="tele-drive">0%</strong></div>
+      <div><span>G-FORCE*</span><strong id="tele-g">1.00 g</strong></div>
+      <div><span>PROGRAM</span><strong id="tele-program">STOP</strong></div>
+    </div>
+
+    <div class="stage-footer">
+      <span>Drag: Kamera · Scroll: Zoom · *vereinfachtes Fahrgastmodell</span>
+      <button id="download" class="ghost-action">GLB exportieren</button>
+    </div>
+
+    <div id="loading"><span class="loader"></span><strong>Nightfly wird initialisiert …</strong><p>Mesh, Materialien und Fahrphysik werden geladen.</p></div>
+    <div id="error" hidden role="alert"><h2>3D-System konnte nicht gestartet werden.</h2><p id="error-text"></p><button onclick="location.reload()">Neu laden</button></div>
+  </section>
+
+  <aside class="console" aria-label="Nightfly Fahrpult">
+    <section class="console-head">
+      <div>
+        <span class="eyebrow">OPERATOR CONSOLE</span>
+        <h1>NIGHTFLY</h1>
+      </div>
+      <div class="ready-lamp"><i></i><span>READY</span></div>
+    </section>
+
+    <section class="machine-overview">
+      <div><span>CAPACITY</span><strong>16</strong><small>4 × 4</small></div>
+      <div><span>HEIGHT</span><strong>17 m</strong><small>Fahrzeug</small></div>
+      <div><span>STAR</span><strong>12</strong><small>rpm max.</small></div>
+      <div><span>PHYSICS</span><strong>120</strong><small>steps/s</small></div>
+    </section>
+
+    <section class="control-card lift-card">
+      <div class="card-title"><div><span class="card-index">01</span><h2>Maschinenposition</h2></div><output id="lift-out">0 %</output></div>
+      <div class="segmented position-select"><button id="load" class="selected">Ladeposition</button><button id="ride">Fahrposition</button></div>
+      <label class="sr-only" for="lift">Hubarmstellung</label>
+      <input id="lift" type="range" min="0" max="100" value="0" step="1">
+      <div class="range-labels"><span>LOAD</span><span>RIDE</span></div>
+      <p id="lift-hint" class="hint">Zum Starten zuerst in Fahrposition anheben.</p>
+    </section>
+
+    <section class="control-card drive-card">
+      <div class="card-title"><div><span class="card-index">02</span><h2>Hauptarm · Drive</h2></div><output id="swing-out">0°</output></div>
+      <div class="program-grid" id="programs">
+        <button data-program="p30" disabled><span class="program-number">30</span><span class="program-text"><b>LOW SWING</b><small>ruhiges Schaukeln</small></span></button>
+        <button data-program="p50" disabled><span class="program-number">50</span><span class="program-text"><b>MID SWING</b><small>mittlere Höhe</small></span></button>
+        <button data-program="p80" disabled><span class="program-number">80</span><span class="program-text"><b>HIGH SWING</b><small>nahe Überschlag</small></span></button>
+        <button data-program="p100" class="loop-program" disabled><span class="program-number">100</span><span class="program-text"><b>CONTINUOUS LOOP</b><small>dauerhafte Überschläge</small></span></button>
+        <button data-program="hold" class="hold-program" disabled><span class="program-number">180°</span><span class="program-text"><b>TOP HOLD</b><small>Arm oben halten</small></span></button>
+        <button data-program="stop" class="stop-program" disabled><span class="program-number">■</span><span class="program-text"><b>STOP DRIVE</b><small>kontrolliert ausrichten</small></span></button>
+      </div>
+      <p class="hint">Das 100%-Programm fährt jetzt mit eigener Beschleunigungsphase in eine geregelte Dauerrotation und kompensiert die Schwerkraft über den kompletten Loop.</p>
+    </section>
+
+    <section class="control-card rotor-card">
+      <div class="card-title"><div><span class="card-index">03</span><h2>Gondelstern</h2></div><output id="spin-out">0 U/min</output></div>
+      <button id="spin" class="motor-button" disabled><span>Drehung starten</span><b>⟳</b></button>
+      <label for="spin-speed"><span>Drehzahl / Richtung</span><output id="spin-speed-out">12 U/min</output></label>
+      <input id="spin-speed" type="range" min="-12" max="12" value="12" step=".5">
+      <div class="range-labels"><span>−12</span><span>0</span><span>+12 RPM</span></div>
+    </section>
+
+    <section class="control-card brake-card">
+      <div class="card-title"><div><span class="card-index">04</span><h2>Gondelbremse</h2></div><output id="brake-count">4 / 4 fest</output></div>
+      <button id="brake" class="brake-button">Alle Gondeln freigeben</button>
+      <div class="gondolas" id="gondolas"></div>
+      <p class="hint">Freigegeben reagieren die vier Gondeln individuell auf Gravitation, Hauptarmbewegung und Rotation des Gondelsterns.</p>
+    </section>
+
+    <footer class="console-footer">
+      <button id="reset" class="reset-action">System Reset</button>
+      <span>Nightfly Digital Twin · v05</span>
+    </footer>
+  </aside>
+</main>
+
+<script type="module" src="./app.js"></script>
 <script type="module">
 import * as THREE from 'three';
-let lightsOn=false,showLights=[],bulbs=[];
+let lightsOn=false,showLights=[],bulbs=[],initialized=false;
 const mat=(color,metalness=.4,roughness=.35,emissive=null)=>new THREE.MeshStandardMaterial({color,metalness,roughness,emissive:emissive||'#000000',emissiveIntensity:emissive?1.5:0});
-function addVisualPass(){const nf=window.nightfly;if(!nf?.groups?.static||!nf?.groups?.crown){requestAnimationFrame(addVisualPass);return;}const root=nf.groups.static;
- for(const mesh of root.children){if(mesh.name?.includes('Scenery_')){mesh.position.y+=2.35;mesh.scale.x*=1.14;}}
- nf.scene.traverse(obj=>{if(!obj.isMesh||!obj.material)return;const name=obj.name||'';if(/Rotor_passenger_arm|Rotor_counterweight_arm/.test(name)){obj.material=obj.material.clone();obj.material.color.set('#3a3f46');obj.material.metalness=.75;obj.material.roughness=.26;}else if(/Maintenance_platform|Spoke_yellow_tip|Seat_yellow_contour/.test(name)){obj.material=obj.material.clone();obj.material.color.set('#f2b91e');obj.material.metalness=.45;obj.material.roughness=.28;}else if(/Gear_tooth|Rotor_drive|Gondola_axle/.test(name)){obj.material=obj.material.clone();obj.material.color.set('#aab1b7');obj.material.metalness=.9;obj.material.roughness=.19;}else if(/bulb|LED|light/i.test(name)){obj.material=obj.material.clone();obj.material.emissive?.set('#fff2bd');obj.material.emissiveIntensity=1.7;}});
- const crown=nf.groups.crown;const hub=new THREE.Mesh(new THREE.CylinderGeometry(.92,.92,.42,32),mat('#171b20',.8,.2));hub.rotation.x=Math.PI/2;hub.castShadow=true;crown.add(hub);
- const ring=new THREE.Mesh(new THREE.TorusGeometry(1.08,.08,10,40),mat('#f0b91e',.55,.25));crown.add(ring);
- for(let i=0;i<32;i++){const a=i/32*Math.PI*2,b=new THREE.Mesh(new THREE.SphereGeometry(.045,8,6),mat('#fff7d7',.1,.2,'#ffd97a'));b.position.set(Math.cos(a)*1.08,Math.sin(a)*1.08,0);crown.add(b);bulbs.push(b);}
- for(const x of [-5.2,0,5.2]){const p=new THREE.PointLight('#ffd36a',0,18,2);p.position.set(x,-3.4,1.1);nf.scene.add(p);showLights.push(p);}
- const blue=new THREE.PointLight('#69b8ff',0,22,2);blue.position.set(0,2.5,7);nf.scene.add(blue);showLights.push(blue);
- document.getElementById('showlights').onclick=()=>{lightsOn=!lightsOn;document.getElementById('showlights').classList.toggle('selected',lightsOn);};requestAnimationFrame(updateVisuals);
+
+function tubeBetween(a,b,r=.045,material=mat('#242a30',.8,.3)){
+ const delta=b.clone().sub(a),mesh=new THREE.Mesh(new THREE.CylinderGeometry(r,r,delta.length(),10),material);
+ mesh.position.copy(a).add(b).multiplyScalar(.5);mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),delta.clone().normalize());mesh.castShadow=true;return mesh;
 }
-function updateVisuals(t){const nf=window.nightfly,s=nf?.state;if(s){for(let i=0;i<showLights.length;i++)showLights[i].intensity=lightsOn?(i===showLights.length-1?4.3:2.2):0;for(let i=0;i<bulbs.length;i++){const m=bulbs[i].material;m.emissiveIntensity=lightsOn?1.4+1.15*Math.sin(t*.007+i*.7)**2:.65;}const d=Math.abs(s.motorTorque||0);document.getElementById('tele-angle').textContent=`${Math.round((Math.atan2(Math.sin(s.mainAngle),Math.cos(s.mainAngle)))*180/Math.PI)}°`;document.getElementById('tele-speed').textContent=`${Math.round(s.mainVelocity*180/Math.PI)}°/s`;document.getElementById('tele-rotor').textContent=`${(s.spinVelocity*60/(Math.PI*2)).toFixed(1)} rpm`;document.getElementById('tele-drive').textContent=`${Math.min(100,Math.round(d/3.5*100))}%`;const g=1+Math.abs(s.mainVelocity*s.mainVelocity*.72/9.81)+Math.abs(s.spinVelocity*s.spinVelocity*1.8/9.81);document.getElementById('tele-g').textContent=`${g.toFixed(2)} g`;}requestAnimationFrame(updateVisuals);}
+function addTruss(scene){
+ const trussMat=mat('#252b31',.82,.26),yellow=mat('#d6a91c',.6,.28);
+ for(const x of [-8.2,8.2]){
+  const frame=new THREE.Group();
+  const a=new THREE.Vector3(x,-1.5,0),b=new THREE.Vector3(x,-1.5,11.2);
+  frame.add(tubeBetween(a,b,.075,trussMat));
+  for(let z=.8;z<10.8;z+=1.15){
+    frame.add(tubeBetween(new THREE.Vector3(x,-1.5,z),new THREE.Vector3(x+(x<0?.65:-.65),-1.5,z+.58),.025,trussMat));
+    frame.add(tubeBetween(new THREE.Vector3(x+(x<0?.65:-.65),-1.5,z+.58),new THREE.Vector3(x,-1.5,z+1.15),.025,trussMat));
+  }
+  const foot=new THREE.Mesh(new THREE.BoxGeometry(.8,.8,.18),yellow);foot.position.set(x,-1.5,.09);frame.add(foot);scene.add(frame);
+ }
+ scene.add(tubeBetween(new THREE.Vector3(-8.2,-1.5,11.2),new THREE.Vector3(8.2,-1.5,11.2),.08,trussMat));
+}
+function addVisualPass(){
+ const nf=window.nightfly;if(!nf?.groups?.static||!nf?.groups?.crown||!nf?.scene){requestAnimationFrame(addVisualPass);return;}if(initialized)return;initialized=true;
+ const root=nf.groups.static;
+ for(const mesh of root.children){if(mesh.name?.includes('Scenery_')){mesh.position.y+=2.35;mesh.scale.x*=1.14;}}
+ nf.scene.traverse(obj=>{
+  if(!obj.isMesh||!obj.material)return;const name=obj.name||'';
+  if(/Rotor_passenger_arm|Rotor_counterweight_arm/.test(name)){obj.material=obj.material.clone();obj.material.color.set('#30363d');obj.material.metalness=.82;obj.material.roughness=.22;}
+  else if(/Maintenance_platform|Spoke_yellow_tip|Seat_yellow_contour/.test(name)){obj.material=obj.material.clone();obj.material.color.set('#f0b719');obj.material.metalness=.52;obj.material.roughness=.25;}
+  else if(/Gear_tooth|Rotor_drive|Gondola_axle/.test(name)){obj.material=obj.material.clone();obj.material.color.set('#aeb7bf');obj.material.metalness=.94;obj.material.roughness=.16;}
+  else if(/bulb|LED|light/i.test(name)){obj.material=obj.material.clone();if(obj.material.emissive){obj.material.emissive.set('#fff0ae');obj.material.emissiveIntensity=1.8;}}
+ });
+ const crown=nf.groups.crown;
+ const hub=new THREE.Mesh(new THREE.CylinderGeometry(.94,.94,.46,40),mat('#12161a',.88,.18));hub.rotation.x=Math.PI/2;hub.castShadow=true;crown.add(hub);
+ const ring=new THREE.Mesh(new THREE.TorusGeometry(1.08,.085,12,48),mat('#efb91f',.65,.22));crown.add(ring);
+ for(let i=0;i<40;i++){const a=i/40*Math.PI*2,b=new THREE.Mesh(new THREE.SphereGeometry(.043,8,6),mat('#fff8dc',.05,.2,'#ffd66b'));b.position.set(Math.cos(a)*1.08,Math.sin(a)*1.08,0);crown.add(b);bulbs.push(b);}
+ addTruss(nf.scene);
+ const stripMat=mat('#15191d',.4,.5,'#e9af26');
+ for(const x of [-6,-3,0,3,6]){const strip=new THREE.Mesh(new THREE.BoxGeometry(2.25,.08,.035),stripMat.clone());strip.position.set(x,-7.1,.06);nf.scene.add(strip);bulbs.push(strip);}
+ const lightData=[[-7,-4,4,'#ffc74c'],[7,-4,4,'#ffc74c'],[-4,1,8,'#59a9ff'],[4,1,8,'#59a9ff'],[0,-1,12,'#fff0bd']];
+ for(const [x,y,z,c] of lightData){const p=new THREE.PointLight(c,0,20,2);p.position.set(x,y,z);nf.scene.add(p);showLights.push(p);}
+ document.getElementById('showlights').onclick=()=>{lightsOn=!lightsOn;document.getElementById('showlights').classList.toggle('selected',lightsOn);};
+ requestAnimationFrame(updateVisuals);
+}
+function updateVisuals(t){
+ const nf=window.nightfly,s=nf?.state;
+ if(s){
+  for(let i=0;i<showLights.length;i++)showLights[i].intensity=lightsOn?(i===showLights.length-1?3.8:2.2):0;
+  for(let i=0;i<bulbs.length;i++){const m=bulbs[i].material;if(!m?.emissive)continue;m.emissiveIntensity=lightsOn?1.2+1.4*Math.sin(t*.006+i*.53)**2:.42;}
+  const d=Math.abs(s.motorTorque||0),angle=Math.atan2(Math.sin(s.mainAngle),Math.cos(s.mainAngle))*180/Math.PI;
+  document.getElementById('tele-angle').textContent=`${Math.round(angle)}°`;
+  document.getElementById('tele-speed').textContent=`${Math.round(s.mainVelocity*180/Math.PI)}°/s`;
+  document.getElementById('tele-rotor').textContent=`${(s.spinVelocity*60/(Math.PI*2)).toFixed(1)} rpm`;
+  document.getElementById('tele-drive').textContent=`${Math.min(100,Math.round(d/3.65*100))}%`;
+  const g=1+Math.abs(s.mainVelocity*s.mainVelocity*.72/9.81)+Math.abs(s.spinVelocity*s.spinVelocity*1.8/9.81);
+  document.getElementById('tele-g').textContent=`${g.toFixed(2)} g`;
+  document.getElementById('tele-program').textContent=(s.program||'stop').toUpperCase();
+  const loop=document.getElementById('loop-state');
+  if(s.program==='p100'){loop.textContent=s.rotating?'LOOP LOCKED':'LOOP ACCEL';loop.classList.toggle('active',true);}else{loop.textContent='LOOP IDLE';loop.classList.toggle('active',false);}
+ }
+ requestAnimationFrame(updateVisuals);
+}
 addVisualPass();
-</script></body></html>
+</script>
+</body>
+</html>
