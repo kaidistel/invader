@@ -1,5 +1,5 @@
 export const TAU=Math.PI*2, LIFT_ANGLE=-28*Math.PI/180;
-export const RIDE_LIFT=1, MAX_LIFT=1, MAX_MAIN_RATE=82*Math.PI/180;
+export const RIDE_LIFT=1, MAX_LIFT=1, MAX_MAIN_RATE=88*Math.PI/180;
 export const PROGRAMS={
   p30:{label:'30 %',kind:'swing',angle:55*Math.PI/180,power:.52},
   p50:{label:'50 %',kind:'swing',angle:95*Math.PI/180,power:.68},
@@ -25,6 +25,7 @@ export class RidePhysics{
   this.mainAngle=0;this.mainVelocity=0;this.mainAccel=0;this.motorTorque=0;
   this.spinAngle=0;this.spinVelocity=0;this.spinAccel=0;
   this.swingEnvelope=0;this.program='stop';this.rotating=false;
+  this.loopDirection=1;this.loopProgress=0;this.loopStage='idle';
   this.spinOn=false;this.spinRPM=12;this.parking=false;this.afterPark=0;this.time=0;
   this.gondolas=Array.from({length:4},()=>({angle:0,velocity:0,brake:true,previous:null,prevVelocity:[0,0,0],acc:[0,0,0]}));
  }
@@ -34,12 +35,17 @@ export class RidePhysics{
  setProgram(name){
   if(!PROGRAMS[name])return false;
   if(name!=='stop'&&!this.canDrive)return false;
-  this.program=name;this.rotating=false;this.swingEnvelope=Math.abs(wrap(this.mainAngle));return true;
+  this.program=name;this.rotating=false;this.swingEnvelope=Math.abs(wrap(this.mainAngle));
+  if(name==='p100'){
+   this.loopDirection=Math.abs(this.mainVelocity)>.12?sgn(this.mainVelocity):1;
+   this.loopProgress=0;this.loopStage='accelerating';
+  }else this.loopStage='idle';
+  return true;
  }
  setLift(target){
   target=clamp(target,0,MAX_LIFT);
   if(target<RIDE_LIFT-.035&&(this.program!=='stop'||this.spinOn||Math.abs(wrap(this.mainAngle))>.015||Math.abs(wrap(this.spinAngle))>.015||this.gondolas.some(g=>Math.abs(wrap(g.angle))>.025))){
-   this.parking=true;this.afterPark=target;this.program='stop';this.rotating=false;this.spinOn=false;
+   this.parking=true;this.afterPark=target;this.program='stop';this.rotating=false;this.loopStage='idle';this.spinOn=false;
   }else{this.liftTarget=target;this.parking=false;}
  }
  setSpin(on){if(on&&!this.canDrive)return false;this.spinOn=on;return true;}
@@ -51,28 +57,39 @@ export class RidePhysics{
   const spec=this.programSpec,a=wrap(this.mainAngle),w=this.mainVelocity;
   const gravity=-1.55*Math.sin(a),drag=-.11*w-.025*w*Math.abs(w);let motor=0;
   if(this.parking||spec.kind==='stop'){
-    this.rotating=false;motor=clamp(-2.9*a-2.35*w,-2.8,2.8);
+    this.rotating=false;this.loopStage='idle';motor=clamp(-2.9*a-2.35*w,-2.8,2.8);
   }else if(spec.kind==='hold'){
-    this.rotating=false;const target=Math.PI+Math.round((this.mainAngle-Math.PI)/TAU)*TAU;motor=clamp((target-this.mainAngle)*4.6-w*2.7-gravity,-3.5,3.5);
+    this.rotating=false;this.loopStage='idle';const target=Math.PI+Math.round((this.mainAngle-Math.PI)/TAU)*TAU;motor=clamp((target-this.mainAngle)*4.6-w*2.7-gravity,-3.5,3.5);
   }else if(spec.kind==='swing'){
-    this.rotating=false;const target=spec.angle,amp=Math.max(Math.abs(a),this.swingEnvelope*.985);this.swingEnvelope=approach(this.swingEnvelope,Math.abs(a),1.4*dt);
+    this.rotating=false;this.loopStage='idle';const target=spec.angle,amp=Math.max(Math.abs(a),this.swingEnvelope*.985);this.swingEnvelope=approach(this.swingEnvelope,Math.abs(a),1.4*dt);
     const lower=Math.max(0,1-Math.abs(a)/(Math.PI*.72));const need=clamp((target-amp)/(25*Math.PI/180),-1,1);motor=sgn(w||Math.sin(a)||1)*spec.power*2.25*lower*need;
     if(amp>target)motor+=-sgn(w)*clamp((amp-target)*2.7,0,1.2);
   }else if(spec.kind==='rotate'){
+    const dir=this.loopDirection||1,desired=66*Math.PI/180*dir;
+    this.loopProgress+=Math.abs(w)*dt;
     if(!this.rotating){
-      const amp=Math.max(Math.abs(a),this.swingEnvelope*.99);this.swingEnvelope=Math.max(this.swingEnvelope*.997,Math.abs(a));const lower=Math.max(.12,1-Math.abs(a)/(Math.PI*.9));motor=sgn(w||Math.sin(a)||1)*2.65*lower;
-      if(amp>164*Math.PI/180&&Math.abs(w)>28*Math.PI/180&&Math.cos(a)<-.94)this.rotating=true;
+      this.loopStage='accelerating';
+      const launchSpeed=52*Math.PI/180;
+      const speedNeed=clamp((launchSpeed-Math.abs(w))/(launchSpeed*.72),0,1);
+      const launchPush=1.15+.95*speedNeed;
+      motor=clamp(-gravity-drag+dir*launchPush,-3.5,3.5);
+      if(Math.abs(w)>48*Math.PI/180&&this.loopProgress>Math.PI*.55){this.rotating=true;this.loopStage='continuous';}
     }else{
-      const desired=62*Math.PI/180;motor=clamp((desired-w)*1.35+(Math.abs(a)>2.35?.42:0),-.55,2.1);
+      this.loopStage='continuous';
+      const speedError=desired-w;
+      motor=clamp(-gravity-drag+speedError*2.15,-3.65,3.65);
+      if(w*dir<18*Math.PI/180){
+        motor=clamp(-gravity-drag+dir*2.45,-3.65,3.65);
+      }
     }
   }
-  this.motorTorque=motor;return clamp(gravity+drag+motor,-4.2,4.2);
+  this.motorTorque=motor;return clamp(gravity+drag+motor,-4.4,4.4);
  }
  step(dt){
   this.time+=dt;
   const desiredLift=clamp((this.liftTarget-this.lift)*1.9,-.18,.18);this.liftVelocity=approach(this.liftVelocity,desiredLift,.30*dt);this.lift=clamp(this.lift+this.liftVelocity*dt,0,MAX_LIFT);
   if(Math.abs(this.liftTarget-this.lift)<.0002&&Math.abs(this.liftVelocity)<.002){this.lift=this.liftTarget;this.liftVelocity=0;}
-  if(this.program!=='stop'&&!this.canDrive){this.program='stop';this.rotating=false;}if(this.spinOn&&!this.canDrive)this.spinOn=false;
+  if(this.program!=='stop'&&!this.canDrive){this.program='stop';this.rotating=false;this.loopStage='idle';}if(this.spinOn&&!this.canDrive)this.spinOn=false;
   const prevMain=this.mainVelocity;this.mainAccel=this._mainDrive(dt);this.mainVelocity=clamp(this.mainVelocity+this.mainAccel*dt,-MAX_MAIN_RATE,MAX_MAIN_RATE);this.mainAngle+=this.mainVelocity*dt;if(Math.abs(this.mainAngle)>TAU*20)this.mainAngle=wrap(this.mainAngle);this.mainAccel=(this.mainVelocity-prevMain)/dt;this.swingEnvelope=Math.max(this.swingEnvelope*.9992,Math.abs(wrap(this.mainAngle)));
   let wantSpin=this.spinOn?this.spinRPM*TAU/60:0;if(this.parking)wantSpin=clamp(-wrap(this.spinAngle)*1.7,-.8,.8);
   const prevSpin=this.spinVelocity;this.spinVelocity=approach(this.spinVelocity,wantSpin,.42*dt);this.spinAngle+=this.spinVelocity*dt;this.spinAccel=(this.spinVelocity-prevSpin)/dt;
