@@ -1,3 +1,4 @@
+import './pegasus31.mjs';
 import * as THREE from 'three';
 
 const $=id=>document.getElementById(id);
@@ -20,7 +21,7 @@ function waitForRide(){
  if(!nf?.groups?.gondola0||!nf?.state){requestAnimationFrame(waitForRide);return;}
  if(initialized)return;
  initialized=true;
- installStyles();installUI(nf);buildOriginalRestraintRigs(nf);buildReferenceGondolaHardware(nf);installInterlock();requestAnimationFrame(update);
+ installStyles();installUI(nf);buildOriginalRestraintRigs(nf);installInterlock();requestAnimationFrame(update);
 }
 
 function installUI(nf){
@@ -77,54 +78,6 @@ function buildOriginalRestraintRigs(nf){
  }
  const state=$('restraint-state');if(state)state.textContent=`${found} / 16 erkannt`;
  setStatus(found===16?'Alle 16 vorhandenen Schulterbügel erkannt.':'Bügelsteuerung aktiv, aber nur '+found+' von 16 Bügelgruppen erkannt.');
-}
-
-function cylBetween(parent,a,b,r,material,segments=14,name='Pegasus_hardware'){
- const av=a.clone(),bv=b.clone(),d=bv.clone().sub(av),len=d.length();
- const mesh=new THREE.Mesh(new THREE.CylinderGeometry(r,r,len,segments),material);
- mesh.name=name;mesh.position.copy(av).add(bv).multiplyScalar(.5);
- mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh;
-}
-function tubePath(parent,points,r,material,name){for(let i=0;i<points.length-1;i++)cylBetween(parent,points[i],points[i+1],r,material,10,name);}
-
-function buildReferenceGondolaHardware(nf){
- const steel=new THREE.MeshStandardMaterial({color:'#c7c7c1',metalness:.88,roughness:.20});
- const yellow=new THREE.MeshStandardMaterial({color:'#f2bd1b',metalness:.42,roughness:.30});
- const dark=new THREE.MeshStandardMaterial({color:'#171717',metalness:.18,roughness:.50});
- const up=new THREE.Vector3(0,0,1);
- for(let k=0;k<4;k++){
-  const g=nf.groups['gondola'+k],t=k*Math.PI/2;
-  const radial=new THREE.Vector3(Math.cos(t),Math.sin(t),0).normalize();
-  const tan=new THREE.Vector3(-Math.sin(t),Math.cos(t),0).normalize();
-  // Real Pegasus 16: the transverse axle sits BEHIND the seat backs, not through the head envelope.
-  const axleCenter=radial.clone().multiplyScalar(-.44).addScaledVector(up,.04);
-  cylBetween(g,axleCenter.clone().addScaledVector(tan,-1.74),axleCenter.clone().addScaledVector(tan,1.74),.105,steel,20,'Pegasus_rear_axle');
-  for(const s of [-1,1]){
-   const side=axleCenter.clone().addScaledVector(tan,s*1.55);
-   cylBetween(g,side.clone().addScaledVector(tan,-s*.10),side.clone().addScaledVector(tan,s*.13),.225,yellow,22,'Pegasus_side_bearing');
-   const motorCenter=axleCenter.clone().addScaledVector(tan,s*1.84);
-   cylBetween(g,motorCenter.clone().addScaledVector(tan,-s*.13),motorCenter.clone().addScaledVector(tan,s*.20),.18,steel,20,'Pegasus_end_motor');
-   // Side cage only. No arch/cross-member above the passengers.
-   const e=tan.clone().multiplyScalar(s*1.88).addScaledVector(radial,-.02);
-   const outlineLocal=[[-.34,-.82],[.43,-.82],[.67,-.50],[.72,.05],[.54,.62],[.20,.82],[-.28,.60],[-.34,-.82]];
-   const outline=outlineLocal.map(([q,z])=>e.clone().addScaledVector(radial,q).addScaledVector(up,z));
-   tubePath(g,outline,.028,steel,'Pegasus_side_guard');
-   for(const q of [-.20,-.02,.16,.34,.50]){
-    const zTop=.72-Math.max(0,q-.12)*.42;
-    tubePath(g,[e.clone().addScaledVector(radial,q).addScaledVector(up,-.75),e.clone().addScaledVector(radial,q).addScaledVector(up,zTop)],.008,steel,'Pegasus_guard_wire');
-   }
-   for(const z of [-.58,-.36,-.14,.08,.30,.50]){
-    const qEnd=.62-Math.max(0,z-.12)*.28;
-    tubePath(g,[e.clone().addScaledVector(radial,-.25).addScaledVector(up,z),e.clone().addScaledVector(radial,qEnd).addScaledVector(up,z)],.008,steel,'Pegasus_guard_wire');
-   }
-   // Yellow side cheek surrounding the bearing, as on Nightfly. It stays completely outside the four seats.
-   const cheekBase=tan.clone().multiplyScalar(s*1.48).addScaledVector(radial,-.46);
-   tubePath(g,[cheekBase.clone().addScaledVector(up,-.34),cheekBase.clone().addScaledVector(radial,-.10).addScaledVector(up,.10),cheekBase.clone().addScaledVector(up,.46)],.055,yellow,'Pegasus_yellow_cheek');
-  }
-  // Slim black lower carrier under the seats; no overhead structure.
-  const low=radial.clone().multiplyScalar(.10).addScaledVector(up,-.68);
-  cylBetween(g,low.clone().addScaledVector(tan,-1.48),low.clone().addScaledVector(tan,1.48),.055,dark,14,'Pegasus_lower_carrier');
- }
 }
 
 function setRestraints(close,nf){
