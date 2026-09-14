@@ -22,7 +22,12 @@ function cylinder(a,b,r,material,parent,name,n=18){
 function bulb(p,parent){const b=new THREE.Mesh(new THREE.SphereGeometry(.035,8,6),M.light);b.position.copy(p);b.name='Pegasus31_LED';parent.add(b);return b;}
 
 function hideLegacyForks(nf){
- nf.scene.traverse(o=>{if(!o.isMesh)return;const n=o.name||'';if(/Crown_spoke|Crown_fork|Nightfly_Y_fork|Shield_perimeter|Shield_vertical_wire|Shield_horizontal_wire|Gondola_end_guard/i.test(n))o.visible=false;});
+ // Only replace the crown/fork structure. Leave every original gondola part untouched.
+ nf.scene.traverse(o=>{
+  if(!o.isMesh)return;
+  const n=o.name||'';
+  if(/Crown_spoke|Crown_fork|Nightfly_Y_fork/i.test(n))o.visible=false;
+ });
 }
 
 function buildBranch(root,k){
@@ -44,23 +49,6 @@ function buildBranch(root,k){
  return branch;
 }
 
-function enhanceGondola(group){
- // The v3.1 source puts the continuous axle behind the four seats and keeps all guards outside the passenger envelope.
- cylinder(new THREE.Vector3(-1.45,.10,.08),new THREE.Vector3(1.45,.10,.08),.10,M.chrome,group,'Pegasus31_continuous_axle',20);
- beam(new THREE.Vector3(-1.29,-.23,-1.12),new THREE.Vector3(1.29,-.23,-1.12),.15,.66,M.dark,group,'Pegasus31_underseat_frame');
- for(const side of [-1,1]){
-  const x=side*1.46;
-  cylinder(new THREE.Vector3(x-side*.04,0,0),new THREE.Vector3(x+side*.04,0,0),.19,M.silver,group,'Pegasus31_bearing_flange',24);
-  cylinder(new THREE.Vector3(side*1.305,-.02,-.03),new THREE.Vector3(side*1.305,.02,-.03),.21,M.chrome,group,'Pegasus31_brake_disc',24);
- }
- // No overhead hoop. Only small end-side protective posts, fully outside all four seats.
- for(const side of [-1,1]){
-  const x=side*1.55;
-  cylinder(new THREE.Vector3(x,.18,-1.13),new THREE.Vector3(x,.18,.12),.022,M.chrome,group,'Pegasus31_end_side_post',12);
-  cylinder(new THREE.Vector3(x,.18,-1.13),new THREE.Vector3(x,-.64,-1.13),.022,M.chrome,group,'Pegasus31_end_lower_rail',12);
- }
-}
-
 export function installPegasus31(nf){
  if(!nf?.groups?.crown)return false;
  if(nf.scene.getObjectByName('Pegasus31_root'))return true;
@@ -68,9 +56,17 @@ export function installPegasus31(nf){
  const root=new THREE.Group();root.name='Pegasus31_root';nf.groups.crown.add(root);
  // Crown-local dimensions from the supplied v3.1 Blender source.
  for(let k=0;k<4;k++)buildBranch(root,k);
- for(let k=0;k<4;k++)enhanceGondola(nf.groups['gondola'+k]);
- // Recolor the surviving original hardware toward the supplied Nightfly reference palette.
- nf.scene.traverse(o=>{if(!o.isMesh||!o.material)return;const n=(o.name||'').toLowerCase();if(n.includes('seat_yellow')||n.includes('yellow_shell')||n.includes('spoke_yellow')){o.material=o.material.clone();o.material.color.setHex(YELLOW);}else if(n.includes('back_pad')||n.includes('headrest')||n.includes('restraint')){o.material=o.material.clone();o.material.color.setHex(DARK);}});
+ // Important: do not add any procedural geometry to the gondolas. The runtime model already
+ // contains the seats, restraints, guards, axle and carrier details and those stay untouched.
+ nf.scene.traverse(o=>{
+  if(!o.isMesh||!o.material)return;
+  const n=(o.name||'').toLowerCase();
+  if(n.includes('seat_yellow')||n.includes('yellow_shell')||n.includes('spoke_yellow')){
+   o.material=o.material.clone();o.material.color.setHex(YELLOW);
+  }else if(n.includes('back_pad')||n.includes('headrest')||n.includes('restraint')){
+   o.material=o.material.clone();o.material.color.setHex(DARK);
+  }
+ });
  return true;
 }
 
