@@ -52,7 +52,6 @@ function enhanceGondola(group){
   const x=side*1.46;
   cylinder(new THREE.Vector3(x-side*.04,0,0),new THREE.Vector3(x+side*.04,0,0),.19,M.silver,group,'Pegasus31_bearing_flange',24);
   cylinder(new THREE.Vector3(side*1.305,-.02,-.03),new THREE.Vector3(side*1.305,.02,-.03),.21,M.chrome,group,'Pegasus31_brake_disc',24);
-  const cal=new THREE.Mesh(new THREE.BoxGeometry(.12,.11,.14),M.dark);cal.position.set(side*1.305,.175,-.03);cal.name='Pegasus31_brake_caliper';group.add(cal);
  }
  // No overhead hoop. Only small end-side protective posts, fully outside all four seats.
  for(const side of [-1,1]){
