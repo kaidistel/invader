@@ -1,4 +1,4 @@
-import './pegasus31.mjs';
+import './pegasus31.mjs?v=10';
 import * as THREE from 'three';
 
 const $=id=>document.getElementById(id);
