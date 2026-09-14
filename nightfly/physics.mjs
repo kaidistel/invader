@@ -28,7 +28,7 @@ export class RidePhysics{
   this.swingEnvelope=0;this.program='stop';this.rotating=false;
   this.loopDirection=1;this.loopProgress=0;this.loopStage='idle';
   this.spinOn=false;this.spinRPM=12;this.parking=false;this.afterPark=0;this.time=0;
-  this.gondolas=Array.from({length:4},()=>({angle:0,velocity:0,brake:true,previous:null,prevVelocity:[0,0,0],acc:[0,0,0]}));
+  this.gondolas=Array.from({length:4},()=>({angle:0,velocity:0,brake:true,lockAngle:0,previous:null,prevVelocity:[0,0,0],acc:[0,0,0]}));
  }
  get canDrive(){return this.lift>RIDE_LIFT-.035&&!this.parking;}
  get swingOn(){return this.program!=='stop';}
@@ -50,7 +50,14 @@ export class RidePhysics{
   }else{this.liftTarget=target;this.parking=false;}
  }
  setSpin(on){if(on&&!this.canDrive)return false;this.spinOn=on;return true;}
- setBrakes(brake){if(this.parking)return;for(const g of this.gondolas)g.brake=brake;}
+ setBrakes(brake){
+  if(this.parking)return;
+  for(const g of this.gondolas){
+   if(brake&&!g.brake){g.lockAngle=g.angle;g.velocity=0;}
+   if(!brake&&g.brake)g.lockAngle=null;
+   g.brake=brake;
+  }
+ }
  liftAngle(){return LIFT_ANGLE*this.lift;}
  pivot(){return add(this.origins.lift,rx(sub(this.origins.rotor,this.origins.lift),this.liftAngle()));}
  support(k){const local=sub(this.origins['gondola'+k],this.origins.crown),arm=add(sub(this.origins.crown,this.origins.rotor),rz(local,this.spinAngle));return add(this.pivot(),rx(ry(arm,this.mainAngle),this.liftAngle()));}
@@ -100,13 +107,16 @@ export class RidePhysics{
    const g=this.gondolas[k],p=this.support(k);let velocity=[0,0,0];
    if(g.previous){velocity=mul(sub(p,g.previous),1/dt);const raw=mul(sub(velocity,g.prevVelocity),1/dt);g.acc=add(mul(g.acc,.78),mul(raw,.22));}g.previous=p;g.prevVelocity=velocity;
    if(this.parking){const aa=clamp(-wrap(g.angle)*14-g.velocity*7,-15,15);g.velocity+=aa*dt;g.angle+=g.velocity*dt;continue;}
-   if(g.brake){const aa=clamp(-wrap(g.angle)*18-g.velocity*8,-18,18);g.velocity+=aa*dt;g.angle+=g.velocity*dt;continue;}
+   if(g.brake){
+    if(g.lockAngle==null)g.lockAngle=g.angle;
+    g.angle=g.lockAngle;g.velocity=0;continue;
+   }
    const t=k*Math.PI/2,hinge=rx(ry(rz([-Math.sin(t),Math.cos(t),0],this.spinAngle),this.mainAngle),liftA),down=rx(ry([0,0,-1],this.mainAngle),liftA),side=cross(hinge,down),length=.68;
    const r=mul(add(mul(down,Math.cos(g.angle)),mul(side,Math.sin(g.angle))),length),rq=cross(hinge,r),inertial=add(add(cross(alpha,r),cross(omega,cross(omega,r))),mul(cross(omega,rq),2*g.velocity)),effective=sub(sub([0,0,-9.81],g.acc),inertial);
    const acceleration=clamp(dot(rq,effective)/(length*length)-.42*g.velocity,-70,70);g.velocity=clamp(g.velocity+acceleration*dt,-13,13);g.angle+=g.velocity*dt;if(Math.abs(g.angle)>Math.PI*20)g.angle=wrap(g.angle);
   }
   if(this.parking&&Math.abs(wrap(this.mainAngle))<.008&&Math.abs(this.mainVelocity)<.014&&Math.abs(wrap(this.spinAngle))<.008&&Math.abs(this.spinVelocity)<.014&&this.gondolas.every(g=>Math.abs(wrap(g.angle))<.012&&Math.abs(g.velocity)<.02)){
-   this.mainAngle=0;this.mainVelocity=0;this.spinAngle=0;this.spinVelocity=0;for(const g of this.gondolas){g.angle=0;g.velocity=0;g.brake=true;}this.parking=false;this.liftTarget=this.afterPark;
+   this.mainAngle=0;this.mainVelocity=0;this.spinAngle=0;this.spinVelocity=0;for(const g of this.gondolas){g.angle=0;g.velocity=0;g.brake=true;g.lockAngle=0;}this.parking=false;this.liftTarget=this.afterPark;
   }
  }
 }
