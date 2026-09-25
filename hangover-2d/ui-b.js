@@ -16,7 +16,7 @@ for(const b of document.querySelectorAll('[data-hold]')){
 
 document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('[data-view]').forEach(x=>x.classList.toggle('active',x===b));
-  const svg=$('towerSvg');svg.setAttribute('viewBox',b.dataset.view==='gondola'?'250 300 460 390':b.dataset.view==='station'?'70 600 820 310':'0 0 960 920');
+  currentView=b.dataset.view;renderFast();
 }));
 
 $('nightMode').addEventListener('change',()=>$('stage').classList.toggle('night',$('nightMode').checked));
