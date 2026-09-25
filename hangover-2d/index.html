@@ -142,11 +142,12 @@
         <div class="stage-caption"><strong id="stageTitle">ANLAGE AUS</strong><span id="stageHint">Hauptschalter einschalten.</span></div>
       </div>
 
-      <div class="telemetry">
+      <div class="telemetry telemetry-five">
         <div><span>GONDELHÖHE</span><b id="height">0.0 <small>m</small></b></div>
         <div><span>GESCHWINDIGKEIT</span><b id="speed">0 <small>km/h</small></b><small id="direction">IN STATION</small></div>
         <div><span>ROTATION</span><b id="rpm">0.0 <small>rpm</small></b><small id="rotationDir">STOP</small></div>
         <div><span>ZYKLUS</span><b id="rideTimer">00:00</b><small id="programStage">STANDBY</small></div>
+        <div><span>G-KRAFT <em>SIM</em></span><b id="gforce">1.00 <small>g</small></b><small id="accelText">RUHE</small></div>
       </div>
 
       <div class="lower-row">
@@ -168,6 +169,13 @@
       </div>
 
       <div class="status-bar"><i id="statusLamp"></i><span id="statusText">ANLAGE AUS</span><b id="safetyText">OFF</b></div>
+      <div class="system-rack" aria-label="Systemstatus">
+        <div><i id="sysPlc"></i><span>PLC</span><b id="sysPlcText">OFF</b></div>
+        <div><i id="sysLift"></i><span>LIFT</span><b id="sysLiftText">IDLE</b></div>
+        <div><i id="sysCatch"></i><span>CATCH CAR</span><b id="sysCatchText">PARK</b></div>
+        <div><i id="sysBrake"></i><span>EDDY BRAKE</span><b id="sysBrakeText">READY</b></div>
+        <div><i id="sysRot"></i><span>ROTATION</span><b id="sysRotText">STOP</b></div>
+      </div>
 
       <section class="control-block power-block">
         <div class="block-title"><h3>♠ Anlage</h3><span id="powerInfo">0 kW SIM</span></div>
