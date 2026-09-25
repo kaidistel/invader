@@ -20,3 +20,5 @@
 @media(max-width:1180px){.telemetry-five{grid-template-columns:repeat(5,1fr)}.system-rack{grid-template-columns:repeat(5,1fr)}}
 @media(max-width:760px){.telemetry-five{grid-template-columns:repeat(3,1fr)}.telemetry-five>div:nth-child(n+4){border-top:1px solid #44203e}.system-rack{grid-template-columns:repeat(5,minmax(0,1fr));padding:5px;gap:3px}.system-rack span{font-size:4.5px}.system-rack b{font-size:5.5px}}
 @media(max-width:480px){.telemetry-five{grid-template-columns:repeat(2,1fr)}.telemetry-five>div:last-child{grid-column:1/-1}.system-rack{grid-template-columns:repeat(3,1fr)}}
+
+.stage.braking .brake-module{fill:#f6c93f;filter:drop-shadow(0 0 4px #ffd34e)}.stage.braking #brakeFins{filter:drop-shadow(0 0 5px #ffd34e88)}.stage.dropping #gondola{filter:url(#softShadow) saturate(1.08)}.stage.dropping .seat-tube{fill:#fff;filter:drop-shadow(0 0 3px #fff)}.stage.lifting .lift-cable{stroke:#15191d;stroke-width:2.6}.stage.lifting .pulley{stroke:#ffd54c}
