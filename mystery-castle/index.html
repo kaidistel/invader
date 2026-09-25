@@ -1,22 +1,197 @@
 <!doctype html>
-<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111719"><meta name="description" content="Mystery Castle Fan-Simulator: sechs Gondeln, drei Fahrprogramme und dein eigener Dienst am Kontrollpult."><title>Mystery Castle · Die Turmkontrolle</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23151d20'/%3E%3Cpath d='M16 52V18h8v7h5V12h6v13h5v-7h8v34z' fill='%23c0a575'/%3E%3C/svg%3E"><link rel="stylesheet" href="style.css"><script type="importmap">{"imports":{"three":"../nightfly/vendor/three.module.js"}}</script></head>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#071015">
+  <meta name="description" content="Inoffizieller Mystery Castle Fan-Simulator mit 2D-Turmansicht, sechs Gondeln und drei Fahrprogrammen.">
+  <title>Mystery Castle · Turmkontrolle</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23071015'/%3E%3Cpath d='M14 54V18h8v7h6V9h8v16h6v-7h8v36z' fill='%238ec7d8'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
 <body>
-<header class="topbar"><a class="brand" href="./" aria-label="Mystery Castle Startseite"><svg viewBox="0 0 40 46" aria-hidden="true"><path d="M3 40V14h8v6h5V3h8v17h5v-6h8v26M3 40h34M16 40V29h8v11"/></svg><span>MYSTERY CASTLE<small>THE OPERATOR EXPERIENCE</small></span></a><div class="shift"><i></i> TURMKONTROLLE <span>/</span> SCHICHT <b id="clock">00:00</b></div><nav><button class="icon-button" id="sound" title="Atmosphäre ein- oder ausschalten" aria-pressed="false">♪ <span>Ton aus</span></button><button class="icon-button" id="help">? <span>Handbuch</span></button><button class="icon-button" id="fullscreen" title="Vollbild">⛶</button></nav></header>
-<div class="titlebar"><div><p class="eyebrow">DAS VERMÄCHTNIS DER VON WINDHOVEN</p><h1>Die Macht liegt <em>in deinen Händen.</em></h1></div><div class="edition"><span>FAN SIMULATION</span><b>MC / 1998</b></div></div>
-<main class="workspace">
-<section class="visual-column" aria-label="Turmkammer und Telemetrie">
-<div class="scene-shell"><div id="scene"><div id="loading"><span class="sigil">✧</span><p>Die Turmkammer erwacht …</p></div></div><div class="scene-header"><span class="live-label"><i></i> TURMKAMMER</span><span id="sceneStatus">STANDBY</span></div><div class="scene-caption"><div class="tiny">SECHS SPUREN. EIN DUNKLES GEHEIMNIS.</div><h2>Das Experiment.</h2><p id="sceneHint">Starte die Anlage. Erwecke den Turm.</p></div><div class="view-controls" role="group" aria-label="Kamera"><button class="active" data-view="overview">Kammer</button><button data-view="station">Station</button><button data-view="tower">Schnitt</button><button data-view="onride">Mitfahren</button></div><label class="light-toggle"><input id="worklight" type="checkbox" checked> Arbeitslicht</label><div class="drag-hint">Ziehen zum Drehen · Scrollen zum Zoomen</div></div>
-<div class="telemetry"><div><span>FAHRHÖHE <small>SIM</small></span><b id="height">0.0 <small>m</small></b><div class="sparkline" id="altitude"></div></div><div><span>GESCHWINDIGKEIT</span><b id="speed">0 <small>km/h</small></b><small id="direction">IN STATION</small></div><div><span>DRUCKRESERVE <small>SIM</small></span><b id="pressure">0 <small>%</small></b><div class="meter"><i id="pressureBar"></i></div></div><div><span>PROGRAMMFORTSCHRITT</span><b id="progress">00:00 <small>/ 01:01</small></b><small id="currentPhase">ANLAGE AUS</small></div></div>
-<section class="gondola-panel"><div class="section-heading"><h2><span>01</span> Gondelüberwachung</h2><span id="capacity">0 / 48 GÄSTE</span></div><div class="gondolas" id="gondolas"></div><p class="gondola-help" id="checkHelp">Nach dem Schließen der Bügel jede aktive Gondel zur Prüfung anklicken.</p></section>
-<div class="bottom-grid"><section class="journal"><div class="section-heading"><h2><span>02</span> Schichtprotokoll</h2><span>LIVE</span></div><ol id="log" aria-label="Letzte Ereignisse"></ol></section><section class="shift-stats"><div class="section-heading"><h2><span>03</span> Deine Schicht</h2></div><div class="stats-grid"><div><b id="rides">0</b><span>FAHRTEN</span></div><div><b id="served">0</b><span>BEFÖRDERT</span></div><div><b id="queue">96</b><span>WARTEND</span></div><div><b id="throughput">—</b><span>GÄSTE / H¹</span></div></div><small>¹ Durchschnitt dieser laufenden Spielschicht.</small></section></div>
-</section>
-<aside class="console"><div class="console-heading"><div><p class="eyebrow">KONTROLLSTAND / MC–06</p><h2>Das Bedienpult</h2></div><span class="screw">⊕</span></div><div class="status-strip"><i id="statusLight"></i><span id="status">ANLAGE AUS</span><span id="voltage">OFF</span></div>
-<section class="control-group"><div class="control-heading"><h3>01 <span>Anlage</span></h3><span class="micro" id="compressor">KOMPRESSOR AUS</span></div><div class="power-row"><button class="power-button" data-action="power" id="power"><span class="switch"><i></i></span><span>Hauptschalter<small id="powerLabel">AUS</small></span></button><label class="lane-select">SPUREN<select id="lanes"><option value="2">2 / 16 Plätze</option><option value="4">4 / 32 Plätze</option><option value="6" selected>6 / 48 Plätze</option></select></label></div></section>
-<section class="control-group"><div class="control-heading"><h3>02 <span>Fahrprogramm</span></h3><span class="micro">MANUELLE AUSWAHL</span></div><div class="programs"><button class="program" data-program="1"><span class="roman">I</span><span><b>Kurzprogramm</b><small>Direkt. Kompakt. Ein Bungee.</small></span><span class="program-time">~26 s</span></button><button class="program" data-program="2"><span class="roman">II</span><span><b>Intensivprogramm</b><small>Zwei Bungees. Ein zweiter Aufstieg.</small></span><span class="program-time">~35 s</span></button><button class="program selected" data-program="3"><span class="roman">III</span><span><b>Langprogramm</b><small>Vorfahrt. Täuschung. Hauptabschuss.</small></span><span class="program-time">~61 s</span></button></div><div class="profile"><svg id="profile" viewBox="0 0 290 42" role="img" aria-label="Schematisches Höhenprofil des gewählten Programms"></svg><span>FAHRVERLAUF · SCHEMATISCH</span></div></section>
-<section class="control-group"><div class="control-heading"><h3>03 <span>Stationsbetrieb</span></h3><span class="micro" id="stationState">BEREIT</span></div><div class="station-controls"><button data-action="board" id="board"><span>↳</span> Einsteigen</button><button data-action="unload" id="unload"><span>↱</span> Aussteigen</button><button data-action="gates" id="gates"><span>▥</span> Tore schließen</button><button data-action="restraints" id="restraints"><span>∩</span> Bügel schließen</button></div><button class="clear-button" data-action="clear" id="clear"><i></i> Fahrbereich freigeben</button></section>
-<section class="dispatch-group"><div class="interlocks"><span id="interGate"><i></i> TORE</span><span id="interRestraint"><i></i> BÜGEL</span><span id="interClear"><i></i> BEREICH</span><span id="interPressure"><i></i> DRUCK</span></div><button id="dispatch" data-action="dispatch"><span>EXPERIMENT STARTEN</span><b>→</b></button><p id="guidance" role="status" aria-live="polite">Hauptschalter einschalten, um die Schicht zu beginnen.</p><div class="emergency-row"><button class="estop" id="stop" data-action="stop"><span></span><b>NOT-HALT</b></button><div><span class="micro">SICHERHEITSKREIS</span><p id="safetyText">System ausgeschaltet</p></div></div><div class="recovery-controls" id="recovery" hidden><button data-action="release" id="release">Not-Halt entriegeln</button><button data-action="recover" id="recover">Gondeln zurückholen</button><button data-action="reset" id="reset">Störung quittieren</button></div></section><div class="console-footer">VON WINDHOVEN <span>✧</span> INSTRUMENTS</div></aside>
-</main>
-<footer class="page-footer"><span>Ein inoffizielles Fanprojekt · inspiriert von Mystery Castle im Phantasialand.</span><button id="sources">Recherche &amp; Simulationsmodell ↗</button><span id="renderStatus">3D · WEBGL</span></footer>
-<dialog id="manual"><button class="close-modal" aria-label="Handbuch schließen">×</button><p class="eyebrow">DEIN ERSTER DIENST</p><h2>Der Turm wartet auf dich.</h2><ol class="instructions"><li><b>Anlage starten.</b> Hauptschalter einschalten. Während des Selbsttests wird die Druckreserve aufgebaut.</li><li><b>Gäste einsteigen lassen.</b> Wähle vorher zwei, vier oder sechs Spuren und eines der drei Programme.</li><li><b>Station sichern.</b> Tore schließen, Bügel schließen und anschließend jede aktive Gondel im Monitor einzeln prüfen.</li><li><b>Freigabe erteilen.</b> Fahrbereich freigeben. Sobald die Druckreserve bereit ist, lässt sich das Experiment starten.</li><li><b>Nach der Fahrt.</b> Bügel öffnen, Tore öffnen, Aussteigen starten. Danach beginnt der nächste Durchgang.</li></ol><h3>Not-Halt &amp; Rückholung</h3><p>Der Not-Halt verwirft das Fahrprogramm. Warte auf den Stillstand, entriegle den Not-Halt und hole erhöhte Gondeln kontrolliert zurück. Quittiere erst danach die Störung. Während der Bewegung und Rückholung bleiben die Bügel gesperrt.</p><h3>Kamera &amp; Atmosphäre</h3><p>Ziehe mit der Maus zum Drehen, scrolle zum Zoomen oder wähle „Mitfahren“. Ohne Arbeitslicht wird die Kammer während der Fahrt dunkel. Ton lässt sich oben einschalten. Beim Wechsel zu einem anderen Tab pausiert die Simulation.</p><label class="motion-option"><input id="reduceMotion" type="checkbox"> Dekorative Bewegung reduzieren</label></dialog>
-<dialog id="research"><button class="close-modal" aria-label="Recherche schließen">×</button><p class="eyebrow">FAKTEN &amp; REKONSTRUKTION</p><h2>Was ist echt?</h2><p>Die Simulation orientiert sich an der Attraktion Mystery Castle. Sie ist kein Nachbau der originalen Steuerungssoftware und kein Trainingssystem.</p><h3>Belegte Grundlagen</h3><ul><li>Geschlossener Turm mit 65 m Gebäudehöhe, Intamin / Ride Trade, Eröffnung 1998.</li><li>Sechs Fahrgastträger mit je acht Plätzen, ein pneumatischer Antrieb und Beschleunigung in beide Richtungen.</li><li>Drei beschriebene Programme: kurze Hauptfahrt; intensivere Fahrt mit zusätzlichem Bungee; längere Fahrt mit Vorfahrt, Rückkehr und Showpause.</li></ul><h3>So wird daraus ein Spiel</h3><p>48,6 m dienen als veröffentlichter Fahrweg der schematischen Höhenanzeige. Bewegungsprofile, Sekundenwerte, Druckreserve, Freigaben und Not-Halt-Bremsung sind eigene Modellwerte. Die drei Programme folgen den veröffentlichten Beschreibungen, nicht ausgelesenen Originaldaten. Es gibt keinen behaupteten festen Umschaltzeitpunkt. Alle aktiven Gondeln laufen hier synchron.</p><p>Turmkammer, Bedienpult, zentrales Laborgerät und synthetische Klänge sind eine eigene gestalterische Interpretation. Originalansagen und Originalmusik sind nicht enthalten.</p><h3>Quellen · geprüft am 25.09.2026</h3><ul><li><a href="https://www.phantasialand.de/de/themenpark/einzigartige-attraktionen/mystery-castle/" target="_blank" rel="noreferrer">Phantasialand: Attraktion, Thema, Turmhöhe</a></li><li><a href="https://www.intamin.com/project/mystery-castle/" target="_blank" rel="noreferrer">Intamin: Herstellerreferenz</a></li><li><a href="https://frei-zeit-blog.de/phantasialand/attraktionen/mystery-castle/" target="_blank" rel="noreferrer">Frei-Zeit Blog: ausführliche Fahrbeschreibungen</a></li><li><a href="https://de.wikipedia.org/wiki/Mystery_Castle" target="_blank" rel="noreferrer">Zusammenstellung: Kapazität, Fahrweg und Spuranzahl</a></li></ul></dialog>
-<script type="module" src="app.mjs"></script></body></html>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Mystery Castle Simulator neu laden">
+      <span class="brand-mark">MC</span>
+      <span>MYSTERY CASTLE<small>TURMKONTROLLE · FAN SIMULATION</small></span>
+    </a>
+    <div class="shift"><i></i><span id="statusTop">ANLAGE AUS</span><b id="clock">00:00</b></div>
+    <nav>
+      <button class="icon-button" id="sound" aria-pressed="false">♪ <span>Ton aus</span></button>
+      <button class="icon-button" id="help">? <span>Hilfe</span></button>
+      <button class="icon-button" id="fullscreen" title="Vollbild">⛶</button>
+    </nav>
+  </header>
+
+  <main class="workspace">
+    <section class="ride-card" aria-label="2D Turmansicht">
+      <div class="ride-head">
+        <div>
+          <p class="eyebrow">BALLISTIC DROP TOWER · 1998</p>
+          <h1>Mystery Castle</h1>
+          <p class="subline">Sechs Fahrgastträger · acht Sitze je Gondel · pneumatischer Antrieb</p>
+        </div>
+        <div class="live"><i></i><span id="sceneStatus">STANDBY</span></div>
+      </div>
+
+      <div class="tower-stage" id="towerStage">
+        <div class="scene-toolbar">
+          <div class="view-controls" role="group" aria-label="Ansicht">
+            <button class="active" data-view="tower">TURM</button>
+            <button data-view="station">STATION</button>
+            <button data-view="tech">TECHNIK</button>
+          </div>
+          <label><input id="worklight" type="checkbox" checked> Arbeitslicht</label>
+        </div>
+
+        <svg id="towerSvg" viewBox="0 0 720 760" role="img" aria-label="Schematische 2D-Ansicht des Mystery-Castle-Turms mit sechs beweglichen Gondeln">
+          <defs>
+            <linearGradient id="wallGlow" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#0e2430"/>
+              <stop offset="0.55" stop-color="#08151d"/>
+              <stop offset="1" stop-color="#050b10"/>
+            </linearGradient>
+            <linearGradient id="carrierMetal" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#a9d7e3"/>
+              <stop offset="0.45" stop-color="#7099a7"/>
+              <stop offset="1" stop-color="#334b58"/>
+            </linearGradient>
+            <pattern id="stone" width="72" height="34" patternUnits="userSpaceOnUse">
+              <rect width="72" height="34" fill="#09141b"/>
+              <path d="M0 1H72M0 33H72M18 1V17M55 17V33" stroke="#19303a" stroke-width="1" opacity=".72"/>
+            </pattern>
+            <filter id="blueGlow" x="-100%" y="-100%" width="300%" height="300%">
+              <feGaussianBlur stdDeviation="7" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <filter id="redGlow" x="-100%" y="-100%" width="300%" height="300%">
+              <feGaussianBlur stdDeviation="8" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <rect class="tower-bg" x="12" y="10" width="696" height="740" rx="10" fill="url(#wallGlow)"/>
+          <rect class="stone-wall" x="26" y="24" width="668" height="712" rx="6" fill="url(#stone)"/>
+          <path class="arch" d="M74 620V178Q74 62 180 62H540Q646 62 646 178V620"/>
+          <path class="arch inner" d="M90 620V192Q90 84 188 84H532Q630 84 630 192V620"/>
+
+          <g class="tower-hardware">
+            <path d="M54 604H666" class="station-floor"/>
+            <path d="M54 640H666" class="station-floor faint"/>
+            <g id="lanesVisual"></g>
+            <g class="booth">
+              <path d="M302 604V520L326 492H394L418 520V604Z"/>
+              <rect x="324" y="522" width="72" height="52" rx="3"/>
+              <circle cx="342" cy="540" r="5" class="booth-light"/>
+              <circle cx="378" cy="540" r="5" class="booth-light"/>
+              <path d="M312 604L330 580H390L408 604"/>
+              <text x="360" y="590" text-anchor="middle">MASCHINENRAUM</text>
+            </g>
+            <g class="tech-labels" id="techLabels">
+              <path d="M102 131H172"/><text x="177" y="135">obere Wirbelstrombremse</text>
+              <path d="M102 466H197"/><text x="202" y="470">untere Bremszone</text>
+              <path d="M564 236H626"/><text x="558" y="240" text-anchor="end">Führungsschiene / Seilzug</text>
+            </g>
+          </g>
+
+          <g class="atmosphere">
+            <ellipse cx="360" cy="88" rx="165" ry="38" class="top-haze"/>
+            <circle cx="172" cy="112" r="8" class="blue-lamp" filter="url(#blueGlow)"/>
+            <circle cx="548" cy="112" r="8" class="blue-lamp" filter="url(#blueGlow)"/>
+            <circle cx="88" cy="585" r="6" class="blue-lamp" filter="url(#blueGlow)"/>
+            <circle cx="632" cy="585" r="6" class="blue-lamp" filter="url(#blueGlow)"/>
+          </g>
+
+          <g class="flash-layer" id="flashLayer">
+            <path d="M362 78L330 202L374 188L342 324L416 162L374 174L405 78Z"/>
+          </g>
+          <g class="estop-layer"><rect x="26" y="24" width="668" height="712" rx="6"/></g>
+
+          <g class="scale">
+            <text x="40" y="96">≈ 48.6 m FAHRWEG</text>
+            <path d="M49 110V590"/>
+            <path d="M45 110H56M45 230H56M45 350H56M45 470H56M45 590H56"/>
+            <text x="59" y="114">48</text><text x="59" y="234">36</text><text x="59" y="354">24</text><text x="59" y="474">12</text><text x="59" y="594">0 m</text>
+          </g>
+        </svg>
+
+        <div class="stage-caption">
+          <strong id="stageName">ANLAGE AUS</strong>
+          <span id="stageHint">Hauptschalter einschalten.</span>
+        </div>
+      </div>
+
+      <div class="telemetry">
+        <div><span>HÖHE</span><b id="height">0.0 <small>m</small></b></div>
+        <div><span>GESCHWINDIGKEIT</span><b id="speed">0 <small>km/h</small></b><small id="direction">IN STATION</small></div>
+        <div><span>DRUCKRESERVE <em>SIM</em></span><b id="pressure">0 <small>%</small></b><div class="meter"><i id="pressureBar"></i></div></div>
+        <div><span>PROGRAMM</span><b id="progress">00:00 <small>/ 00:00</small></b><small id="currentPhase">ANLAGE AUS</small></div>
+      </div>
+
+      <section class="gondola-panel">
+        <div class="section-heading"><h2>Gondelstatus</h2><span id="capacity">0 / 48 GÄSTE</span></div>
+        <div class="gondolas" id="gondolas"></div>
+        <p class="gondola-help">Nach dem Verriegeln jede aktive Gondel einmal anklicken. Die acht Punkte stehen für die acht Sitzplätze.</p>
+      </section>
+
+      <div class="lower-grid">
+        <section class="journal"><div class="section-heading"><h2>Schichtprotokoll</h2><span>LIVE</span></div><ol id="log"></ol></section>
+        <section><div class="section-heading"><h2>Schichtwerte</h2></div><div class="stats-grid"><div><b id="rides">0</b><span>FAHRTEN</span></div><div><b id="served">0</b><span>GÄSTE</span></div><div><b id="queue">96</b><span>WARTEND</span></div><div><b id="throughput">—</b><span>GÄSTE/H</span></div></div></section>
+      </div>
+    </section>
+
+    <aside class="console" aria-label="Bedienpult">
+      <div class="console-title"><div><p class="eyebrow">OPERATOR PANEL · FAN INTERPRETATION</p><h2>Turmkontrolle</h2></div><span class="plate">MC–06</span></div>
+      <div class="status-strip"><i id="statusLight"></i><span id="status">ANLAGE AUS</span><b id="voltage">OFF</b></div>
+
+      <section class="control-group">
+        <div class="control-heading"><h3>Anlage</h3><span id="compressor">KOMPRESSOR AUS</span></div>
+        <div class="power-row">
+          <button class="power-button" data-action="power" id="power"><span class="toggle"><i></i></span><span>HAUPTSCHALTER<small id="powerLabel">AUS</small></span></button>
+          <label class="lane-select">AKTIVE GONDELN<select id="lanes"><option value="2">2 · 16 Plätze</option><option value="4">4 · 32 Plätze</option><option value="6" selected>6 · 48 Plätze</option></select></label>
+        </div>
+      </section>
+
+      <section class="control-group">
+        <div class="control-heading"><h3>Fahrprogramm</h3><span>REKONSTRUIERT</span></div>
+        <div class="programs">
+          <button class="program" data-program="1"><span class="roman">I</span><span><b>Kurz</b><small>Voller Abschuss · kurzer Rebound</small></span><span class="program-time">—</span></button>
+          <button class="program" data-program="2"><span class="roman">II</span><span><b>Standard</b><small>Zusätzlicher zweiter Rebound</small></span><span class="program-time">—</span></button>
+          <button class="program selected" data-program="3"><span class="roman">III</span><span><b>Lang</b><small>Halbe Vorfahrt · Pause · Hauptfahrt</small></span><span class="program-time">—</span></button>
+        </div>
+        <svg class="profile" id="profile" viewBox="0 0 300 48" aria-label="Schematisches Höhenprofil"></svg>
+      </section>
+
+      <section class="control-group">
+        <div class="control-heading"><h3>Station</h3><span id="stationState">LEER</span></div>
+        <div class="station-controls">
+          <button data-action="board" id="board">EINLASS</button>
+          <button data-action="unload" id="unload">AUSLASS</button>
+          <button data-action="gates" id="gates">TORE SCHLIESSEN</button>
+          <button data-action="restraints" id="restraints">BÜGEL SCHLIESSEN</button>
+        </div>
+        <button class="clear-button" data-action="clear" id="clear"><i></i> FAHRBEREICH FREIGEBEN</button>
+      </section>
+
+      <section class="dispatch-group">
+        <div class="interlocks"><span id="interGate"><i></i>TORE</span><span id="interRestraint"><i></i>BÜGEL</span><span id="interClear"><i></i>BEREICH</span><span id="interPressure"><i></i>DRUCK</span></div>
+        <button id="dispatch" data-action="dispatch"><span>FAHRT STARTEN</span><b>START</b></button>
+        <p id="guidance" role="status" aria-live="polite">Hauptschalter einschalten.</p>
+        <div class="emergency-row">
+          <button class="estop" id="stop" data-action="stop"><span></span><b>NOT-HALT</b></button>
+          <div><small>SICHERHEITSKREIS</small><p id="safetyText">System ausgeschaltet</p></div>
+        </div>
+        <div class="recovery-controls" id="recovery" hidden><button data-action="release">NOT-HALT ENTRIEGELN</button><button data-action="recover">RÜCKHOLUNG</button><button data-action="reset">STÖRUNG QUITTIEREN</button></div>
+      </section>
+    </aside>
+  </main>
+
+  <footer class="page-footer"><span>Inoffizielles Fanprojekt · keine originale Phantasialand- oder Intamin-Steuerung.</span><button id="sources">Recherche &amp; Modell ↗</button><span>2D · RIDESIM-STYLE</span></footer>
+
+  <dialog id="manual"><button class="close-modal" aria-label="Schließen">×</button><p class="eyebrow">KURZANLEITUNG</p><h2>Eine komplette Fahrt</h2><ol><li>Anlage einschalten und Selbsttest abwarten.</li><li>Aktive Gondeln und Fahrprogramm wählen, dann Einlass starten.</li><li>Tore schließen, Bügel schließen und jede aktive Gondel prüfen.</li><li>Fahrbereich freigeben. Wenn die Druckreserve bereit ist, Fahrt starten.</li><li>Nach Stillstand Bügel öffnen, Tore öffnen und Auslass starten.</li></ol><h3>Not-Halt</h3><p>Der Not-Halt bricht die Sequenz ab. Nach Stillstand entriegeln, erhöhte Gondeln zurückholen und anschließend die Störung quittieren.</p><label><input id="reduceMotion" type="checkbox"> Dekorative Effekte reduzieren</label></dialog>
+
+  <dialog id="research"><button class="close-modal" aria-label="Schließen">×</button><p class="eyebrow">RECHERCHE</p><h2>Was ist real, was ist Simulation?</h2><p>Belegt sind der 65&nbsp;m hohe geschlossene Turm, bis zu 72&nbsp;km/h, sechs Gondeln mit je acht Plätzen sowie der pneumatische Antrieb. Fotos der echten Station zeigen die sechs Fahrgastträger mit hellen Schalensitzen, dunklen Schulterbügeln, vertikalen Führungselementen, Rohren, Steinwänden und starkem blauem Arbeitslicht.</p><p>Die drei Programmabläufe wurden aus öffentlich beschriebenen Fahrtfolgen rekonstruiert. Quellen unterscheiden sich bei Benennung und Nutzung einzelner Programme; deshalb werden hier keine originalen SPS-Zeiten oder offiziellen Programmnamen behauptet. Fahrweg, Sekundenwerte, Druckanzeige, Bedienpult und Interlocks sind Spielmodell.</p><h3>Quellen</h3><ul><li><a href="https://www.phantasialand.de/de/themenpark/einzigartige-attraktionen/mystery-castle/" target="_blank" rel="noreferrer">Phantasialand · Mystery Castle</a></li><li><a href="https://www.intamin.com/project/mystery-castle/" target="_blank" rel="noreferrer">Intamin · Mystery Castle</a></li><li><a href="https://de.wikipedia.org/wiki/Mystery_Castle" target="_blank" rel="noreferrer">Mystery Castle · technische Zusammenfassung</a></li></ul></dialog>
+
+  <script type="module" src="app.mjs"></script>
+</body>
+</html>
