@@ -62,7 +62,7 @@ function update(dt){
   }else if(state.phase==='braking'&&state.segment?.type==='brake'){
     const s=state.segment;
     const decel=clamp(25+Math.abs(state.velocity)*1.15,25,47);state.velocity+=decel*dt;
-    if(state.velocity>-.8)state.velocity=-.8;state.height=Math.max(5,state.height+state.velocity*dt);
+    if(state.velocity>-2.2)state.velocity=-2.2;state.height=Math.max(5,state.height+state.velocity*dt);
     if(state.height<=7.5){state.height=7.5;state.velocity=0;
       if(state.estop){state.segment=null;setPhase('halted','NOT-HALT · IN BREMSZONE');}
       else if(s.afterHalf){state.segment=null;startMove(TOP_POS,12,'running','AUFFAHRT ZUR TOPPOSITION',()=>{state.hold=+$('topHold').value;state.segment={type:'holdTop'};state.stage='TOP HOLD';log('Topposition erreicht · Hauptdrop bereit.');});}
