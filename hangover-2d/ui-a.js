@@ -203,6 +203,9 @@ function renderFast(){
   $('rideTimer').textContent=fmt(state.rideTime);$('programStage').textContent=state.stage;
   $('motionChip').textContent=state.stage;$('stageTitle').textContent=state.stage;$('stageHint').textContent=hint();
   $('sceneState').textContent=state.estop?'NOT-HALT':moving()?state.stage:'STANDBY';
+  $('stage').classList.toggle('braking',state.phase==='braking');
+  $('stage').classList.toggle('dropping',state.phase==='dropping');
+  $('stage').classList.toggle('lifting',state.velocity>.15&&!['dropping','braking'].includes(state.phase));
 
   const accel=Number.isFinite(state.accel)?state.accel:0;
   const gv=Math.max(0,1+accel/9.81);
