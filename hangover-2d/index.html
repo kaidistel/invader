@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#100517">
+  <meta name="description" content="Inoffizieller 2D-Fan-Simulator von Hangover – The Tower mit 40-m-Vorfall, Hauptdrop, manueller Steuerung, Reko-Mikrofon und YouTube-Musik.">
+  <title>Hangover · The Tower Operator</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="marquee-top">
+    <a class="brand" href="./" aria-label="Hangover Simulator neu laden">
+      <span class="brand-bulbs" aria-hidden="true"></span>
+      <span class="brand-copy"><b>HANGOVER</b><small>THE TOWER · LAS VEGAS OPERATOR SIM</small></span>
+    </a>
+    <div class="top-status"><i id="topLamp"></i><span id="topState">ANLAGE AUS</span><b id="clock">00:00</b></div>
+    <nav>
+      <button id="sound" class="top-btn" aria-pressed="false">♪ <span>FX aus</span></button>
+      <button id="help" class="top-btn">? <span>Hilfe</span></button>
+      <button id="fullscreen" class="top-btn">⛶</button>
+    </nav>
+  </header>
+
+  <main class="layout">
+    <section class="show-card">
+      <div class="show-heading">
+        <div>
+          <p class="eyebrow">SCHNEIDER · FUNTIME · 2015</p>
+          <h1>Hangover <em>The Tower</em></h1>
+          <p>85 m Turmhöhe · 24 Plätze · drehbare Gondel · ca. 90 km/h</p>
+        </div>
+        <div class="live-badge"><i></i><span id="sceneState">STANDBY</span></div>
+      </div>
+
+      <div class="stage" id="stage">
+        <div class="vegas-sky"></div>
+        <div class="stage-toolbar">
+          <div class="view-tabs" role="group" aria-label="Ansicht">
+            <button class="active" data-view="full">TURM</button>
+            <button data-view="gondola">GONDEL</button>
+            <button data-view="station">STATION</button>
+          </div>
+          <label><input id="nightMode" type="checkbox"> Nachtshow</label>
+        </div>
+
+        <svg id="towerSvg" viewBox="0 0 960 920" role="img" aria-label="Detaillierte 2D-Frontansicht von Hangover The Tower">
+          <defs>
+            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1589df"/><stop offset=".58" stop-color="#65c3ef"/><stop offset="1" stop-color="#d8eff7"/></linearGradient>
+            <linearGradient id="nightGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#08051c"/><stop offset=".55" stop-color="#1d0d42"/><stop offset="1" stop-color="#3d174e"/></linearGradient>
+            <linearGradient id="redMetal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ef253c"/><stop offset=".5" stop-color="#b70f27"/><stop offset="1" stop-color="#650716"/></linearGradient>
+            <linearGradient id="yellowMetal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe65a"/><stop offset=".5" stop-color="#efbd00"/><stop offset="1" stop-color="#9d6d00"/></linearGradient>
+            <linearGradient id="towerSteel" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c9d1d8"/><stop offset=".45" stop-color="#ffffff"/><stop offset="1" stop-color="#8d9da9"/></linearGradient>
+            <linearGradient id="facadeGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fb93dd"/><stop offset=".42" stop-color="#ffc882"/><stop offset="1" stop-color="#e83c73"/></linearGradient>
+            <filter id="neonGlow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#000" flood-opacity=".45"/></filter>
+            <pattern id="ledPattern" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="7" cy="7" r="2.4" fill="#fff5b6"/></pattern>
+            <pattern id="trussPattern" width="44" height="44" patternUnits="userSpaceOnUse"><path d="M0 0L44 44M44 0L0 44" stroke="#94a2ad" stroke-width="3" opacity=".85"/></pattern>
+          </defs>
+
+          <rect id="skyRect" width="960" height="920" fill="url(#skyGrad)"/>
+          <g class="clouds" opacity=".66"><ellipse cx="180" cy="165" rx="120" ry="36"/><ellipse cx="710" cy="120" rx="150" ry="44"/><ellipse cx="850" cy="235" rx="90" ry="28"/></g>
+          <g id="nightStars" opacity="0"><circle cx="90" cy="95" r="2"/><circle cx="150" cy="58" r="1.5"/><circle cx="260" cy="125" r="1.8"/><circle cx="610" cy="70" r="2"/><circle cx="760" cy="175" r="1.4"/><circle cx="880" cy="75" r="2"/></g>
+
+          <g class="tower-structure" filter="url(#softShadow)">
+            <rect x="444" y="65" width="72" height="686" rx="8" fill="#e8edf1" stroke="#76848f" stroke-width="4"/>
+            <rect x="451" y="72" width="58" height="670" fill="url(#trussPattern)" opacity=".9"/>
+            <rect x="438" y="155" width="10" height="540" fill="#f4c400"/>
+            <rect x="512" y="155" width="10" height="540" fill="#f4c400"/>
+            <rect x="462" y="74" width="5" height="664" fill="#505d65" opacity=".8"/>
+            <rect x="493" y="74" width="5" height="664" fill="#505d65" opacity=".8"/>
+            <g id="brakeFins">
+              <rect x="452" y="580" width="8" height="126" fill="#2a3238"/><rect x="500" y="580" width="8" height="126" fill="#2a3238"/>
+              <g fill="#d2d7da" opacity=".9">
+                <rect x="450" y="586" width="12" height="7"/><rect x="450" y="602" width="12" height="7"/><rect x="450" y="618" width="12" height="7"/><rect x="450" y="634" width="12" height="7"/><rect x="450" y="650" width="12" height="7"/><rect x="450" y="666" width="12" height="7"/><rect x="450" y="682" width="12" height="7"/>
+                <rect x="498" y="586" width="12" height="7"/><rect x="498" y="602" width="12" height="7"/><rect x="498" y="618" width="12" height="7"/><rect x="498" y="634" width="12" height="7"/><rect x="498" y="650" width="12" height="7"/><rect x="498" y="666" width="12" height="7"/><rect x="498" y="682" width="12" height="7"/>
+              </g>
+            </g>
+            <g class="crown">
+              <ellipse cx="480" cy="62" rx="33" ry="12" fill="#242d33"/><ellipse cx="480" cy="58" rx="25" ry="10" fill="none" stroke="#d7dce0" stroke-width="5"/>
+              <path d="M458 58L470 29M502 58L490 29M470 29H490" stroke="#9aa7b0" stroke-width="4" fill="none"/>
+              <circle cx="480" cy="27" r="8" fill="#161c21" stroke="#e7edf0" stroke-width="3"/>
+            </g>
+          </g>
+
+          <g class="base-structure">
+            <path d="M370 760L416 670H544L590 760Z" fill="#f0c000" stroke="#925a00" stroke-width="5"/>
+            <path d="M390 758L432 684M570 758L528 684M416 714H544" stroke="#b71824" stroke-width="15"/>
+            <rect x="421" y="683" width="118" height="82" fill="#f4f4f2" stroke="#9ba4aa" stroke-width="4"/>
+            <path d="M421 702H539M421 724H539M444 683V765M480 683V765M516 683V765" stroke="#aab1b6" stroke-width="3"/>
+          </g>
+
+          <g id="gondola" transform="translate(0 0)" filter="url(#softShadow)">
+            <g id="catchCar">
+              <rect x="424" y="0" width="112" height="22" rx="6" fill="url(#redMetal)" stroke="#6a0a14" stroke-width="3"/>
+              <path d="M438 1L449 -20H463L469 0M522 1L511 -20H497L491 0" fill="#d1192f" stroke="#760b15" stroke-width="4"/>
+              <circle cx="449" cy="-18" r="10" fill="#89939b" stroke="#333" stroke-width="4"/><circle cx="511" cy="-18" r="10" fill="#89939b" stroke="#333" stroke-width="4"/>
+              <rect x="455" y="22" width="50" height="18" rx="4" fill="#252b30"/>
+              <text x="480" y="35" text-anchor="middle" class="catch-text">DROP CONTROL</text>
+            </g>
+            <g id="gondolaDeck" transform="translate(0 58)">
+              <ellipse cx="480" cy="42" rx="177" ry="42" fill="url(#yellowMetal)" stroke="#7b4c00" stroke-width="5"/>
+              <ellipse cx="480" cy="48" rx="168" ry="35" fill="url(#redMetal)" stroke="#590814" stroke-width="5"/>
+              <path d="M315 51Q480 93 645 51" fill="none" stroke="#63101b" stroke-width="15"/>
+              <path d="M328 66Q480 106 632 66" fill="none" stroke="url(#ledPattern)" stroke-width="11"/>
+              <g id="seatRow"></g>
+              <g class="center-cage">
+                <rect x="445" y="-2" width="70" height="68" rx="10" fill="#b21122" stroke="#730712" stroke-width="4"/>
+                <rect x="454" y="7" width="52" height="50" fill="#f5c300" stroke="#8d6400" stroke-width="3"/>
+                <path d="M454 25H506M471 7V57M489 7V57" stroke="#99202a" stroke-width="5"/>
+              </g>
+              <g id="magicFinger" opacity="0"><rect x="472" y="70" width="16" height="28" rx="5" fill="#efc400"/><circle cx="480" cy="101" r="7" fill="#e22b3b"/></g>
+            </g>
+          </g>
+
+          <g id="facade" filter="url(#softShadow)">
+            <rect x="74" y="742" width="812" height="145" rx="18" fill="url(#facadeGrad)" stroke="#b0196b" stroke-width="5"/>
+            <g class="skyline" fill="#33223f" opacity=".88"><rect x="118" y="790" width="38" height="64"/><rect x="163" y="775" width="52" height="79"/><rect x="225" y="803" width="31" height="51"/><path d="M275 854L300 765L325 854Z"/><rect x="344" y="787" width="49" height="67"/><rect x="568" y="790" width="43" height="64"/><rect x="620" y="765" width="32" height="89"/><rect x="662" y="803" width="42" height="51"/><rect x="720" y="781" width="56" height="73"/><rect x="789" y="799" width="34" height="55"/></g>
+            <path d="M110 855H850" stroke="#ffef8f" stroke-width="6" opacity=".8"/>
+            <g class="facade-stars" fill="#ffef84"><circle cx="140" cy="766" r="6"/><circle cx="235" cy="782" r="4"/><circle cx="720" cy="761" r="5"/><circle cx="810" cy="777" r="4"/></g>
+            <g class="sign-frame">
+              <rect x="170" y="704" width="620" height="72" rx="12" fill="#55104f" stroke="#270d31" stroke-width="8"/>
+              <rect x="182" y="716" width="596" height="48" rx="9" fill="#170d24" stroke="#ff40d5" stroke-width="3"/>
+              <text x="480" y="752" text-anchor="middle" class="hangover-sign">HANGOVER</text>
+              <g id="signBulbs"></g>
+            </g>
+            <text x="685" y="823" class="tower-script">THE TOWER</text>
+            <g class="cards"><rect x="118" y="812" width="64" height="42" rx="6"/><text x="150" y="841">A♠</text><rect x="790" y="812" width="64" height="42" rx="6"/><text x="822" y="841">K♥</text></g>
+          </g>
+
+          <g class="scale" aria-hidden="true">
+            <path d="M885 115V744"/>
+            <path d="M875 744H895M875 557H895M875 370H895M875 182H895M875 115H895"/>
+            <text x="868" y="748">0 m</text><text x="868" y="561">~25</text><text x="868" y="374">~50</text><text x="868" y="186">~75</text><text x="868" y="119">85 m</text>
+            <path id="halfMarker" d="M420 445H540"/><text x="550" y="449" class="half-label">40 m Vorfall</text>
+          </g>
+
+          <g id="dropFlash" opacity="0"><rect x="0" y="0" width="960" height="920" fill="#fff" opacity=".16"/></g>
+        </svg>
+
+        <div class="height-chip"><span>GONDEL</span><b id="heightChip">0.0 m</b><small id="motionChip">STATION</small></div>
+        <div class="stage-caption"><strong id="stageTitle">ANLAGE AUS</strong><span id="stageHint">Hauptschalter einschalten.</span></div>
+      </div>
+
+      <div class="telemetry">
+        <div><span>GONDELHÖHE</span><b id="height">0.0 <small>m</small></b></div>
+        <div><span>GESCHWINDIGKEIT</span><b id="speed">0 <small>km/h</small></b><small id="direction">IN STATION</small></div>
+        <div><span>ROTATION</span><b id="rpm">0.0 <small>rpm</small></b><small id="rotationDir">STOP</small></div>
+        <div><span>ZYKLUS</span><b id="rideTimer">00:00</b><small id="programStage">STANDBY</small></div>
+      </div>
+
+      <div class="lower-row">
+        <section class="seat-status">
+          <div class="section-title"><h2>24 Plätze</h2><span id="seatState">LEER</span></div>
+          <div class="seat-map" id="seatMap"></div>
+        </section>
+        <section class="journal">
+          <div class="section-title"><h2>Operator Log</h2><span>LIVE</span></div>
+          <ol id="log"></ol>
+        </section>
+      </div>
+    </section>
+
+    <aside class="console">
+      <div class="console-head">
+        <div><p class="eyebrow">CASINO FLOOR · OPERATOR BOOTH</p><h2>Drop Control</h2></div>
+        <span class="table-no">TABLE 85</span>
+      </div>
+
+      <div class="status-bar"><i id="statusLamp"></i><span id="statusText">ANLAGE AUS</span><b id="safetyText">OFF</b></div>
+
+      <section class="control-block power-block">
+        <div class="block-title"><h3>♠ Anlage</h3><span id="powerInfo">0 kW SIM</span></div>
+        <div class="power-line">
+          <button id="power" class="switch-btn" data-action="power"><span class="switch"><i></i></span><b>HAUPTSCHALTER<small id="powerLabel">AUS</small></b></button>
+          <button id="estop" class="estop" data-action="estop"><span></span><b>NOT-HALT</b></button>
+        </div>
+      </section>
+
+      <section class="control-block">
+        <div class="block-title"><h3>♥ Station</h3><span id="stationInfo">LEER</span></div>
+        <div class="button-grid station-buttons">
+          <button id="board" data-action="board">EINLASS</button>
+          <button id="unload" data-action="unload">AUSLASS</button>
+          <button id="gates" data-action="gates">TORE SCHLIESSEN</button>
+          <button id="restraints" data-action="restraints">BÜGEL SCHLIESSEN</button>
+        </div>
+        <button id="clear" class="clear-btn" data-action="clear"><i></i> FAHRBEREICH FREIGEBEN</button>
+        <div class="interlocks"><span id="iGate"><i></i>TORE</span><span id="iRest"><i></i>BÜGEL</span><span id="iClear"><i></i>BEREICH</span><span id="iBrake"><i></i>BREMSE</span></div>
+      </section>
+
+      <section class="control-block">
+        <div class="block-title"><h3>♦ Fahrweise</h3><span id="modeLabel">AUTOMATIK</span></div>
+        <div class="mode-tabs"><button class="active" data-mode="auto">AUTO</button><button data-mode="manual">MANUELL</button></div>
+
+        <div id="autoPanel" class="mode-panel active">
+          <div class="program-card selected">
+            <span class="chip">SIGNATURE</span>
+            <b>Doppelfall 40 m + Top</b>
+            <small>Aufzug → Halt bei 40 m → erster Fall → Topposition → Hauptdrop</small>
+          </div>
+          <label class="hold-control">TOP HOLD <b id="holdValue">4.0 s</b><input id="topHold" type="range" min="1" max="10" step="0.5" value="4"></label>
+          <button id="dispatch" class="dispatch" data-action="dispatch"><span>Fahrt starten</span><b>DEAL</b></button>
+        </div>
+
+        <div id="manualPanel" class="mode-panel">
+          <div class="preset-row"><button data-manual="to40">40 m</button><button data-manual="toTop">TOP / 85 m</button><button data-manual="home">STATION</button></div>
+          <div class="manual-jog"><button id="jogUp" data-hold="up">▲ JOG AUF</button><button id="jogDown" data-hold="down">▼ JOG AB</button></div>
+          <div class="rotation-row"><button data-action="rotLeft">↶ CCW</button><button data-action="rotStop">■ STOP</button><button data-action="rotRight">↷ CW</button></div>
+          <button id="manualDrop" class="drop-btn" data-action="manualDrop">DROP FREIGEBEN</button>
+          <button id="magic" class="magic-btn" data-action="magic">MAGIC FINGERS</button>
+        </div>
+      </section>
+
+      <section class="control-block media-block">
+        <div class="block-title"><h3>♣ Show &amp; Reko</h3><span>PA / MUSIC</span></div>
+        <div class="reko-wrap">
+          <button id="ptt" class="ptt">🎙 HALTEN ZUM REKOMMANDIEREN</button>
+          <small id="micHint">Beim ersten Mal Mikrofon erlauben · Kopfhörer empfohlen.</small>
+        </div>
+        <div class="music-box">
+          <label for="youtubeUrl">YouTube Musik</label>
+          <div class="music-input"><input id="youtubeUrl" type="text" inputmode="url" placeholder="YouTube-Link einfügen"><button id="loadMusic">LADEN</button></div>
+          <div id="playerWrap" class="player-wrap"><div class="player-placeholder">Noch keine Musik geladen</div></div>
+        </div>
+      </section>
+
+      <section class="control-block recovery-block" id="recovery" hidden>
+        <div class="block-title"><h3>Störung</h3><span>RECOVERY</span></div>
+        <div class="button-grid"><button data-action="releaseEstop">NOT-HALT ENTRIEGELN</button><button data-action="recover">RÜCKHOLUNG</button><button data-action="reset">STÖRUNG QUITTIEREN</button></div>
+      </section>
+
+      <p id="guidance" class="guidance" role="status">Hauptschalter einschalten.</p>
+    </aside>
+  </main>
+
+  <footer><span>Inoffizielles Fanprojekt · keine originale Schneider/Funtime-Steuerung.</span><button id="sources">Recherche &amp; Modell ↗</button><span>2D · RIDESIM-STYLE</span></footer>
+
+  <dialog id="manualDialog">
+    <button class="close" aria-label="Schließen">×</button>
+    <p class="eyebrow">KURZANLEITUNG</p><h2>So läuft eine Fahrt</h2>
+    <ol><li>Anlage einschalten und Selbsttest abwarten.</li><li>Einlass, Tore schließen, Bügel verriegeln und Fahrbereich freigeben.</li><li>Im Auto-Modus startet der charakteristische Ablauf mit Vorfall bei 40 m und anschließendem Hauptdrop.</li><li>Im manuellen Modus kannst du die Gondel auf 40 m oder Top fahren, rotieren und den Drop freigeben.</li><li>Für Reko die Mikrofontaste gedrückt halten. Wegen möglicher Rückkopplung sind Kopfhörer sinnvoll.</li></ol>
+    <p>Der NOT-HALT stoppt Lift- und Rückholbewegungen. Ein bereits ausgelöster Freifall wird in der Simulation nicht „in der Luft eingefroren“, sondern läuft bis in die Magnetbremszone.</p>
+  </dialog>
+
+  <dialog id="researchDialog">
+    <button class="close" aria-label="Schließen">×</button>
+    <p class="eyebrow">RECHERCHE</p><h2>Realität vs. Spielmodell</h2>
+    <p>Öffentlich belegt sind 85 m Turmhöhe, 24 Sitzplätze, etwa 90 km/h, eine drehbare Gondel, Stopps an verschiedenen Höhen und der mögliche freie Fall aus halber Höhe. Der Hersteller ist Funtime; Premiere war 2015 in Düsseldorf.</p>
+    <p>Wichtig: 85 m ist die Turmhöhe. Die öffentlich angegebene höchste Gondelposition liegt ungefähr bei 72 m. Im Spiel heißt der obere Preset trotzdem „TOP / 85 m“, damit die Bedienung zur bekannten Bezeichnung des Fahrgeschäfts passt.</p>
+    <p>Die genaue originale SPS-Logik, Bremskurven, Hubgeschwindigkeiten, Verriegelungszeiten und Bedienoberfläche sind nicht öffentlich dokumentiert. Diese Werte sind deshalb eine realistisch orientierte Fan-Simulation.</p>
+    <h3>Quellen</h3><ul><li><a href="https://www.hangoverthetower.de/" target="_blank" rel="noreferrer">Offizielle Hangover-Seite</a></li><li><a href="https://de.wikipedia.org/wiki/Hangover_%E2%80%93_The_Tower" target="_blank" rel="noreferrer">Technische Zusammenfassung</a></li><li><a href="https://komet-pirmasens.de/Komet_Archiv/2022/5755_Ausgabe_web.pdf" target="_blank" rel="noreferrer">KOMET 2022 · beschriebener 40-m-Vorfall</a></li></ul>
+  </dialog>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
