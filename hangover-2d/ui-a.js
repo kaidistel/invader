@@ -1,4 +1,5 @@
 const SVGNS='http://www.w3.org/2000/svg';
+let currentView='full';
 const svg=(name,attrs={},text='')=>{
   const el=document.createElementNS(SVGNS,name);
   for(const [k,v] of Object.entries(attrs))el.setAttribute(k,String(v));
@@ -190,6 +191,9 @@ function renderFast(){
   const yStation=650,yTop=112,range=yStation-yTop;const y=yStation-(state.height/TOP_POS)*range;
   $('gondola').setAttribute('transform','translate(0 '+(y-100)+')');
   $('gondolaDeck').setAttribute('transform','translate(0 58)');
+  if(currentView==='gondola')$('towerSvg').setAttribute('viewBox','230 '+clamp(y-205,0,500)+' 500 410');
+  else if(currentView==='station')$('towerSvg').setAttribute('viewBox','70 600 820 310');
+  else $('towerSvg').setAttribute('viewBox','0 0 960 920');
   projectSeats();
   $('height').innerHTML=state.height.toFixed(1)+' <small>m</small>';$('heightChip').textContent=state.height.toFixed(1)+' m';
   $('speed').innerHTML=Math.abs(state.velocity*3.6).toFixed(0)+' <small>km/h</small>';
