@@ -27,7 +27,7 @@ function triggerMagic(){
 }
 
 function update(dt){
-  dt=Math.min(.05,Math.max(0,dt));state.time+=dt;
+  dt=Math.min(.05,Math.max(0,dt));const previousVelocity=state.velocity;state.time+=dt;
   if(state.phase==='running'||state.phase==='dropping'||state.phase==='braking'||state.phase==='returning')state.rideTime+=dt;
   state.rotation+=state.rotationDir*state.rotationRpm*360/60*dt;
 
@@ -79,6 +79,7 @@ function update(dt){
     }
   }else if(state.phase==='manual'&&!state.segment){state.velocity=0;if(atStation()){state.phase='station';state.stage='STATION BEREIT';}else state.stage='MANUELL · HALT';}
 
+  state.accel=dt>0?(state.velocity-previousVelocity)/dt:0;
   renderFast();
 }
 
