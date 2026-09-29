@@ -841,7 +841,7 @@
       if (!flattened.length) throw new Error("Keine Attraktionen in Live-Snapshot");
 
       const nowState = {};
-      rides = flattened.map((raw) => {
+      const mappedLiveRides = flattened.map((raw) => {
         const id = slugRide(raw.name, park.slug);
         if (isExcludedRide(raw.name, id, park.slug)) return null;
         const old = previous[id];
@@ -868,6 +868,13 @@
           lastUpdated: raw.last_updated || null
         }, park.slug);
       }).filter(Boolean);
+
+      const liveById = new Map();
+      mappedLiveRides.forEach((ride) => {
+        const existing = liveById.get(ride.id);
+        if (!existing || (!existing.isOpen && ride.isOpen)) liveById.set(ride.id, ride);
+      });
+      rides = Array.from(liveById.values());
 
       const liveIds = new Set(rides.map(ride => ride.id));
       fallbackRidesFor(park.slug).forEach(ride => { if (!liveIds.has(ride.id)) rides.push(Object.assign({}, ride)); });
