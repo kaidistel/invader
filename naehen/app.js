@@ -97,6 +97,49 @@
     "deep-in-africa-adventure-trail": {label:"DEEP IN AFRICA · WANDERKARTE", line:"Der Weg führt durch den Dschungel.", art:"deep-in-africa-adventure-trail"},
     "das-verrueckte-hotel-tartueff": {label:"BERLIN · HOTEL TARTÜFF", line:"Willkommen. Der Boden trügt.", art:"das-verrueckte-hotel-tartueff"}
   };
+
+  const ATTRACTION_FONTS = {
+    "taron": { fontFamily: "'Germania One', serif", theme: "klugheim" },
+    "fly": { fontFamily: "'Steampunk Machinery Font', 'Steampunk Machinery', 'Stardos Stencil', 'Barlow Condensed', sans-serif", theme: "rookburgh" },
+    "black-mamba": { fontFamily: "'African', 'Staatliches', serif", theme: "african" },
+    "mystery-castle": { fontFamily: "'Old London', 'UnifrakturCook', serif", theme: "gothic-castle" },
+    "river-quest": { fontFamily: "'IM Fell English SC', serif", theme: "medieval" },
+    "chiapas": { fontFamily: "'Ewert', serif", theme: "mexican-adventure" },
+    "colorado-adventure": { fontFamily: "'Rye', serif", theme: "western-goldrush" },
+    "talocan": { fontFamily: "'Caesar Dressing', serif", theme: "mesoamerican-temple" },
+    "raik": { fontFamily: "'Almendra SC', serif", theme: "klugheim-medieval" },
+    "winjas-fear": { fontFamily: "'Macondo', serif", theme: "wuze-dark-fantasy" },
+    "winjas-force": { fontFamily: "'Grenze Gotisch', serif", theme: "wuze-dark-power" },
+    "geister-rikscha": { fontFamily: "'Gang of Three', 'ZCOOL XiaoWei', sans-serif", theme: "chinese-ghost" },
+    "maus-au-chocolat": { fontFamily: "'Emilys Candy', serif", theme: "patisserie" },
+    "crazy-bats": { fontFamily: "'Creepster', cursive", theme: "cartoon-horror" },
+    "die-3-mausketiere": { fontFamily: "'Almendra Display', serif", theme: "french-musketeer" },
+    "deep-in-africa-adventure-trail": { fontFamily: "'Trade Winds', sans-serif", theme: "african-expedition" },
+    "das-verrueckte-hotel-tartueff": { fontFamily: "'Fredericka the Great', serif", theme: "eccentric-hotel" },
+
+    "wavy-battle": { fontFamily: "'Bungee Spice', sans-serif", theme: "wuze-water-battle" },
+    "avoras": { fontFamily: "'Macondo Swash Caps', serif", theme: "wuze-organic-fantasy" },
+    "wellenflug": { fontFamily: "'Limelight', sans-serif", theme: "berlin-1920s" },
+    "pferdekarussell": { fontFamily: "'Poiret One', sans-serif", theme: "berlin-belle-epoque" },
+    "tikal": { fontFamily: "'Sancreek', serif", theme: "expedition" },
+    "moptis-monkey-depot": { fontFamily: "'Ribeye', serif", theme: "african-cartoon" },
+    "wuermling-express": { fontFamily: "'Henny Penny', serif", theme: "wuze-fantasy" },
+    "wakobato": { fontFamily: "'Macondo', serif", theme: "wuze-water-fantasy" },
+    "wirtls-taubenturm": { fontFamily: "'Mystery Quest', serif", theme: "wuze-mystery" },
+    "woezls-wassertreter": { fontFamily: "'Ribeye Marrow', serif", theme: "wuze-water" },
+    "tittle-tattle-tree": { fontFamily: "'Flavors', serif", theme: "wuze-fantasy" },
+    "feng-ju-palace": { fontFamily: "'ZCOOL XiaoWei', serif", theme: "chinese-palace" },
+    "winni-splash": { fontFamily: "'Jolly Lodger', serif", theme: "wuze-water" },
+    "wolkes-luftpost": { fontFamily: "'Henny Penny', serif", theme: "wuze-airmail" },
+    "bolles-flugschule": { fontFamily: "'Special Elite', monospace", theme: "berlin-aviation" },
+    "die-froehliche-bienchenjagd": { fontFamily: "'Chela One', sans-serif", theme: "wuze-kids" },
+    "der-lustige-papagei": { fontFamily: "'Ribeye', serif", theme: "tropical-cartoon" },
+    "bolles-riesenrad": { fontFamily: "'Fascinate Inline', sans-serif", theme: "vintage-fairground" },
+    "bumper-klumpen": { fontFamily: "'Luckiest Guy', sans-serif", theme: "comic-bumpercars" },
+    "woezls-duck-washer": { fontFamily: "'Freckle Face', sans-serif", theme: "wuze-comic" },
+    "wupis-wabi-wipper": { fontFamily: "'Kablammo', sans-serif", theme: "wuze-chaotic" }
+  };
+
   const RIDE_ALIASES = {
     "winja‘s fear":"winjas-fear", "winja‘s force":"winjas-force",
     "winja’s fear":"winjas-fear", "winja’s force":"winjas-force",
@@ -115,6 +158,22 @@
   let favoriteSettings = store.get("naehen:favoriteSettings", {});
   let totalRideCount = store.get("naehen:totalRideCount", sessions.filter((s) => s.status === "ridden").length);
   let srReportsLocal = store.get("naehen:srReports", []);
+
+  function attractionFontConfig(rideId) {
+    return ATTRACTION_FONTS[rideId] || null;
+  }
+
+  function applyAttractionTypography(element, rideId) {
+    if (!element) return;
+    const config = attractionFontConfig(rideId);
+    if (!config) {
+      element.style.removeProperty("--attraction-font");
+      element.removeAttribute("data-theme");
+      return;
+    }
+    element.style.setProperty("--attraction-font", config.fontFamily);
+    element.dataset.theme = config.theme;
+  }
 
   function enrichRide(ride) {
     const config = RIDE_CONFIG[ride.id] || { singleRider: false };
@@ -547,6 +606,10 @@
     container.innerHTML = (cards || "<div class=\"empty\">Keine passenden Attraktionen. Passe deine Suche oder den Favoritenfilter an.</div>") +
       "<a class=\"attribution\" href=\"https://queue-times.com/\" target=\"_blank\" rel=\"noopener\">Powered by <b style=\"color:var(--text)\">Queue-Times.com</b> · Live-Daten ca. alle 5 Min.</a>";
 
+    container.querySelectorAll(".ride[data-detail]").forEach((card) => {
+      applyAttractionTypography(card, card.dataset.detail);
+    });
+
     $$("[data-fav]").forEach((button) => {
       button.addEventListener("click", async (event) => {
         event.stopPropagation();
@@ -874,6 +937,7 @@
     const rideSheet = $("#rideSheet");
     const worldArtImage = $("#worldArtImage");
     rideSheet.dataset.world = world ? selectedDetailRide.id : "default";
+    applyAttractionTypography(rideSheet, selectedDetailRide.id);
     if (worldArtImage) {
       if (world && world.art) {
         worldArtImage.src = "./assets/" + world.art + ".webp";
