@@ -1,9 +1,13 @@
-name: Deploy Australia 2027 to GitHub Pages
+name: Deploy Invader to GitHub Pages
 
 on:
   push:
     branches: ["main"]
   workflow_dispatch:
+  schedule:
+    # Queue-Times updates about every 5 minutes. Offset from the top of the hour
+    # to reduce the chance of GitHub's busiest cron window.
+    - cron: "2-57/5 * * * *"
 
 permissions:
   contents: read
@@ -23,12 +27,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Fetch Phantasialand live queue data
+        run: |
+          curl --fail --silent --show-error --location \
+            --retry 3 --retry-delay 2 --max-time 25 \
+            "https://queue-times.com/parks/56/queue_times.json" \
+            --output "naehen/live.json"
+          test -s "naehen/live.json"
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
+
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
