@@ -3,10 +3,10 @@ const webpush = require("web-push");
 
 const livePath = process.argv[2] || "naehen/live.json";
 const SUPABASE_URL = process.env.NAEHEN_SUPABASE_URL || "";
-const SERVICE_KEY = process.env.NAEHEN_SUPABASE_SERVICE_ROLE_KEY || "";
+const SERVICE_KEY = process.env.NAEHEN_SUPABASE_SECRET_KEY || process.env.NAEHEN_SUPABASE_SERVICE_ROLE_KEY || "";
 const VAPID_PUBLIC_KEY = process.env.NAEHEN_VAPID_PUBLIC_KEY || "";
 const VAPID_PRIVATE_KEY = process.env.NAEHEN_VAPID_PRIVATE_KEY || "";
-const VAPID_SUBJECT = process.env.NAEHEN_VAPID_SUBJECT || "mailto:admin@example.com";
+const VAPID_SUBJECT = process.env.NAEHEN_VAPID_SUBJECT || "https://kaidistel.github.io/invader/naehen/";
 
 if (!SUPABASE_URL || !SERVICE_KEY || !VAPID_PUBLIC_KEY || !VAPID_PRIVATE_KEY) {
   console.log("NÄHEN push backend not configured; skipping push evaluation.");
@@ -17,9 +17,11 @@ webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY);
 
 const headers = {
   apikey: SERVICE_KEY,
-  Authorization: "Bearer " + SERVICE_KEY,
   "Content-Type": "application/json"
 };
+if (!SERVICE_KEY.startsWith("sb_secret_")) {
+  headers.Authorization = "Bearer " + SERVICE_KEY;
+}
 
 function slugRide(name) {
   const known = {
