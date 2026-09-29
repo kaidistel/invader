@@ -15,8 +15,20 @@
       disclaimer: "Kein offizielles Angebot des Phantasialands."
     }
   };
-  const MOVIE_PARK = window.NAEHEN_MOVIE_PARK || null;
-  if (MOVIE_PARK?.park) PARKS[MOVIE_PARK.park.slug] = MOVIE_PARK.park;
+  const EXTERNAL_PARK_MODULES = [
+    window.NAEHEN_MOVIE_PARK,
+    window.NAEHEN_WALIBI_HOLLAND
+  ].filter((module) => module && module.park && module.park.slug);
+
+  const PARK_MODULES = {};
+  EXTERNAL_PARK_MODULES.forEach((module) => {
+    PARK_MODULES[module.park.slug] = module;
+    PARKS[module.park.slug] = module.park;
+  });
+
+  function parkModuleFor(parkSlug = activeParkSlug || "phantasialand") {
+    return PARK_MODULES[parkSlug] || null;
+  }
 
   const LIVE_REFRESH_MS = 5 * 60 * 1000;
   const SR_FRESH_MINUTES = 30;
@@ -26,11 +38,14 @@
   function isExcludedRide(name, id, parkSlug = activeParkSlug || "phantasialand") {
     const normalizedName = String(name || "").toLowerCase().trim();
     const normalizedId = String(id || "");
+    const module = parkModuleFor(parkSlug);
 
-    if (parkSlug === "movie-park-germany" && MOVIE_PARK) {
-      const excludedIds = new Set(MOVIE_PARK.exclusions?.ids || []);
-      const patterns = MOVIE_PARK.exclusions?.namePatterns || [];
-      return excludedIds.has(normalizedId) || patterns.some((pattern) => normalizedName.includes(String(pattern).toLowerCase()));
+    if (module) {
+      const excludedIds = new Set(module.exclusions?.ids || []);
+      const patterns = module.exclusions?.namePatterns || [];
+      return excludedIds.has(normalizedId) || patterns.some((pattern) =>
+        normalizedName.includes(String(pattern).toLowerCase())
+      );
     }
 
     return EXCLUDED_RIDE_IDS.has(normalizedId) || /^berliner\s+einl/i.test(normalizedName);
@@ -96,17 +111,22 @@
     lastUpdated: null
   }), "phantasialand"));
 
-  const MOVIE_PARK_FALLBACK_RIDES = (MOVIE_PARK?.rides || []).map((ride) => enrichRide(Object.assign({}, ride, {
-    wait: null,
-    isOpen: null,
-    trend: "flat",
-    delta: 0,
-    source: "fallback",
-    lastUpdated: null
-  }), "movie-park-germany"));
+  const EXTERNAL_FALLBACK_RIDES = {};
+  EXTERNAL_PARK_MODULES.forEach((module) => {
+    EXTERNAL_FALLBACK_RIDES[module.park.slug] = (module.rides || []).map((ride) =>
+      enrichRide(Object.assign({}, ride, {
+        wait: null,
+        isOpen: null,
+        trend: "flat",
+        delta: 0,
+        source: "fallback",
+        lastUpdated: null
+      }), module.park.slug)
+    );
+  });
 
   function fallbackRidesFor(parkSlug = activeParkSlug || "phantasialand") {
-    return parkSlug === "movie-park-germany" ? MOVIE_PARK_FALLBACK_RIDES : FALLBACK_RIDES;
+    return EXTERNAL_FALLBACK_RIDES[parkSlug] || FALLBACK_RIDES;
   }
 
   let deferredInstall = null;
@@ -317,22 +337,26 @@
   let srReportsLocal = store.get("naehen:srReports", []);
 
   function attractionFontConfig(rideId, parkSlug = activeParkSlug || "phantasialand") {
-    if (parkSlug === "movie-park-germany" && MOVIE_PARK) return MOVIE_PARK.fonts?.[rideId] || null;
+    const module = parkModuleFor(parkSlug);
+    if (module) return module.fonts?.[rideId] || null;
     return ATTRACTION_FONTS[rideId] || null;
   }
 
   function worldForRide(rideId, parkSlug = activeParkSlug || "phantasialand") {
-    if (parkSlug === "movie-park-germany" && MOVIE_PARK) return MOVIE_PARK.worlds?.[rideId] || null;
+    const module = parkModuleFor(parkSlug);
+    if (module) return module.worlds?.[rideId] || null;
     return WORLD[rideId] || null;
   }
 
   function aliasesForPark(parkSlug = activeParkSlug || "phantasialand") {
-    if (parkSlug === "movie-park-germany" && MOVIE_PARK) return MOVIE_PARK.aliases || {};
+    const module = parkModuleFor(parkSlug);
+    if (module) return module.aliases || {};
     return RIDE_ALIASES;
   }
 
   function rideConfigForPark(parkSlug = activeParkSlug || "phantasialand") {
-    if (parkSlug === "movie-park-germany" && MOVIE_PARK) return MOVIE_PARK.rideConfig || {};
+    const module = parkModuleFor(parkSlug);
+    if (module) return module.rideConfig || {};
     return RIDE_CONFIG;
   }
 
