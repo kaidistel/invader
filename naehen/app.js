@@ -35,7 +35,11 @@
     "chiapas": { singleRider: false },
     "colorado-adventure": { singleRider: false },
     "talocan": { singleRider: false },
-    "river-quest": { singleRider: false }
+    "river-quest": { singleRider: false },
+    "winjas-fear": { singleRider: false }, "winjas-force": { singleRider: false },
+    "geister-rikscha": { singleRider: false }, "maus-au-chocolat": { singleRider: false },
+    "crazy-bats": { singleRider: false }, "die-3-mausketiere": { singleRider: false },
+    "deep-in-africa-adventure-trail": { singleRider: false }, "das-verrueckte-hotel-tartueff": { singleRider: false }
   };
 
   const FALLBACK_RIDES = [
@@ -47,7 +51,15 @@
     { id: "colorado-adventure", name: "Colorado Adventure", zone: "Mexico" },
     { id: "talocan", name: "Talocan", zone: "Mexico" },
     { id: "river-quest", name: "River Quest", zone: "Mystery" },
-    { id: "raik", name: "Raik", zone: "Mystery" }
+    { id: "raik", name: "Raik", zone: "Mystery" },
+    { id: "winjas-fear", name: "Winja’s Fear", zone: "Fantasy" },
+    { id: "winjas-force", name: "Winja’s Force", zone: "Fantasy" },
+    { id: "geister-rikscha", name: "Geister Rikscha", zone: "China Town" },
+    { id: "maus-au-chocolat", name: "Maus au Chocolat", zone: "Berlin" },
+    { id: "crazy-bats", name: "Crazy Bats", zone: "Fantasy" },
+    { id: "die-3-mausketiere", name: "Die 3 Mausketiere", zone: "Berlin" },
+    { id: "deep-in-africa-adventure-trail", name: "Deep in Africa – Adventure Trail", zone: "Deep in Africa" },
+    { id: "das-verrueckte-hotel-tartueff", name: "Das verrückte Hotel Tartüff", zone: "Berlin" }
   ].map((ride) => enrichRide(Object.assign({}, ride, {
     wait: null,
     isOpen: null,
@@ -66,7 +78,33 @@
   let rideSearch = "";
   let onlyFavorites = false;
   let lastSheetFocus = null;
-  const WORLD = {taron:["KLUGHEIM", "Basalt. Kraft. Adrenalin."], "river-quest":["RIVER QUEST", "Mitten in die Fluten."], fly:["ROOKBURGH · FLUGJOURNAL", "Bereit zum Abheben."], "black-mamba":["DEEP IN AFRICA", "Folge dem Ruf der Wildnis."], chiapas:["MEXICO · EXPEDITION", "Auf zu neuen Ufern."], talocan:["FEUER & WASSER", "Im Bann der Elemente."], "mystery-castle":["MYSTERY", "Jenseits des Gewöhnlichen."]};
+  const WORLD = {
+    taron: {label:"KLUGHEIM · DER PULS", line:"Zwischen Basalt und glühendem Stahl.", art:"taron"},
+    "river-quest": {label:"MYSTERY · WASSERWEG", line:"Die Burg verschluckt den Fluss.", art:"river-quest"},
+    fly: {label:"ROOKBURGH · FLUGJOURNAL", line:"Die Flugmaschine ist bereit.", art:"fly"},
+    "black-mamba": {label:"DEEP IN AFRICA · DSCHUNGEL", line:"Die Schlange erwacht im Fels.", art:"black-mamba"},
+    chiapas: {label:"MEXICO · WASSERFÄLLE", line:"Der Fluss führt durch den Fels.", art:"chiapas"},
+    talocan: {label:"MEXICO · FEUER & WASSER", line:"Im Bann der Elemente.", art:"talocan"},
+    "mystery-castle": {label:"MYSTERY · DER TURM", line:"Ein Schritt durch das Burgtor.", art:"mystery-castle"},
+    "winjas-fear": {label:"WUZE TOWN · FEAR", line:"Der Pfad der Winjas beginnt.", art:"winjas"},
+    "winjas-force": {label:"WUZE TOWN · FORCE", line:"Die Kräfte der Wuze rufen.", art:"winjas"},
+    "geister-rikscha": {label:"CHINA TOWN · UNTER DER ERDE", line:"Die Laternen weisen den Weg.", art:"geister-rikscha"},
+    "colorado-adventure": {label:"MEXICO · EISENBAHN", line:"Die Lokomotive rollt durch den Canyon.", art:"colorado-adventure"},
+    raik: {label:"KLUGHEIM · HIN UND ZURÜCK", line:"Ein Zug durch die dunklen Canyons.", art:"raik"},
+    "maus-au-chocolat": {label:"BERLIN · KONDITOREI", line:"In der Backstube ist etwas los.", art:"maus-au-chocolat"},
+    "crazy-bats": {label:"FANTASY · VR MISSION", line:"Die Fledermäuse übernehmen.", art:"crazy-bats"},
+    "die-3-mausketiere": {label:"BERLIN · 4D ABENTEUER", line:"Drei Helden. Eine Mission.", art:"die-3-mausketiere"},
+    "deep-in-africa-adventure-trail": {label:"DEEP IN AFRICA · WANDERKARTE", line:"Der Weg führt durch den Dschungel.", art:"deep-in-africa-adventure-trail"},
+    "das-verrueckte-hotel-tartueff": {label:"BERLIN · HOTEL TARTÜFF", line:"Willkommen. Der Boden trügt.", art:"das-verrueckte-hotel-tartueff"}
+  };
+  const RIDE_ALIASES = {
+    "winja‘s fear":"winjas-fear", "winja‘s force":"winjas-force",
+    "winja’s fear":"winjas-fear", "winja’s force":"winjas-force",
+    "winja's fear":"winjas-fear", "winja's force":"winjas-force",
+    "deep in africa – adventure trail":"deep-in-africa-adventure-trail",
+    "das verrückte hotel tartüff":"das-verrueckte-hotel-tartueff",
+    "die 3 mausketiere":"die-3-mausketiere"
+  };
   let selectedRide = null;
   let selectedDetailRide = null;
   let queueType = "regular";
@@ -97,6 +135,7 @@
     };
     const low = String(name || "").toLowerCase().trim();
     if (known[low]) return known[low];
+    if (RIDE_ALIASES[low]) return RIDE_ALIASES[low];
     if (low.startsWith("chiapas")) return "chiapas";
     return low.normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
@@ -406,6 +445,9 @@
         });
       });
 
+      const liveIds = new Set(rides.map(ride => ride.id));
+      FALLBACK_RIDES.forEach(ride => { if (!liveIds.has(ride.id)) rides.push(Object.assign({}, ride)); });
+
       rides.sort((a, b) => {
         const aFav = favorites.includes(a.id) ? 0 : 1;
         const bFav = favorites.includes(b.id) ? 0 : 1;
@@ -460,6 +502,7 @@
     const visibleRides = rides.filter(ride => (!onlyFavorites || favorites.includes(ride.id)) && ride.name.toLowerCase().includes(rideSearch));
     const cards = visibleRides.map((ride) => {
       const fav = favorites.includes(ride.id);
+      const world = WORLD[ride.id];
       const hasLive = ride.source === "queue-times";
       const closed = hasLive && !ride.isOpen;
       const unknown = !hasLive || ride.isOpen === null;
@@ -472,7 +515,7 @@
       const queueDisabled = closed ? " disabled" : "";
 
       return "<article class=\"ride\" data-world=\"" + escapeHtml(ride.id) + "\" data-detail=\"" + escapeHtml(ride.id) + "\">" +
-        (WORLD[ride.id] ? "<img class=\"rideArt\" src=\"./assets/" + ride.id + ".webp\" alt=\"\" loading=\"lazy\">" : "") +
+        (world ? "<img class=\"rideArt\" src=\"./assets/" + world.art + ".webp\" alt=\"\" loading=\"lazy\">" : "") +
         "<div class=\"rideMain\">" +
           "<div class=\"rideTop\">" +
             "<button class=\"fav " + (fav ? "on" : "") + "\" data-fav=\"" + ride.id + "\" aria-label=\"Favorit für " + escapeHtml(ride.name) + "\" aria-pressed=\"" + fav + "\">★</button>" +
@@ -815,9 +858,9 @@
     if (!selectedDetailRide) return;
 
     $("#rideSheet").dataset.world = WORLD[selectedDetailRide.id] ? selectedDetailRide.id : "default";
-    $("#worldCaption").textContent = WORLD[selectedDetailRide.id]?.[1] || "Deine nächste Nähung.";
+    $("#worldCaption").textContent = WORLD[selectedDetailRide.id]?.line || "Deine nächste Nähung.";
     $("#rideTitle").textContent = selectedDetailRide.name;
-    $("#rideZone").textContent = WORLD[selectedDetailRide.id]?.[0] || selectedDetailRide.zone || "Phantasialand";
+    $("#rideZone").textContent = WORLD[selectedDetailRide.id]?.label || selectedDetailRide.zone || "Phantasialand";
 
     if (selectedDetailRide.source === "queue-times") {
       $("#rideDetailWait").textContent = selectedDetailRide.isOpen ? selectedDetailRide.wait + " min" : "Geschlossen";

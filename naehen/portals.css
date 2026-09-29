@@ -1,0 +1,167 @@
+/* Bundled display fonts keep themed titles available in the installed PWA. */
+@font-face{font-family:'Pirata One';src:url('./assets/fonts/pirata-one.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'IM Fell English SC';src:url('./assets/fonts/im-fell-english-sc.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Josefin Sans';src:url('./assets/fonts/josefin-sans.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Bebas Neue';src:url('./assets/fonts/bebas-neue.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Patua One';src:url('./assets/fonts/patua-one.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Almendra Display';src:url('./assets/fonts/almendra-display.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'UnifrakturCook';src:url('./assets/fonts/unifrakturcook.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Cinzel Decorative';src:url('./assets/fonts/cinzel-decorative.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Unicase';src:url('./assets/fonts/cormorant-unicase.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Rye';src:url('./assets/fonts/rye.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Grenze Gotisch';src:url('./assets/fonts/grenze-gotisch.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Serif Display';src:url('./assets/fonts/dm-serif-display.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Bangers';src:url('./assets/fonts/bangers.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Playfair Display';src:url('./assets/fonts/playfair-display.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Special Elite';src:url('./assets/fonts/special-elite.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Abril Fatface';src:url('./assets/fonts/abril-fatface.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
+
+/* Individual attraction portals. Body copy and timing data keep the same readable UI font. */
+#rideSheet .sheetCard{--ink:#f6eee0;--veil:#121a19;--metal:#d8c39a;--world-font:Georgia,serif;--world-art:none;--world-decoration:none;color:var(--ink);background:var(--veil);border:1px solid var(--metal);border-radius:24px 24px 0 0;box-shadow:0 -16px 80px #000c,inset 0 0 80px #0005;padding:270px 22px calc(28px + env(safe-area-inset-bottom));min-height:670px;max-height:94dvh;overflow:auto;scrollbar-color:var(--metal) var(--veil)}
+#rideSheet .worldArt{display:block;position:absolute;inset:0 0 auto;height:345px;background:linear-gradient(to bottom,#05090814 0%,#05090800 45%,var(--veil) 100%),var(--world-art) center/cover no-repeat;z-index:-2;animation:portalReveal .48s ease-out both}
+#rideSheet .worldOrnament{display:block;position:absolute;top:18px;left:20px;right:70px;height:205px;border:1px solid color-mix(in srgb,var(--metal) 70%,transparent);pointer-events:none;box-shadow:inset 0 0 0 5px #0003,0 4px 20px #0004}
+#rideSheet .worldOrnament:after{content:var(--world-decoration);position:absolute;bottom:12px;left:16px;color:var(--metal);font:18px var(--world-font);text-shadow:0 2px 7px #000b}
+#rideSheet .worldCaption{display:block;max-width:300px;color:var(--ink);font:italic 16px/1.35 var(--world-font);letter-spacing:.01em;margin:0 0 12px;opacity:.94}
+#rideSheet .eyebrow{color:var(--metal);font:700 11px/1.4 ui-monospace,monospace;letter-spacing:2px}
+#rideSheet #rideTitle{font-family:var(--world-font);font-weight:400;color:var(--ink);font-size:clamp(34px,10vw,64px);line-height:1.04;letter-spacing:0;text-shadow:0 2px 12px #0009;margin:11px 0 28px;max-width:100%;text-wrap:balance;overflow-wrap:anywhere}
+#rideSheet .waitCaption{color:var(--metal);font-size:10px;letter-spacing:2px;font-weight:800}
+#rideSheet .rideDetailWait{display:block;float:none;width:auto;height:auto;border:0;border-top:1px solid var(--metal);border-bottom:1px solid var(--metal);border-radius:0;box-shadow:none;text-align:left;font:700 clamp(34px,10vw,52px)/1.25 ui-monospace,monospace;color:var(--ink);padding:8px 0;margin:9px 0 12px;background:transparent}
+#rideSheet #rideDetailStatus{clear:both;color:var(--ink);background:#060b0ac2;border:1px solid color-mix(in srgb,var(--metal) 48%,transparent);padding:13px 14px;font-size:13px;line-height:1.45}
+#rideSheet .srBox{background:#060b0ab8;color:var(--ink);border-color:color-mix(in srgb,var(--metal) 48%,transparent);border-radius:6px}
+#rideSheet .srBox .meta,#rideSheet .srBox .mini{color:var(--ink)}
+#rideSheet #rideQueueBtn{position:sticky;bottom:0;background:var(--metal);border:1px solid #fff8;color:#121817;font-size:13px;min-height:54px;margin-top:14px;box-shadow:0 0 20px #000b}
+#rideSheet .close{position:absolute;top:20px;right:19px;background:#09100eea;border:1px solid var(--metal);color:#fff;z-index:4}
+/* Basalt and forge. */
+#rideSheet[data-world=taron]{--world-art:url('./assets/taron.webp');--veil:#171717;--ink:#f4e5d1;--metal:#d69a54;--world-font:'Pirata One',Georgia,serif;--world-decoration:'⟡  KLUGHEIM  ⟡'}
+#rideSheet[data-world=taron] .sheetCard{background:repeating-linear-gradient(128deg,#171715 0 28px,#1a1a18 29px 32px);border-left:7px solid #8a5235;border-top:3px solid #dfaa65}
+#rideSheet[data-world=taron] .worldArt{background-image:linear-gradient(0deg,#171715 0%,transparent 85%),var(--world-art);filter:saturate(.83)}
+#rideSheet[data-world=taron] #rideTitle{text-transform:uppercase;font-size:clamp(55px,14vw,86px);letter-spacing:3px;transform:skewY(-3deg)}
+#rideSheet[data-world=taron] .rideDetailWait{border-left:5px solid #d59a55;padding-left:14px}
+/* Water spiral in the medieval castle. */
+#rideSheet[data-world=river-quest]{--world-art:url('./assets/river-quest.webp');--veil:#0f272b;--metal:#9cd9d8;--ink:#ecf8ee;--world-font:'IM Fell English SC',Georgia,serif;--world-decoration:'✦  AQUA · MYSTERY  ✦'}
+#rideSheet[data-world=river-quest] .sheetCard{border-top:8px solid #86cfd0;border-radius:55px 55px 0 0;background:radial-gradient(circle at 95% 45%,#276069,#0f272b 60%)}
+#rideSheet[data-world=river-quest] .worldArt{clip-path:polygon(0 0,100% 0,100% 84%,77% 96%,50% 87%,22% 100%,0 88%)}
+#rideSheet[data-world=river-quest] .worldOrnament{border-radius:50% 50% 2% 2%}
+#rideSheet[data-world=river-quest] .rideDetailWait{text-align:right;border-bottom:5px double #9cd9d8}
+/* Copper aviation hangar. */
+#rideSheet[data-world=fly]{--world-art:url('./assets/fly.webp');--veil:#211c1b;--metal:#d8ad78;--ink:#f6e5c9;--world-font:'Josefin Sans','Arial Narrow',sans-serif;--world-decoration:'○   FLIGHT LOG  001   ○'}
+#rideSheet[data-world=fly] .sheetCard{border:4px double #b98a53;background:repeating-linear-gradient(90deg,#211c1b 0 31px,#332523 32px 34px)}
+#rideSheet[data-world=fly] .worldArt{height:355px;clip-path:polygon(0 0,100% 0,100% 92%,75% 97%,50% 91%,25% 97%,0 92%)}
+#rideSheet[data-world=fly] .worldOrnament{border-radius:110px 110px 4px 4px;border:3px double #d8ad78}
+#rideSheet[data-world=fly] #rideTitle{font-size:clamp(65px,18vw,96px);font-weight:700;letter-spacing:10px;text-transform:uppercase;color:#ffdfae}
+#rideSheet[data-world=fly] .rideDetailWait{border:4px double #bc915c;border-radius:90px;background:#171513;width:max-content;min-width:174px;height:104px;display:grid;place-items:center;margin:5px 0 14px;box-shadow:inset 0 0 20px #0009,0 7px 18px #0007;font-size:32px}
+/* Dense green and ochre jungle. */
+#rideSheet[data-world=black-mamba]{--world-art:url('./assets/black-mamba.webp');--veil:#17221b;--metal:#dbc178;--ink:#f8efd6;--world-font:'Bebas Neue','Arial Narrow',sans-serif;--world-decoration:'◆  DEEP IN AFRICA  ◆'}
+#rideSheet[data-world=black-mamba] .sheetCard{border-left:9px solid #887044;background:radial-gradient(at 85% 30%,#3a421d,#17221b 58%)}
+#rideSheet[data-world=black-mamba] .worldArt{clip-path:polygon(0 0,100% 0,100% 100%,0 77%);height:380px}
+#rideSheet[data-world=black-mamba] .worldOrnament{clip-path:polygon(0 0,100% 0,100% 83%,93% 89%,72% 83%,55% 96%,0 75%)}
+#rideSheet[data-world=black-mamba] #rideTitle{max-width:300px;font-size:clamp(63px,15vw,87px);text-transform:uppercase;letter-spacing:2px;line-height:.85}
+#rideSheet[data-world=black-mamba] .rideDetailWait{border-bottom:4px solid #dbc178}
+/* Sunlit river and carved stone. */
+#rideSheet[data-world=chiapas]{--world-art:url('./assets/chiapas.webp');--veil:#f2dbac;--ink:#3c2717;--metal:#195e64;--world-font:'Patua One',Georgia,serif;--world-decoration:'✺   MEXICO · RÍO   ✺'}
+#rideSheet[data-world=chiapas] .sheetCard{background:linear-gradient(0deg,#dcbf86,#f2dbac);border:4px solid #c58748}
+#rideSheet[data-world=chiapas] .worldArt{height:270px;background:var(--world-art) center/cover}
+#rideSheet[data-world=chiapas] .worldOrnament{border:4px double #815122;height:210px}
+#rideSheet[data-world=chiapas] #rideTitle{color:#653916;text-shadow:0 1px #ffe6bd;font-size:clamp(40px,11vw,64px)}
+#rideSheet[data-world=chiapas] #rideDetailStatus,#rideSheet[data-world=chiapas] .srBox{background:#f8eccd;border-color:#956138;color:#3c2717}
+#rideSheet[data-world=chiapas] .srBox .meta,#rideSheet[data-world=chiapas] .srBox .mini{color:#3c2717}
+/* Fiery stone chamber. */
+#rideSheet[data-world=talocan]{--world-art:url('./assets/talocan.webp');--veil:#251813;--metal:#efaa55;--ink:#ffe7bb;--world-font:'Almendra Display',Georgia,serif;--world-decoration:'✺  FUEGO  ·  AGUA  ✺'}
+#rideSheet[data-world=talocan] .sheetCard{text-align:center;background:radial-gradient(circle at 50% 57%,#54301f,#21140f 75%);border:4px double #bc7440}
+#rideSheet[data-world=talocan] .worldOrnament{height:192px;border:4px double #ca8646}
+#rideSheet[data-world=talocan] #rideTitle{font-size:clamp(64px,17vw,94px);line-height:.8;text-transform:uppercase;color:#f8d192;letter-spacing:2px}
+#rideSheet[data-world=talocan] .rideDetailWait{width:max-content;min-width:170px;margin-inline:auto;border:4px double #efaa55;box-shadow:0 0 30px #f0722744}
+#rideSheet[data-world=talocan] .srBox{text-align:left}
+/* Castle arch and antique ink. */
+#rideSheet[data-world=mystery-castle]{--world-art:url('./assets/mystery-castle.webp');--veil:#181722;--metal:#c9b8dd;--ink:#efe7fc;--world-font:'UnifrakturCook',Georgia,serif;--world-decoration:'✦  DAS GEHEIMNIS WARTET  ✦'}
+#rideSheet[data-world=mystery-castle] .sheetCard{text-align:center;background:radial-gradient(circle at 50% 45%,#342840,#17141d 68%);border-top:4px solid #7e698c}
+#rideSheet[data-world=mystery-castle] .worldArt{height:310px;inset:14px 14% auto;border-radius:50% 50% 0 0;border:3px solid #a99abc;background-image:linear-gradient(0deg,#181722,transparent 63%),var(--world-art)}
+#rideSheet[data-world=mystery-castle] .worldOrnament{border-radius:50% 50% 0 0;top:16px;height:260px;left:12%;right:12%;border:1px solid #c8bade}
+#rideSheet[data-world=mystery-castle] .worldOrnament:after{bottom:0;left:50%;transform:translateX(-50%);font-family:Georgia,serif;white-space:nowrap}
+#rideSheet[data-world=mystery-castle] #rideTitle{font-size:clamp(46px,12vw,70px)}
+#rideSheet[data-world=mystery-castle] .rideDetailWait{font-weight:400;border-block:1px solid #a894be}
+/* Wuze Town: one photo, distinct Fear and Force treatments. */
+#rideSheet[data-world=winjas-fear],#rideSheet[data-world=winjas-force]{--world-art:url('./assets/winjas.webp');--world-font:'Cinzel Decorative',Georgia,serif;--world-decoration:'◇  WUZE TOWN  ◇'}
+#rideSheet[data-world=winjas-fear]{--veil:#231e34;--ink:#f5e6ff;--metal:#c9a7df}
+#rideSheet[data-world=winjas-force]{--veil:#17353b;--ink:#ecfaf5;--metal:#93d7cd}
+#rideSheet[data-world=winjas-fear] .sheetCard{background:radial-gradient(at 30% 30%,#4b304f,#211a33 68%);border-radius:65px 65px 0 0;border-top:8px double #b98bcf}
+#rideSheet[data-world=winjas-force] .sheetCard{background:radial-gradient(at 70% 30%,#246874,#142f36 68%);border-radius:6px 58px 0 0;border-top:8px solid #84cfc6}
+#rideSheet[data-world=winjas-fear] .worldOrnament{border-radius:50% 50% 0 0;transform:rotate(-2deg)}
+#rideSheet[data-world=winjas-force] .worldOrnament{clip-path:polygon(50% 0,100% 28%,100% 100%,0 100%,0 28%);border-width:3px}
+#rideSheet[data-world=winjas-fear] #rideTitle,#rideSheet[data-world=winjas-force] #rideTitle{font-size:clamp(42px,12vw,68px);line-height:1.1}
+#rideSheet[data-world=winjas-force] .rideDetailWait{border-left:6px solid var(--metal);padding-left:14px}
+/* Lamplit underground folklore. */
+#rideSheet[data-world=geister-rikscha]{--world-art:url('./assets/geister-rikscha.webp');--veil:#171c1b;--ink:#f5e4c1;--metal:#d79d5d;--world-font:'Cormorant Unicase',Georgia,serif;--world-decoration:'◇  DIE REISE BEGINNT  ◇'}
+#rideSheet[data-world=geister-rikscha] .sheetCard{background:linear-gradient(110deg,#142622,#1c151a);border-left:3px solid #9b3c3b}
+#rideSheet[data-world=geister-rikscha] .worldArt{filter:saturate(1.2);height:365px}
+#rideSheet[data-world=geister-rikscha] .worldOrnament{border:2px solid #b35d44;box-shadow:inset 0 0 45px #4e1414,0 0 18px #d77e443f}
+#rideSheet[data-world=geister-rikscha] #rideTitle{font-size:clamp(44px,12vw,68px);letter-spacing:2px;color:#f4d29c}
+#rideSheet[data-world=geister-rikscha] .rideDetailWait{border-block-color:#bd6c4b}
+/* The image is a diptych. Only the left panel appears in Colorado's portal and cards. */
+#rideSheet[data-world=colorado-adventure]{--world-art:url('./assets/colorado-adventure.webp');--veil:#322117;--ink:#f8e3b9;--metal:#dbb277;--world-font:'Rye',Georgia,serif;--world-decoration:'✦  COLORADO EXPRESS  ✦'}
+#rideSheet[data-world=colorado-adventure] .sheetCard{background:repeating-linear-gradient(0deg,#302117 0 25px,#38271a 26px 29px);border:7px double #b28c58;border-radius:0}
+#rideSheet[data-world=colorado-adventure] .worldArt{background-image:linear-gradient(0deg,#302117,transparent 72%),var(--world-art);background-size:100% 100%,200% auto;background-position:center,left center;box-shadow:inset 0 0 25px #000b}
+#rideSheet[data-world=colorado-adventure] .worldOrnament{border:4px double #d6b581;transform:rotate(-1deg)}
+#rideSheet[data-world=colorado-adventure] #rideTitle{font-size:clamp(35px,8vw,51px);text-transform:uppercase}
+#rides .ride[data-world=colorado-adventure] .rideArt{width:200%;max-width:none;object-fit:cover;object-position:left center}
+/* Child of Klugheim, rhythmic return. */
+#rideSheet[data-world=raik]{--world-art:url('./assets/raik.webp');--veil:#222321;--ink:#f9eac7;--metal:#e5ae68;--world-font:'Grenze Gotisch',Georgia,serif;--world-decoration:'⟡  HIN & ZURÜCK  ⟡'}
+#rideSheet[data-world=raik] .sheetCard{background:linear-gradient(142deg,#28302d,#211d19 70%);border-left:6px double #e4ae6a}
+#rideSheet[data-world=raik] .worldArt{clip-path:polygon(0 0,100% 0,100% 89%,50% 100%,0 89%)}
+#rideSheet[data-world=raik] .worldOrnament{border-bottom:0}
+#rideSheet[data-world=raik] #rideTitle{font-size:clamp(76px,21vw,116px);letter-spacing:4px}
+/* Berlin confectionery and chequerboard tiles. */
+#rideSheet[data-world=maus-au-chocolat]{--world-art:url('./assets/maus-au-chocolat.webp');--veil:#e9d8ba;--ink:#3c211c;--metal:#813d34;--world-font:'DM Serif Display',Georgia,serif;--world-decoration:'✿  KONDITOREI  ·  BERLIN  ✿'}
+#rideSheet[data-world=maus-au-chocolat] .sheetCard{background:linear-gradient(#eddcc0eb,#eddcc0eb),repeating-conic-gradient(#946c60 0 25%,#dacbb4 0 50%) 0 0/34px 34px;border:5px solid #874941;border-radius:8px 8px 0 0}
+#rideSheet[data-world=maus-au-chocolat] .worldArt{height:280px;background:linear-gradient(0deg,#e9d8ba,transparent 32%),var(--world-art) center/cover}
+#rideSheet[data-world=maus-au-chocolat] .worldOrnament{border:5px double #80514b;border-radius:60px 60px 4px 4px}
+#rideSheet[data-world=maus-au-chocolat] #rideTitle{color:#5e2d28;font-size:clamp(40px,10vw,58px);text-shadow:none}
+#rideSheet[data-world=maus-au-chocolat] #rideDetailStatus,#rideSheet[data-world=maus-au-chocolat] .srBox{background:#f9eddb;color:#3c211c;border-color:#a48173}
+#rideSheet[data-world=maus-au-chocolat] .srBox .meta,#rideSheet[data-world=maus-au-chocolat] .srBox .mini{color:#3c211c}
+/* Bright VR bat mischief. */
+#rideSheet[data-world=crazy-bats]{--world-art:url('./assets/crazy-bats.webp');--veil:#171e4b;--ink:#fff3fc;--metal:#ff9fd9;--world-font:'Bangers',sans-serif;--world-decoration:'⚡  VR MISSION  ⚡'}
+#rideSheet[data-world=crazy-bats] .sheetCard{background:radial-gradient(at 75% 20%,#6a2a8c,#192464 60%,#111a37);border:3px solid #f694e3;border-radius:50px 12px 0 0}
+#rideSheet[data-world=crazy-bats] .worldOrnament{clip-path:polygon(0 0,100% 0,95% 78%,68% 100%,0 88%);border:3px solid #ff9fd9}
+#rideSheet[data-world=crazy-bats] #rideTitle{font-size:clamp(68px,18vw,100px);letter-spacing:3px;color:#ffe4a5;transform:rotate(-4deg)}
+#rideSheet[data-world=crazy-bats] .rideDetailWait{border-block:4px solid #fe8dd7;color:#fff6b9}
+/* Period poster for the 4D trio. */
+#rideSheet[data-world=die-3-mausketiere]{--world-art:url('./assets/die-3-mausketiere.webp');--veil:#29201d;--ink:#f5e6cb;--metal:#d5b98b;--world-font:'Playfair Display',Georgia,serif;--world-decoration:'❧  DREI HELDEN  ·  EINE MISSION  ❧'}
+#rideSheet[data-world=die-3-mausketiere] .sheetCard{border:9px double #b7a276;background:#29201d;text-align:center;border-radius:0}
+#rideSheet[data-world=die-3-mausketiere] .worldArt{height:320px;background:linear-gradient(0deg,#29201d,transparent 45%),var(--world-art) center/cover}
+#rideSheet[data-world=die-3-mausketiere] .worldOrnament{border:3px double #d4b987;height:240px}
+#rideSheet[data-world=die-3-mausketiere] #rideTitle{font-size:clamp(35px,9vw,53px);font-style:italic}
+#rideSheet[data-world=die-3-mausketiere] .rideDetailWait{text-align:center;border-block:3px double #d5b98b}
+/* Adventure journal: the supplied image is a map, not a pretend live map. */
+#rideSheet[data-world=deep-in-africa-adventure-trail]{--world-art:url('./assets/deep-in-africa-adventure-trail.webp');--veil:#e1c693;--ink:#352816;--metal:#73532d;--world-font:'Special Elite',Georgia,serif;--world-decoration:'✦  EXPEDITION  ·  JOURNAL  ✦'}
+#rideSheet[data-world=deep-in-africa-adventure-trail] .sheetCard{background:#e6d3ab;border:7px double #816333;border-radius:3px;box-shadow:0 -18px 40px #000b,inset 0 0 80px #94622d66}
+#rideSheet[data-world=deep-in-africa-adventure-trail] .worldArt{height:265px;background:linear-gradient(0deg,#e6d3ab,transparent 25%),var(--world-art) center/cover;filter:sepia(.14)}
+#rideSheet[data-world=deep-in-africa-adventure-trail] .worldOrnament{border:2px dashed #74532d}
+#rideSheet[data-world=deep-in-africa-adventure-trail] #rideTitle{font-size:clamp(31px,8vw,48px);text-shadow:none;color:#423019}
+#rideSheet[data-world=deep-in-africa-adventure-trail] #rideDetailStatus,#rideSheet[data-world=deep-in-africa-adventure-trail] .srBox{background:#f5e5c4;color:#352816;border-color:#967646}
+#rideSheet[data-world=deep-in-africa-adventure-trail] .srBox .meta,#rideSheet[data-world=deep-in-africa-adventure-trail] .srBox .mini{color:#352816}
+/* Tilted hotel stationery. */
+#rideSheet[data-world=das-verrueckte-hotel-tartueff]{--world-art:url('./assets/das-verrueckte-hotel-tartueff.webp');--veil:#f0e6d6;--ink:#352627;--metal:#95535d;--world-font:'Abril Fatface',Georgia,serif;--world-decoration:'❦  HOTEL TARTÜFF  ❦'}
+#rideSheet[data-world=das-verrueckte-hotel-tartueff] .sheetCard{background:linear-gradient(95deg,#f0e6d6,#faefe2);border:6px double #95535d;border-radius:12px 54px 0 0}
+#rideSheet[data-world=das-verrueckte-hotel-tartueff] .worldArt{height:290px;background:linear-gradient(0deg,#f0e6d6,transparent 25%),var(--world-art) center/cover}
+#rideSheet[data-world=das-verrueckte-hotel-tartueff] .worldOrnament{border:4px double #864a54;transform:rotate(2deg)}
+#rideSheet[data-world=das-verrueckte-hotel-tartueff] #rideTitle{font-size:clamp(38px,9vw,60px);line-height:1.05;transform:rotate(-2deg);color:#7a3947;text-shadow:none}
+#rideSheet[data-world=das-verrueckte-hotel-tartueff] .rideDetailWait{border-block:3px double #a05a68}
+#rideSheet[data-world=das-verrueckte-hotel-tartueff] #rideDetailStatus,#rideSheet[data-world=das-verrueckte-hotel-tartueff] .srBox{background:#fff7e9;color:#352627;border-color:#a87979}
+#rideSheet[data-world=das-verrueckte-hotel-tartueff] .srBox .meta,#rideSheet[data-world=das-verrueckte-hotel-tartueff] .srBox .mini{color:#352627}
+#rideSheet[data-world=default] .sheetCard{min-height:0;padding-top:72px}
+#rideSheet[data-world=default] .worldArt,#rideSheet[data-world=default] .worldOrnament{display:none}
+@keyframes portalReveal{from{opacity:.5;transform:scale(1.06)}to{opacity:1;transform:scale(1)}}
+@media(min-width:700px){#rideSheet .sheetCard{width:min(94vw,650px);border-radius:22px;min-height:680px}#rideSheet[data-world=colorado-adventure] .worldArt{background-size:100% 100%,200% auto}}
+@media(max-width:390px){#rideSheet .sheetCard{padding:250px 16px calc(24px + env(safe-area-inset-bottom))}#rideSheet .worldArt{height:325px}#rideSheet .worldCaption{font-size:14px}#rideSheet .worldOrnament{left:16px;right:62px}#rideSheet[data-world=fly] #rideTitle{font-size:70px}}
+@media(prefers-reduced-motion:reduce){#rideSheet .worldArt{animation:none}}
+
+/* The detail sheet becomes a full themed room on a phone. */
+@media(max-width:699px){
+  #rideSheet{align-items:stretch;background:#0c1010}
+  #rideSheet[data-world] .sheetCard{width:100%;height:100dvh;max-height:100dvh;border-radius:0!important;padding-top:calc(275px + env(safe-area-inset-top));padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+  #rideSheet .worldArt{height:calc(355px + env(safe-area-inset-top))}
+  #rideSheet .worldOrnament{top:calc(20px + env(safe-area-inset-top))}
+  #rideSheet .close{top:calc(20px + env(safe-area-inset-top))}
+}
+#rideSheet[data-world=winjas-fear] .worldArt{background-position:center,left 40%}
+#rideSheet[data-world=winjas-force] .worldArt{background-position:center,right 40%;filter:hue-rotate(15deg)}
