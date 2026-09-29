@@ -578,3 +578,41 @@ body[data-park="walibi-holland"] .btn.primary{
   border-color:#ff8a8a;
   color:#130909;
 }
+
+
+/* v41 — Europa-Park park-level atmosphere */
+body[data-park="europa-park"]{
+  --accent:#d7b767;
+  --accent2:#74cde9;
+  --line:#58615e;
+}
+
+body[data-park="europa-park"] .parkAtmosphere{
+  background:
+    linear-gradient(180deg,rgba(8,10,12,.12) 0%,rgba(8,10,12,.62) 44%,#0e1212 87%),
+    var(--park-hero-image) center 38%/cover no-repeat;
+}
+
+body[data-park="europa-park"] .hero{
+  background:
+    radial-gradient(circle at 88% 10%,rgba(116,205,233,.13),transparent 28%),
+    linear-gradient(135deg,rgba(31,34,33,.97),rgba(12,16,16,.96));
+  border-color:rgba(215,183,103,.35);
+}
+
+body[data-park="europa-park"] .hero:before{
+  background:linear-gradient(#d7b767 0 34%,#74cde9 34% 67%,#d95e53 67%);
+}
+
+body[data-park="europa-park"] .brand b,
+body[data-park="europa-park"] .brandDot{
+  color:#d7b767;
+}
+
+body[data-park="europa-park"] .ride{
+  border-color:rgba(232,220,184,.21);
+}
+
+body[data-park="europa-park"] .parkSwitch{
+  border-color:rgba(215,183,103,.44);
+}
