@@ -81,6 +81,28 @@
     </div>
   </section>
 
+
+  <section class="parkPicker hidden" id="parkPicker" aria-labelledby="parkPickerTitle">
+    <div class="parkPickerShell">
+      <header class="parkPickerTop">
+        <div>
+          <div class="parkPickerBrand">NÄHEN<b>.</b></div>
+          <div class="mini" id="parkPickerAccount">Parkday Companion</div>
+        </div>
+        <div class="parkPickerMark" aria-hidden="true">N<span>.</span></div>
+      </header>
+
+      <div class="parkPickerIntro">
+        <div class="eyebrow">Park auswählen</div>
+        <h1 id="parkPickerTitle">Wo wird heute genäht?</h1>
+        <p>Wähle deinen Park. Jeder Park bekommt seine eigene NÄHEN-Welt mit Attraktionen, Live-Daten und individuellem Theming.</p>
+      </div>
+
+      <div class="parkGrid" id="parkGrid"></div>
+      <div class="parkPickerFooter"><span id="parkCount">1 Park verfügbar</span><span>Weitere Parks folgen.</span></div>
+    </div>
+  </section>
+
   <main class="app hidden" id="app">
     <div class="queueBar" id="queueBar" role="button" tabindex="0" aria-label="Aktive Queue öffnen">
       <div>
@@ -95,14 +117,17 @@
         <div class="brand">NÄHEN<b>.</b></div>
         <div class="mini" id="accountMode">Account</div>
       </div>
-      <button class="avatar" id="avatarBtn" aria-label="Profil öffnen">🧵</button>
+      <div class="topbarActions">
+        <button class="parkSwitch" id="parkSwitchBtn" type="button" aria-label="Zur Parkauswahl">← PARKS</button>
+        <button class="avatar" id="avatarBtn" aria-label="Profil öffnen">🧵</button>
+      </div>
     </header>
 
     <section id="homeView">
       <div class="hero"><div class="heroIndex" aria-hidden="true">01 / PARKDAY</div>
         <div class="heroLine">
           <div>
-            <div class="eyebrow">Phantasialand · Parktag</div>
+            <div class="eyebrow" id="parkDayEyebrow">Phantasialand · Parktag</div>
             <h1 id="parkDayHeadline">Heute wird genäht.</h1>
           </div>
           <button class="btn primary compact" id="parkDayBtn">PARKTAG STARTEN</button>
@@ -118,7 +143,7 @@
         <h2>Deine Nähchancen</h2>
         <span id="dataLabel">LIVE-DATEN LADEN…</span>
       </div>
-      <div class="rideTools" aria-label="Attraktionen filtern"><label class="searchLabel"><span aria-hidden="true">⌕</span><input id="rideSearch" type="search" placeholder="Attraktion suchen" aria-label="Attraktion suchen"></label><button id="favoriteFilter" aria-pressed="false">★ Favoriten</button></div><div id="rides"></div><p class="fanNote">NÄHEN · Dein unabhängiger Parkbegleiter.<br>Kein offizielles Angebot des Phantasialands.</p>
+      <div class="rideTools" aria-label="Attraktionen filtern"><label class="searchLabel"><span aria-hidden="true">⌕</span><input id="rideSearch" type="search" placeholder="Attraktion suchen" aria-label="Attraktion suchen"></label><button id="favoriteFilter" aria-pressed="false">★ Favoriten</button></div><div id="rides"></div><p class="fanNote" id="parkDisclaimer">NÄHEN · Dein unabhängiger Parkbegleiter.<br>Kein offizielles Angebot des Phantasialands.</p>
     </section>
 
     <section id="logView" class="hidden">
