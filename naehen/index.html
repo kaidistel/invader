@@ -305,8 +305,8 @@ function renderRides(){
   }).join('');
   const attribution='<a href="https://queue-times.com/" target="_blank" rel="noopener" style="display:block;text-align:center;color:var(--muted);font-size:12px;padding:13px 4px 3px;text-decoration:none">Powered by <b style="color:var(--text)">Queue-Times.com</b> · Live-Daten ca. alle 5 Min.</a>';
   $('#rides').innerHTML=cards+attribution;
-  $('[data-fav]').forEach(b=>b.onclick=()=>{const id=b.dataset.fav;favorites=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];store.set('naehen:favs',favorites);renderRides()});
-  $('[data-queue]').forEach(b=>b.onclick=()=>{if(!b.disabled)openQueue(b.dataset.queue)});
+  $$('[data-fav]').forEach(b=>b.onclick=()=>{const id=b.dataset.fav;favorites=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];store.set('naehen:favs',favorites);renderRides()});
+  $$('[data-queue]').forEach(b=>b.onclick=()=>{if(!b.disabled)openQueue(b.dataset.queue)});
 }
 function openQueue(id){
   if(active){openActive();return}
@@ -318,7 +318,7 @@ function openQueue(id){
   const srBtn=$('[data-qtype="single"]');
   srBtn.disabled=!selectedRide.singleRider;
   srBtn.textContent=selectedRide.singleRider?'Single Rider':'Single Rider · nicht vorhanden';
-  $('[data-qtype]').forEach((b,i)=>b.classList.toggle('on',i===0));
+  $$('[data-qtype]').forEach((b,i)=>b.classList.toggle('on',i===0));
   $('#queueSheet').classList.add('show')
 }
 $$('[data-qtype]').forEach(b=>b.onclick=()=>{queueType=b.dataset.qtype;$$('[data-qtype]').forEach(x=>x.classList.toggle('on',x===b))});
