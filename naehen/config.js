@@ -6,5 +6,5 @@ window.NAEHEN_CONFIG = {
   supabaseAnonKey: "",
 
   // Web Push public VAPID key. The private key belongs only in the push backend.
-  vapidPublicKey: ""
+  vapidPublicKey: "BDxPEYxaMC9ldXnE5X7NHO35E0VvkFAFH9BS1ICNZKQXfeifjLSqBF9x7hsK2posMXjoKPDj1Q1kOnlzCRonX58"
 };
