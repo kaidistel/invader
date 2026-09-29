@@ -242,7 +242,20 @@
     bindStaticEvents();
 
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./sw.js").catch(() => {});
+      try {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=15", {
+          scope: "./",
+          updateViaCache: "none"
+        });
+        registration.update().catch(() => {});
+
+        let reloadingForUpdate = false;
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+          if (reloadingForUpdate) return;
+          reloadingForUpdate = true;
+          window.location.reload();
+        });
+      } catch (_) {}
     }
 
     if (supabaseConfigured()) {
