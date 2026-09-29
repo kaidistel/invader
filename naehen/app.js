@@ -104,7 +104,7 @@
     "black-mamba": { fontFamily: "'African', 'Staatliches', serif", theme: "african" },
     "mystery-castle": { fontFamily: "'Old London', 'UnifrakturCook', serif", theme: "gothic-castle" },
     "river-quest": { fontFamily: "'IM Fell English SC', serif", theme: "medieval" },
-    "chiapas": { fontFamily: "'Ewert', serif", theme: "mexican-adventure" },
+    "chiapas": { fontFamily: "'Sancreek', serif", theme: "mexican-adventure" },
     "colorado-adventure": { fontFamily: "'Rye', serif", theme: "western-goldrush" },
     "talocan": { fontFamily: "'Caesar Dressing', serif", theme: "mesoamerican-temple" },
     "raik": { fontFamily: "'Almendra SC', serif", theme: "klugheim-medieval" },
@@ -247,11 +247,24 @@
     if (el) { lastSheetFocus = document.activeElement; el.classList.add("show"); document.body.classList.add("modalOpen"); el.querySelector("button")?.focus(); }
   }
 
-  function closeSheet(id) {
+  function closeSheet(id, options = {}) {
     const el = $("#" + id);
     if (el) el.classList.remove("show");
     if (!document.querySelector(".sheet.show")) document.body.classList.remove("modalOpen");
     if (lastSheetFocus?.isConnected) lastSheetFocus.focus();
+
+    if (id === "rideSheet" && !options.fromPopState && history.state?.naehenRideDetail) {
+      history.back();
+    }
+  }
+
+  function pushRideDetailHistory(rideId) {
+    if (history.state?.naehenRideDetail) return;
+    history.pushState(
+      Object.assign({}, history.state || {}, { naehenRideDetail: true, rideId: rideId }),
+      "",
+      location.href
+    );
   }
 
   function formatElapsed(ms) {
@@ -310,7 +323,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=22", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=23", {
           scope: "./",
           updateViaCache: "none"
         });
@@ -970,6 +983,7 @@
     $("#rideQueueBtn").disabled = selectedDetailRide.source === "queue-times" && !selectedDetailRide.isOpen;
     $("#srCommunity").innerHTML = "<div class=\"message\">Single-Rider-Informationen laden…</div>";
     openSheet("rideSheet");
+    pushRideDetailHistory(selectedDetailRide.id);
     await renderSrCommunity(selectedDetailRide);
   }
 
@@ -1177,6 +1191,13 @@
     });
     $$("[data-view]").forEach((button) => button.classList.toggle("active", button.dataset.view === viewId));
   }
+
+  window.addEventListener("popstate", () => {
+    const rideSheet = $("#rideSheet");
+    if (rideSheet?.classList.contains("show")) {
+      closeSheet("rideSheet", { fromPopState: true });
+    }
+  });
 
   function bindStaticEvents() {
     $("#rideSearch").addEventListener("input", e => { rideSearch = e.target.value.trim().toLowerCase(); renderRides(); });
