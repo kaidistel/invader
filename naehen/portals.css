@@ -2,20 +2,15 @@
 
 /* Bundled display fonts keep themed titles available in the installed PWA. */
 @font-face{font-family:'Pirata One';src:url('./assets/fonts/pirata-one.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
-@font-face{font-family:'IM Fell English SC';src:url('./assets/fonts/im-fell-english-sc.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
 @font-face{font-family:'Josefin Sans';src:url('./assets/fonts/josefin-sans.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
 @font-face{font-family:'Bebas Neue';src:url('./assets/fonts/bebas-neue.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
 @font-face{font-family:'Patua One';src:url('./assets/fonts/patua-one.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
-@font-face{font-family:'Almendra Display';src:url('./assets/fonts/almendra-display.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
 @font-face{font-family:'UnifrakturCook';src:url('./assets/fonts/unifrakturcook.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
 @font-face{font-family:'Cinzel Decorative';src:url('./assets/fonts/cinzel-decorative.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
 @font-face{font-family:'Cormorant Unicase';src:url('./assets/fonts/cormorant-unicase.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
-@font-face{font-family:'Rye';src:url('./assets/fonts/rye.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
-@font-face{font-family:'Grenze Gotisch';src:url('./assets/fonts/grenze-gotisch.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
 @font-face{font-family:'DM Serif Display';src:url('./assets/fonts/dm-serif-display.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
 @font-face{font-family:'Bangers';src:url('./assets/fonts/bangers.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
 @font-face{font-family:'Playfair Display';src:url('./assets/fonts/playfair-display.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
-@font-face{font-family:'Special Elite';src:url('./assets/fonts/special-elite.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
 @font-face{font-family:'Abril Fatface';src:url('./assets/fonts/abril-fatface.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
 
 /* Individual attraction portals. Body copy and timing data keep the same readable UI font. */
