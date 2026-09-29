@@ -40,6 +40,12 @@ jobs:
             --output "naehen/live-movie-park.json"
           test -s "naehen/live-movie-park.json"
 
+          curl --fail --silent --show-error --location \
+            --retry 3 --retry-delay 2 --max-time 25 \
+            "https://queue-times.com/parks/53/queue_times.json" \
+            --output "naehen/live-walibi-holland.json"
+          test -s "naehen/live-walibi-holland.json"
+
       - name: Evaluate NÄHEN push alerts
         env:
           NAEHEN_SUPABASE_URL: ${{ secrets.NAEHEN_SUPABASE_URL }}
@@ -58,7 +64,8 @@ jobs:
           npm install --silent web-push@3.6.7
           NODE_PATH=/tmp/naehen-push/node_modules node "$GITHUB_WORKSPACE/naehen/push-alerts.cjs" \
             "$GITHUB_WORKSPACE/naehen/live.json" \
-            "$GITHUB_WORKSPACE/naehen/live-movie-park.json"
+            "$GITHUB_WORKSPACE/naehen/live-movie-park.json" \
+            "$GITHUB_WORKSPACE/naehen/live-walibi-holland.json"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
