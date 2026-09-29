@@ -1247,3 +1247,333 @@
     font-size:clamp(34px,10vw,54px)!important;
   }
 }
+
+
+/* v41 — Europa-Park attraction portals */
+#rideSheet[data-park="europa-park"]{
+  --ep-bg:#171a19;
+  --ep-bg2:#0b0f0f;
+  --ep-accent:#d7b767;
+  --ep-title:#fff7e3;
+  --ep-panel:#111716eb;
+  --ink:#f4f1e8;
+  --metal:var(--ep-accent);
+  --veil:var(--ep-bg);
+}
+
+#rideSheet[data-park="europa-park"] .sheetCard{
+  background:
+    radial-gradient(circle at 88% 8%,color-mix(in srgb,var(--ep-accent) 15%,transparent),transparent 30%),
+    linear-gradient(155deg,var(--ep-bg),var(--ep-bg2))!important;
+  border-top:4px solid var(--ep-accent)!important;
+  color:var(--ink)!important;
+  padding-top:280px;
+}
+
+#rideSheet[data-park="europa-park"] .worldArt{
+  display:block!important;
+  inset:0 0 auto!important;
+  width:100%!important;
+  height:370px!important;
+  border:0!important;
+  border-radius:0!important;
+  clip-path:none;
+  overflow:hidden;
+  box-shadow:none!important;
+}
+
+#rideSheet[data-park="europa-park"] .worldArt>img{
+  width:100%!important;
+  height:100%!important;
+  left:0!important;
+  object-fit:cover!important;
+  object-position:center 42%;
+  border:0!important;
+  border-radius:0!important;
+  filter:saturate(1.03) contrast(1.04);
+}
+
+#rideSheet[data-park="europa-park"] .worldArt:after{
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.02) 0%,rgba(0,0,0,.07) 48%,color-mix(in srgb,var(--ep-bg) 76%,transparent) 80%,var(--ep-bg) 100%)!important;
+}
+
+#rideSheet[data-park="europa-park"] #rideTitle{
+  width:100%!important;
+  margin:8px 0 22px!important;
+  padding:0!important;
+  background:none!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  color:var(--ep-title)!important;
+  text-shadow:0 3px 10px #000,0 0 18px color-mix(in srgb,var(--ep-accent) 28%,transparent)!important;
+}
+
+#rideSheet[data-park="europa-park"] #worldCaption,
+#rideSheet[data-park="europa-park"] #rideZone,
+#rideSheet[data-park="europa-park"] .waitCaption{
+  color:color-mix(in srgb,var(--ep-accent) 80%,#fff 20%)!important;
+  text-shadow:0 2px 8px #000d;
+}
+
+#rideSheet[data-park="europa-park"] .rideDetailWait{
+  color:var(--ep-title)!important;
+  border-color:color-mix(in srgb,var(--ep-accent) 62%,transparent)!important;
+}
+
+#rideSheet[data-park="europa-park"] #rideDetailStatus,
+#rideSheet[data-park="europa-park"] .srBox,
+#rideSheet[data-park="europa-park"] .message{
+  background:var(--ep-panel)!important;
+  color:var(--ink)!important;
+  border-color:color-mix(in srgb,var(--ep-accent) 35%,transparent)!important;
+}
+
+#rideSheet[data-park="europa-park"] .srBox .meta,
+#rideSheet[data-park="europa-park"] .srBox .mini,
+#rideSheet[data-park="europa-park"] .message{
+  color:color-mix(in srgb,var(--ink) 90%,var(--ep-accent) 10%)!important;
+}
+
+/* Tesla / Croatia */
+#rideSheet[data-park="europa-park"][data-theme="tesla-croatia"]{
+  --ep-bg:#1b2024;--ep-bg2:#090d10;--ep-accent:#7ce7ff;--ep-title:#eefcff;--ep-panel:#101820ed;
+}
+#rideSheet[data-park="europa-park"][data-theme="tesla-croatia"] #rideTitle{
+  text-transform:uppercase;
+  letter-spacing:.08em!important;
+  padding:11px 14px!important;
+  border:1px solid #7ce7ff!important;
+  border-left:7px solid #d8a65d!important;
+  clip-path:polygon(0 0,94% 0,100% 28%,100% 100%,6% 100%,0 72%);
+  background:linear-gradient(90deg,#173141,#0c1218)!important;
+}
+
+/* Iceland */
+#rideSheet[data-park="europa-park"][data-theme="iceland-energy"]{
+  --ep-bg:#102b3a;--ep-bg2:#07131a;--ep-accent:#55d8ff;--ep-title:#eafaff;--ep-panel:#0b202bea;
+}
+#rideSheet[data-park="europa-park"][data-theme="norse-wood"]{
+  --ep-bg:#2a241c;--ep-bg2:#0e0b08;--ep-accent:#c4965d;--ep-title:#f4dfb8;--ep-panel:#1a1510ec;
+}
+#rideSheet[data-park="europa-park"][data-theme="norse-wood"] .sheetCard{
+  background:
+    linear-gradient(90deg,rgba(43,35,25,.98),rgba(12,10,8,.97)),
+    repeating-linear-gradient(0deg,#34261b 0 27px,#291d15 28px 30px)!important;
+  border-top:6px double #b48550!important;
+}
+#rideSheet[data-park="europa-park"][data-theme="norse-wood"] #rideTitle{
+  text-transform:uppercase;
+  border-bottom:4px solid #9d7445!important;
+  padding-bottom:9px!important;
+}
+#rideSheet[data-park="europa-park"][data-theme="iceland-water"]{
+  --ep-bg:#12303a;--ep-bg2:#07171c;--ep-accent:#81e2ee;--ep-title:#e9fcff;--ep-panel:#0c252dea;
+}
+
+/* Monaco motorsport */
+#rideSheet[data-park="europa-park"][data-theme="monaco-racing"]{
+  --ep-bg:#25292d;--ep-bg2:#0d1012;--ep-accent:#d9d9d9;--ep-title:#ffffff;--ep-panel:#171b1eeb;
+}
+#rideSheet[data-park="europa-park"][data-theme="monaco-racing"] #rideTitle{
+  text-transform:uppercase;
+  letter-spacing:.09em!important;
+  border-left:7px solid #d72638!important;
+  padding-left:14px!important;
+}
+
+/* France */
+#rideSheet[data-park="europa-park"][data-theme="paris-cancan"]{
+  --ep-bg:#2b1735;--ep-bg2:#100817;--ep-accent:#f3c26f;--ep-title:#fff0c8;--ep-panel:#1d1026ec;
+}
+#rideSheet[data-park="europa-park"][data-theme="paris-cancan"] #rideTitle{
+  text-align:center;
+  text-transform:uppercase;
+  letter-spacing:.065em!important;
+  border-block:4px double #f3c26f!important;
+  padding-block:10px!important;
+}
+#rideSheet[data-park="europa-park"][data-theme="alsace-dinos"]{
+  --ep-bg:#4a2b29;--ep-bg2:#1b0f10;--ep-accent:#f1b36c;--ep-title:#fff0c8;--ep-panel:#2c1918eb;
+}
+#rideSheet[data-park="europa-park"][data-theme="alsace-dinos"] #rideTitle{transform:rotate(-1deg)}
+#rideSheet[data-park="europa-park"][data-theme="french-skyline"]{
+  --ep-bg:#1b2e3b;--ep-bg2:#09151c;--ep-accent:#9fdaf0;--ep-title:#eefbff;--ep-panel:#10232deb;
+}
+
+/* Russia */
+#rideSheet[data-park="europa-park"][data-theme="russian-space"]{
+  --ep-bg:#25273b;--ep-bg2:#0c0d17;--ep-accent:#8fd6ff;--ep-title:#eef9ff;--ep-panel:#171927eb;
+}
+#rideSheet[data-park="europa-park"][data-theme="russian-space"] #rideTitle{
+  text-transform:uppercase;
+  letter-spacing:.1em!important;
+  border-block:2px solid #8fd6ff!important;
+  padding-block:10px!important;
+}
+#rideSheet[data-park="europa-park"][data-theme="russian-retro"]{
+  --ep-bg:#2d2520;--ep-bg2:#100d0b;--ep-accent:#c84c47;--ep-title:#f3dfc9;--ep-panel:#1d1713ec;
+}
+#rideSheet[data-park="europa-park"][data-theme="russian-fairy"]{
+  --ep-bg:#24334a;--ep-bg2:#0c1420;--ep-accent:#d9edff;--ep-title:#fff;--ep-panel:#18263aec;
+}
+
+/* Minimoys */
+#rideSheet[data-park="europa-park"][data-theme="minimoys"],
+#rideSheet[data-park="europa-park"][data-theme="minimoys-kids"]{
+  --ep-bg:#263520;--ep-bg2:#0d160b;--ep-accent:#a9de67;--ep-title:#f2ffd6;--ep-panel:#192718eb;
+}
+#rideSheet[data-park="europa-park"][data-theme="minimoys"] #rideTitle{
+  transform:rotate(-1deg);
+  text-shadow:3px 3px 0 #4f7431,0 0 16px #a9de6788!important;
+}
+#rideSheet[data-park="europa-park"][data-theme="minimoys-kids"] #rideTitle{transform:rotate(-2deg)}
+
+/* Batavia */
+#rideSheet[data-park="europa-park"][data-theme="batavia-pirates"]{
+  --ep-bg:#292017;--ep-bg2:#0d0a08;--ep-accent:#d2a45d;--ep-title:#f6e0af;--ep-panel:#1c1510ec;
+}
+#rideSheet[data-park="europa-park"][data-theme="batavia-pirates"] #rideTitle{
+  transform:rotate(-1deg);
+  border-bottom:4px double #9f7747!important;
+  padding-bottom:10px!important;
+}
+
+/* Voletarium / aviation */
+#rideSheet[data-park="europa-park"][data-theme="aviation-club"],
+#rideSheet[data-park="europa-park"][data-theme="aviation-kids"]{
+  --ep-bg:#26323b;--ep-bg2:#0d151a;--ep-accent:#d4b775;--ep-title:#f5e9cb;--ep-panel:#19242bea;
+}
+#rideSheet[data-park="europa-park"][data-theme="aviation-club"] #rideTitle{
+  text-align:center;
+  border-block:3px double #b79a62!important;
+  padding-block:10px!important;
+}
+
+/* Greece */
+#rideSheet[data-park="europa-park"][data-theme="greek-myth"],
+#rideSheet[data-park="europa-park"][data-theme="greek-family"],
+#rideSheet[data-park="europa-park"][data-theme="greek-madness"],
+#rideSheet[data-park="europa-park"][data-theme="greek-atlantis"]{
+  --ep-bg:#183448;--ep-bg2:#081921;--ep-accent:#e1c37c;--ep-title:#fff2ca;--ep-panel:#102734eb;
+}
+#rideSheet[data-park="europa-park"][data-theme="greek-myth"] #rideTitle,
+#rideSheet[data-park="europa-park"][data-theme="greek-atlantis"] #rideTitle{
+  text-transform:uppercase;
+  text-align:center;
+  border-block:3px double #e1c37c!important;
+  padding-block:10px!important;
+}
+#rideSheet[data-park="europa-park"][data-theme="greek-madness"] #rideTitle{transform:skewY(-2deg)}
+
+/* Alps / Austria / Switzerland */
+#rideSheet[data-park="europa-park"][data-theme="austrian-alps"],
+#rideSheet[data-park="europa-park"][data-theme="swiss-alps"],
+#rideSheet[data-park="europa-park"][data-theme="swiss-bob"]{
+  --ep-bg:#243425;--ep-bg2:#0c160e;--ep-accent:#d3b36d;--ep-title:#f5e8c8;--ep-panel:#18271aeb;
+}
+#rideSheet[data-park="europa-park"][data-theme="swiss-alps"] #rideTitle,
+#rideSheet[data-park="europa-park"][data-theme="swiss-bob"] #rideTitle{
+  border-bottom:4px double #b39862!important;
+  padding-bottom:9px!important;
+}
+#rideSheet[data-park="europa-park"][data-theme="imperial-austria"]{
+  --ep-bg:#3a2837;--ep-bg2:#140e14;--ep-accent:#e2c68e;--ep-title:#fff0d0;--ep-panel:#261b25eb;
+}
+#rideSheet[data-park="europa-park"][data-theme="imperial-austria"] #rideTitle{text-align:center}
+
+/* Water worlds */
+#rideSheet[data-park="europa-park"][data-theme="portuguese-sea"],
+#rideSheet[data-park="europa-park"][data-theme="nordic-water"]{
+  --ep-bg:#143441;--ep-bg2:#071820;--ep-accent:#72d6e8;--ep-title:#e9fbff;--ep-panel:#0d2831eb;
+}
+#rideSheet[data-park="europa-park"][data-theme="portuguese-sea"] #rideTitle,
+#rideSheet[data-park="europa-park"][data-theme="nordic-water"] #rideTitle{
+  transform:rotate(-1deg);
+}
+
+/* Italy */
+#rideSheet[data-park="europa-park"][data-theme="renaissance-flight"]{
+  --ep-bg:#34281f;--ep-bg2:#120e0b;--ep-accent:#d9b66d;--ep-title:#f9e9c1;--ep-panel:#221a14eb;
+}
+#rideSheet[data-park="europa-park"][data-theme="medici-dark"]{
+  --ep-bg:#271820;--ep-bg2:#0d080b;--ep-accent:#b68c61;--ep-title:#ead7c2;--ep-panel:#1a1015ed;
+}
+#rideSheet[data-park="europa-park"][data-theme="medici-dark"] .worldArt>img{filter:saturate(.72) contrast(1.12)}
+#rideSheet[data-park="europa-park"][data-theme="medici-dark"] #rideTitle{
+  text-align:center;
+  border-block:4px double #8f674f!important;
+  padding-block:10px!important;
+}
+#rideSheet[data-park="europa-park"][data-theme="italian-family"]{
+  --ep-bg:#3a2826;--ep-bg2:#140d0c;--ep-accent:#f0b879;--ep-title:#fff0cf;--ep-panel:#271918eb;
+}
+
+/* UK */
+#rideSheet[data-park="europa-park"][data-theme="british-chaos"],
+#rideSheet[data-park="europa-park"][data-theme="british-london"],
+#rideSheet[data-park="europa-park"][data-theme="british-vintage"],
+#rideSheet[data-park="europa-park"][data-theme="british-racing"],
+#rideSheet[data-park="europa-park"][data-theme="football"]{
+  --ep-bg:#202d3a;--ep-bg2:#0b1117;--ep-accent:#d44747;--ep-title:#f7f5ec;--ep-panel:#151f29eb;
+}
+#rideSheet[data-park="europa-park"][data-theme="british-racing"] #rideTitle,
+#rideSheet[data-park="europa-park"][data-theme="football"] #rideTitle{
+  text-transform:uppercase;letter-spacing:.06em!important;
+}
+
+/* Ireland */
+#rideSheet[data-park="europa-park"][data-theme^="irish-"]{
+  --ep-bg:#20372a;--ep-bg2:#0b160f;--ep-accent:#e2b75d;--ep-title:#f5ead0;--ep-panel:#15281ceb;
+}
+#rideSheet[data-park="europa-park"][data-theme="irish-sea"]{--ep-accent:#74d3dc;--ep-title:#eafcff}
+#rideSheet[data-park="europa-park"][data-theme="irish-farm"]{--ep-accent:#d7bc78}
+#rideSheet[data-park="europa-park"][data-theme="irish-dragon"]{--ep-accent:#9fe163}
+
+/* Spain / Netherlands / small classics */
+#rideSheet[data-park="europa-park"][data-theme="spanish-fair"],
+#rideSheet[data-park="europa-park"][data-theme="spanish-sea"]{
+  --ep-bg:#40241f;--ep-bg2:#160d0a;--ep-accent:#f0b74f;--ep-title:#fff0c2;--ep-panel:#2a1713eb;
+}
+#rideSheet[data-park="europa-park"][data-theme="dutch-playful"],
+#rideSheet[data-park="europa-park"][data-theme="dutch-sea"]{
+  --ep-bg:#193641;--ep-bg2:#09171d;--ep-accent:#f5a24a;--ep-title:#fff0c9;--ep-panel:#102832eb;
+}
+#rideSheet[data-park="europa-park"][data-theme="balloon"],
+#rideSheet[data-park="europa-park"][data-theme="fairy-water"],
+#rideSheet[data-park="europa-park"][data-theme="puppet-boat"],
+#rideSheet[data-park="europa-park"][data-theme="vintage-germany"],
+#rideSheet[data-park="europa-park"][data-theme="german-fairy"],
+#rideSheet[data-park="europa-park"][data-theme="park-rail"],
+#rideSheet[data-park="europa-park"][data-theme="lummerland"],
+#rideSheet[data-park="europa-park"][data-theme="europe-classic"]{
+  --ep-bg:#29312d;--ep-bg2:#0e1311;--ep-accent:#d5b977;--ep-title:#f5ead1;--ep-panel:#1a211deb;
+}
+
+/* GRAND PRIX */
+#rideSheet[data-park="europa-park"][data-theme="grand-prix"]{
+  --ep-bg:#27282a;--ep-bg2:#0d0e10;--ep-accent:#f5c23e;--ep-title:#fff7cf;--ep-panel:#191b1deb;
+}
+#rideSheet[data-park="europa-park"][data-theme="grand-prix"] #rideTitle{
+  text-transform:uppercase;
+  transform:skewX(-3deg);
+  text-shadow:3px 3px 0 #d7443f,0 0 15px #f5c23e88!important;
+}
+
+@media(max-width:699px){
+  #rideSheet[data-park="europa-park"] .sheetCard{
+    padding-top:calc(300px + env(safe-area-inset-top))!important;
+  }
+  #rideSheet[data-park="europa-park"] .worldArt{
+    height:calc(400px + env(safe-area-inset-top))!important;
+  }
+  #rideSheet[data-park="europa-park"] #rideTitle{
+    font-size:clamp(33px,9.5vw,55px)!important;
+    line-height:1.04!important;
+  }
+  #rideSheet[data-park="europa-park"][data-theme="tesla-croatia"] #rideTitle,
+  #rideSheet[data-park="europa-park"][data-theme="paris-cancan"] #rideTitle{
+    font-size:clamp(28px,8vw,44px)!important;
+  }
+}
