@@ -283,7 +283,11 @@
     "side-kick":"side-kick",
     "tmnt license to drive":"teenage-mutant-ninja-turtles-license-to-drive",
     "teenage mutant ninja turtles: license to drive":"teenage-mutant-ninja-turtles-license-to-drive",
-    "paw patrol adventure tour":"paw-patrol-adventure-tour"
+    "paw patrol adventure tour":"paw-patrol-adventure-tour",
+    "skye's high flyer":"skyes-high-flyer",
+    "skye’s high flyer":"skyes-high-flyer",
+    "zuma's zoomers":"zumas-zoomers",
+    "zuma’s zoomers":"zumas-zoomers"
   };
 
   window.NAEHEN_MOVIE_PARK = {
@@ -300,7 +304,11 @@
     worlds,
     fonts,
     aliases,
-    rideConfig:{},
+    rideConfig:{
+      "van-helsings-factory":{singleRider:true},
+      "movie-park-studio-tour":{singleRider:true},
+      "ghost-chasers":{singleRider:true}
+    },
     exclusions:{
       ids:["ahoj-brause-horror-lab","unhallowed-2-show","the-lost-temple"],
       namePatterns:["horror lab","unhallowed","the lost temple"]
