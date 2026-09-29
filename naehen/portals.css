@@ -18,7 +18,9 @@
 
 /* Individual attraction portals. Body copy and timing data keep the same readable UI font. */
 #rideSheet .sheetCard{--ink:#f6eee0;--veil:#121a19;--metal:#d8c39a;--world-font:Georgia,serif;--world-art:none;--world-decoration:none;color:var(--ink);background:var(--veil);border:1px solid var(--metal);border-radius:24px 24px 0 0;box-shadow:0 -16px 80px #000c,inset 0 0 80px #0005;padding:270px 22px calc(28px + env(safe-area-inset-bottom));min-height:670px;max-height:94dvh;overflow:auto;scrollbar-color:var(--metal) var(--veil)}
-#rideSheet .worldArt{display:block;position:absolute;inset:0 0 auto;height:345px;background:linear-gradient(to bottom,#05090814 0%,#05090800 45%,var(--veil) 100%),var(--world-art) center/cover no-repeat;z-index:-2;animation:portalReveal .48s ease-out both}
+#rideSheet .worldArt{display:block;position:absolute;inset:0 0 auto;height:345px;background:var(--veil);z-index:-2;overflow:hidden;animation:portalReveal .48s ease-out both}
+#rideSheet .worldArt>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;z-index:0}
+#rideSheet .worldArt:after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,#05090814 0%,#05090800 45%,var(--veil) 100%)}
 #rideSheet .worldOrnament{display:block;position:absolute;top:18px;left:20px;right:70px;height:205px;border:1px solid color-mix(in srgb,var(--metal) 70%,transparent);pointer-events:none;box-shadow:inset 0 0 0 5px #0003,0 4px 20px #0004}
 #rideSheet .worldOrnament:after{content:var(--world-decoration);position:absolute;bottom:12px;left:16px;color:var(--metal);font:18px var(--world-font);text-shadow:0 2px 7px #000b}
 #rideSheet .worldCaption{display:block;max-width:300px;color:var(--ink);font:italic 16px/1.35 var(--world-font);letter-spacing:.01em;margin:0 0 12px;opacity:.94}
@@ -34,7 +36,8 @@
 /* Basalt and forge. */
 #rideSheet[data-world=taron]{--world-art:url('./assets/taron.webp');--veil:#171717;--ink:#f4e5d1;--metal:#d69a54;--world-font:'Pirata One',Georgia,serif;--world-decoration:'⟡  KLUGHEIM  ⟡'}
 #rideSheet[data-world=taron] .sheetCard{background:repeating-linear-gradient(128deg,#171715 0 28px,#1a1a18 29px 32px);border-left:7px solid #8a5235;border-top:3px solid #dfaa65}
-#rideSheet[data-world=taron] .worldArt{background-image:linear-gradient(0deg,#171715 0%,transparent 85%),var(--world-art);filter:saturate(.83)}
+#rideSheet[data-world=taron] .worldArt>img{filter:saturate(.83)}
+#rideSheet[data-world=taron] .worldArt:after{background:linear-gradient(0deg,#171715 0%,transparent 85%)}
 #rideSheet[data-world=taron] #rideTitle{text-transform:uppercase;font-size:clamp(55px,14vw,86px);letter-spacing:3px;transform:skewY(-3deg)}
 #rideSheet[data-world=taron] .rideDetailWait{border-left:5px solid #d59a55;padding-left:14px}
 /* Water spiral in the medieval castle. */
@@ -60,7 +63,8 @@
 /* Sunlit river and carved stone. */
 #rideSheet[data-world=chiapas]{--world-art:url('./assets/chiapas.webp');--veil:#f2dbac;--ink:#3c2717;--metal:#195e64;--world-font:'Patua One',Georgia,serif;--world-decoration:'✺   MEXICO · RÍO   ✺'}
 #rideSheet[data-world=chiapas] .sheetCard{background:linear-gradient(0deg,#dcbf86,#f2dbac);border:4px solid #c58748}
-#rideSheet[data-world=chiapas] .worldArt{height:270px;background:var(--world-art) center/cover}
+#rideSheet[data-world=chiapas] .worldArt{height:270px}
+#rideSheet[data-world=chiapas] .worldArt:after{background:linear-gradient(0deg,#e9d3a5 0%,transparent 42%)}
 #rideSheet[data-world=chiapas] .worldOrnament{border:4px double #815122;height:210px}
 #rideSheet[data-world=chiapas] #rideTitle{color:#653916;text-shadow:0 1px #ffe6bd;font-size:clamp(40px,11vw,64px)}
 #rideSheet[data-world=chiapas] #rideDetailStatus,#rideSheet[data-world=chiapas] .srBox{background:#f8eccd;border-color:#956138;color:#3c2717}
@@ -75,7 +79,8 @@
 /* Castle arch and antique ink. */
 #rideSheet[data-world=mystery-castle]{--world-art:url('./assets/mystery-castle.webp');--veil:#181722;--metal:#c9b8dd;--ink:#efe7fc;--world-font:'UnifrakturCook',Georgia,serif;--world-decoration:'✦  DAS GEHEIMNIS WARTET  ✦'}
 #rideSheet[data-world=mystery-castle] .sheetCard{text-align:center;background:radial-gradient(circle at 50% 45%,#342840,#17141d 68%);border-top:4px solid #7e698c}
-#rideSheet[data-world=mystery-castle] .worldArt{height:310px;inset:14px 14% auto;border-radius:50% 50% 0 0;border:3px solid #a99abc;background-image:linear-gradient(0deg,#181722,transparent 63%),var(--world-art)}
+#rideSheet[data-world=mystery-castle] .worldArt{height:310px;inset:14px 14% auto;border-radius:50% 50% 0 0;border:3px solid #a99abc}
+#rideSheet[data-world=mystery-castle] .worldArt:after{background:linear-gradient(0deg,#181722,transparent 63%)}
 #rideSheet[data-world=mystery-castle] .worldOrnament{border-radius:50% 50% 0 0;top:16px;height:260px;left:12%;right:12%;border:1px solid #c8bade}
 #rideSheet[data-world=mystery-castle] .worldOrnament:after{bottom:0;left:50%;transform:translateX(-50%);font-family:Georgia,serif;white-space:nowrap}
 #rideSheet[data-world=mystery-castle] #rideTitle{font-size:clamp(46px,12vw,70px)}
@@ -100,7 +105,9 @@
 /* The image is a diptych. Only the left panel appears in Colorado's portal and cards. */
 #rideSheet[data-world=colorado-adventure]{--world-art:url('./assets/colorado-adventure.webp');--veil:#322117;--ink:#f8e3b9;--metal:#dbb277;--world-font:'Rye',Georgia,serif;--world-decoration:'✦  COLORADO EXPRESS  ✦'}
 #rideSheet[data-world=colorado-adventure] .sheetCard{background:repeating-linear-gradient(0deg,#302117 0 25px,#38271a 26px 29px);border:7px double #b28c58;border-radius:0}
-#rideSheet[data-world=colorado-adventure] .worldArt{background-image:linear-gradient(0deg,#302117,transparent 72%),var(--world-art);background-size:100% 100%,200% auto;background-position:center,left center;box-shadow:inset 0 0 25px #000b}
+#rideSheet[data-world=colorado-adventure] .worldArt{box-shadow:inset 0 0 25px #000b}
+#rideSheet[data-world=colorado-adventure] .worldArt>img{width:200%;max-width:none;object-fit:cover;object-position:left center}
+#rideSheet[data-world=colorado-adventure] .worldArt:after{background:linear-gradient(0deg,#302117,transparent 72%)}
 #rideSheet[data-world=colorado-adventure] .worldOrnament{border:4px double #d6b581;transform:rotate(-1deg)}
 #rideSheet[data-world=colorado-adventure] #rideTitle{font-size:clamp(35px,8vw,51px);text-transform:uppercase}
 #rides .ride[data-world=colorado-adventure] .rideArt{width:200%;max-width:none;object-fit:cover;object-position:left center}
@@ -113,7 +120,8 @@
 /* Berlin confectionery and chequerboard tiles. */
 #rideSheet[data-world=maus-au-chocolat]{--world-art:url('./assets/maus-au-chocolat.webp');--veil:#e9d8ba;--ink:#3c211c;--metal:#813d34;--world-font:'DM Serif Display',Georgia,serif;--world-decoration:'✿  KONDITOREI  ·  BERLIN  ✿'}
 #rideSheet[data-world=maus-au-chocolat] .sheetCard{background:linear-gradient(#eddcc0eb,#eddcc0eb),repeating-conic-gradient(#946c60 0 25%,#dacbb4 0 50%) 0 0/34px 34px;border:5px solid #874941;border-radius:8px 8px 0 0}
-#rideSheet[data-world=maus-au-chocolat] .worldArt{height:280px;background:linear-gradient(0deg,#e9d8ba,transparent 32%),var(--world-art) center/cover}
+#rideSheet[data-world=maus-au-chocolat] .worldArt{height:280px}
+#rideSheet[data-world=maus-au-chocolat] .worldArt:after{background:linear-gradient(0deg,#e9d8ba,transparent 32%)}
 #rideSheet[data-world=maus-au-chocolat] .worldOrnament{border:5px double #80514b;border-radius:60px 60px 4px 4px}
 #rideSheet[data-world=maus-au-chocolat] #rideTitle{color:#5e2d28;font-size:clamp(40px,10vw,58px);text-shadow:none}
 #rideSheet[data-world=maus-au-chocolat] #rideDetailStatus,#rideSheet[data-world=maus-au-chocolat] .srBox{background:#f9eddb;color:#3c211c;border-color:#a48173}
@@ -127,14 +135,17 @@
 /* Period poster for the 4D trio. */
 #rideSheet[data-world=die-3-mausketiere]{--world-art:url('./assets/die-3-mausketiere.webp');--veil:#29201d;--ink:#f5e6cb;--metal:#d5b98b;--world-font:'Playfair Display',Georgia,serif;--world-decoration:'❧  DREI HELDEN  ·  EINE MISSION  ❧'}
 #rideSheet[data-world=die-3-mausketiere] .sheetCard{border:9px double #b7a276;background:#29201d;text-align:center;border-radius:0}
-#rideSheet[data-world=die-3-mausketiere] .worldArt{height:320px;background:linear-gradient(0deg,#29201d,transparent 45%),var(--world-art) center/cover}
+#rideSheet[data-world=die-3-mausketiere] .worldArt{height:320px}
+#rideSheet[data-world=die-3-mausketiere] .worldArt:after{background:linear-gradient(0deg,#29201d,transparent 45%)}
 #rideSheet[data-world=die-3-mausketiere] .worldOrnament{border:3px double #d4b987;height:240px}
 #rideSheet[data-world=die-3-mausketiere] #rideTitle{font-size:clamp(35px,9vw,53px);font-style:italic}
 #rideSheet[data-world=die-3-mausketiere] .rideDetailWait{text-align:center;border-block:3px double #d5b98b}
 /* Adventure journal: the supplied image is a map, not a pretend live map. */
 #rideSheet[data-world=deep-in-africa-adventure-trail]{--world-art:url('./assets/deep-in-africa-adventure-trail.webp');--veil:#e1c693;--ink:#352816;--metal:#73532d;--world-font:'Special Elite',Georgia,serif;--world-decoration:'✦  EXPEDITION  ·  JOURNAL  ✦'}
 #rideSheet[data-world=deep-in-africa-adventure-trail] .sheetCard{background:#e6d3ab;border:7px double #816333;border-radius:3px;box-shadow:0 -18px 40px #000b,inset 0 0 80px #94622d66}
-#rideSheet[data-world=deep-in-africa-adventure-trail] .worldArt{height:265px;background:linear-gradient(0deg,#e6d3ab,transparent 25%),var(--world-art) center/cover;filter:sepia(.14)}
+#rideSheet[data-world=deep-in-africa-adventure-trail] .worldArt{height:265px}
+#rideSheet[data-world=deep-in-africa-adventure-trail] .worldArt>img{filter:sepia(.14)}
+#rideSheet[data-world=deep-in-africa-adventure-trail] .worldArt:after{background:linear-gradient(0deg,#e6d3ab,transparent 25%)}
 #rideSheet[data-world=deep-in-africa-adventure-trail] .worldOrnament{border:2px dashed #74532d}
 #rideSheet[data-world=deep-in-africa-adventure-trail] #rideTitle{font-size:clamp(31px,8vw,48px);text-shadow:none;color:#423019}
 #rideSheet[data-world=deep-in-africa-adventure-trail] #rideDetailStatus,#rideSheet[data-world=deep-in-africa-adventure-trail] .srBox{background:#f5e5c4;color:#352816;border-color:#967646}
@@ -142,7 +153,8 @@
 /* Tilted hotel stationery. */
 #rideSheet[data-world=das-verrueckte-hotel-tartueff]{--world-art:url('./assets/das-verrueckte-hotel-tartueff.webp');--veil:#f0e6d6;--ink:#352627;--metal:#95535d;--world-font:'Abril Fatface',Georgia,serif;--world-decoration:'❦  HOTEL TARTÜFF  ❦'}
 #rideSheet[data-world=das-verrueckte-hotel-tartueff] .sheetCard{background:linear-gradient(95deg,#f0e6d6,#faefe2);border:6px double #95535d;border-radius:12px 54px 0 0}
-#rideSheet[data-world=das-verrueckte-hotel-tartueff] .worldArt{height:290px;background:linear-gradient(0deg,#f0e6d6,transparent 25%),var(--world-art) center/cover}
+#rideSheet[data-world=das-verrueckte-hotel-tartueff] .worldArt{height:290px}
+#rideSheet[data-world=das-verrueckte-hotel-tartueff] .worldArt:after{background:linear-gradient(0deg,#f0e6d6,transparent 25%)}
 #rideSheet[data-world=das-verrueckte-hotel-tartueff] .worldOrnament{border:4px double #864a54;transform:rotate(2deg)}
 #rideSheet[data-world=das-verrueckte-hotel-tartueff] #rideTitle{font-size:clamp(38px,9vw,60px);line-height:1.05;transform:rotate(-2deg);color:#7a3947;text-shadow:none}
 #rideSheet[data-world=das-verrueckte-hotel-tartueff] .rideDetailWait{border-block:3px double #a05a68}
@@ -151,7 +163,7 @@
 #rideSheet[data-world=default] .sheetCard{min-height:0;padding-top:72px}
 #rideSheet[data-world=default] .worldArt,#rideSheet[data-world=default] .worldOrnament{display:none}
 @keyframes portalReveal{from{opacity:.5;transform:scale(1.06)}to{opacity:1;transform:scale(1)}}
-@media(min-width:700px){#rideSheet .sheetCard{width:min(94vw,650px);border-radius:22px;min-height:680px}#rideSheet[data-world=colorado-adventure] .worldArt{background-size:100% 100%,200% auto}}
+@media(min-width:700px){#rideSheet .sheetCard{width:min(94vw,650px);border-radius:22px;min-height:680px}}
 @media(max-width:390px){#rideSheet .sheetCard{padding:250px 16px calc(24px + env(safe-area-inset-bottom))}#rideSheet .worldArt{height:325px}#rideSheet .worldCaption{font-size:14px}#rideSheet .worldOrnament{left:16px;right:62px}#rideSheet[data-world=fly] #rideTitle{font-size:70px}}
 @media(prefers-reduced-motion:reduce){#rideSheet .worldArt{animation:none}}
 
@@ -163,8 +175,8 @@
   #rideSheet .worldOrnament{top:calc(20px + env(safe-area-inset-top))}
   #rideSheet .close{top:calc(20px + env(safe-area-inset-top))}
 }
-#rideSheet[data-world=winjas-fear] .worldArt{background-position:center,left 40%}
-#rideSheet[data-world=winjas-force] .worldArt{background-position:center,right 40%;filter:hue-rotate(15deg)}
+#rideSheet[data-world=winjas-fear] .worldArt>img{width:200%;max-width:none;object-position:left center}
+#rideSheet[data-world=winjas-force] .worldArt>img{width:200%;max-width:none;left:-100%;object-position:right center;filter:hue-rotate(15deg)}
 /* Attraction card art must sit above the card fill, below its contrast veil and labels. */
 #rides .ride{isolation:isolate}
 #rides .ride .rideArt{z-index:0}
