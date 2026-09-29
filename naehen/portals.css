@@ -492,3 +492,25 @@
   color:#f3d7df;
   text-shadow:0 2px 7px #000c;
 }
+
+
+/* v19 — anchor favorite control to the card, not the content column */
+#rides .ride .rideMain,
+#rides .ride .rideTop{
+  position:static!important;
+}
+#rides .ride .rideTop>div,
+#rides .ride .meta,
+#rides .ride>.wait{
+  position:relative;
+  z-index:2;
+}
+#rides .ride .fav{
+  position:absolute!important;
+  top:14px!important;
+  right:14px!important;
+  left:auto!important;
+  z-index:5!important;
+  margin:0!important;
+  transform:none!important;
+}
