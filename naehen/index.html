@@ -89,7 +89,7 @@
       </div>
     </div>
 
-    <div class="sectionHead"><h2>Deine Nähchancen</h2><span id="dataLabel">DEMO-DATEN</span></div>
+    <div class="sectionHead"><h2>Deine Nähchancen</h2><span id="dataLabel">LIVE-DATEN LADEN…</span></div>
     <div id="rides"></div>
   </section>
 
@@ -153,6 +153,7 @@ const FALLBACK_RIDES = [
 ];
 let rides=[...FALLBACK_RIDES];
 const QUEUE_TIMES_URL='https://queue-times.com/parks/56/queue_times.json';
+const QUEUE_TIMES_PROXY_URL='https://proxy.cors.dev/'+QUEUE_TIMES_URL;
 const LIVE_REFRESH_MS=5*60*1000;
 
 function slugRide(name){
@@ -176,8 +177,15 @@ async function loadLiveWaits(){
   const label=$('#dataLabel');
   try{
     label.textContent='LIVE WIRD GELADEN…';
-    const res=await fetch(QUEUE_TIMES_URL,{cache:'no-store'});
-    if(!res.ok)throw new Error('HTTP '+res.status);
+    let res;
+    try{
+      res=await fetch(QUEUE_TIMES_URL,{cache:'no-store'});
+      if(!res.ok)throw new Error('Direktabruf HTTP '+res.status);
+    }catch(directError){
+      console.info('Direkter Queue-Times-Abruf blockiert, nutze CORS-Fallback.',directError);
+      res=await fetch(QUEUE_TIMES_PROXY_URL,{cache:'no-store'});
+      if(!res.ok)throw new Error('Proxy HTTP '+res.status);
+    }
     const data=await res.json();
     const previous=store.get('naehen:lastWaits',{});
     const flattened=[];
