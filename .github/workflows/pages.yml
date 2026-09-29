@@ -26,13 +26,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Fetch Phantasialand live queue data
+      - name: Fetch NÄHEN live queue data
         run: |
           curl --fail --silent --show-error --location \
             --retry 3 --retry-delay 2 --max-time 25 \
             "https://queue-times.com/parks/56/queue_times.json" \
             --output "naehen/live.json"
           test -s "naehen/live.json"
+
+          curl --fail --silent --show-error --location \
+            --retry 3 --retry-delay 2 --max-time 25 \
+            "https://queue-times.com/parks/310/queue_times.json" \
+            --output "naehen/live-movie-park.json"
+          test -s "naehen/live-movie-park.json"
 
       - name: Evaluate NÄHEN push alerts
         env:
@@ -50,7 +56,9 @@ jobs:
           cd /tmp/naehen-push
           npm init -y >/dev/null 2>&1
           npm install --silent web-push@3.6.7
-          NODE_PATH=/tmp/naehen-push/node_modules node "$GITHUB_WORKSPACE/naehen/push-alerts.cjs" "$GITHUB_WORKSPACE/naehen/live.json"
+          NODE_PATH=/tmp/naehen-push/node_modules node "$GITHUB_WORKSPACE/naehen/push-alerts.cjs" \
+            "$GITHUB_WORKSPACE/naehen/live.json" \
+            "$GITHUB_WORKSPACE/naehen/live-movie-park.json"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
