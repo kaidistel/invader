@@ -1,0 +1,19 @@
+{
+  "name": "NÄHEN · Parkday Companion",
+  "short_name": "NÄHEN",
+  "description": "Parkday Companion für Phantasialand-Fans",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#090b10",
+  "theme_color": "#090b10",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
