@@ -1,7 +1,8 @@
 const fs = require("fs");
 const webpush = require("web-push");
 
-const livePath = process.argv[2] || "naehen/live.json";
+const livePaths = process.argv.slice(2);
+if (!livePaths.length) livePaths.push("naehen/live.json");
 const SUPABASE_URL = process.env.NAEHEN_SUPABASE_URL || "";
 const SERVICE_KEY = process.env.NAEHEN_SUPABASE_SECRET_KEY || process.env.NAEHEN_SUPABASE_SERVICE_ROLE_KEY || "";
 const VAPID_PUBLIC_KEY = process.env.NAEHEN_VAPID_PUBLIC_KEY || "";
@@ -32,13 +33,37 @@ function slugRide(name) {
     "mystery castle": "mystery-castle",
     "colorado adventure": "colorado-adventure",
     "river quest": "river-quest",
-    "talocan": "talocan"
+    "talocan": "talocan",
+    "star trek": "star-trek-operation-enterprise",
+    "star trek™: operation enterprise": "star-trek-operation-enterprise",
+    "star trek: operation enterprise": "star-trek-operation-enterprise",
+    "excalibur": "excalibur-secrets-of-the-dark-forest",
+    "excalibur - secrets of the dark forest": "excalibur-secrets-of-the-dark-forest",
+    "jimmy neutron atomic flyer": "jimmy-neutrons-atomic-flyer",
+    "jimmy neutron's atomic flyer": "jimmy-neutrons-atomic-flyer",
+    "jimmy neutron’s atomic flyer": "jimmy-neutrons-atomic-flyer",
+    "dora’s big river adventure": "doras-big-river-adventure",
+    "dora's big river adventure": "doras-big-river-adventure",
+    "van helsing’s factory": "van-helsings-factory",
+    "van helsing's factory": "van-helsings-factory",
+    "side-kick": "side-kick",
+    "tmnt license to drive": "teenage-mutant-ninja-turtles-license-to-drive",
+    "paw patrol adventure tour": "paw-patrol-adventure-tour"
   };
   const low = String(name || "").toLowerCase().trim();
   if (known[low]) return known[low];
   if (low.startsWith("chiapas")) return "chiapas";
   return low.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ß/g, "ss").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
+
+const PUSH_EXCLUDED_RIDES = new Set([
+  "berliner-einlauten",
+  "berliner-einlaufen",
+  "berliner-einlauf",
+  "ahoj-brause-horror-lab",
+  "unhallowed-2-show",
+  "the-lost-temple"
+]);
 
 async function rest(path, options) {
   const response = await fetch(SUPABASE_URL + "/rest/v1/" + path, Object.assign({
@@ -66,7 +91,7 @@ function flattenLive(data) {
     is_open: !!ride.is_open,
     source_updated_at: ride.last_updated || null,
     synced_at: new Date().toISOString()
-  }));
+  })).filter((ride) => !PUSH_EXCLUDED_RIDES.has(ride.ride_id));
 }
 
 function eventPayload(type, ride, extra) {
@@ -104,7 +129,7 @@ async function sendToUser(userId, payload, subscriptions) {
 }
 
 (async () => {
-  const live = flattenLive(JSON.parse(fs.readFileSync(livePath, "utf8")));
+  const live = livePaths.flatMap((livePath) => flattenLive(JSON.parse(fs.readFileSync(livePath, "utf8"))));
   const previous = await rest("live_ride_state?select=*") || [];
   const favorites = await rest("favorites?select=*") || [];
   const subscriptions = await rest("push_subscriptions?select=*") || [];
