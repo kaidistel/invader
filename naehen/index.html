@@ -13,13 +13,15 @@
   <title>NÄHEN · Parkday Companion</title>
 </head>
 <body>
-  <div class="toast" id="toast"></div>
+  <div class="parkAtmosphere" aria-hidden="true"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <section class="gate show" id="installGate">
     <div class="gateCard">
-      <div class="logoMark">🧵</div>
+      <div class="logoMark">N<span>.</span></div>
       <div class="eyebrow">Parkday Companion</div>
-      <h1>NÄHEN</h1>
+      <h1>NÄHEN<span class="brandDot">.</span></h1>
+      <div class="installSlogan">Dein Park. Dein Tempo.</div>
       <p>Installieren. Anstellen. Nähen. Für Push-Alarme, Queue-Timer und das volle Park-Erlebnis gehört NÄHEN auf deinen Homescreen.</p>
       <button class="btn primary full" id="installBtn">NÄHEN INSTALLIEREN</button>
       <div class="steps hidden" id="iosSteps">
@@ -59,9 +61,9 @@
         <button data-authmode="signup">Account erstellen</button>
       </div>
       <div class="form">
-        <label>E-MAIL</label>
+        <label for="email">E-MAIL</label>
         <input id="email" type="email" placeholder="du@beispiel.de" autocomplete="email">
-        <label>PASSWORT</label>
+        <label for="password">PASSWORT</label>
         <input id="password" type="password" placeholder="Mindestens 6 Zeichen" autocomplete="current-password">
         <label id="usernameLabel" class="hidden">USERNAME</label>
         <input id="username" class="hidden" placeholder="Nähmaschinenführer">
@@ -72,7 +74,7 @@
   </section>
 
   <main class="app hidden" id="app">
-    <div class="queueBar" id="queueBar">
+    <div class="queueBar" id="queueBar" role="button" tabindex="0" aria-label="Aktive Queue öffnen">
       <div>
         <small id="queueLabel">QUEUE WIRD GENÄHT</small>
         <strong id="queueRide">Taron</strong>
@@ -89,7 +91,7 @@
     </header>
 
     <section id="homeView">
-      <div class="hero">
+      <div class="hero"><div class="heroIndex" aria-hidden="true">01 / PARKDAY</div>
         <div class="heroLine">
           <div>
             <div class="eyebrow">Phantasialand · Parktag</div>
@@ -108,7 +110,7 @@
         <h2>Deine Nähchancen</h2>
         <span id="dataLabel">LIVE-DATEN LADEN…</span>
       </div>
-      <div id="rides"></div>
+      <div class="rideTools" aria-label="Attraktionen filtern"><label class="searchLabel"><span aria-hidden="true">⌕</span><input id="rideSearch" type="search" placeholder="Attraktion suchen" aria-label="Attraktion suchen"></label><button id="favoriteFilter" aria-pressed="false">★ Favoriten</button></div><div id="rides"></div><p class="fanNote">NÄHEN · Dein unabhängiger Parkbegleiter.<br>Kein offizielles Angebot des Phantasialands.</p>
     </section>
 
     <section id="logView" class="hidden">
@@ -139,17 +141,17 @@
   </main>
 
   <nav class="nav hidden" id="nav">
-    <button class="active" data-view="homeView">🏠<br>Park</button>
-    <button data-view="logView">🧵<br>Protokoll</button>
-    <button data-view="profileView">👤<br>Profil</button>
+    <button class="active" data-view="homeView"><span aria-hidden="true">⌂</span>Park</button>
+    <button data-view="logView"><span aria-hidden="true">≋</span>Protokoll</button>
+    <button data-view="profileView"><span aria-hidden="true">◎</span>Profil</button>
   </nav>
 
-  <section class="sheet" id="rideSheet">
+  <section class="sheet" id="rideSheet" role="dialog" aria-modal="true" aria-labelledby="rideTitle">
     <div class="sheetCard">
-      <button class="close" data-close="rideSheet">✕</button>
-      <div class="eyebrow" id="rideZone">Phantasialand</div>
+      <button aria-label="Schließen" class="close" data-close="rideSheet">✕</button>
+      <div class="worldArt" aria-hidden="true"></div><div class="worldOrnament" aria-hidden="true"></div><div class="worldCaption" id="worldCaption"></div><div class="eyebrow" id="rideZone">Phantasialand</div>
       <h2 id="rideTitle">Attraktion</h2>
-      <div class="rideDetailWait" id="rideDetailWait">–</div>
+      <div class="waitCaption">AKTUELLE WARTEZEIT</div><div class="rideDetailWait" id="rideDetailWait">–</div>
       <div class="message" id="rideDetailStatus"></div>
       <div id="srCommunity"></div>
       <button class="btn primary full" id="rideQueueBtn">🧵 ANSTELLEN</button>
@@ -158,7 +160,7 @@
 
   <section class="sheet" id="queueSheet">
     <div class="sheetCard">
-      <button class="close" data-close="queueSheet">✕</button>
+      <button aria-label="Schließen" class="close" data-close="queueSheet">✕</button>
       <div class="eyebrow">Queue-Timer</div>
       <h2 id="sheetRide">Taron</h2>
       <p>Beim Anstellen starten. Die Zeit bleibt korrekt, auch wenn das Handy gesperrt wird.</p>
@@ -176,7 +178,7 @@
 
   <section class="sheet" id="activeSheet">
     <div class="sheetCard">
-      <button class="close" data-close="activeSheet">✕</button>
+      <button aria-label="Schließen" class="close" data-close="activeSheet">✕</button>
       <div class="eyebrow">Aktive Nähung</div>
       <h2 id="activeRide">Taron</h2>
       <div class="timerBig" id="activeTime">00:00:00</div>
@@ -188,7 +190,7 @@
 
   <section class="sheet" id="pushSheet">
     <div class="sheetCard">
-      <button class="close" data-close="pushSheet">✕</button>
+      <button aria-label="Schließen" class="close" data-close="pushSheet">✕</button>
       <div class="eyebrow">Persönliche Benachrichtigungen</div>
       <h2>Näh-Alarme</h2>
       <p>Favorisiere Attraktionen und lege fest, wann NÄHEN dich annähen darf.</p>
@@ -201,7 +203,7 @@
 
   <section class="sheet" id="recapSheet">
     <div class="sheetCard">
-      <button class="close" data-close="recapSheet">✕</button>
+      <button aria-label="Schließen" class="close" data-close="recapSheet">✕</button>
       <div class="eyebrow">Parktag abgeschlossen</div>
       <h2>🧵 Nähbilanz</h2>
       <div id="recapContent"></div>

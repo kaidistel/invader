@@ -63,6 +63,10 @@
   let localMode = false;
   let authMode = "login";
   let rides = FALLBACK_RIDES.slice();
+  let rideSearch = "";
+  let onlyFavorites = false;
+  let lastSheetFocus = null;
+  const WORLD = {taron:["KLUGHEIM", "Basalt. Kraft. Adrenalin."], "river-quest":["RIVER QUEST", "Mitten in die Fluten."], fly:["ROOKBURGH · FLUGJOURNAL", "Bereit zum Abheben."], "black-mamba":["DEEP IN AFRICA", "Folge dem Ruf der Wildnis."], chiapas:["MEXICO · EXPEDITION", "Auf zu neuen Ufern."], talocan:["FEUER & WASSER", "Im Bann der Elemente."], "mystery-castle":["MYSTERY", "Jenseits des Gewöhnlichen."]};
   let selectedRide = null;
   let selectedDetailRide = null;
   let queueType = "regular";
@@ -134,12 +138,14 @@
 
   function openSheet(id) {
     const el = $("#" + id);
-    if (el) el.classList.add("show");
+    if (el) { lastSheetFocus = document.activeElement; el.classList.add("show"); document.body.classList.add("modalOpen"); el.querySelector("button")?.focus(); }
   }
 
   function closeSheet(id) {
     const el = $("#" + id);
     if (el) el.classList.remove("show");
+    if (!document.querySelector(".sheet.show")) document.body.classList.remove("modalOpen");
+    if (lastSheetFocus?.isConnected) lastSheetFocus.focus();
   }
 
   function formatElapsed(ms) {
@@ -451,7 +457,8 @@
     const container = $("#rides");
     if (!container) return;
 
-    const cards = rides.map((ride) => {
+    const visibleRides = rides.filter(ride => (!onlyFavorites || favorites.includes(ride.id)) && ride.name.toLowerCase().includes(rideSearch));
+    const cards = visibleRides.map((ride) => {
       const fav = favorites.includes(ride.id);
       const hasLive = ride.source === "queue-times";
       const closed = hasLive && !ride.isOpen;
@@ -464,10 +471,11 @@
       const sr = ride.singleRider ? "<span>👤 SR</span><span>·</span>" : "";
       const queueDisabled = closed ? " disabled" : "";
 
-      return "<article class=\"ride\" data-detail=\"" + ride.id + "\">" +
+      return "<article class=\"ride\" data-world=\"" + escapeHtml(ride.id) + "\" data-detail=\"" + escapeHtml(ride.id) + "\">" +
+        (WORLD[ride.id] ? "<img class=\"rideArt\" src=\"./assets/" + ride.id + ".webp\" alt=\"\" loading=\"lazy\">" : "") +
         "<div class=\"rideMain\">" +
           "<div class=\"rideTop\">" +
-            "<button class=\"fav " + (fav ? "on" : "") + "\" data-fav=\"" + ride.id + "\" aria-label=\"Favorit\">★</button>" +
+            "<button class=\"fav " + (fav ? "on" : "") + "\" data-fav=\"" + ride.id + "\" aria-label=\"Favorit für " + escapeHtml(ride.name) + "\" aria-pressed=\"" + fav + "\">★</button>" +
             "<div><h3>" + escapeHtml(ride.name) + "</h3><div class=\"zone\">" + escapeHtml(ride.zone + updated) + "</div></div>" +
           "</div>" +
           "<div class=\"meta\">" + sr +
@@ -480,7 +488,7 @@
       "</article>";
     }).join("");
 
-    container.innerHTML = cards +
+    container.innerHTML = (cards || "<div class=\"empty\">Keine passenden Attraktionen. Passe deine Suche oder den Favoritenfilter an.</div>") +
       "<a class=\"attribution\" href=\"https://queue-times.com/\" target=\"_blank\" rel=\"noopener\">Powered by <b style=\"color:var(--text)\">Queue-Times.com</b> · Live-Daten ca. alle 5 Min.</a>";
 
     $$("[data-fav]").forEach((button) => {
@@ -806,20 +814,23 @@
     selectedDetailRide = rides.find((ride) => ride.id === rideId) || FALLBACK_RIDES.find((ride) => ride.id === rideId);
     if (!selectedDetailRide) return;
 
+    $("#rideSheet").dataset.world = WORLD[selectedDetailRide.id] ? selectedDetailRide.id : "default";
+    $("#worldCaption").textContent = WORLD[selectedDetailRide.id]?.[1] || "Deine nächste Nähung.";
     $("#rideTitle").textContent = selectedDetailRide.name;
-    $("#rideZone").textContent = selectedDetailRide.zone || "Phantasialand";
+    $("#rideZone").textContent = WORLD[selectedDetailRide.id]?.[0] || selectedDetailRide.zone || "Phantasialand";
 
     if (selectedDetailRide.source === "queue-times") {
       $("#rideDetailWait").textContent = selectedDetailRide.isOpen ? selectedDetailRide.wait + " min" : "Geschlossen";
-      $("#rideDetailStatus").textContent = selectedDetailRide.isOpen ? "Offizielle Live-Wartezeit via Queue-Times." : "Attraktion wird aktuell als geschlossen gemeldet.";
+      $("#rideDetailStatus").textContent = selectedDetailRide.isOpen ? "Als geöffnet gemeldet · Daten von Queue-Times, keine offizielle Park-Livezeit." : "Attraktion wird aktuell als geschlossen gemeldet.";
     } else {
       $("#rideDetailWait").textContent = "–";
       $("#rideDetailStatus").textContent = "Aktuell keine Live-Wartezeit verfügbar.";
     }
 
     $("#rideQueueBtn").disabled = selectedDetailRide.source === "queue-times" && !selectedDetailRide.isOpen;
-    await renderSrCommunity(selectedDetailRide);
+    $("#srCommunity").innerHTML = "<div class=\"message\">Single-Rider-Informationen laden…</div>";
     openSheet("rideSheet");
+    await renderSrCommunity(selectedDetailRide);
   }
 
   async function renderSrCommunity(ride) {
@@ -851,6 +862,7 @@
       reports = srReportsLocal.filter((report) => report.rideId === ride.id && report.measuredAt >= cutoff).slice(0, 8);
     }
 
+    if (selectedDetailRide?.id !== ride.id) return;
     const freshCount = reports.filter((report) => Date.now() - report.measuredAt <= SR_FRESH_MINUTES * 60000).length;
     let reportHtml = reports.length ? reports.map((report) => {
       const age = Math.max(0, Math.round((Date.now() - report.measuredAt) / 60000));
@@ -1027,6 +1039,21 @@
   }
 
   function bindStaticEvents() {
+    $("#rideSearch").addEventListener("input", e => { rideSearch = e.target.value.trim().toLowerCase(); renderRides(); });
+    $("#favoriteFilter").addEventListener("click", e => { onlyFavorites = !onlyFavorites; e.currentTarget.setAttribute("aria-pressed", onlyFavorites); renderRides(); });
+    $("#queueBar").addEventListener("keydown", e => { if(e.key === "Enter" || e.key === " ") { e.preventDefault(); openActive(); } });
+    $$(".sheet").forEach(sheet => sheet.addEventListener("click", e => { if(e.target === sheet) closeSheet(sheet.id); }));
+    document.addEventListener("keydown", e => {
+      const modal = document.querySelector(".sheet.show");
+      if (!modal) return;
+      if (e.key === "Escape") closeSheet(modal.id);
+      if (e.key === "Tab") {
+        const items = Array.from(modal.querySelectorAll("button:not(:disabled),input:not(:disabled),a[href]")).filter(el => el.getClientRects().length);
+        const first=items[0], last=items[items.length-1];
+        if(e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
+        else if(!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
+      }
+    });
     window.addEventListener("beforeinstallprompt", (event) => {
       event.preventDefault();
       deferredInstall = event;
