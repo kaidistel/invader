@@ -534,3 +534,47 @@ body[data-park="movie-park-germany"] .brandDot{
 body[data-park="movie-park-germany"] .ride{
   border-color:rgba(255,220,151,.24);
 }
+
+
+/* v39 — Walibi Holland park-level atmosphere */
+body[data-park="walibi-holland"]{
+  --accent:#ff4a4a;
+  --accent2:#55d9ff;
+  --line:#4f5b58;
+}
+
+body[data-park="walibi-holland"] .parkAtmosphere{
+  background:
+    linear-gradient(180deg,rgba(7,10,12,.14) 0%,rgba(7,10,12,.62) 43%,#0d1212 86%),
+    url('https://www.walibi.nl/adobe/dynamicmedia/deliver/dm-aid--6220150f-ff8f-44c6-b5a3-1218028c4461/2025-walibiholland-yoy-8494.jpg?preferwebp=true&quality=85') center 35%/cover no-repeat;
+}
+
+body[data-park="walibi-holland"] .hero{
+  background:
+    radial-gradient(circle at 92% 8%,rgba(94,224,255,.14),transparent 27%),
+    linear-gradient(135deg,rgba(24,26,28,.96),rgba(11,16,16,.95));
+  border-color:rgba(255,74,74,.34);
+}
+
+body[data-park="walibi-holland"] .hero:before{
+  background:linear-gradient(#ff4242 0 33%,#55d9ff 33% 66%,#9bf052 66%);
+}
+
+body[data-park="walibi-holland"] .brand b,
+body[data-park="walibi-holland"] .brandDot{
+  color:#ff4a4a;
+}
+
+body[data-park="walibi-holland"] .ride{
+  border-color:rgba(255,255,255,.19);
+}
+
+body[data-park="walibi-holland"] .parkSwitch{
+  border-color:rgba(255,74,74,.45);
+}
+
+body[data-park="walibi-holland"] .btn.primary{
+  background:#ff4a4a;
+  border-color:#ff8a8a;
+  color:#130909;
+}
