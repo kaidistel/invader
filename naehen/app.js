@@ -8,7 +8,13 @@
   const LIVE_REFRESH_MS = 5 * 60 * 1000;
   const SR_FRESH_MINUTES = 30;
   const SR_VISIBLE_MINUTES = 60;
-  const EXCLUDED_RIDE_PREFIXES = ["berliner-einlauf"];
+  const EXCLUDED_RIDE_IDS = new Set(["berliner-einlauten","berliner-einlaufen","berliner-einlauf"]);
+
+  function isExcludedRide(name, id) {
+    const normalizedName = String(name || "").toLowerCase().trim();
+    const normalizedId = String(id || "");
+    return EXCLUDED_RIDE_IDS.has(normalizedId) || /^berliner\s+einl/i.test(normalizedName);
+  }
 
   const store = {
     get(key, fallback) {
@@ -430,7 +436,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=28", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=29", {
           scope: "./",
           updateViaCache: "none"
         });
@@ -496,6 +502,10 @@
       $("#profileMail").textContent = appUser.email || "";
       await loadAccountState();
     }
+
+    favorites = favorites.filter((id) => !EXCLUDED_RIDE_IDS.has(id));
+    EXCLUDED_RIDE_IDS.forEach((id) => delete favoriteSettings[id]);
+    persistLocalState();
 
     renderAll();
     loadLiveWaits();
@@ -620,7 +630,7 @@
       const nowState = {};
       rides = flattened.map((raw) => {
         const id = slugRide(raw.name);
-        if (EXCLUDED_RIDE_PREFIXES.some((prefix) => id.startsWith(prefix))) return null;
+        if (isExcludedRide(raw.name, id)) return null;
         const old = previous[id];
         const wait = Number(raw.wait_time) || 0;
         let delta = 0;
@@ -700,7 +710,7 @@
     const container = $("#rides");
     if (!container) return;
 
-    const visibleRides = rides.filter(ride => (!onlyFavorites || favorites.includes(ride.id)) && ride.name.toLowerCase().includes(rideSearch));
+    const visibleRides = rides.filter(ride => !isExcludedRide(ride.name, ride.id) && (!onlyFavorites || favorites.includes(ride.id)) && ride.name.toLowerCase().includes(rideSearch));
     const cards = visibleRides.map((ride) => {
       const fav = favorites.includes(ride.id);
       const world = WORLD[ride.id];
