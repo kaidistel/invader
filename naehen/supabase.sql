@@ -139,6 +139,12 @@ create policy "live state authenticated read" on public.live_ride_state for sele
 
 revoke all on public.push_event_log from anon, authenticated;
 
+drop policy if exists "push event log no client access" on public.push_event_log;
+create policy "push event log no client access" on public.push_event_log
+for all to authenticated
+using (false)
+with check (false);
+
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer set search_path=public as $$
 begin
