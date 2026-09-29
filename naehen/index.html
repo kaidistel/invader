@@ -1,349 +1,216 @@
 <!doctype html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#090b10" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="NÄHEN" />
-  <link rel="manifest" href="./manifest.webmanifest" />
-  <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#090b10">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="NÄHEN">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
   <title>NÄHEN · Parkday Companion</title>
-  <style>
-    :root{--bg:#090b10;--panel:#121722;--panel2:#171e2b;--line:#273044;--text:#f7f9fc;--muted:#8f9ab0;--accent:#d7ff45;--accent2:#8fffcb;--danger:#ff5f68;--warn:#ffcf55;--blue:#70a7ff}
-    *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh}
-    button,input{font:inherit}.app{max-width:540px;margin:0 auto;min-height:100vh;padding:calc(18px + env(safe-area-inset-top)) 16px calc(92px + env(safe-area-inset-bottom))}
-    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.brand{font-weight:950;letter-spacing:-1.2px;font-size:25px}.brand b{color:var(--accent)}.avatar{width:40px;height:40px;border-radius:14px;background:var(--panel2);display:grid;place-items:center;border:1px solid var(--line)}
-    .hero{padding:20px;border:1px solid var(--line);border-radius:26px;background:radial-gradient(circle at 90% 0%,rgba(215,255,69,.16),transparent 34%),linear-gradient(145deg,#151b27,#0e121a);box-shadow:0 20px 60px #0008}
-    .eyebrow{font-size:11px;font-weight:900;letter-spacing:1.6px;color:var(--accent);text-transform:uppercase}.hero h1{font-size:31px;line-height:1;margin:8px 0 14px;letter-spacing:-1.4px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{background:#0b0f17cc;border:1px solid #252d3f;padding:12px;border-radius:16px}.stat strong{display:block;font-size:18px}.stat span{color:var(--muted);font-size:11px}
-    .sectionHead{display:flex;align-items:end;justify-content:space-between;margin:24px 2px 10px}.sectionHead h2{font-size:18px;margin:0}.sectionHead span{font-size:12px;color:var(--muted)}
-    .ride{display:grid;grid-template-columns:1fr auto;gap:10px;padding:15px;border:1px solid var(--line);border-radius:20px;background:var(--panel);margin-bottom:9px}.rideTop{display:flex;gap:8px;align-items:center}.ride h3{margin:0;font-size:16px}.zone{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px}.meta{display:flex;gap:9px;align-items:center;margin-top:7px;color:var(--muted);font-size:12px}.wait{min-width:67px;text-align:center;background:var(--panel2);border:1px solid var(--line);border-radius:16px;padding:9px 8px}.wait strong{display:block;font-size:20px;line-height:1}.wait small{font-size:9px;color:var(--muted)}.fav{border:0;background:none;color:#5b6577;padding:0;font-size:19px}.fav.on{color:var(--accent)}
-    .trend.down{color:var(--accent2)}.trend.up{color:var(--danger)}.trend.flat{color:var(--muted)}
-    .btn{border:0;border-radius:16px;padding:13px 16px;font-weight:900;cursor:pointer}.btn.primary{background:var(--accent);color:#0b0d0f}.btn.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}.btn.ghost{background:transparent;color:var(--muted)}.full{width:100%}
-    .queueBar{position:sticky;top:12px;z-index:7;margin-bottom:12px;background:#d7ff45;color:#080a0d;border-radius:19px;padding:14px 15px;display:none;grid-template-columns:1fr auto;align-items:center;gap:12px;box-shadow:0 14px 40px #0008}.queueBar.show{display:grid}.queueBar small{font-weight:800;opacity:.7}.queueBar strong{display:block}.queueTime{font-size:24px;font-weight:950;font-variant-numeric:tabular-nums}
-    .nav{position:fixed;z-index:10;bottom:calc(10px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(calc(100% - 24px),516px);background:#111722eF;border:1px solid var(--line);backdrop-filter:blur(16px);border-radius:22px;padding:8px;display:grid;grid-template-columns:repeat(3,1fr);box-shadow:0 15px 50px #000b}.nav button{border:0;background:transparent;color:var(--muted);padding:9px;border-radius:14px;font-weight:800;font-size:12px}.nav button.active{background:var(--panel2);color:var(--text)}
-    .sheet,.gate,.auth{position:fixed;inset:0;z-index:30;background:#080a0ef5;display:none;align-items:flex-end;justify-content:center}.sheet.show,.gate.show,.auth.show{display:flex}.sheetCard{width:min(100%,540px);max-height:91vh;overflow:auto;border-radius:28px 28px 0 0;background:var(--panel);border:1px solid var(--line);padding:22px 18px calc(24px + env(safe-area-inset-bottom))}.sheetCard h2{margin:6px 0 7px;font-size:25px;letter-spacing:-.8px}.sheetCard p{color:var(--muted);line-height:1.45}.close{float:right;background:var(--panel2);color:var(--text);border:1px solid var(--line);width:38px;height:38px;border-radius:13px}
-    .seg{display:grid;grid-template-columns:1fr 1fr;background:#0c1017;border-radius:15px;padding:4px;margin:14px 0}.seg button{border:0;padding:11px;background:transparent;color:var(--muted);border-radius:12px;font-weight:900}.seg button.on{background:var(--panel2);color:var(--text)}
-    .form input{width:100%;background:#0c1017;color:var(--text);border:1px solid var(--line);border-radius:15px;padding:14px;margin:5px 0 9px;outline:none}.form label{font-size:11px;color:var(--muted);font-weight:800}.hint{font-size:11px;color:var(--muted);margin-top:8px}.message{padding:11px;border-radius:14px;background:#0c1017;margin:10px 0;font-size:12px;color:var(--muted)}
-    .gate{align-items:center;padding:20px}.gateCard{width:min(100%,430px);text-align:center}.logoMark{width:82px;height:82px;margin:0 auto 19px;border-radius:26px;background:var(--accent);color:#0b0d0f;display:grid;place-items:center;font-size:37px;transform:rotate(-5deg);box-shadow:0 20px 70px rgba(215,255,69,.18)}.gate h1{font-size:40px;margin:0;letter-spacing:-2px}.gate p{color:var(--muted);line-height:1.45}.steps{text-align:left;background:var(--panel);border:1px solid var(--line);padding:14px;border-radius:18px;margin:14px 0;font-size:13px}.steps div{margin:8px 0}.mini{font-size:11px;color:var(--muted)}
-    .logItem{display:flex;justify-content:space-between;gap:12px;padding:13px 2px;border-bottom:1px solid var(--line)}.logItem small{color:var(--muted)}.empty{padding:28px 10px;text-align:center;color:var(--muted)}
-    .profileBox{padding:18px;border:1px solid var(--line);border-radius:21px;background:var(--panel);margin-bottom:10px}.profileBox h3{margin:0 0 5px}
-    .toast{position:fixed;top:calc(16px + env(safe-area-inset-top));left:50%;transform:translate(-50%,-20px);opacity:0;z-index:60;background:#f5f7fb;color:#090b10;padding:12px 16px;border-radius:15px;font-weight:850;font-size:13px;transition:.25s;pointer-events:none;box-shadow:0 16px 40px #0008}.toast.show{opacity:1;transform:translate(-50%,0)}
-    .hidden{display:none!important}
-  </style>
 </head>
 <body>
-<div class="toast" id="toast"></div>
+  <div class="toast" id="toast"></div>
 
-<div class="gate show" id="installGate">
-  <div class="gateCard">
-    <div class="logoMark">🧵</div>
-    <div class="eyebrow">Parkday Companion</div>
-    <h1>NÄHEN</h1>
-    <p>Installieren. Anstellen. Nähen.<br>Für Push-Alarme, Queue-Timer und das volle Park-Erlebnis gehört NÄHEN auf deinen Homescreen.</p>
-    <button class="btn primary full" id="installBtn">NÄHEN INSTALLIEREN</button>
-    <div class="steps hidden" id="iosSteps">
-      <b>So nähst du auf dem iPhone:</b>
-      <div>1. In Safari unten auf <b>Teilen</b> tippen.</div>
-      <div>2. <b>Zum Home-Bildschirm</b> auswählen.</div>
-      <div>3. <b>Hinzufügen</b> und NÄHEN danach über das Icon öffnen.</div>
+  <section class="gate show" id="installGate">
+    <div class="gateCard">
+      <div class="logoMark">🧵</div>
+      <div class="eyebrow">Parkday Companion</div>
+      <h1>NÄHEN</h1>
+      <p>Installieren. Anstellen. Nähen. Für Push-Alarme, Queue-Timer und das volle Park-Erlebnis gehört NÄHEN auf deinen Homescreen.</p>
+      <button class="btn primary full" id="installBtn">NÄHEN INSTALLIEREN</button>
+      <div class="steps hidden" id="iosSteps">
+        <b>Auf dem iPhone installieren</b>
+        <div>1. In Safari auf <b>Teilen</b> tippen.</div>
+        <div>2. <b>Zum Home-Bildschirm</b> auswählen.</div>
+        <div>3. <b>Hinzufügen</b> und danach über das NÄHEN-Icon öffnen.</div>
+      </div>
+      <button class="btn ghost full" id="previewBtn">Erstmal im Browser ansehen</button>
+      <div class="mini">PWA · Android · iPhone · Desktop</div>
     </div>
-    <button class="btn ghost full" id="previewBtn">Erstmal im Browser ansehen</button>
-    <div class="mini">PWA · funktioniert auf Android, iPhone und Desktop</div>
-  </div>
-</div>
+  </section>
 
-<div class="auth" id="authGate">
-  <div class="sheetCard">
-    <div class="eyebrow">Dein Account</div>
-    <h2>Bereit zum Nähen?</h2>
-    <p>Deine Parktage, Queue-Zeiten, Favoriten und später Push-Einstellungen hängen an deinem Account.</p>
-    <div class="seg"><button class="on" data-authmode="login">Einloggen</button><button data-authmode="signup">Account erstellen</button></div>
-    <div class="form">
-      <label>E-MAIL</label><input id="email" type="email" placeholder="du@beispiel.de" autocomplete="email">
-      <label>PASSWORT</label><input id="password" type="password" placeholder="Mindestens 6 Zeichen" autocomplete="current-password">
-      <label id="usernameLabel" class="hidden">USERNAME</label><input id="username" class="hidden" placeholder="Nähmaschinenführer">
-      <button class="btn primary full" id="authBtn">EINLOGGEN</button>
-      <div class="message" id="authMessage">Supabase kann direkt angeschlossen werden. Bis dahin kannst du den UI-Prototyp lokal testen.</div>
-      <button class="btn secondary full" id="demoBtn">PROTOTYP ÖFFNEN</button>
+  <section class="gate" id="setupGate">
+    <div class="gateCard">
+      <div class="logoMark">⚙️</div>
+      <div class="eyebrow">Einmaliges Backend-Setup</div>
+      <h1>NÄHEN ist bereit.</h1>
+      <p>Für echte Accounts und geräteübergreifende Parktage fehlen nur noch die öffentlichen Supabase-Projektdaten in <code>config.js</code>.</p>
+      <div class="steps">
+        <div>✓ App, Live-Wartezeiten und Queue-Timer funktionieren.</div>
+        <div>✓ Datenbank-Schema liegt in <b>supabase.sql</b>.</div>
+        <div>✓ Account-, Push- und Community-Code ist eingebaut.</div>
+      </div>
+      <button class="btn primary full" id="localModeBtn">LOKALEN TESTMODUS ÖFFNEN</button>
+      <div class="mini">Der Testmodus speichert nur auf diesem Gerät.</div>
     </div>
-  </div>
-</div>
+  </section>
 
-<main class="app hidden" id="app">
-  <div class="queueBar" id="queueBar">
-    <div><small id="queueLabel">QUEUE LÄUFT</small><strong id="queueRide">Taron</strong></div>
-    <div class="queueTime" id="queueTime">00:00:00</div>
-  </div>
-  <header class="topbar"><div class="brand">NÄHEN<b>.</b></div><div class="avatar">🧵</div></header>
-
-  <section id="homeView">
-    <div class="hero">
-      <div class="eyebrow">Phantasialand · Parktag</div>
-      <h1>Heute wird genäht.</h1>
-      <div class="stats">
-        <div class="stat"><strong id="ridesToday">0×</strong><span>genäht</span></div>
-        <div class="stat"><strong id="queueToday">0m</strong><span>echte Queue</span></div>
-        <div class="stat"><strong id="srToday">0×</strong><span>Single Rider</span></div>
+  <section class="auth" id="authGate">
+    <div class="sheetCard authCard">
+      <div class="eyebrow">Dein NÄHEN-Account</div>
+      <h2>Bereit zum Nähen?</h2>
+      <p>Parktage, Queue-Zeiten, Favoriten und Push-Einstellungen werden mit deinem Account synchronisiert.</p>
+      <div class="seg">
+        <button class="on" data-authmode="login">Einloggen</button>
+        <button data-authmode="signup">Account erstellen</button>
+      </div>
+      <div class="form">
+        <label>E-MAIL</label>
+        <input id="email" type="email" placeholder="du@beispiel.de" autocomplete="email">
+        <label>PASSWORT</label>
+        <input id="password" type="password" placeholder="Mindestens 6 Zeichen" autocomplete="current-password">
+        <label id="usernameLabel" class="hidden">USERNAME</label>
+        <input id="username" class="hidden" placeholder="Nähmaschinenführer">
+        <button class="btn primary full" id="authBtn">EINLOGGEN</button>
+        <div class="message" id="authMessage">Mit deinem Account bleibt dein Nähprotokoll auf allen Geräten erhalten.</div>
       </div>
     </div>
-
-    <div class="sectionHead"><h2>Deine Nähchancen</h2><span id="dataLabel">LIVE-DATEN LADEN…</span></div>
-    <div id="rides"></div>
   </section>
 
-  <section id="logView" class="hidden">
-    <div class="sectionHead"><h2>Nähprotokoll</h2><span>HEUTE</span></div>
-    <div id="log"></div>
+  <main class="app hidden" id="app">
+    <div class="queueBar" id="queueBar">
+      <div>
+        <small id="queueLabel">QUEUE WIRD GENÄHT</small>
+        <strong id="queueRide">Taron</strong>
+      </div>
+      <div class="queueTime" id="queueTime">00:00:00</div>
+    </div>
+
+    <header class="topbar">
+      <div>
+        <div class="brand">NÄHEN<b>.</b></div>
+        <div class="mini" id="accountMode">Account</div>
+      </div>
+      <button class="avatar" id="avatarBtn" aria-label="Profil öffnen">🧵</button>
+    </header>
+
+    <section id="homeView">
+      <div class="hero">
+        <div class="heroLine">
+          <div>
+            <div class="eyebrow">Phantasialand · Parktag</div>
+            <h1 id="parkDayHeadline">Heute wird genäht.</h1>
+          </div>
+          <button class="btn primary compact" id="parkDayBtn">PARKTAG STARTEN</button>
+        </div>
+        <div class="stats">
+          <div class="stat"><strong id="ridesToday">0×</strong><span>genäht</span></div>
+          <div class="stat"><strong id="queueToday">0m</strong><span>echte Queue</span></div>
+          <div class="stat"><strong id="srToday">0×</strong><span>Single Rider</span></div>
+        </div>
+      </div>
+
+      <div class="sectionHead">
+        <h2>Deine Nähchancen</h2>
+        <span id="dataLabel">LIVE-DATEN LADEN…</span>
+      </div>
+      <div id="rides"></div>
+    </section>
+
+    <section id="logView" class="hidden">
+      <div class="sectionHead">
+        <h2>Nähprotokoll</h2>
+        <span id="logDayLabel">AKTUELLER PARKTAG</span>
+      </div>
+      <div id="log"></div>
+    </section>
+
+    <section id="profileView" class="hidden">
+      <div class="sectionHead"><h2>Profil</h2><span>ACCOUNT</span></div>
+      <div class="profileBox">
+        <h3 id="profileName">Parkfan</h3>
+        <div class="meta"><span id="profileMail"></span></div>
+      </div>
+      <div class="profileBox">
+        <h3>🔔 Näh-Alarme</h3>
+        <p class="meta">Persönliche Wartezeitlimits, Drops, Wiedereröffnungen und SR-Community-Meldungen.</p>
+        <button class="btn secondary full" id="pushSettingsBtn">NÄH-ALARME EINSTELLEN</button>
+      </div>
+      <div class="profileBox">
+        <h3>🧵 Nähbilanz</h3>
+        <p class="meta">Gesamtfahrten auf diesem Account/Gerät: <b id="totalRides">0</b></p>
+      </div>
+      <button class="btn ghost full" id="logoutBtn">Abmelden</button>
+    </section>
+  </main>
+
+  <nav class="nav hidden" id="nav">
+    <button class="active" data-view="homeView">🏠<br>Park</button>
+    <button data-view="logView">🧵<br>Protokoll</button>
+    <button data-view="profileView">👤<br>Profil</button>
+  </nav>
+
+  <section class="sheet" id="rideSheet">
+    <div class="sheetCard">
+      <button class="close" data-close="rideSheet">✕</button>
+      <div class="eyebrow" id="rideZone">Phantasialand</div>
+      <h2 id="rideTitle">Attraktion</h2>
+      <div class="rideDetailWait" id="rideDetailWait">–</div>
+      <div class="message" id="rideDetailStatus"></div>
+      <div id="srCommunity"></div>
+      <button class="btn primary full" id="rideQueueBtn">🧵 ANSTELLEN</button>
+    </div>
   </section>
 
-  <section id="profileView" class="hidden">
-    <div class="sectionHead"><h2>Profil</h2><span>ACCOUNT</span></div>
-    <div class="profileBox"><h3 id="profileName">Parkfan</h3><div class="meta"><span id="profileMail">Prototyp</span></div></div>
-    <div class="profileBox"><h3>🔔 Näh-Alarme</h3><p class="meta">Push-Benachrichtigungen für Drops, Wiedereröffnungen und persönliche Limits.</p><button class="btn secondary full" id="pushBtn">PUSH AKTIVIEREN</button></div>
-    <div class="profileBox"><h3>🧵 Nähbilanz</h3><p class="meta">Gesamtfahrten im aktuellen Prototyp: <b id="totalRides">0</b></p></div>
-    <button class="btn ghost full" id="logoutBtn">Abmelden</button>
+  <section class="sheet" id="queueSheet">
+    <div class="sheetCard">
+      <button class="close" data-close="queueSheet">✕</button>
+      <div class="eyebrow">Queue-Timer</div>
+      <h2 id="sheetRide">Taron</h2>
+      <p>Beim Anstellen starten. Die Zeit bleibt korrekt, auch wenn das Handy gesperrt wird.</p>
+      <div class="seg">
+        <button class="on" data-qtype="regular">Regular</button>
+        <button data-qtype="single">Single Rider</button>
+      </div>
+      <div class="form">
+        <label>ANGEZEIGTE WARTEZEIT (OPTIONAL)</label>
+        <input id="postedWait" inputmode="numeric" type="number" min="0" placeholder="z. B. 30">
+      </div>
+      <button class="btn primary full" id="startQueue">🧵 ANSTELLEN & TIMER STARTEN</button>
+    </div>
   </section>
-</main>
 
-<nav class="nav hidden" id="nav">
-  <button class="active" data-view="homeView">🏠<br>Park</button>
-  <button data-view="logView">🧵<br>Protokoll</button>
-  <button data-view="profileView">👤<br>Profil</button>
-</nav>
+  <section class="sheet" id="activeSheet">
+    <div class="sheetCard">
+      <button class="close" data-close="activeSheet">✕</button>
+      <div class="eyebrow">Aktive Nähung</div>
+      <h2 id="activeRide">Taron</h2>
+      <div class="timerBig" id="activeTime">00:00:00</div>
+      <div class="message" id="activeMeta"></div>
+      <button class="btn primary full" id="boardBtn">🎢 BOARDING · GENÄHT</button>
+      <button class="btn secondary full spaceTop" id="abortBtn">💀 QUEUE VERLASSEN · VERNÄHT</button>
+    </div>
+  </section>
 
-<div class="sheet" id="queueSheet">
-  <div class="sheetCard">
-    <button class="close" id="closeSheet">✕</button>
-    <div class="eyebrow">Queue-Timer</div>
-    <h2 id="sheetRide">Taron</h2>
-    <p>Beim Anstellen starten. Die Zeit bleibt korrekt, auch wenn das Handy gesperrt wird.</p>
-    <div class="seg"><button class="on" data-qtype="regular">Regular</button><button data-qtype="single">Single Rider</button></div>
-    <div class="form"><label>ANGEZEIGTE WARTEZEIT (OPTIONAL)</label><input id="postedWait" inputmode="numeric" type="number" min="0" placeholder="z. B. 30"></div>
-    <button class="btn primary full" id="startQueue">🧵 ANSTELLEN & TIMER STARTEN</button>
-  </div>
-</div>
+  <section class="sheet" id="pushSheet">
+    <div class="sheetCard">
+      <button class="close" data-close="pushSheet">✕</button>
+      <div class="eyebrow">Persönliche Benachrichtigungen</div>
+      <h2>Näh-Alarme</h2>
+      <p>Favorisiere Attraktionen und lege fest, wann NÄHEN dich annähen darf.</p>
+      <button class="btn primary full" id="enablePushBtn">🔔 PUSH AKTIVIEREN</button>
+      <div class="sectionHead"><h2>Favoriten</h2><span>PRO RIDE</span></div>
+      <div id="pushRideSettings"></div>
+      <button class="btn secondary full" id="savePushSettingsBtn">EINSTELLUNGEN SPEICHERN</button>
+    </div>
+  </section>
 
-<div class="sheet" id="activeSheet">
-  <div class="sheetCard">
-    <button class="close" id="closeActive">✕</button>
-    <div class="eyebrow">Aktive Nähung</div>
-    <h2 id="activeRide">Taron</h2>
-    <div style="font-size:52px;font-weight:950;font-variant-numeric:tabular-nums;margin:24px 0" id="activeTime">00:00:00</div>
-    <div class="message" id="activeMeta"></div>
-    <button class="btn primary full" id="boardBtn">🎢 BOARDING · GENÄHT</button>
-    <button class="btn secondary full" style="margin-top:8px" id="abortBtn">💀 QUEUE VERLASSEN · VERNÄHT</button>
-  </div>
-</div>
+  <section class="sheet" id="recapSheet">
+    <div class="sheetCard">
+      <button class="close" data-close="recapSheet">✕</button>
+      <div class="eyebrow">Parktag abgeschlossen</div>
+      <h2>🧵 Nähbilanz</h2>
+      <div id="recapContent"></div>
+      <button class="btn primary full" data-close="recapSheet">SAUBER GENÄHT</button>
+    </div>
+  </section>
 
-<script src="./config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const FALLBACK_RIDES = [
-  {id:'taron',name:'Taron',zone:'Mystery',wait:null,isOpen:null,trend:'flat',delta:0,source:'fallback',singleRider:true},
-  {id:'fly',name:'F.L.Y.',zone:'Rookburgh',wait:null,isOpen:null,trend:'flat',delta:0,source:'fallback',singleRider:false},
-  {id:'black-mamba',name:'Black Mamba',zone:'Deep in Africa',wait:null,isOpen:null,trend:'flat',delta:0,source:'fallback',singleRider:false},
-  {id:'mystery-castle',name:'Mystery Castle',zone:'Mystery',wait:null,isOpen:null,trend:'flat',delta:0,source:'fallback',singleRider:false},
-  {id:'chiapas',name:'Chiapas – DIE Wasserbahn',zone:'Mexico',wait:null,isOpen:null,trend:'flat',delta:0,source:'fallback',singleRider:false},
-  {id:'colorado-adventure',name:'Colorado Adventure',zone:'Mexico',wait:null,isOpen:null,trend:'flat',delta:0,source:'fallback',singleRider:false},
-  {id:'talocan',name:'Talocan',zone:'Mexico',wait:null,isOpen:null,trend:'flat',delta:0,source:'fallback',singleRider:false},
-  {id:'river-quest',name:'River Quest',zone:'Mystery',wait:null,isOpen:null,trend:'flat',delta:0,source:'fallback',singleRider:false},
-  {id:'raik',name:'Raik',zone:'Mystery',wait:null,isOpen:null,trend:'flat',delta:0,source:'fallback',singleRider:true}
-];
-let rides=[...FALLBACK_RIDES];
-const QUEUE_TIMES_URL='https://queue-times.com/parks/56/queue_times.json';
-const LIVE_DATA_URL='./live.json';
-const LIVE_REFRESH_MS=5*60*1000;
-
-function slugRide(name){
-  const known={
-    'f.l.y.':'fly',
-    'taron':'taron',
-    'raik':'raik',
-    'black mamba':'black-mamba',
-    'mystery castle':'mystery-castle',
-    'colorado adventure':'colorado-adventure',
-    'river quest':'river-quest',
-    'talocan':'talocan'
-  };
-  const low=name.toLowerCase().trim();
-  if(known[low])return known[low];
-  if(low.startsWith('chiapas'))return 'chiapas';
-  return low.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ß/g,'ss').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-}
-
-async function loadLiveWaits(){
-  const label=$('#dataLabel');
-  try{
-    label.textContent='LIVE WIRD GELADEN…';
-    const controller=new AbortController();
-    const timer=setTimeout(()=>controller.abort(),6500);
-    const res=await fetch(LIVE_DATA_URL+'?t='+Date.now(),{cache:'no-store',signal:controller.signal});
-    clearTimeout(timer);
-    if(!res.ok)throw new Error('Live-Snapshot HTTP '+res.status);
-    const data=await res.json();
-    const previous=store.get('naehen:lastWaits',{});
-    const flattened=[];
-    for(const land of (data.lands||[])){
-      for(const ride of (land.rides||[]))flattened.push({...ride,zone:land.name||'Phantasialand'});
-    }
-    for(const ride of (data.rides||[]))flattened.push({...ride,zone:'Phantasialand'});
-    if(!flattened.length)throw new Error('Keine Attraktionen in API-Antwort');
-
-    const nowState={};
-    rides=flattened.map(r=>{
-      const id=slugRide(r.name);
-      const old=previous[id];
-      const wait=Number(r.wait_time)||0;
-      let delta=0,trend='flat';
-      if(old && old.isOpen && r.is_open){
-        delta=wait-Number(old.wait||0);
-        if(delta<=-5)trend='down';
-        else if(delta>=5)trend='up';
-      }
-      nowState[id]={wait,isOpen:!!r.is_open,at:Date.now()};
-      return {
-        id,name:r.name,zone:r.zone,wait,isOpen:!!r.is_open,trend,delta,
-        source:'queue-times',lastUpdated:r.last_updated||null,
-        singleRider:id==='taron'||id==='raik'
-      };
-    }).sort((a,b)=>{
-      const af=favorites.includes(a.id)?0:1,bf=favorites.includes(b.id)?0:1;
-      return af-bf || a.name.localeCompare(b.name,'de');
-    });
-    store.set('naehen:lastWaits',nowState);
-    label.textContent='LIVE · GITHUB SYNC';
-    renderRides();
-  }catch(err){
-    console.warn('Live-Snapshot konnte nicht geladen werden',err);
-    label.textContent='LIVE NICHT ERREICHBAR';
-    if(!rides.some(r=>r.source==='queue-times'))rides=[...FALLBACK_RIDES];
-    renderRides();
-  }
-}
-
-const $ = s => document.querySelector(s);
-const $$ = s => [...document.querySelectorAll(s)];
-const store = {
-  get(k,d){try{return JSON.parse(localStorage.getItem(k)) ?? d}catch{return d}},
-  set(k,v){localStorage.setItem(k,JSON.stringify(v))}
-};
-let deferredInstall=null, selectedRide=null, queueType='regular', authMode='login';
-let favorites=store.get('naehen:favs',['taron','fly','black-mamba']);
-let sessions=store.get('naehen:sessions',[]);
-let active=store.get('naehen:active',null);
-let supa=null;
-
-function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2200)}
-function standalone(){return matchMedia('(display-mode: standalone)').matches || navigator.standalone===true}
-function isIOS(){return /iphone|ipad|ipod/i.test(navigator.userAgent)}
-function showAuth(){ $('#installGate').classList.remove('show'); $('#authGate').classList.add('show') }
-function enterApp(user){ $('#authGate').classList.remove('show'); $('#app').classList.remove('hidden'); $('#nav').classList.remove('hidden'); if(user){$('#profileName').textContent=user.user_metadata?.username||user.email?.split('@')[0]||'Parkfan';$('#profileMail').textContent=user.email||''} renderAll() }
-
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e});
-$('#installBtn').onclick=async()=>{
-  if(isIOS()){ $('#iosSteps').classList.remove('hidden'); return }
-  if(deferredInstall){deferredInstall.prompt();const r=await deferredInstall.userChoice;if(r.outcome==='accepted')showAuth();deferredInstall=null}
-  else toast('Browser-Menü → App installieren / Zum Startbildschirm');
-};
-$('#previewBtn').onclick=showAuth;
-if(standalone()) showAuth();
-
-const cfg=window.NAEHEN_CONFIG||{};
-if(cfg.supabaseUrl && cfg.supabaseAnonKey && window.supabase){supa=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey);supa.auth.getSession().then(({data})=>{if(data.session)enterApp(data.session.user)})}
-
-$$('[data-authmode]').forEach(b=>b.onclick=()=>{
-  authMode=b.dataset.authmode;$$('[data-authmode]').forEach(x=>x.classList.toggle('on',x===b));
-  const sign=authMode==='signup';$('#username').classList.toggle('hidden',!sign);$('#usernameLabel').classList.toggle('hidden',!sign);$('#authBtn').textContent=sign?'ACCOUNT ERSTELLEN':'EINLOGGEN'
-});
-$('#authBtn').onclick=async()=>{
-  if(!supa){$('#authMessage').textContent='Backend noch nicht verbunden. Supabase URL + Anon Key in config.js eintragen.';return}
-  const email=$('#email').value.trim(), password=$('#password').value;
-  if(authMode==='signup'){
-    const {data,error}=await supa.auth.signUp({email,password,options:{data:{username:$('#username').value.trim()}}});
-    if(error)return $('#authMessage').textContent=error.message;
-    $('#authMessage').textContent='Account erstellt. Falls E-Mail-Bestätigung aktiv ist: Mail bestätigen.';
-    if(data.user && data.session)enterApp(data.user);
-  } else {
-    const {data,error}=await supa.auth.signInWithPassword({email,password});
-    if(error)return $('#authMessage').textContent=error.message;
-    enterApp(data.user);
-  }
-};
-$('#demoBtn').onclick=()=>enterApp({email:'prototype@naehen.app',user_metadata:{username:'Prototyp'}});
-$('#logoutBtn').onclick=async()=>{if(supa)await supa.auth.signOut();location.reload()};
-
-function renderRides(){
-  const cards=rides.map(r=>{
-    const fav=favorites.includes(r.id), arrow=r.trend==='down'?'↓':r.trend==='up'?'↑':'→';
-    const hasLive=r.source==='queue-times';
-    const closed=hasLive && !r.isOpen;
-    const unknown=!hasLive || r.isOpen===null;
-    const waitMain=closed?'ZU':unknown?'–':r.wait;
-    const waitSub=closed?'GESCHLOSSEN':unknown?'KEINE LIVE-DATEN':'MIN · LIVE';
-    const trendText=!hasLive?'warte auf Live-Daten':closed?'aktuell geschlossen':r.delta?(arrow+' '+Math.abs(r.delta)+' min'):'→ stabil';
-    const updated=r.lastUpdated?(' · Stand '+new Date(r.lastUpdated).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})):'';
-    const sr=r.singleRider?'<span>👤 SR</span><span>·</span>':'';
-    const button='<button class="btn secondary" style="padding:7px 10px;font-size:11px" data-queue="'+r.id+'" '+(closed?'disabled':'')+'>'+(closed?'ZU':'ANSTELLEN')+'</button>';
-    return '<div class="ride"><div><div class="rideTop"><button class="fav '+(fav?'on':'')+'" data-fav="'+r.id+'">★</button><div><h3>'+r.name+'</h3><div class="zone">'+r.zone+updated+'</div></div></div><div class="meta">'+sr+'<span class="trend '+r.trend+'">'+trendText+'</span><span>·</span>'+button+'</div></div><div class="wait"><strong>'+waitMain+'</strong><small>'+waitSub+'</small></div></div>'
-  }).join('');
-  const attribution='<a href="https://queue-times.com/" target="_blank" rel="noopener" style="display:block;text-align:center;color:var(--muted);font-size:12px;padding:13px 4px 3px;text-decoration:none">Powered by <b style="color:var(--text)">Queue-Times.com</b> · Live-Daten ca. alle 5 Min.</a>';
-  $('#rides').innerHTML=cards+attribution;
-  $$('[data-fav]').forEach(b=>b.onclick=()=>{const id=b.dataset.fav;favorites=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];store.set('naehen:favs',favorites);renderRides()});
-  $$('[data-queue]').forEach(b=>b.onclick=()=>{if(!b.disabled)openQueue(b.dataset.queue)});
-}
-function openQueue(id){
-  if(active){openActive();return}
-  selectedRide=rides.find(r=>r.id===id);
-  if(!selectedRide)return;
-  queueType='regular';
-  $('#sheetRide').textContent=selectedRide.name;
-  $('#postedWait').value=(selectedRide.source==='queue-times'&&selectedRide.isOpen)?selectedRide.wait:'';
-  const srBtn=$('[data-qtype="single"]');
-  srBtn.disabled=!selectedRide.singleRider;
-  srBtn.textContent=selectedRide.singleRider?'Single Rider':'Single Rider · nicht vorhanden';
-  $$('[data-qtype]').forEach((b,i)=>b.classList.toggle('on',i===0));
-  $('#queueSheet').classList.add('show')
-}
-$$('[data-qtype]').forEach(b=>b.onclick=()=>{queueType=b.dataset.qtype;$$('[data-qtype]').forEach(x=>x.classList.toggle('on',x===b))});
-$('#closeSheet').onclick=()=>$('#queueSheet').classList.remove('show');
-$('#startQueue').onclick=()=>{
-  if(!selectedRide)return;
-  active={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),rideId:selectedRide.id,rideName:selectedRide.name,type:queueType,posted:Number($('#postedWait').value)||null,startedAt:Date.now()};
-  store.set('naehen:active',active);$('#queueSheet').classList.remove('show');updateActive();openActive();toast(queueType==='single'?'👤 SR-Nähung gestartet':'🧵 Timer läuft')
-};
-function elapsed(ms){let s=Math.floor(ms/1000);const h=Math.floor(s/3600);s%=3600;const m=Math.floor(s/60);s%=60;return [h,m,s].map(x=>String(x).padStart(2,'0')).join(':')}
-function updateActive(){
-  const bar=$('#queueBar');
-  if(!active){bar.classList.remove('show');return}
-  const t=elapsed(Date.now()-active.startedAt);bar.classList.add('show');$('#queueRide').textContent=active.rideName;$('#queueTime').textContent=t;$('#queueLabel').textContent=active.type==='single'?'SINGLE RIDER WIRD GENÄHT':'QUEUE WIRD GENÄHT';$('#activeTime').textContent=t;$('#activeRide').textContent=active.rideName;$('#activeMeta').textContent=(active.type==='single'?'Single Rider':'Regular Queue')+(active.posted?' · ausgeschildert '+active.posted+' min':'')
-}
-function openActive(){if(!active)return;updateActive();$('#activeSheet').classList.add('show')}
-$('#queueBar').onclick=openActive;$('#closeActive').onclick=()=>$('#activeSheet').classList.remove('show');
-function finishSession(status){
-  if(!active)return;const ended=Date.now();sessions.unshift({...active,endedAt:ended,duration:ended-active.startedAt,status});store.set('naehen:sessions',sessions);active=null;localStorage.removeItem('naehen:active');$('#activeSheet').classList.remove('show');renderAll();toast(status==='ridden'?'🎢 Sauber genäht.':'💀 Vernäht.')
-}
-$('#boardBtn').onclick=()=>finishSession('ridden');$('#abortBtn').onclick=()=>finishSession('aborted');
-
-function todaySessions(){const d=new Date().toDateString();return sessions.filter(s=>new Date(s.startedAt).toDateString()===d)}
-function renderStats(){const t=todaySessions(), ridden=t.filter(x=>x.status==='ridden'), total=ridden.reduce((a,x)=>a+x.duration,0);$('#ridesToday').textContent=ridden.length+'×';$('#queueToday').textContent=Math.round(total/60000)+'m';$('#srToday').textContent=ridden.filter(x=>x.type==='single').length+'×';$('#totalRides').textContent=sessions.filter(x=>x.status==='ridden').length}
-function renderLog(){const t=todaySessions();$('#log').innerHTML=t.length?t.map(s=>'<div class="logItem"><div><b>'+s.rideName+'</b><br><small>'+(s.type==='single'?'👤 Single Rider':'Regular')+' · '+new Date(s.startedAt).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})+'</small></div><div style="text-align:right"><b>'+Math.round(s.duration/60000)+' min</b><br><small>'+(s.status==='ridden'?'🧵 genäht':'💀 vernäht')+'</small></div></div>').join(''):'<div class="empty">Noch nichts genäht. Das ändern wir.</div>'}
-function renderAll(){renderRides();renderStats();renderLog();updateActive()}
-setInterval(updateActive,1000);
-
-$$('[data-view]').forEach(b=>b.onclick=()=>{$$('[data-view]').forEach(x=>x.classList.toggle('active',x===b));['homeView','logView','profileView'].forEach(v=>$('#'+v).classList.toggle('hidden',v!==b.dataset.view))});
-$('#pushBtn').onclick=async()=>{
-  if(!('Notification' in window))return toast('Push wird von diesem Browser nicht unterstützt');
-  const p=await Notification.requestPermission();
-  if(p==='granted'){toast('🔔 Näh-Alarme dürfen rein');$('#pushBtn').textContent='PUSH ERLAUBT ✓'} else toast('Push nicht freigegeben')
-};
-
-if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
-renderAll();
-loadLiveWaits();
-setInterval(loadLiveWaits,LIVE_REFRESH_MS);
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')loadLiveWaits()});
-</script>
+  <script defer src="./config.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="./app.js"></script>
 </body>
 </html>
