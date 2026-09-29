@@ -393,3 +393,66 @@
   }
 }
 
+
+
+/* v26 — Mystery Castle: full-bleed hero, no image frame, no title plaque */
+#rideSheet[data-world=mystery-castle] .sheetCard{
+  text-align:center;
+  background:linear-gradient(180deg,#17131d 0%,#181722 48%,#121016 100%)!important;
+  border-top:0!important;
+}
+
+#rideSheet[data-world=mystery-castle] .worldArt{
+  inset:0 0 auto!important;
+  width:100%!important;
+  height:430px!important;
+  border:0!important;
+  border-radius:0!important;
+  clip-path:none!important;
+  box-shadow:none!important;
+  overflow:hidden;
+}
+
+#rideSheet[data-world=mystery-castle] .worldArt>img{
+  width:100%!important;
+  height:100%!important;
+  left:0!important;
+  object-fit:cover!important;
+  object-position:center 34%!important;
+  border:0!important;
+  border-radius:0!important;
+  filter:saturate(.92) contrast(1.04);
+}
+
+#rideSheet[data-world=mystery-castle] .worldArt:after{
+  background:
+    linear-gradient(180deg,rgba(13,10,18,.06) 0%,rgba(16,12,22,.08) 48%,rgba(24,23,34,.78) 78%,#181722 100%)!important;
+}
+
+#rideSheet[data-world=mystery-castle] #rideTitle{
+  width:auto!important;
+  max-width:100%!important;
+  margin:10px auto 28px!important;
+  padding:0!important;
+  background:none!important;
+  border:0!important;
+  outline:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  color:#eee7f8!important;
+  text-shadow:0 3px 12px #000d,0 0 12px #a89abc66!important;
+  overflow:visible!important;
+}
+
+@media(max-width:699px){
+  #rideSheet[data-world=mystery-castle] .sheetCard{
+    padding-top:calc(310px + env(safe-area-inset-top))!important;
+  }
+  #rideSheet[data-world=mystery-castle] .worldArt{
+    height:calc(410px + env(safe-area-inset-top))!important;
+  }
+  #rideSheet[data-world=mystery-castle] #rideTitle{
+    font-size:clamp(38px,11vw,58px)!important;
+    line-height:1.04!important;
+  }
+}
