@@ -740,9 +740,11 @@
       .eq("user_id", currentUserId());
 
     if (!favoriteResult.error) {
-      favorites = (favoriteResult.data || []).map((row) => row.ride_id);
+      const activeRideIds = new Set(fallbackRidesFor(parkSlug).map((ride) => ride.id));
+      const parkFavoriteRows = (favoriteResult.data || []).filter((row) => activeRideIds.has(row.ride_id));
+      favorites = parkFavoriteRows.map((row) => row.ride_id);
       favoriteSettings = {};
-      (favoriteResult.data || []).forEach((row) => {
+      parkFavoriteRows.forEach((row) => {
         favoriteSettings[row.ride_id] = {
           rideId: row.ride_id,
           waitLimit: row.wait_limit === null ? 25 : row.wait_limit,
