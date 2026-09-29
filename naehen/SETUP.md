@@ -7,12 +7,20 @@
 - ✅ `supabase.sql` ist vorbereitet
 - ✅ VAPID-Schlüsselpaar wurde erzeugt
 - ✅ VAPID Public Key ist bereits in `config.js` eingetragen
-- ⏳ Supabase-Projekt verbinden
-- ⏳ `supabase.sql` im Supabase-Projekt ausführen
-- ⏳ Supabase URL + anon/publishable key in `config.js` eintragen
+- ✅ Supabase-Projekt erstellt und verbunden
+- ✅ Datenbankschema, RLS, Indizes und Trigger eingespielt
+- ✅ Supabase URL + Publishable Key in `config.js` eingetragen
 - ⏳ private GitHub Actions Secrets hinterlegen
 
 Die App ist so gebaut, dass GitHub Pages weiterhin das kostenlose Frontend-Hosting übernimmt. Für Accounts und Web Push wird ein kostenloses Supabase-Projekt benötigt.
+
+## Backend-Status
+
+- Supabase-Projekt: `NAEHEN`
+- Region: Frankfurt (`eu-central-1`)
+- Security Advisor: **0 offene Security-Lints**
+- Die App nutzt den modernen Supabase Publishable Key im Browser.
+- Private Server-Schlüssel werden nicht ins öffentliche Repo geschrieben.
 
 ## 1. Supabase-Projekt erstellen
 
