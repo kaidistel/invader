@@ -203,3 +203,19 @@
 #rideSheet[data-world=die-3-mausketiere] #rideTitle{font-weight:400;letter-spacing:.035em;text-transform:uppercase}
 #rideSheet[data-world=deep-in-africa-adventure-trail] #rideTitle{font-weight:400;letter-spacing:.015em}
 #rideSheet[data-world=das-verrueckte-hotel-tartueff] #rideTitle{font-weight:700;letter-spacing:.01em}
+
+
+/* Final typography authority.
+   styles.css still contains legacy attraction-specific font shorthands.
+   Portal typography must win without changing operational number/UI fonts. */
+#rideSheet[data-world] #rideTitle,
+#rideSheet[data-world] #rideZone,
+#rideSheet[data-world] #worldCaption,
+#rideSheet[data-world] .worldOrnament:after{
+  font-family:var(--world-font)!important;
+}
+#rideSheet[data-world] #rideTitle{
+  font-style:normal;
+}
+#rideSheet[data-world=fly] #rideTitle{font-style:normal!important}
+#rideSheet[data-world=die-3-mausketiere] #rideTitle{font-style:normal!important}
