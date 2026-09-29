@@ -69,7 +69,22 @@ function slugRide(name) {
     "tequila taxi's": "tequila-taxis",
     "tequila taxi’s": "tequila-taxis",
     "merrie go'round": "merrie-goround",
-    "merrie go’round": "merrie-goround"
+    "merrie go’round": "merrie-goround",
+    "alpine express 'enzian'": "alpenexpress-enzian",
+    "alpine express ’enzian’": "alpenexpress-enzian",
+    "atlantis adventure": "abenteuer-atlantis",
+    "jim button – journey through morrowland": "jim-knopf-reise-durch-lummerland",
+    "jim button - journey through morrowland": "jim-knopf-reise-durch-lummerland",
+    "josefina’s magical imperial journey": "josefinas-kaiserliche-zauberreise",
+    "josefina's magical imperial journey": "josefinas-kaiserliche-zauberreise",
+    "tirol log flume": "tiroler-wildwasserbahn",
+    "vienna wave swing - 'glückspilz'": "wiener-wellenflieger",
+    "water rollercoaster poseidon": "wasserachterbahn-poseidon",
+    "swiss bob run": "schweizer-bobbahn",
+    "pirates in batavia": "piraten-in-batavia",
+    "voltron nevera powered by rimac": "voltron-nevera",
+    "eurosat - cancan coaster": "eurosat-cancan-coaster",
+    "arena of football - be part of it!": "arena-football"
   };
   const low = String(name || "").replace(/[\u200B-\u200D\uFEFF]/g, "").toLowerCase().trim();
   if (known[low]) return known[low];
@@ -88,7 +103,17 @@ const PUSH_EXCLUDED_RIDES = new Set([
   "psychoshock",
   "the-villa",
   "camp-of-curiosities",
-  "wicked-woods"
+  "wicked-woods",
+  "eurosat-coastiality",
+  "alpenexpress-coastiality",
+  "yullbe-go-im-blue-fire-dome",
+  "tages-maze-niflheim",
+  "tages-maze-tartaros",
+  "trick-or-treat-funfair",
+  "pumpkin-village",
+  "pumpkin-boulevard",
+  "harvest-market",
+  "magic-forest"
 ]);
 
 async function rest(path, options) {
@@ -110,7 +135,7 @@ function flattenLive(data) {
     (land.rides || []).forEach((ride) => rows.push(ride));
   });
   (data.rides || []).forEach((ride) => rows.push(ride));
-  return rows.map((ride) => ({
+  return rows.filter((ride) => !/^virtualline:/i.test(String(ride.name || ""))).map((ride) => ({
     ride_id: slugRide(ride.name),
     ride_name: ride.name,
     wait_time: Number(ride.wait_time) || 0,
