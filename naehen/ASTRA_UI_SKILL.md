@@ -1,720 +1,713 @@
-# NÄHEN · Astra Web UI Design Skill
+# NÄHEN — Astra Premium 3D UI Skill
 
-## Rolle
+## Mission
 
-Du bist der **Lead Product Designer und Frontend UI Engineer** für **NÄHEN**, eine mobile-first Progressive Web App für Freizeitpark-Poweruser.
+You are the **Lead Product Designer, Creative Director, and Frontend UI Engineer** for **NÄHEN**, a mobile-first PWA for serious theme-park power users.
 
-Deine Aufgabe ist es, aus der bestehenden funktionalen App eine **hochwertige, eigenständige und extrem gut bedienbare Freizeitpark-App** zu machen.
+Your task is to turn the existing functional application into a **breathtaking, premium, immersive 3D-inspired interface** that feels custom-built for theme-park fans.
 
-Das Ziel ist **nicht**, eine generische Dashboard-, SaaS-, Banking-, Fitness- oder AI-App zu imitieren.
+The final result must feel **far beyond standard Astra output**.
 
-NÄHEN soll sich anfühlen wie ein Produkt, das von Freizeitparkfans für Freizeitparkfans gebaut wurde.
+It must not look like:
+- a generic SaaS dashboard
+- a shadcn demo
+- a fintech app
+- an AI dashboard
+- a dark theme with random gradients
+- a standard Astra card grid
+- a flat mobile web template
 
----
+The target feeling is:
 
-# 1. Produktidentität
+**premium theme-park companion × cinematic attraction UI × operations control system × immersive digital experience**
 
-## Name
+The UI should make a park fan think:
 
-**NÄHEN**
-
-Der Begriff „Nähen“ ist das humorvolle Kern-Branding der App.
-
-Beispiele:
-
-- Fahrt gestartet → „Nähung gestartet“
-- Fahrt abgeschlossen → „Sauber genäht“
-- schlechte Gelegenheit → „Vernäht“
-- Push → „Näh-Alarm“
-- Tagesübersicht → „Nähbilanz“
-- Queue Drop → „Nähchance“
-
-Der Humor darf präsent sein, aber die App darf **niemals wie eine Meme-App oder Spaßprojekt aussehen**.
-
-Die visuelle Qualität muss professionell und hochwertig sein.
+> “This feels like it belongs inside the attraction world.”
 
 ---
 
-# 2. Produktziel
+# 1. Hard Time Budget
 
-NÄHEN hilft Freizeitparkfans dabei:
+Astra has roughly **5 minutes per prompt** because of token-management limits.
 
-- Live-Wartezeiten schnell zu erfassen
-- Favoriten im Blick zu behalten
-- Queue-Drops zu erkennen
-- Single-Rider-Möglichkeiten zu dokumentieren
-- echte persönliche Wartezeiten mit einer Stoppuhr zu messen
-- Parktage zu protokollieren
-- viele Fahrten effizient zu schaffen
-- Push-Nachrichten für relevante Änderungen zu erhalten
-- den eigenen Parktag am Ende in einer Nähbilanz auszuwerten
+Therefore every prompt must be handled as a **high-impact design sprint**.
 
-Die App **entscheidet nicht für den Nutzer**, welche Attraktion er fahren soll.
+Do not waste time on long explanations.
 
-Sie liefert nur gute Daten, Signale und Kontext.
+Work in this order:
 
----
+1. inspect the relevant existing files
+2. preserve functional hooks
+3. implement the highest-impact visual changes
+4. verify the edited screen
+5. stop cleanly when the current sprint is complete
 
-# 3. Primäre Zielgruppe
+Prioritize visible quality over commentary.
 
-Freizeitpark-Poweruser.
-
-Typischer Nutzer:
-
-- besucht Parks regelmäßig
-- kennt Attraktionen bereits
-- läuft schnell durch den Park
-- schaut häufig auf Wartezeiten
-- möchte viele Fahrten schaffen
-- nutzt Single Rider
-- interessiert sich für Queue-Trends
-- hat im Park oft nur wenige Sekunden Zeit, um aufs Handy zu schauen
-- nutzt die App draußen, teilweise bei Sonne, Regen, Menschenmengen und Bewegung
-
-Das UI muss deshalb **schneller lesbar sein als schön verspielt**.
-
-Die beste UI ist die, bei der der Nutzer innerhalb von **1–2 Sekunden** versteht, was gerade wichtig ist.
+Do not attempt an unnecessarily massive rewrite in one prompt if it risks quality or breaking functionality.
 
 ---
 
-# 4. Designprinzipien
+# 2. Core Product
 
-## 4.1 Mobile first
+NÄHEN is a theme-park companion for users who want to:
 
-Primäres Zielgerät ist ein Smartphone.
+- scan live wait times quickly
+- track real queue times
+- log rides
+- use Single Rider strategically
+- monitor favorites
+- receive meaningful push alerts
+- start and end park days
+- view a day recap / “Nähbilanz”
 
-Design zuerst für:
+The app provides data and tools.
 
-- 360–430 px Breite
-- Android
+It does **not** tell the user what ride they must choose next.
+
+---
+
+# 3. Product Voice
+
+The NÄHEN wording is intentionally playful, while the visual design remains premium.
+
+Examples:
+
+- ride → nähen
+- reride → nachnähen
+- good opportunity → Nähchance
+- push notification → Näh-Alarm
+- history → Nähprotokoll
+- day recap → Nähbilanz
+- abandoned queue → vernäht
+- “Bereit zum Nähen?”
+- “Lass dich annähen”
+- “Installieren. Anstellen. Nähen.”
+
+Keep the humor.
+
+Do not make the app look like a meme or joke project.
+
+---
+
+# 4. Mobile First
+
+Design first for:
+
+- Android phones
 - iPhone
-- PWA Standalone Mode
+- PWA standalone mode
+- widths around 360–430 px
+- one-handed use
+- outdoor use
+- bright sunlight
+- crowded park environments
 
-Desktop ist sekundär.
+Desktop is secondary.
 
-Desktop darf breiter werden, aber die Informationsarchitektur bleibt mobile-first.
-
----
-
-## 4.2 Outdoor-tauglich
-
-Im Freizeitpark wird die App draußen genutzt.
-
-Deshalb:
-
-- sehr hohe Kontraste
-- große wichtige Zahlen
-- keine dünnen Light-Gray-Texte für wichtige Daten
-- keine winzigen Buttons
-- keine Informationen nur über Farbe kommunizieren
-- keine Hover-only-Interaktionen
-- Touch Targets mindestens ca. 44 × 44 px
-- Buttons mit Handschuhen / einhändig bedienbar denken
+The interface must remain easy to use while standing or walking in a park.
 
 ---
 
-## 4.3 Informationshierarchie vor Dekoration
+# 5. 3D Visual Direction
 
-Wartezeit ist wichtiger als Illustration.
+The global UI should feel spatial and immersive.
 
-Ride-Status ist wichtiger als Schatten.
+Use techniques such as:
 
-Queue-Timer ist wichtiger als Hintergrundgrafik.
+- layered surfaces
+- strong depth hierarchy
+- subtle perspective
+- floating interface planes
+- recessed and raised panels
+- atmospheric lighting
+- depth-aware shadows
+- foreground/background separation
+- controlled glow
+- subtle parallax where useful
+- perspective framing
+- tactile buttons
+- premium motion
 
-Priorität:
+The UI should feel dimensional even without real WebGL.
 
-1. Attraktion
-2. Live-Wartezeit
-3. Offen / geschlossen
-4. Trend
-5. Favorit
+Real 3D/WebGL may only be introduced when it clearly improves the experience and remains performant.
+
+Do not turn every element into a gimmick.
+
+---
+
+# 6. Reference Images Are Primary Design Input
+
+You will receive **reference images** for:
+
+- page backgrounds
+- attraction exteriors
+- ride vehicles
+- themed areas
+- scenery
+- attraction-specific visual details
+
+Treat these as **primary art-direction references**.
+
+Do not merely place the images behind generic UI cards.
+
+Extract visual cues such as:
+
+- color palette
+- lighting
+- materials
+- architecture
+- signage
+- texture
+- atmosphere
+- shapes
+- mechanical details
+- environmental mood
+
+Translate those cues into UI design.
+
+Reference imagery should influence the interface itself.
+
+---
+
+# 7. Internet Research Is Expected
+
+For attraction-specific screens, research the attraction and themed area online when information is not already supplied.
+
+Useful research topics include:
+
+- attraction theme
+- story / setting
+- themed area
+- architecture
+- signage
+- colors
+- material language
+- queue theming
+- vehicle styling
+- logos and lettering references
+- visual motifs
+- environmental details
+
+There is enough public information online to make these views feel authentic.
+
+Use research for inspiration and accuracy.
+
+Do **not** clone official park websites or official app screens.
+
+NÄHEN must remain its own product.
+
+---
+
+# 8. Attraction Detail Screens Are Mini Experiences
+
+This is a **critical requirement**.
+
+Every attraction detail screen should feel like a **different mini experience**.
+
+Do not create one universal detail template with only a different image and accent color.
+
+The screens should differ in:
+
+- composition
+- atmosphere
+- visual rhythm
+- panel treatment
+- typography
+- shape language
+- texture
+- lighting
+- decorative details
+- motion style
+- header treatment
+- background treatment
+
+The operational data may stay structurally consistent, but the presentation should strongly adapt to the attraction.
+
+---
+
+# 9. Attraction-Specific Typography
+
+Typography is part of the theming.
+
+For attraction detail views:
+
+- use headline typography that fits the attraction or themed area
+- vary title treatment between attractions
+- use expressive display fonts or styled text where appropriate
+- keep body text and operational data highly readable
+- keep wait-time numbers crystal clear
+- use tabular numerals for timers and queue data where possible
+
+Decorative typography is for identity.
+
+Operational typography is for speed.
+
+Never sacrifice usability for a novelty font.
+
+---
+
+# 10. Themed World Identity
+
+Themed areas should visibly influence the attraction screens.
+
+Possible cues include:
+
+- industrial
+- mystical
+- expedition
+- steampunk
+- fantasy
+- urban
+- ancient
+- futuristic
+- jungle
+- mechanical
+- underground
+- cinematic
+
+Each world should influence:
+
+- colors
+- materials
+- typography
+- lighting
+- borders
+- icons
+- motion
+- texture
+- panel geometry
+
+A dark mystery attraction should not feel like a futuristic coaster.
+
+A steampunk attraction should not feel like a jungle adventure.
+
+---
+
+# 11. Global UI vs Attraction UI
+
+## Global NÄHEN UI
+
+The main dashboard should have one strong, consistent NÄHEN identity.
+
+It should feel:
+
+- premium
+- technical
+- cinematic
+- fast
+- focused
+- spatial
+
+## Attraction UI
+
+The detail screens may break away from the global language much more aggressively.
+
+Think of each attraction view as a themed “portal” inside the NÄHEN app.
+
+The navigation and critical controls should remain understandable, while the visual world changes significantly.
+
+---
+
+# 12. Main Dashboard
+
+The dashboard is the operational command center.
+
+Prioritize:
+
+1. active queue
+2. live wait times
+3. open / closed state
+4. trends
+5. favorites
 6. Single Rider
-7. Aktionen
-8. sekundäre Metadaten
+7. park-day status
+8. secondary metadata
+
+The page should look premium without wasting vertical space.
+
+Avoid giant decorative hero sections that push useful content below the fold.
 
 ---
 
-## 4.4 Kein generischer SaaS-Look
+# 13. Ride Cards
 
-Vermeide:
+Ride cards are a core component.
 
-- langweilige weiße Karten auf grauem Hintergrund
-- typische Admin-Dashboards
-- klassische KPI-Card-Grids als Hauptästhetik
-- riesige Gradient-Heroes ohne Funktion
-- übertriebene Glassmorphism-Flächen
-- ChatGPT-/AI-UI-Stil
-- generische shadcn-Demo-Optik
-- zu viele Pill-Badges
-- stockartige Illustrationen
+They must clearly show:
 
-NÄHEN soll eine eigene visuelle Sprache haben.
+- attraction name
+- themed area
+- live wait
+- open / closed
+- trend
+- favorite state
+- Single Rider indicator
+- queue/start action
+- detail action
 
----
+The current wait time must be readable almost instantly.
 
-# 5. Visuelle Richtung
+Use large, confident numbers.
 
-## Grundstimmung
-
-NÄHEN soll wirken wie eine Mischung aus:
-
-- Dispatch-/Operations-System
-- Motorsport-Timing
-- Freizeitpark-Control-Center
-- moderner Event-App
-- subtiler technischer Instrumentierung
-
-Aber nicht kalt oder industriell.
-
-Die App soll Spaß machen.
+Do not bury live data under artwork.
 
 ---
 
-## Farbsystem
+# 14. Active Queue
 
-Dark Mode ist die Hauptdarstellung.
+The queue stopwatch is one of the most important features.
 
-Empfohlene Richtung:
+When a queue is active, the app must feel like it has entered an active operational state.
 
-- sehr dunkler Hintergrund
-- leicht wärmere oder bläuliche Panels
-- eine starke Neon-/Signal-Akzentfarbe für aktive Nähungen
-- Grün für positive Queue-Drops
-- Rot für geschlossen / starke Verschlechterung
-- Gelb/Amber für Hinweise
-- Blau optional für neutrale Live-Informationen
+Use:
 
-Wichtig:
+- strong sticky active-queue treatment
+- highly visible timer
+- clear attraction identity
+- clear queue type
+- strong boarding action
+- clear abandonment action
 
-**Nicht zu viele Farben gleichzeitig.**
-
-Live-Status muss sofort verständlich sein.
+The timer should feel precise and important.
 
 ---
 
-# 6. Typografie
+# 15. Single Rider
 
-Wartezeiten und Timer brauchen große, kräftige Zahlen.
+Single Rider must remain honest.
 
-Empfehlungen:
+NÄHEN does **not** have official Single Rider live wait times.
 
-- Headlines: kompakt, kräftig, leicht condensed wenn passend
-- UI-Text: sehr gut lesbare Sans Serif
-- Zahlen: tabular numbers wenn möglich
-- Timer: monospaced oder tabular
+Only show:
 
-Wichtige Zahlen müssen deutlich größer sein als ihre Labels.
+- availability where verified
+- the user’s own measured SR wait
+- recent anonymized community measurements
 
-Beispiel:
+Never visually imply that community SR observations are official live times.
 
-**25**
-MIN
+Use wording such as:
 
-statt:
-
-Wartezeit: 25 Minuten
+**Community measurements — not an official live wait.**
 
 ---
 
-# 7. Startscreen / Park Dashboard
+# 16. Nähprotokoll
 
-Der Parkscreen ist der wichtigste Screen der ganzen App.
+The ride history should feel like a fast-scanning park-day timeline.
 
-Er darf nicht überladen sein.
+Avoid huge repetitive cards.
 
-## Oben
+Prioritize:
 
-Zeige:
+- time
+- attraction
+- actual wait
+- queue type
+- completed / abandoned state
 
-- NÄHEN Branding
-- Account/Profil
-- Parktag-Status
-- Live-Sync-Status
-
-## Hero / Parktag
-
-Zeige kompakt:
-
-- Phantasialand
-- Parktag aktiv / nicht aktiv
-- Startzeit
-- Fahrten heute
-- echte Queue-Zeit
-- Single-Rider-Nutzungen
-- Parktag starten / beenden
-
-Der Hero darf stark aussehen, aber nicht 40 % des Screens einnehmen.
+This screen should feel dense, clean, and satisfying to review.
 
 ---
 
-# 8. Ride Cards
+# 17. Nähbilanz
 
-Ride Cards sind das Herzstück.
+The park-day recap may be more emotional and visually dramatic.
 
-Jede Karte braucht mindestens:
+Show:
 
-- Attraktionsname
-- Themenbereich
-- Live-Wartezeit
-- Offen/Geschlossen
-- Trend
-- Favoritenstatus
-- Single-Rider-Hinweis wenn vorhanden
-- Anstellen-Aktion
-- Detail-Aktion
+- rides completed
+- actual queue time
+- Single Rider uses
+- aborted queues
+- most-ridden attraction
+- posted-vs-actual wait comparison
+- other meaningful day statistics
 
-## Wartezeit
-
-Die Wartezeit ist das visuell stärkste Element.
-
-Beispiel:
-
-**20**
-MIN
-
-Nicht:
-
-„Aktuelle Wartezeit beträgt 20 Minuten“
+Design it so a screenshot feels worth sharing.
 
 ---
 
-## Trend
+# 18. Install and Auth Screens
 
-Beispiele:
+Do not let these screens fall back to generic Supabase or standard login UI.
 
-- ↓ 15 min
-- → stabil
-- ↑ 10 min
+They should feel fully integrated into NÄHEN.
 
-Keine komplizierten Graphen auf jeder Karte.
-
----
-
-## Geschlossen
-
-Wenn eine Attraktion geschlossen ist:
-
-- nicht einfach nur Zahl 0 anzeigen
-- deutlich „GESCHLOSSEN“ / „ZU“
-- Karte optisch zurücknehmen
-- Anstellen deaktivieren
-
----
-
-# 9. Queue Timer
-
-Die Queue-Stoppuhr ist ein Kernfeature.
-
-Wenn eine Queue aktiv ist, muss dies in der gesamten App klar sichtbar sein.
-
-## Active Queue Bar
-
-Eine aktive Queue darf oben sticky angezeigt werden.
-
-Enthält:
-
-- Ride Name
-- Queue Type
-- laufende Zeit
-
-Ein Tap öffnet den vollständigen Queue-Screen.
-
----
-
-## Queue Screen
-
-Der Timer ist das wichtigste Element.
-
-Beispiel:
-
-TARON
-
-**00:18:42**
-
-Regular Queue
-Ausgeschildert: 30 min
-
-[ BOARDING · GENÄHT ]
-[ QUEUE VERLASSEN · VERNÄHT ]
-
-Buttons müssen extrem groß und eindeutig sein.
-
----
-
-# 10. Single Rider
-
-Single Rider ist kein kleiner Nebensatz.
-
-Wenn vorhanden:
-
-- eigenes klares Symbol
-- gut sichtbar
-- nicht mit einer erfundenen offiziellen Wartezeit versehen
-
-Community-Messungen sind **tatsächlich gestoppte Werte**.
-
-Beispiel:
-
-Single Rider
-
-Letzte Messungen:
-- 11 min · vor 5 min
-- 16 min · vor 12 min
-- 9 min · vor 19 min
-
-Zeige deutlich:
-
-„Keine offizielle SR-Livezeit“
-
----
-
-# 11. Ride Detail
-
-Der Detail-Screen soll kompakt sein.
-
-Nicht zu einer Wikipedia-Seite machen.
-
-Zeige:
-
-- Ride Name
-- Bereich
-- aktuelle Live-Wartezeit
-- Status
-- Trend
-- Single Rider
-- frische Community-Messungen
-- Anstellen-Button
-
-Optional später:
-
-- Tagesverlauf
-- persönliche Statistik
-- persönliche beste Queue
-
----
-
-# 12. Nähprotokoll
-
-Das Protokoll soll wie eine kompakte Parkday-Timeline wirken.
-
-Beispiel:
-
-10:07  
-Black Mamba  
-8 min · Regular  
-✓ genäht
-
-10:34  
-Taron  
-21 min · Regular  
-✓ genäht
-
-11:48  
-Raik  
-12 min · Single Rider  
-✓ genäht
-
-Vermeide große Karten pro Eintrag.
-
-Die Timeline soll schnell scannbar sein.
-
----
-
-# 13. Nähbilanz
-
-Die Nähbilanz ist der Abschluss des Parktags.
-
-Sie darf emotionaler und visueller sein.
-
-Zeige:
-
-- Anzahl Fahrten
-- echte Queue-Zeit
-- Single-Rider-Nutzungen
-- abgebrochene Queues
-- meistgefahrene Attraktion
-- Vergleich echte vs. ausgeschilderte Wartezeit
-
-Sie sollte später als Social Card exportierbar sein.
-
-Design sie deshalb so, dass sie auch als Screenshot stark aussieht.
-
----
-
-# 14. Push Settings
-
-Push-Einstellungen dürfen nicht wie ein technisches Einstellungsformular wirken.
-
-Pro Ride:
-
-- persönliches Wartezeitlimit
-- Push bei starkem Drop
-- Mindest-Drop in Minuten
-- Push bei Wiedereröffnung
-- Push bei frischer Single-Rider-Messung
-
-Nutze klare Toggles und Zahlenfelder.
-
-Nicht zu viel Text.
-
----
-
-# 15. Install Flow
-
-Die PWA-Installation ist Bestandteil des Produkts.
-
-Der erste Screen soll hochwertig wirken.
-
-Claim:
+Install flow should prominently use:
 
 **Installieren. Anstellen. Nähen.**
 
-Android:
-
-- echter Install-Button
-
-iPhone:
-
-- sehr klare 3-Schritt-Anleitung
-- Teilen
-- Zum Home-Bildschirm
-- Hinzufügen
-
-Keine lange technische Erklärung.
+Auth should be simple, premium, branded, and focused.
 
 ---
 
-# 16. Account Screens
+# 19. Push Settings
 
-Login und Registrierung minimal halten.
+Push configuration should feel polished and clear.
 
-Keine unnötigen Felder.
+Possible controls:
 
-Benötigt:
+- personal wait threshold
+- strong-drop alert
+- minimum drop
+- reopening alert
+- fresh Single Rider community report
 
-- E-Mail
-- Passwort
-- Username bei Registrierung
-
-Der Screen soll sich wie Teil der App anfühlen, nicht wie ein Supabase-Demoformular.
-
----
-
-# 17. Animationen
-
-Animationen sparsam einsetzen.
-
-Erlaubt:
-
-- Queue-Bar erscheint weich
-- Timer-State-Wechsel
-- Ride-Card bei starkem Drop subtil hervorheben
-- Sheet-Transitions
-- Button-Feedback
-- leichte Count-Up-Effekte
-
-Nicht erlaubt:
-
-- ständig pulsierende Elemente
-- unnötige Parallax-Effekte
-- lange Page Transitions
-- Animationen, die Informationen verzögern
+Avoid technical-looking raw forms.
 
 ---
 
-# 18. Performance
+# 20. Outdoor Readability
 
-Diese App wird unterwegs genutzt.
+The app will often be used in direct sunlight.
 
-Deshalb:
+Therefore:
 
-- keine riesigen Hintergrundvideos
-- keine schweren 3D-Szenen
-- keine 10 MB Hero-Bilder
-- keine unnötigen UI-Bibliotheken
-- wenig externe Fonts
-- keine Designentscheidung, die den Live-Screen langsamer macht
+- high contrast
+- bold hierarchy
+- no important low-opacity text
+- large tap targets
+- no color-only status communication
+- no hover-dependent interaction
+- no tiny controls
+- strong active states
 
-Performance ist Teil des Designs.
-
----
-
-# 19. Accessibility
-
-Mindestens:
-
-- ausreichend Kontrast
-- sichtbare Fokuszustände
-- sinnvolle Button-Texte
-- Icon + Text bei wichtigen Statusinformationen
-- keine reine Rot/Grün-Kommunikation
-- Touchflächen groß genug
-- reduzierte Animation bei `prefers-reduced-motion`
+Minimum target size should generally be around 44 × 44 px.
 
 ---
 
-# 20. Technische Grenzen
+# 21. Motion
 
-## Diese Dateien dürfen für den reinen Design-Pass NICHT funktional umgebaut werden:
+Use motion to support depth and feedback.
 
-- `app.js`
-- `supabase.sql`
-- `push-alerts.cjs`
-- `sw.js`
+Good examples:
+
+- layered sheet transitions
+- active queue expansion
+- subtle perspective shift
+- card elevation
+- queue-drop highlight
+- tactile press feedback
+- gentle environmental parallax
+- controlled count-up animation
+
+Avoid:
+
+- constant pulsing
+- excessive floating
+- long transition delays
+- distracting animation
+- animation that makes data harder to read
+
+Support `prefers-reduced-motion`.
+
+---
+
+# 22. Performance
+
+This is a real park-day tool.
+
+Do not destroy performance for visual spectacle.
+
+Avoid:
+
+- huge videos
+- unnecessarily large images
+- oversized frameworks
+- heavy shader effects
+- excessive DOM layers
+- uncontrolled filters
+- expensive animations everywhere
+
+Optimize reference images where possible.
+
+Visual quality and performance are both requirements.
+
+---
+
+# 23. Existing Functional Architecture
+
+NÄHEN already has working application logic.
+
+### Primary design files
+
+- `naehen/index.html`
+- `naehen/styles.css`
+
+### Functional logic
+
+- `naehen/app.js`
+
+### Backend / infrastructure — do not redesign during UI work
+
+- `naehen/supabase.sql`
+- `naehen/push-alerts.cjs`
+- `naehen/sw.js`
 - `.github/workflows/pages.yml`
+- `naehen/config.js`
 
-## Primäre Design-Dateien:
-
-- `index.html`
-- `styles.css`
+Do not refactor working backend systems during a design sprint.
 
 ---
 
-# 21. Kritische DOM-Regel
+# 24. Critical DOM Contract
 
-`app.js` greift auf bestehende DOM-IDs und `data-*` Attribute zu.
+`app.js` depends on existing:
 
-Deshalb:
+- DOM IDs
+- `data-*` attributes
+- buttons
+- forms
+- sheets
+- state containers
 
-**Bestehende IDs und relevante data-Attribute niemals entfernen oder umbenennen.**
+These are functional hooks.
 
-Du darfst:
+You may:
 
-- Elemente verschachteln
-- visuelle Wrapper hinzufügen
-- Klassen ändern
-- CSS komplett neu schreiben
-- Icons ergänzen
-- Layouts neu strukturieren
+- add wrappers
+- add decorative markup
+- change classes
+- restructure visual layout
+- completely rewrite CSS
+- add icons
+- add visual layers
 
-Aber JS-Hooks müssen erhalten bleiben.
+You must **not remove or rename required IDs or data attributes**.
 
----
-
-# 22. Keine Funktionsattrappen
-
-Astra darf keine Fake-Features hinzufügen.
-
-Nicht erlaubt:
-
-- Fake-Live-Wartezeiten
-- Fake-Maps
-- Fake-Single-Rider-Zeiten
-- nicht funktionierende Buttons
-- erfundene Parkinformationen
-- UI für Features, die nicht existieren
-
-Wenn eine Funktion noch nicht vorhanden ist, darf sie höchstens als klar markiertes zukünftiges Konzept erscheinen.
+If unsure whether an element is used by JS, preserve it.
 
 ---
 
-# 23. Phantasialand zuerst
+# 25. No Fake Features
 
-Version 1 ist bewusst **Phantasialand-first**.
+Never add fake functionality merely to make the UI look richer.
 
-Design deshalb nicht so, als müsse sofort jeder Park der Welt unterstützt werden.
+Do not invent:
 
-Die Datenarchitektur darf skalierbar sein, aber die UX soll sich für Phantasialand maßgeschneidert anfühlen.
+- fake live wait times
+- fake Single Rider live values
+- fake maps
+- fake crowd heatmaps
+- fake ride status
+- fake buttons
+- fake operational data
 
----
-
-# 24. Kein offizielles Phantasialand-Branding imitieren
-
-NÄHEN ist eine unabhängige Fan-App.
-
-Nicht:
-
-- offizielles Phantasialand-Logo nachbauen
-- Corporate Design des Parks kopieren
-- offiziellen App-Look imitieren
-
-NÄHEN braucht eine eigene Marke.
+Visual ambition must not reduce product honesty.
 
 ---
 
-# 25. Queue-Times Attribution
+# 26. Queue-Times Attribution
 
-Die sichtbare Attribution muss erhalten bleiben:
+The visible attribution must remain:
 
 **Powered by Queue-Times.com**
 
-Der Link zu Queue-Times muss erhalten bleiben.
+Keep it linked and visible.
 
-Sie darf elegant integriert werden, aber nicht versteckt werden.
+It can be integrated elegantly, but not hidden.
 
----
-
-# 26. Zielbild
-
-Wenn der Nutzer die fertige App sieht, soll der Eindruck sein:
-
-> „Das wurde offensichtlich von jemandem gebaut, der wirklich Freizeitparks besucht.“
-
-Nicht:
-
-> „Das ist ein generisches Dashboard mit Achterbahn-Daten.“
+Queue-Times data is not official Phantasialand live data.
 
 ---
 
-# 27. Qualitätscheck vor Abschluss
+# 27. Independent Fan Product
 
-Vor jedem finalen Design-Pass prüfen:
+NÄHEN is an independent fan product.
 
-### Funktion
+Do not make it look like an official Phantasialand product.
 
-- Sind alle Buttons noch klickbar?
-- Funktioniert Anstellen?
-- Funktioniert Regular / Single Rider?
-- Läuft die Stoppuhr?
-- Öffnet Ride Detail?
-- Funktioniert Parktag starten/beenden?
-- Öffnen Push Settings?
-- Funktioniert Navigation?
+Do not copy:
 
-### Mobile
+- the official app
+- official page layouts
+- official corporate identity wholesale
 
-- 360 px getestet
-- 390 px getestet
-- 430 px getestet
-- iPhone Safe Areas berücksichtigt
-- Bottom Navigation überlappt nichts
+You may use public visual/theme research to create attraction-inspired experiences.
 
-### Lesbarkeit
-
-- Wartezeit in < 1 Sekunde erfassbar
-- geschlossen sofort sichtbar
-- aktive Queue sofort sichtbar
-- Trend verständlich
-- Buttons groß genug
-
-### Branding
-
-- NÄHEN wirkt eigenständig
-- Humor vorhanden, aber nicht albern
-- keine generische SaaS-Ästhetik
-- keine unnötige UI-Dekoration
+The final design must remain original.
 
 ---
 
-# 28. Arbeitsweise
+# 28. Quality Standard
 
-Arbeite iterativ.
+Before finishing a design sprint, verify:
 
-1. Bestehende App vollständig lesen.
-2. Funktions-Hooks identifizieren.
-3. Informationshierarchie verbessern.
-4. Mobile Layout zuerst umbauen.
-5. Visual System definieren.
-6. Ride Cards perfektionieren.
-7. Queue Timer perfektionieren.
-8. Install/Login/Settings konsistent gestalten.
-9. Nähbilanz emotional gestalten.
-10. Abschließend alle Funktionen testen.
+## Visual
+- Does this look clearly custom?
+- Does it avoid standard Astra output?
+- Does it feel premium?
+- Is there convincing depth?
+- Does the screen feel designed rather than templated?
 
-Bei Zielkonflikten gilt immer:
+## Attraction Detail
+- Is this attraction visually distinct?
+- Does its typography fit its theme?
+- Does the page use supplied references intelligently?
+- Does it feel like its own world?
 
-**Benutzbarkeit > Design-Showcase.**
+## Usability
+- Can live wait time be understood in about one second?
+- Is open/closed state obvious?
+- Is the active queue obvious?
+- Are buttons easy to hit?
+- Does the UI remain readable outdoors?
 
-Und:
+## Technical
+- Are JS hooks intact?
+- Does navigation still work?
+- Do sheets still open?
+- Does queue timing still work?
+- Does Parktag logic still work?
+- Does the layout work at 360, 390, and 430 px?
+- Are iPhone safe areas respected?
 
-**Live-Information > Dekoration.**
+---
+
+# 29. Astra Execution Rule
+
+For every prompt:
+
+**Spend the limited time building, not explaining.**
+
+If references are provided, inspect them first.
+
+If the task is attraction-specific, research the attraction/theme where useful.
+
+Then implement directly.
+
+Use the existing working application as the foundation.
+
+Do not replace functional architecture just because a fresh mockup would be easier.
+
+---
+
+# 30. Final Creative Directive
+
+Be ambitious.
+
+Avoid safe defaults.
+
+Avoid repetitive layouts.
+
+Avoid generic components.
+
+Avoid “Astra-looking” output.
+
+Use the supplied references and attraction research to create a **deeply themed, dimensional, premium UI**.
+
+The global NÄHEN app should feel exceptional.
+
+The individual attraction views should feel like entering completely different worlds.
+
+**Usability > spectacle.**
+
+**Theme authenticity > generic consistency.**
+
+**Custom design > standard Astra patterns.**
+
+**Live information > decoration.**
