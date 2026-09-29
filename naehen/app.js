@@ -95,7 +95,113 @@
     "crazy-bats": {label:"FANTASY · VR MISSION", line:"Die Fledermäuse übernehmen.", art:"crazy-bats"},
     "die-3-mausketiere": {label:"BERLIN · 4D ABENTEUER", line:"Drei Helden. Eine Mission.", art:"die-3-mausketiere"},
     "deep-in-africa-adventure-trail": {label:"DEEP IN AFRICA · WANDERKARTE", line:"Der Weg führt durch den Dschungel.", art:"deep-in-africa-adventure-trail"},
-    "das-verrueckte-hotel-tartueff": {label:"BERLIN · HOTEL TARTÜFF", line:"Willkommen. Der Boden trügt.", art:"das-verrueckte-hotel-tartueff"}
+    "das-verrueckte-hotel-tartueff": {label:"BERLIN · HOTEL TARTÜFF", line:"Willkommen. Der Boden trügt.", art:"das-verrueckte-hotel-tartueff"},
+
+    "wavy-battle": {
+      label:"FANTASY · TAL DER WUZE",
+      line:"An die Wasserspritzer, fertig, los.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/fantasy/fantasy-phenie-2025/wavy/fh-wavy_02.jpg"
+    },
+    "avoras": {
+      label:"FANTASY · TAL DER WUZE",
+      line:"Dem Himmel über dem Wuze Tal entgegen.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/fantasy/avoras/fh-avoras_01.jpg"
+    },
+    "wellenflug": {
+      label:"BERLIN · KAISERPLATZ",
+      line:"Über den Fontänen des goldenen Berlin.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/berlin/wellenflug/fh_wellenflug_04.jpg"
+    },
+    "pferdekarussell": {
+      label:"BERLIN · KAISERPLATZ",
+      line:"Eine klassische Runde durch das goldene Berlin.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/berlin/pferdekarussell/ga_pferdekarussell_02.jpg"
+    },
+    "tikal": {
+      label:"MEXICO · COLORADO MOUNTAINS",
+      line:"Kupferrote Türme und eine Portion Bauchkribbeln.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/mexico/tikal/fh-tikal_01.jpg"
+    },
+    "moptis-monkey-depot": {
+      label:"DEEP IN AFRICA · MONKEY DEPOT",
+      line:"Klettern, kraxeln und Afrika entdecken.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/deep-in-africa/mopti/fh_mopti_01.jpg"
+    },
+    "wuermling-express": {
+      label:"FANTASY · WUZE TAL",
+      line:"Hoch über dem Mondsee unterwegs.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/fantasy/wuermling-express/ga-wuermling-express_02.jpg"
+    },
+    "wakobato": {
+      label:"FANTASY · MONDSEE",
+      line:"Patrouillenfahrt durch Schilf und Wasser.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/fantasy/wakobato/ga-wakobato_01.jpg"
+    },
+    "wirtls-taubenturm": {
+      label:"FANTASY · WUZE TAL",
+      line:"Aus eigener Kraft hoch hinaus.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/fantasy/wirtls-taubenturm/ga-wirtls-taubenturm_02.jpg"
+    },
+    "woezls-wassertreter": {
+      label:"FANTASY · MONDSEE",
+      line:"Mit Muskelkraft über den Mondsee.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/fantasy/woezls-wassertreter/ga-woezls-wassertreter_02.jpg"
+    },
+    "tittle-tattle-tree": {
+      label:"FANTASY · WUZE TOWN",
+      line:"Schwerelos im Reich der Wuze.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/fantasy/tittle-tattle-tree/ga-tittle-tattle-tree_03.jpg"
+    },
+    "feng-ju-palace": {
+      label:"CHINA TOWN · PALAST",
+      line:"Wenn Gut und Böse die Welt auf den Kopf stellen.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/china-town/feng-ju-palace/fh-feng-ju-palace_01.jpg"
+    },
+    "winni-splash": {
+      label:"FANTASY · TAL DER WUZE",
+      line:"Kurbeln, spritzen und staunen.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/fantasy/fantasy-phenie-2025/winni/fh-winni_02.jpg"
+    },
+    "wolkes-luftpost": {
+      label:"FANTASY · WUZE TOWN",
+      line:"Ab geht die Post über den Dächern der Wuze.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/fantasy/wolkes-luftpost/2025/ga-wolkes-luftpost-2025_01.jpg"
+    },
+    "bolles-flugschule": {
+      label:"BERLIN · FLUGSCHULE",
+      line:"Mit Flugzeug und Zeppelin über Berlin.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/berlin/bolles-flugschule/fh-bolles-flugschule.jpg"
+    },
+    "die-froehliche-bienchenjagd": {
+      label:"FANTASY · KINDERLAND",
+      line:"Eine fröhliche Jagd durch die Wuze-Welt.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/fantasy/die-froehliche-bienchenjagd/fh_froehliche-bienchenjagd_01.jpg"
+    },
+    "der-lustige-papagei": {
+      label:"FANTASY · KINDERLAND",
+      line:"Bunter Flugspaß für kleine Abenteurer.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/fantasy/der-lustige-papagei/fh-der-lustige-papagei-2020_01.jpg"
+    },
+    "bolles-riesenrad": {
+      label:"BERLIN · KAISERPLATZ",
+      line:"Ein kleiner Höhenflug im goldenen Berlin.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/berlin/bolles-riesenrad/fh-bolles-riesenrad_01.jpg"
+    },
+    "bumper-klumpen": {
+      label:"FANTASY · WUZE TOWN",
+      line:"Kunterbunter Fahrspaß mit den Klumpen.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/fantasy/bumper-klumpen/fh-bumper-klumpen_01.jpg"
+    },
+    "woezls-duck-washer": {
+      label:"FANTASY · WUZE TOWN",
+      line:"Die Entenwäsche der Wuze ist eröffnet.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/fantasy/woezls-duck-washer/fh-woezls-duck-washer_01.jpg"
+    },
+    "wupis-wabi-wipper": {
+      label:"FANTASY · WUZE TOWN",
+      line:"Wippen, wirbeln und Wuze-Chaos.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/fantasy/wupis-wabi-wipper/fh-wupis-wabi-wipper_01.jpg"
+    }
   };
 
   const ATTRACTION_FONTS = {
@@ -323,7 +429,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=26", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=27", {
           scope: "./",
           updateViaCache: "none"
         });
@@ -596,6 +702,7 @@
     const cards = visibleRides.map((ride) => {
       const fav = favorites.includes(ride.id);
       const world = WORLD[ride.id];
+      const artSrc = world ? (world.artUrl || (world.art ? "./assets/" + world.art + ".webp" : "")) : "";
       const hasLive = ride.source === "queue-times";
       const closed = hasLive && !ride.isOpen;
       const unknown = !hasLive || ride.isOpen === null;
@@ -608,7 +715,7 @@
       const queueDisabled = closed ? " disabled" : "";
 
       return "<article class=\"ride\" data-world=\"" + escapeHtml(ride.id) + "\" data-detail=\"" + escapeHtml(ride.id) + "\">" +
-        (world ? "<img class=\"rideArt\" src=\"./assets/" + world.art + ".webp\" alt=\"\" loading=\"lazy\">" : "") +
+        (artSrc ? "<img class=\"rideArt\" src=\"" + escapeHtml(artSrc) + "\" alt=\"\" loading=\"lazy\" decoding=\"async\">" : "") +
         "<div class=\"rideMain\">" +
           "<div class=\"rideTop\">" +
             "<button class=\"fav " + (fav ? "on" : "") + "\" data-fav=\"" + ride.id + "\" aria-label=\"Favorit für " + escapeHtml(ride.name) + "\" aria-pressed=\"" + fav + "\">★</button>" +
@@ -955,13 +1062,14 @@
     if (!selectedDetailRide) return;
 
     const world = WORLD[selectedDetailRide.id] || null;
+    const artSrc = world ? (world.artUrl || (world.art ? "./assets/" + world.art + ".webp" : "")) : "";
     const rideSheet = $("#rideSheet");
     const worldArtImage = $("#worldArtImage");
     rideSheet.dataset.world = world ? selectedDetailRide.id : "default";
     applyAttractionTypography(rideSheet, selectedDetailRide.id);
     if (worldArtImage) {
-      if (world && world.art) {
-        worldArtImage.src = "./assets/" + world.art + ".webp";
+      if (artSrc) {
+        worldArtImage.src = artSrc;
         worldArtImage.hidden = false;
       } else {
         worldArtImage.removeAttribute("src");
