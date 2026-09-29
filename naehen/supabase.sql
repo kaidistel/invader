@@ -76,6 +76,14 @@ create table if not exists public.live_ride_state (
   synced_at timestamptz not null default now()
 );
 
+create table if not exists public.push_event_log (
+  event_key text primary key,
+  user_id uuid references auth.users(id) on delete cascade,
+  event_type text not null,
+  ride_id text,
+  created_at timestamptz not null default now()
+);
+
 create index if not exists queue_sessions_user_started_idx on public.queue_sessions(user_id, started_at desc);
 create index if not exists sr_reports_ride_measured_idx on public.sr_reports(ride_id, measured_at desc);
 create index if not exists favorites_user_idx on public.favorites(user_id);
@@ -86,7 +94,7 @@ alter table public.queue_sessions enable row level security;
 alter table public.favorites enable row level security;
 alter table public.push_subscriptions enable row level security;
 alter table public.sr_reports enable row level security;
-alter table public.live_ride_state enable row level security;
+alter table public.live_ride_state enable row level security;\nalter table public.push_event_log enable row level security;
 
 drop policy if exists "profiles own" on public.profiles;
 create policy "profiles own" on public.profiles for all
