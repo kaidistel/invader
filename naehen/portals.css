@@ -514,3 +514,65 @@
   margin:0!important;
   transform:none!important;
 }
+
+
+/* v20 — authoritative detail-title font mapping.
+   Mirrors the home-card typography exactly and overrides all legacy font shorthands. */
+#rideSheet[data-world=taron] #rideTitle{
+  font-family:'Germania One',Georgia,serif!important;
+}
+#rideSheet[data-world=fly] #rideTitle{
+  font-family:'Steampunk Machinery Font','Stardos Stencil','Barlow Condensed',sans-serif!important;
+}
+#rideSheet[data-world=black-mamba] #rideTitle{
+  font-family:'African','Staatliches','Bebas Neue',sans-serif!important;
+}
+#rideSheet[data-world=mystery-castle] #rideTitle{
+  font-family:'Old London','UnifrakturCook',Georgia,serif!important;
+}
+#rideSheet[data-world=river-quest] #rideTitle{
+  font-family:'IM Fell English SC',Georgia,serif!important;
+}
+#rideSheet[data-world=chiapas] #rideTitle{
+  font-family:'Bree Serif','Patua One',Georgia,serif!important;
+}
+#rideSheet[data-world=colorado-adventure] #rideTitle{
+  font-family:'Rye',Georgia,serif!important;
+}
+#rideSheet[data-world=talocan] #rideTitle{
+  font-family:'Cinzel Decorative','Almendra Display',Georgia,serif!important;
+}
+#rideSheet[data-world=raik] #rideTitle{
+  font-family:'Eagle Lake','Grenze Gotisch',Georgia,serif!important;
+}
+#rideSheet[data-world=winjas-fear] #rideTitle{
+  font-family:'Macondo','Almendra Display',Georgia,serif!important;
+}
+#rideSheet[data-world=winjas-force] #rideTitle{
+  font-family:'Eagle Lake','Cinzel Decorative',Georgia,serif!important;
+}
+#rideSheet[data-world=geister-rikscha] #rideTitle{
+  font-family:'Gang of Three','ZCOOL XiaoWei',serif!important;
+}
+#rideSheet[data-world=maus-au-chocolat] #rideTitle{
+  font-family:'Emilys Candy','Berkshire Swash',cursive!important;
+}
+#rideSheet[data-world=crazy-bats] #rideTitle{
+  font-family:'Creepster','Luckiest Guy',cursive!important;
+}
+#rideSheet[data-world=die-3-mausketiere] #rideTitle{
+  font-family:'Limelight','Playfair Display',Georgia,serif!important;
+}
+#rideSheet[data-world=deep-in-africa-adventure-trail] #rideTitle{
+  font-family:'Special Elite',monospace!important;
+}
+#rideSheet[data-world=das-verrueckte-hotel-tartueff] #rideTitle{
+  font-family:'Bodoni Moda','Abril Fatface',Georgia,serif!important;
+}
+
+/* Neutralize legacy shorthand side effects without flattening the themed styling. */
+#rideSheet[data-world] #rideTitle{
+  font-style:normal!important;
+  font-variant:normal!important;
+  font-stretch:normal!important;
+}
