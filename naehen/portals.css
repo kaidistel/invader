@@ -165,3 +165,8 @@
 }
 #rideSheet[data-world=winjas-fear] .worldArt{background-position:center,left 40%}
 #rideSheet[data-world=winjas-force] .worldArt{background-position:center,right 40%;filter:hue-rotate(15deg)}
+/* Attraction card art must sit above the card fill, below its contrast veil and labels. */
+#rides .ride{isolation:isolate}
+#rides .ride .rideArt{z-index:0}
+#rides .ride:after{z-index:1}
+#rides .ride .rideMain,#rides .ride>.wait{position:relative;z-index:2}
