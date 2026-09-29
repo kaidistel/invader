@@ -37,12 +37,12 @@ jobs:
       - name: Evaluate NÄHEN push alerts
         env:
           NAEHEN_SUPABASE_URL: ${{ secrets.NAEHEN_SUPABASE_URL }}
-          NAEHEN_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NAEHEN_SUPABASE_SERVICE_ROLE_KEY }}
+          NAEHEN_SUPABASE_SECRET_KEY: ${{ secrets.NAEHEN_SUPABASE_SECRET_KEY }}
           NAEHEN_VAPID_PUBLIC_KEY: ${{ secrets.NAEHEN_VAPID_PUBLIC_KEY }}
           NAEHEN_VAPID_PRIVATE_KEY: ${{ secrets.NAEHEN_VAPID_PRIVATE_KEY }}
           NAEHEN_VAPID_SUBJECT: ${{ secrets.NAEHEN_VAPID_SUBJECT }}
         run: |
-          if [ -z "$NAEHEN_SUPABASE_URL" ] || [ -z "$NAEHEN_SUPABASE_SERVICE_ROLE_KEY" ] || [ -z "$NAEHEN_VAPID_PUBLIC_KEY" ] || [ -z "$NAEHEN_VAPID_PRIVATE_KEY" ]; then
+          if [ -z "$NAEHEN_SUPABASE_URL" ] || [ -z "$NAEHEN_SUPABASE_SECRET_KEY" ] || [ -z "$NAEHEN_VAPID_PUBLIC_KEY" ] || [ -z "$NAEHEN_VAPID_PRIVATE_KEY" ]; then
             echo "NÄHEN push secrets not configured yet; skipping push evaluation."
             exit 0
           fi
