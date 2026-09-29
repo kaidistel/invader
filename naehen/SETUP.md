@@ -1,5 +1,17 @@
 # NÄHEN · einmaliges Backend-Setup
 
+## Status
+
+- ✅ GitHub Pages läuft
+- ✅ Queue-Times Live-Sync läuft
+- ✅ `supabase.sql` ist vorbereitet
+- ✅ VAPID-Schlüsselpaar wurde erzeugt
+- ✅ VAPID Public Key ist bereits in `config.js` eingetragen
+- ⏳ Supabase-Projekt verbinden
+- ⏳ `supabase.sql` im Supabase-Projekt ausführen
+- ⏳ Supabase URL + anon/publishable key in `config.js` eintragen
+- ⏳ private GitHub Actions Secrets hinterlegen
+
 Die App ist so gebaut, dass GitHub Pages weiterhin das kostenlose Frontend-Hosting übernimmt. Für Accounts und Web Push wird ein kostenloses Supabase-Projekt benötigt.
 
 ## 1. Supabase-Projekt erstellen
@@ -20,17 +32,11 @@ In `naehen/config.js`:
 
 Der anon/publishable Key ist für Browser-Apps gedacht und darf öffentlich sein. Der Service-Role-Key darf niemals in `config.js` landen. Die Tabellen sind mit Row Level Security abgesichert.
 
-## 3. VAPID-Schlüsselpaar für Web Push erzeugen
+## 3. VAPID für Web Push
 
-Lokal einmal ausführen:
+✅ Bereits erledigt: Das VAPID-Schlüsselpaar wurde erzeugt und der **Public Key** ist bereits in `naehen/config.js` eingetragen.
 
-```bash
-npx web-push generate-vapid-keys
-```
-
-Den **Public Key** zusätzlich in `naehen/config.js` als `vapidPublicKey` eintragen.
-
-Den **Private Key niemals committen**.
+Der **Private Key** darf niemals committed werden und muss nur als GitHub Actions Secret hinterlegt werden.
 
 ## 4. GitHub Actions Secrets setzen
 
