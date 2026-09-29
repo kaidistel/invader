@@ -10,7 +10,7 @@
 - ✅ Supabase-Projekt erstellt und verbunden
 - ✅ Datenbankschema, RLS, Indizes und Trigger eingespielt
 - ✅ Supabase URL + Publishable Key in `config.js` eingetragen
-- ⏳ private GitHub Actions Secrets hinterlegen
+- ✅ private GitHub Actions Secrets wurden gesetzt
 
 Die App ist so gebaut, dass GitHub Pages weiterhin das kostenlose Frontend-Hosting übernimmt. Für Accounts und Web Push wird ein kostenloses Supabase-Projekt benötigt.
 
