@@ -8,6 +8,7 @@
   const LIVE_REFRESH_MS = 5 * 60 * 1000;
   const SR_FRESH_MINUTES = 30;
   const SR_VISIBLE_MINUTES = 60;
+  const EXCLUDED_RIDE_PREFIXES = ["berliner-einlauf"];
 
   const store = {
     get(key, fallback) {
@@ -429,7 +430,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=27", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=28", {
           scope: "./",
           updateViaCache: "none"
         });
@@ -619,6 +620,7 @@
       const nowState = {};
       rides = flattened.map((raw) => {
         const id = slugRide(raw.name);
+        if (EXCLUDED_RIDE_PREFIXES.some((prefix) => id.startsWith(prefix))) return null;
         const old = previous[id];
         const wait = Number(raw.wait_time) || 0;
         let delta = 0;
@@ -642,7 +644,7 @@
           source: "queue-times",
           lastUpdated: raw.last_updated || null
         });
-      });
+      }).filter(Boolean);
 
       const liveIds = new Set(rides.map(ride => ride.id));
       FALLBACK_RIDES.forEach(ride => { if (!liveIds.has(ride.id)) rides.push(Object.assign({}, ride)); });
