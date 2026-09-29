@@ -48,9 +48,30 @@ function slugRide(name) {
     "van helsing's factory": "van-helsings-factory",
     "side-kick": "side-kick",
     "tmnt license to drive": "teenage-mutant-ninja-turtles-license-to-drive",
-    "paw patrol adventure tour": "paw-patrol-adventure-tour"
+    "paw patrol adventure tour": "paw-patrol-adventure-tour",
+    "yoy chill": "yoy-chill",
+    "yoy thrill": "yoy-thrill",
+    "walibi express station 1": "walibi-express",
+    "walibi express station 2": "walibi-express",
+    "walibi express": "walibi-express",
+    "skydive": "skydiver",
+    "skydiver": "skydiver",
+    "merlin's magic castle": "merlins-magic-castle",
+    "merlin’s magic castle": "merlins-magic-castle",
+    "walibi's fun recorder": "walibis-fun-recorder",
+    "walibi’s fun recorder": "walibis-fun-recorder",
+    "walibi's world tour": "walibis-world-tour",
+    "walibi’s world tour": "walibis-world-tour",
+    "walibi's shuttle": "walibis-shuttle",
+    "walibi’s shuttle": "walibis-shuttle",
+    "mini taxi's": "mini-taxis",
+    "mini taxi’s": "mini-taxis",
+    "tequila taxi's": "tequila-taxis",
+    "tequila taxi’s": "tequila-taxis",
+    "merrie go'round": "merrie-goround",
+    "merrie go’round": "merrie-goround"
   };
-  const low = String(name || "").toLowerCase().trim();
+  const low = String(name || "").replace(/[\u200B-\u200D\uFEFF]/g, "").toLowerCase().trim();
   if (known[low]) return known[low];
   if (low.startsWith("chiapas")) return "chiapas";
   return low.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ß/g, "ss").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -62,7 +83,12 @@ const PUSH_EXCLUDED_RIDES = new Set([
   "berliner-einlauf",
   "ahoj-brause-horror-lab",
   "unhallowed-2-show",
-  "the-lost-temple"
+  "the-lost-temple",
+  "jefferson-manor",
+  "psychoshock",
+  "the-villa",
+  "camp-of-curiosities",
+  "wicked-woods"
 ]);
 
 async function rest(path, options) {
