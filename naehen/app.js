@@ -146,7 +146,15 @@
     "winja's fear":"winjas-fear", "winja's force":"winjas-force",
     "deep in africa – adventure trail":"deep-in-africa-adventure-trail",
     "das verrückte hotel tartüff":"das-verrueckte-hotel-tartueff",
-    "die 3 mausketiere":"die-3-mausketiere"
+    "die 3 mausketiere":"die-3-mausketiere",
+    "mopti's monkey depot":"moptis-monkey-depot", "mopti’s monkey depot":"moptis-monkey-depot", "mopti‘s monkey depot":"moptis-monkey-depot",
+    "würmling express":"wuermling-express",
+    "wirtl's taubenturm":"wirtls-taubenturm", "wirtl’s taubenturm":"wirtls-taubenturm", "wirtl‘s taubenturm":"wirtls-taubenturm",
+    "wözl's wassertreter":"woezls-wassertreter", "wözl’s wassertreter":"woezls-wassertreter", "wözl‘s wassertreter":"woezls-wassertreter",
+    "wolke's luftpost":"wolkes-luftpost", "wolke’s luftpost":"wolkes-luftpost", "wolke‘s luftpost":"wolkes-luftpost",
+    "die fröhliche bienchenjagd":"die-froehliche-bienchenjagd",
+    "wözl's duck washer":"woezls-duck-washer", "wözl’s duck washer":"woezls-duck-washer", "wözl‘s duck washer":"woezls-duck-washer",
+    "wupi's wabi wipper":"wupis-wabi-wipper", "wupi’s wabi wipper":"wupis-wabi-wipper", "wupi‘s wabi wipper":"wupis-wabi-wipper"
   };
   let selectedRide = null;
   let selectedDetailRide = null;
