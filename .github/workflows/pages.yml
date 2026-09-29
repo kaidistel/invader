@@ -46,6 +46,20 @@ jobs:
             --output "naehen/live-walibi-holland.json"
           test -s "naehen/live-walibi-holland.json"
 
+          curl --fail --silent --show-error --location \
+            --retry 3 --retry-delay 2 --max-time 25 \
+            "https://queue-times.com/parks/51/queue_times.json" \
+            --output "naehen/live-europa-park.json"
+          test -s "naehen/live-europa-park.json"
+
+      - name: Build Europa-Park official art manifest
+        run: |
+          node "$GITHUB_WORKSPACE/naehen/build-official-art-manifest.cjs" \
+            "$GITHUB_WORKSPACE/naehen/europa-park-config.js" \
+            "NAEHEN_EUROPA_PARK" \
+            "$GITHUB_WORKSPACE/naehen/europa-park-images.json"
+          test -s "$GITHUB_WORKSPACE/naehen/europa-park-images.json"
+
       - name: Evaluate NÄHEN push alerts
         env:
           NAEHEN_SUPABASE_URL: ${{ secrets.NAEHEN_SUPABASE_URL }}
@@ -65,7 +79,8 @@ jobs:
           NODE_PATH=/tmp/naehen-push/node_modules node "$GITHUB_WORKSPACE/naehen/push-alerts.cjs" \
             "$GITHUB_WORKSPACE/naehen/live.json" \
             "$GITHUB_WORKSPACE/naehen/live-movie-park.json" \
-            "$GITHUB_WORKSPACE/naehen/live-walibi-holland.json"
+            "$GITHUB_WORKSPACE/naehen/live-walibi-holland.json" \
+            "$GITHUB_WORKSPACE/naehen/live-europa-park.json"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
