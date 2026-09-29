@@ -393,7 +393,3 @@
   }
 }
 
-/* If a future attraction has no themed plaque, do not create a generic one. */
-#rideSheet #rideTitle:not([style]){
-  box-shadow:none;
-}
