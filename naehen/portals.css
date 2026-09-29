@@ -26,7 +26,7 @@
 #rideSheet #rideDetailStatus{clear:both;color:var(--ink);background:#060b0ac2;border:1px solid color-mix(in srgb,var(--metal) 48%,transparent);padding:13px 14px;font-size:13px;line-height:1.45}
 #rideSheet .srBox{background:#060b0ab8;color:var(--ink);border-color:color-mix(in srgb,var(--metal) 48%,transparent);border-radius:6px}
 #rideSheet .srBox .meta,#rideSheet .srBox .mini{color:var(--ink)}
-#rideSheet #rideQueueBtn{position:sticky;bottom:0;background:var(--metal);border:1px solid #fff8;color:#121817;font-size:13px;min-height:54px;margin-top:14px;box-shadow:0 0 20px #000b}
+#rideSheet #rideQueueBtn{position:static;background:var(--metal);border:1px solid #fff8;color:#121817;font-size:13px;min-height:54px;margin-top:18px;box-shadow:0 0 20px #000b}
 #rideSheet .close{position:absolute;top:20px;right:19px;background:#09100eea;border:1px solid var(--metal);color:#fff;z-index:4}
 /* Basalt and forge. */
 #rideSheet[data-world=taron]{--world-art:url('./assets/taron.webp');--veil:#171717;--ink:#f4e5d1;--metal:#d69a54;--world-font:'Grenze Gotisch','Pirata One',Georgia,serif;--world-decoration:'⟡  KLUGHEIM  ⟡'}
