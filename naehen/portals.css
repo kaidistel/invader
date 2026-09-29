@@ -342,3 +342,9 @@
   color:#f7b8ff!important;
   text-shadow:0 0 8px #b928ff;
 }
+
+
+/* v17 — remove intrusive ornament boxes from attraction artwork */
+#rideSheet[data-world] .worldOrnament{
+  display:none!important;
+}
