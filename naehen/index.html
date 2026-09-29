@@ -153,11 +153,7 @@ const FALLBACK_RIDES = [
 ];
 let rides=[...FALLBACK_RIDES];
 const QUEUE_TIMES_URL='https://queue-times.com/parks/56/queue_times.json';
-const QUEUE_TIMES_PROXIES=[
-  ()=>QUEUE_TIMES_URL,
-  ()=>`https://api.allorigins.win/raw?url=${encodeURIComponent(QUEUE_TIMES_URL)}`,
-  ()=>`https://corsproxy.io/?${encodeURIComponent(QUEUE_TIMES_URL)}`
-];
+const LIVE_DATA_URL='./live.json';
 const LIVE_REFRESH_MS=5*60*1000;
 
 function slugRide(name){
@@ -181,23 +177,12 @@ async function loadLiveWaits(){
   const label=$('#dataLabel');
   try{
     label.textContent='LIVE WIRD GELADEN…';
-    let data=null,lastError=null;
-    for(const makeUrl of QUEUE_TIMES_PROXIES){
-      const controller=new AbortController();
-      const timer=setTimeout(()=>controller.abort(),6500);
-      try{
-        const res=await fetch(makeUrl(),{cache:'no-store',signal:controller.signal});
-        if(!res.ok)throw new Error('HTTP '+res.status);
-        data=await res.json();
-        clearTimeout(timer);
-        break;
-      }catch(err){
-        clearTimeout(timer);
-        lastError=err;
-        console.info('Live-Daten-Quelle nicht erreichbar, versuche nächste.',err);
-      }
-    }
-    if(!data)throw lastError||new Error('Keine Live-Datenquelle erreichbar');
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),6500);
+    const res=await fetch(LIVE_DATA_URL+'?t='+Date.now(),{cache:'no-store',signal:controller.signal});
+    clearTimeout(timer);
+    if(!res.ok)throw new Error('Live-Snapshot HTTP '+res.status);
+    const data=await res.json();
     const previous=store.get('naehen:lastWaits',{});
     const flattened=[];
     for(const land of (data.lands||[])){
@@ -228,10 +213,10 @@ async function loadLiveWaits(){
       return af-bf || a.name.localeCompare(b.name,'de');
     });
     store.set('naehen:lastWaits',nowState);
-    label.textContent='LIVE · QUEUE-TIMES';
+    label.textContent='LIVE · GITHUB SYNC';
     renderRides();
   }catch(err){
-    console.warn('Queue-Times konnte nicht geladen werden',err);
+    console.warn('Live-Snapshot konnte nicht geladen werden',err);
     label.textContent='LIVE NICHT ERREICHBAR';
     if(!rides.some(r=>r.source==='queue-times'))rides=[...FALLBACK_RIDES];
     renderRides();
