@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Almendra+Display&family=Almendra+SC&family=Bungee+Spice&family=Caesar+Dressing&family=Chela+One&family=Creepster&family=Emilys+Candy&family=Ewert&family=Fascinate+Inline&family=Flavors&family=Freckle+Face&family=Fredericka+the+Great&family=Germania+One&family=Grenze+Gotisch&family=Henny+Penny&family=IM+Fell+English+SC&family=Jolly+Lodger&family=Kablammo&family=Limelight&family=Luckiest+Guy&family=Macondo&family=Macondo+Swash+Caps&family=Mystery+Quest&family=Poiret+One&family=Ribeye&family=Ribeye+Marrow&family=Rye&family=Sancreek&family=Special+Elite&family=Trade+Winds&family=ZCOOL+XiaoWei&display=swap');
+
 /* Bundled display fonts keep themed titles available in the installed PWA. */
 @font-face{font-family:'Pirata One';src:url('./assets/fonts/pirata-one.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
 @font-face{font-family:'IM Fell English SC';src:url('./assets/fonts/im-fell-english-sc.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
@@ -23,9 +25,7 @@
 #rideSheet .worldArt:after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,#05090814 0%,#05090800 45%,var(--veil) 100%)}
 #rideSheet .worldOrnament{display:block;position:absolute;top:18px;left:20px;right:70px;height:205px;border:1px solid color-mix(in srgb,var(--metal) 70%,transparent);pointer-events:none;box-shadow:inset 0 0 0 5px #0003,0 4px 20px #0004}
 #rideSheet .worldOrnament:after{content:var(--world-decoration);position:absolute;bottom:12px;left:16px;color:var(--metal);font:18px var(--world-font);text-shadow:0 2px 7px #000b}
-#rideSheet .worldCaption{display:block;max-width:300px;color:var(--ink);font:italic 16px/1.35 var(--world-font);letter-spacing:.01em;margin:0 0 12px;opacity:.94}
-#rideSheet .eyebrow{color:var(--metal);font-family:var(--world-font);font-weight:700;font-size:12px;line-height:1.35;letter-spacing:1.4px;text-transform:uppercase}
-#rideSheet #rideTitle{font-family:var(--world-font);font-weight:400;color:var(--ink);font-size:clamp(34px,10vw,64px);line-height:1.04;letter-spacing:0;text-shadow:0 2px 12px #0009;margin:11px 0 28px;max-width:100%;text-wrap:balance;overflow-wrap:anywhere}
+#rideSheet .worldCaption{display:block;max-width:300px;color:var(--ink);font:italic 16px/1.35 'Trebuchet MS',system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:.01em;margin:0 0 12px;opacity:.94}
 #rideSheet .waitCaption{color:var(--metal);font-size:10px;letter-spacing:2px;font-weight:800}
 #rideSheet .rideDetailWait{display:block;float:none;width:auto;height:auto;border:0;border-top:1px solid var(--metal);border-bottom:1px solid var(--metal);border-radius:0;box-shadow:none;text-align:left;font:700 clamp(34px,10vw,52px)/1.25 ui-monospace,monospace;color:var(--ink);padding:8px 0;margin:9px 0 12px;background:transparent}
 #rideSheet #rideDetailStatus{clear:both;color:var(--ink);background:#060b0ac2;border:1px solid color-mix(in srgb,var(--metal) 48%,transparent);padding:13px 14px;font-size:13px;line-height:1.45}
@@ -83,7 +83,6 @@
 #rideSheet[data-world=mystery-castle] .worldArt{height:310px;inset:14px 14% auto;border-radius:50% 50% 0 0;border:3px solid #a99abc}
 #rideSheet[data-world=mystery-castle] .worldArt:after{background:linear-gradient(0deg,#181722,transparent 63%)}
 #rideSheet[data-world=mystery-castle] .worldOrnament{border-radius:50% 50% 0 0;top:16px;height:260px;left:12%;right:12%;border:1px solid #c8bade}
-#rideSheet[data-world=mystery-castle] .worldOrnament:after{bottom:0;left:50%;transform:translateX(-50%);font-family:Georgia,serif;white-space:nowrap}
 #rideSheet[data-world=mystery-castle] #rideTitle{font-size:clamp(46px,12vw,70px)}
 #rideSheet[data-world=mystery-castle] .rideDetailWait{font-weight:400;border-block:1px solid #a894be}
 /* Wuze Town: one photo, distinct Fear and Force treatments. */
@@ -187,48 +186,12 @@
 #rides .ride .rideMain,#rides .ride>.wait{position:relative;z-index:2}
 
 
-/* Curated attraction typography — operational numbers remain neutral for instant readability. */
-#rideSheet[data-world=taron] #rideTitle{font-weight:700;letter-spacing:2px}
-#rideSheet[data-world=fly] #rideTitle{font-weight:800;letter-spacing:.16em}
-#rideSheet[data-world=black-mamba] #rideTitle{font-weight:400;letter-spacing:.045em}
-#rideSheet[data-world=chiapas] #rideTitle{letter-spacing:.015em}
-#rideSheet[data-world=talocan] #rideTitle{font-weight:900;letter-spacing:.07em}
-#rideSheet[data-world=mystery-castle] #rideTitle{font-weight:700;letter-spacing:.025em}
-#rideSheet[data-world=winjas-fear] #rideTitle{font-weight:400;letter-spacing:.025em}
-#rideSheet[data-world=winjas-force] #rideTitle{font-weight:400;letter-spacing:.045em}
-#rideSheet[data-world=geister-rikscha] #rideTitle{font-weight:400;letter-spacing:.04em}
-#rideSheet[data-world=colorado-adventure] #rideTitle{letter-spacing:.035em}
-#rideSheet[data-world=raik] #rideTitle{font-weight:400;letter-spacing:.06em}
-#rideSheet[data-world=maus-au-chocolat] #rideTitle{font-weight:400;letter-spacing:.005em}
-#rideSheet[data-world=crazy-bats] #rideTitle{font-weight:400;letter-spacing:.045em}
-#rideSheet[data-world=die-3-mausketiere] #rideTitle{font-weight:400;letter-spacing:.035em;text-transform:uppercase}
-#rideSheet[data-world=deep-in-africa-adventure-trail] #rideTitle{font-weight:400;letter-spacing:.015em}
-#rideSheet[data-world=das-verrueckte-hotel-tartueff] #rideTitle{font-weight:700;letter-spacing:.01em}
-
-
-/* Final typography authority.
-   styles.css still contains legacy attraction-specific font shorthands.
-   Portal typography must win without changing operational number/UI fonts. */
-#rideSheet[data-world] #rideTitle,
-#rideSheet[data-world] #rideZone,
-#rideSheet[data-world] #worldCaption,
-#rideSheet[data-world] .worldOrnament:after{
-  font-family:var(--world-font)!important;
-}
-#rideSheet[data-world] #rideTitle{
-  font-style:normal;
-}
-#rideSheet[data-world=fly] #rideTitle{font-style:normal!important}
-#rideSheet[data-world=die-3-mausketiere] #rideTitle{font-style:normal!important}
-
-
 /* v16 — explicit attraction typography + material direction.
    These rules intentionally override all earlier portal title rules. */
 
 /* TARON — Germania One, carved earth/stone relief */
 #rideSheet[data-world=taron]{--world-font:'Germania One',Georgia,serif}
 #rideSheet[data-world=taron] #rideTitle{
-  font-family:'Germania One',Georgia,serif!important;
   font-weight:400!important;
   letter-spacing:.10em!important;
   color:#d9bd8b!important;
@@ -244,7 +207,6 @@
 /* F.L.Y. — Steampunk Machinery first, reliable stencil fallback, brass/steel */
 #rideSheet[data-world=fly]{--world-font:'Steampunk Machinery Font','Stardos Stencil','Barlow Condensed',sans-serif}
 #rideSheet[data-world=fly] #rideTitle{
-  font-family:'Steampunk Machinery Font','Stardos Stencil','Barlow Condensed',sans-serif!important;
   font-weight:700!important;
   letter-spacing:.10em!important;
   color:#d2a25e!important;
@@ -257,7 +219,6 @@
 }
 #rideSheet[data-world=fly] #rideZone,
 #rideSheet[data-world=fly] #worldCaption{
-  font-family:'Stardos Stencil','Barlow Condensed',sans-serif!important;
   letter-spacing:.14em;
   text-transform:uppercase;
 }
@@ -265,7 +226,6 @@
 /* COLORADO ADVENTURE — Rye, wanted poster / timber sign */
 #rideSheet[data-world=colorado-adventure]{--world-font:'Rye',Georgia,serif}
 #rideSheet[data-world=colorado-adventure] #rideTitle{
-  font-family:'Rye',Georgia,serif!important;
   font-weight:400!important;
   letter-spacing:.025em!important;
   color:#3c2416!important;
@@ -281,7 +241,6 @@
 /* MAUS AU CHOCOLAT — Emilys Candy, cream patisserie sign */
 #rideSheet[data-world=maus-au-chocolat]{--world-font:'Emilys Candy','Berkshire Swash',cursive}
 #rideSheet[data-world=maus-au-chocolat] #rideTitle{
-  font-family:'Emilys Candy','Berkshire Swash',cursive!important;
   font-weight:400!important;
   letter-spacing:.01em!important;
   color:#7a3a37!important;
@@ -296,7 +255,6 @@
 /* GEISTER RIKSCHA — Gang of Three, lacquer red + imperial gold */
 #rideSheet[data-world=geister-rikscha]{--world-font:'Gang of Three','ZCOOL XiaoWei',serif}
 #rideSheet[data-world=geister-rikscha] #rideTitle{
-  font-family:'Gang of Three','ZCOOL XiaoWei',serif!important;
   font-weight:400!important;
   letter-spacing:.055em!important;
   color:#efc75e!important;
@@ -310,7 +268,6 @@
 /* MYSTERY CASTLE — Old London, stone/metal + cold glow */
 #rideSheet[data-world=mystery-castle]{--world-font:'Old London','UnifrakturCook',Georgia,serif}
 #rideSheet[data-world=mystery-castle] #rideTitle{
-  font-family:'Old London','UnifrakturCook',Georgia,serif!important;
   font-weight:400!important;
   letter-spacing:.025em!important;
   color:#d7d3dd!important;
@@ -325,7 +282,6 @@
 /* CRAZY BATS — Creepster, purple UV/comic */
 #rideSheet[data-world=crazy-bats]{--world-font:'Creepster','Luckiest Guy',cursive}
 #rideSheet[data-world=crazy-bats] #rideTitle{
-  font-family:'Creepster','Luckiest Guy',cursive!important;
   font-weight:400!important;
   letter-spacing:.035em!important;
   color:#eaff57!important;
@@ -347,150 +303,6 @@
 /* v17 — remove intrusive ornament boxes from attraction artwork */
 #rideSheet[data-world] .worldOrnament{
   display:none!important;
-}
-
-
-/* v18 — carry attraction typography into the home overview.
-   Only attraction names are themed; operational data remains neutral. */
-#rides .ride h3{
-  line-height:1.02;
-  text-wrap:balance;
-}
-
-/* Klugheim */
-#rides .ride[data-world=taron] h3{
-  font-family:'Germania One',Georgia,serif!important;
-  font-weight:400;
-  letter-spacing:.06em;
-  text-transform:uppercase;
-  color:#e0c08d;
-  text-shadow:0 2px 0 #5b3c27,0 4px 9px #000d;
-}
-#rides .ride[data-world=raik] h3{
-  font-family:'Eagle Lake','Grenze Gotisch',Georgia,serif!important;
-  font-weight:400;
-  letter-spacing:.035em;
-  color:#f1d9a5;
-  text-shadow:0 2px 8px #000d;
-}
-
-/* Rookburgh */
-#rides .ride[data-world=fly] h3{
-  font-family:'Steampunk Machinery Font','Stardos Stencil','Barlow Condensed',sans-serif!important;
-  font-weight:700;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:#ddb26f;
-  text-shadow:0 2px 0 #4b3020,0 5px 12px #000d;
-}
-
-/* Deep in Africa */
-#rides .ride[data-world=black-mamba] h3{
-  font-family:'African','Staatliches','Bebas Neue',sans-serif!important;
-  font-weight:400;
-  letter-spacing:.045em;
-  text-transform:uppercase;
-  color:#f1d98a;
-  text-shadow:0 2px 7px #000d;
-}
-#rides .ride[data-world=deep-in-africa-adventure-trail] h3{
-  font-family:'Special Elite',monospace!important;
-  font-weight:400;
-  letter-spacing:.01em;
-  color:#f0ddb3;
-  text-shadow:0 2px 7px #000d;
-}
-
-/* Mystery */
-#rides .ride[data-world=mystery-castle] h3{
-  font-family:'Old London','UnifrakturCook',Georgia,serif!important;
-  font-weight:400;
-  letter-spacing:.02em;
-  color:#e2d9ee;
-  text-shadow:0 0 8px #b6a0d877,0 2px 7px #000d;
-}
-#rides .ride[data-world=river-quest] h3{
-  font-family:'IM Fell English SC',Georgia,serif!important;
-  font-weight:400;
-  letter-spacing:.025em;
-  color:#ddf3ec;
-  text-shadow:0 2px 7px #000d;
-}
-
-/* Mexico */
-#rides .ride[data-world=colorado-adventure] h3{
-  font-family:'Rye',Georgia,serif!important;
-  font-weight:400;
-  letter-spacing:.02em;
-  color:#f1d3a0;
-  text-shadow:0 2px 0 #5a3822,0 4px 9px #000d;
-}
-#rides .ride[data-world=chiapas] h3{
-  font-family:'Bree Serif','Patua One',Georgia,serif!important;
-  font-weight:400;
-  color:#ffe0a3;
-  text-shadow:0 2px 7px #000d;
-}
-#rides .ride[data-world=talocan] h3{
-  font-family:'Cinzel Decorative','Almendra Display',Georgia,serif!important;
-  font-weight:900;
-  letter-spacing:.035em;
-  text-transform:uppercase;
-  color:#ffc473;
-  text-shadow:0 2px 8px #541a0ddd,0 0 12px #cf6c2d55;
-}
-
-/* Fantasy / Wuze Town */
-#rides .ride[data-world=winjas-fear] h3{
-  font-family:'Macondo','Almendra Display',Georgia,serif!important;
-  font-weight:400;
-  color:#f1d8ff;
-  text-shadow:0 2px 7px #000d;
-}
-#rides .ride[data-world=winjas-force] h3{
-  font-family:'Eagle Lake','Cinzel Decorative',Georgia,serif!important;
-  font-weight:400;
-  color:#d9fff6;
-  text-shadow:0 2px 7px #000d;
-}
-#rides .ride[data-world=crazy-bats] h3{
-  font-family:'Creepster','Luckiest Guy',cursive!important;
-  font-weight:400;
-  letter-spacing:.035em;
-  color:#eaff57;
-  -webkit-text-stroke:.55px #6c278d;
-  text-shadow:2px 2px 0 #ee4bd2,0 0 8px #8c28ff,0 3px 8px #000c;
-}
-
-/* China Town */
-#rides .ride[data-world=geister-rikscha] h3{
-  font-family:'Gang of Three','ZCOOL XiaoWei',serif!important;
-  font-weight:400;
-  letter-spacing:.035em;
-  color:#f1c85f;
-  text-shadow:2px 2px 0 #5e1617,0 0 7px #d69a3555,0 3px 8px #000c;
-}
-
-/* Berlin */
-#rides .ride[data-world=maus-au-chocolat] h3{
-  font-family:'Emilys Candy','Berkshire Swash',cursive!important;
-  font-weight:400;
-  color:#ffe7c2;
-  text-shadow:0 2px 0 #793c37,0 3px 8px #000c;
-}
-#rides .ride[data-world=die-3-mausketiere] h3{
-  font-family:'Limelight','Playfair Display',Georgia,serif!important;
-  font-weight:400;
-  letter-spacing:.025em;
-  text-transform:uppercase;
-  color:#f4ddb4;
-  text-shadow:0 2px 7px #000c;
-}
-#rides .ride[data-world=das-verrueckte-hotel-tartueff] h3{
-  font-family:'Bodoni Moda','Abril Fatface',Georgia,serif!important;
-  font-weight:700;
-  color:#f3d7df;
-  text-shadow:0 2px 7px #000c;
 }
 
 
@@ -516,63 +328,26 @@
 }
 
 
-/* v20 — authoritative detail-title font mapping.
-   Mirrors the home-card typography exactly and overrides all legacy font shorthands. */
-#rideSheet[data-world=taron] #rideTitle{
-  font-family:'Germania One',Georgia,serif!important;
-}
-#rideSheet[data-world=fly] #rideTitle{
-  font-family:'Steampunk Machinery Font','Stardos Stencil','Barlow Condensed',sans-serif!important;
-}
-#rideSheet[data-world=black-mamba] #rideTitle{
-  font-family:'African','Staatliches','Bebas Neue',sans-serif!important;
-}
-#rideSheet[data-world=mystery-castle] #rideTitle{
-  font-family:'Old London','UnifrakturCook',Georgia,serif!important;
-}
-#rideSheet[data-world=river-quest] #rideTitle{
-  font-family:'IM Fell English SC',Georgia,serif!important;
-}
-#rideSheet[data-world=chiapas] #rideTitle{
-  font-family:'Bree Serif','Patua One',Georgia,serif!important;
-}
-#rideSheet[data-world=colorado-adventure] #rideTitle{
-  font-family:'Rye',Georgia,serif!important;
-}
-#rideSheet[data-world=talocan] #rideTitle{
-  font-family:'Cinzel Decorative','Almendra Display',Georgia,serif!important;
-}
-#rideSheet[data-world=raik] #rideTitle{
-  font-family:'Eagle Lake','Grenze Gotisch',Georgia,serif!important;
-}
-#rideSheet[data-world=winjas-fear] #rideTitle{
-  font-family:'Macondo','Almendra Display',Georgia,serif!important;
-}
-#rideSheet[data-world=winjas-force] #rideTitle{
-  font-family:'Eagle Lake','Cinzel Decorative',Georgia,serif!important;
-}
-#rideSheet[data-world=geister-rikscha] #rideTitle{
-  font-family:'Gang of Three','ZCOOL XiaoWei',serif!important;
-}
-#rideSheet[data-world=maus-au-chocolat] #rideTitle{
-  font-family:'Emilys Candy','Berkshire Swash',cursive!important;
-}
-#rideSheet[data-world=crazy-bats] #rideTitle{
-  font-family:'Creepster','Luckiest Guy',cursive!important;
-}
-#rideSheet[data-world=die-3-mausketiere] #rideTitle{
-  font-family:'Limelight','Playfair Display',Georgia,serif!important;
-}
-#rideSheet[data-world=deep-in-africa-adventure-trail] #rideTitle{
-  font-family:'Special Elite',monospace!important;
-}
-#rideSheet[data-world=das-verrueckte-hotel-tartueff] #rideTitle{
-  font-family:'Bodoni Moda','Abril Fatface',Georgia,serif!important;
+
+
+/* v21 — one typography source for Home + Detail.
+   app.js sets --attraction-font from ATTRACTION_FONTS. */
+#rides .ride h3,
+#rideSheet #rideTitle{
+  font-family:var(--attraction-font,'Trebuchet MS',system-ui,sans-serif)!important;
 }
 
-/* Neutralize legacy shorthand side effects without flattening the themed styling. */
-#rideSheet[data-world] #rideTitle{
+#rideSheet #rideTitle{
   font-style:normal!important;
   font-variant:normal!important;
   font-stretch:normal!important;
+}
+
+#rideSheet #rideZone,
+#rideSheet #worldCaption,
+#rideSheet .waitCaption,
+#rideSheet #rideDetailStatus,
+#rideSheet .srBox,
+#rideSheet .message{
+  font-family:'Trebuchet MS',system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
 }
