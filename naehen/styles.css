@@ -291,3 +291,207 @@ to{transform:translateY(0);opacity:1}
 
 
 #rideSheet .rideDetailWait{overflow-wrap:anywhere}#rideSheet[data-world=fly] .rideDetailWait{font-size:24px}#rideSheet[data-world=default] .worldArt{display:none}
+
+
+/* v36 — multi-park entry screen */
+.parkPicker{
+  position:fixed;
+  inset:0;
+  z-index:20;
+  overflow:auto;
+  color:#f8f4e9;
+  background:
+    radial-gradient(circle at 18% 8%,rgba(219,236,157,.11),transparent 27%),
+    radial-gradient(circle at 88% 72%,rgba(184,236,199,.08),transparent 31%),
+    linear-gradient(155deg,#111816 0%,#0b100f 48%,#080b0a 100%);
+}
+.parkPickerShell{
+  width:min(100%,620px);
+  min-height:100dvh;
+  margin:0 auto;
+  padding:calc(22px + env(safe-area-inset-top)) 18px calc(34px + env(safe-area-inset-bottom));
+  display:flex;
+  flex-direction:column;
+}
+.parkPickerTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+.parkPickerBrand{
+  font-size:28px;
+  line-height:1;
+  font-weight:950;
+  letter-spacing:-1.3px;
+}
+.parkPickerBrand b{color:var(--accent)}
+.parkPickerMark{
+  width:48px;
+  height:48px;
+  display:grid;
+  place-items:center;
+  border:1px solid #dce9b866;
+  border-radius:9px;
+  background:#17261f;
+  color:#f0f5dc;
+  font:700 24px Georgia,serif;
+  transform:rotate(-5deg);
+  box-shadow:7px 7px 0 #7280552c;
+}
+.parkPickerMark span{color:var(--accent)}
+.parkPickerIntro{
+  margin:clamp(52px,10vh,92px) 2px 28px;
+  max-width:540px;
+}
+.parkPickerIntro h1{
+  margin:9px 0 14px;
+  max-width:520px;
+  font-size:clamp(38px,10vw,62px);
+  line-height:.96;
+  letter-spacing:-2.3px;
+}
+.parkPickerIntro p{
+  margin:0;
+  max-width:520px;
+  color:#c7d0c7;
+  font-size:14px;
+  line-height:1.65;
+}
+.parkGrid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+}
+.parkChoice{
+  position:relative;
+  isolation:isolate;
+  min-height:270px;
+  width:100%;
+  padding:0;
+  overflow:hidden;
+  border:1px solid #9cb29366;
+  border-radius:14px;
+  background:#17211e;
+  color:#fff;
+  text-align:left;
+  cursor:pointer;
+  box-shadow:0 22px 48px #0008,inset 0 1px #ffffff20;
+}
+.parkChoiceArt{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:-3;
+}
+.parkChoice:before{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:-2;
+  background:
+    linear-gradient(180deg,rgba(6,12,10,.06) 0%,rgba(6,12,10,.22) 34%,rgba(6,12,10,.92) 88%,#07100d 100%),
+    linear-gradient(90deg,rgba(4,9,8,.56),transparent 72%);
+}
+.parkChoice:after{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  border:1px solid #ffffff12;
+  border-radius:inherit;
+  pointer-events:none;
+}
+.parkChoiceCopy{
+  min-height:270px;
+  padding:24px 22px 20px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+}
+.parkChoiceMeta{
+  margin-bottom:8px;
+  color:#dce7d0;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1.7px;
+  text-transform:uppercase;
+  text-shadow:0 2px 7px #000;
+}
+.parkChoice h2{
+  margin:0;
+  font-size:clamp(32px,9vw,48px);
+  line-height:.96;
+  letter-spacing:-1.6px;
+  text-shadow:0 3px 12px #000;
+}
+.parkChoice p{
+  margin:10px 0 16px;
+  max-width:410px;
+  color:#e4e9e2;
+  font-size:12px;
+  line-height:1.55;
+}
+.parkChoiceOpen{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  border-top:1px solid #ffffff26;
+  padding-top:14px;
+  color:#eef7d4;
+  font-size:11px;
+  font-weight:950;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+}
+.parkChoiceArrow{
+  font-size:20px;
+  line-height:1;
+  transition:transform .2s ease;
+}
+.parkChoice:hover .parkChoiceArrow{transform:translateX(4px)}
+.parkChoice:focus-visible{
+  outline:3px solid #eefbb3;
+  outline-offset:3px;
+}
+.parkPickerFooter{
+  margin-top:auto;
+  padding:28px 3px 0;
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  color:#94a098;
+  font-size:10px;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+}
+.topbarActions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.parkSwitch{
+  min-height:42px;
+  padding:0 11px;
+  border:1px solid #7181776b;
+  border-radius:7px;
+  background:#131d1a;
+  color:#e9eee6;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.8px;
+  cursor:pointer;
+}
+.parkSwitch:active{transform:translateY(1px)}
+
+@media(max-width:430px){
+  .parkPickerShell{padding-inline:16px}
+  .parkPickerIntro{margin-top:48px}
+  .parkChoice{min-height:246px}
+  .parkChoiceCopy{min-height:246px;padding:21px 18px 18px}
+  .parkPickerFooter{display:block;line-height:1.8}
+  .parkPickerFooter span{display:block}
+}
