@@ -87,6 +87,12 @@ create table if not exists public.push_event_log (
 create index if not exists queue_sessions_user_started_idx on public.queue_sessions(user_id, started_at desc);
 create index if not exists sr_reports_ride_measured_idx on public.sr_reports(ride_id, measured_at desc);
 create index if not exists favorites_user_idx on public.favorites(user_id);
+create index if not exists park_days_user_id_idx on public.park_days(user_id);
+create index if not exists push_event_log_user_id_idx on public.push_event_log(user_id);
+create index if not exists push_subscriptions_user_id_idx on public.push_subscriptions(user_id);
+create index if not exists queue_sessions_park_day_id_idx on public.queue_sessions(park_day_id);
+create index if not exists sr_reports_queue_session_id_idx on public.sr_reports(queue_session_id);
+create index if not exists sr_reports_user_id_idx on public.sr_reports(user_id);
 
 alter table public.profiles enable row level security;
 alter table public.park_days enable row level security;
@@ -94,27 +100,28 @@ alter table public.queue_sessions enable row level security;
 alter table public.favorites enable row level security;
 alter table public.push_subscriptions enable row level security;
 alter table public.sr_reports enable row level security;
-alter table public.live_ride_state enable row level security;\nalter table public.push_event_log enable row level security;
+alter table public.live_ride_state enable row level security;
+alter table public.push_event_log enable row level security;
 
 drop policy if exists "profiles own" on public.profiles;
-create policy "profiles own" on public.profiles for all
-  using (auth.uid()=id) with check (auth.uid()=id);
+create policy "profiles own" on public.profiles for all to authenticated
+  using ((select auth.uid()) = id) with check ((select auth.uid()) = id);
 
 drop policy if exists "park days own" on public.park_days;
-create policy "park days own" on public.park_days for all
-  using (auth.uid()=user_id) with check (auth.uid()=user_id);
+create policy "park days own" on public.park_days for all to authenticated
+  using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
 
 drop policy if exists "queue sessions own" on public.queue_sessions;
-create policy "queue sessions own" on public.queue_sessions for all
-  using (auth.uid()=user_id) with check (auth.uid()=user_id);
+create policy "queue sessions own" on public.queue_sessions for all to authenticated
+  using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
 
 drop policy if exists "favorites own" on public.favorites;
-create policy "favorites own" on public.favorites for all
-  using (auth.uid()=user_id) with check (auth.uid()=user_id);
+create policy "favorites own" on public.favorites for all to authenticated
+  using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
 
 drop policy if exists "push subscriptions own" on public.push_subscriptions;
-create policy "push subscriptions own" on public.push_subscriptions for all
-  using (auth.uid()=user_id) with check (auth.uid()=user_id);
+create policy "push subscriptions own" on public.push_subscriptions for all to authenticated
+  using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
 
 -- Community SR data is deliberately anonymous in the UI:
 -- signed-in users may read wait durations/timestamps; users only write/delete their own rows.
@@ -122,13 +129,15 @@ drop policy if exists "sr reports authenticated read" on public.sr_reports;
 create policy "sr reports authenticated read" on public.sr_reports for select to authenticated using (true);
 drop policy if exists "sr reports own insert" on public.sr_reports;
 create policy "sr reports own insert" on public.sr_reports for insert to authenticated
-  with check (auth.uid()=user_id);
+  with check ((select auth.uid()) = user_id);
 drop policy if exists "sr reports own delete" on public.sr_reports;
 create policy "sr reports own delete" on public.sr_reports for delete to authenticated
-  using (auth.uid()=user_id);
+  using ((select auth.uid()) = user_id);
 
 drop policy if exists "live state authenticated read" on public.live_ride_state;
 create policy "live state authenticated read" on public.live_ride_state for select to authenticated using (true);
+
+revoke all on public.push_event_log from anon, authenticated;
 
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer set search_path=public as $$
@@ -137,7 +146,11 @@ begin
   values(new.id,coalesce(nullif(new.raw_user_meta_data->>'username',''),'Parkfan'))
   on conflict (id) do nothing;
   return new;
-end; $$;
+end; $;
+
+revoke all on function public.handle_new_user() from public;
+revoke all on function public.handle_new_user() from anon;
+revoke all on function public.handle_new_user() from authenticated;
 
 drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created after insert on auth.users
