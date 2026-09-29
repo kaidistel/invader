@@ -857,10 +857,22 @@
     selectedDetailRide = rides.find((ride) => ride.id === rideId) || FALLBACK_RIDES.find((ride) => ride.id === rideId);
     if (!selectedDetailRide) return;
 
-    $("#rideSheet").dataset.world = WORLD[selectedDetailRide.id] ? selectedDetailRide.id : "default";
-    $("#worldCaption").textContent = WORLD[selectedDetailRide.id]?.line || "Deine nächste Nähung.";
+    const world = WORLD[selectedDetailRide.id] || null;
+    const rideSheet = $("#rideSheet");
+    const worldArtImage = $("#worldArtImage");
+    rideSheet.dataset.world = world ? selectedDetailRide.id : "default";
+    if (worldArtImage) {
+      if (world && world.art) {
+        worldArtImage.src = "./assets/" + world.art + ".webp";
+        worldArtImage.hidden = false;
+      } else {
+        worldArtImage.removeAttribute("src");
+        worldArtImage.hidden = true;
+      }
+    }
+    $("#worldCaption").textContent = world?.line || "Deine nächste Nähung.";
     $("#rideTitle").textContent = selectedDetailRide.name;
-    $("#rideZone").textContent = WORLD[selectedDetailRide.id]?.label || selectedDetailRide.zone || "Phantasialand";
+    $("#rideZone").textContent = world?.label || selectedDetailRide.zone || "Phantasialand";
 
     if (selectedDetailRide.source === "queue-times") {
       $("#rideDetailWait").textContent = selectedDetailRide.isOpen ? selectedDetailRide.wait + " min" : "Geschlossen";
