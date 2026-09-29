@@ -5,8 +5,6 @@ on:
     branches: ["main"]
   workflow_dispatch:
   schedule:
-    # Queue-Times updates about every 5 minutes. Offset from the top of the hour
-    # to reduce the chance of GitHub's busiest cron window.
     - cron: "2-57/5 * * * *"
 
 permissions:
@@ -35,6 +33,24 @@ jobs:
             "https://queue-times.com/parks/56/queue_times.json" \
             --output "naehen/live.json"
           test -s "naehen/live.json"
+
+      - name: Evaluate NÄHEN push alerts
+        env:
+          NAEHEN_SUPABASE_URL: ${{ secrets.NAEHEN_SUPABASE_URL }}
+          NAEHEN_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NAEHEN_SUPABASE_SERVICE_ROLE_KEY }}
+          NAEHEN_VAPID_PUBLIC_KEY: ${{ secrets.NAEHEN_VAPID_PUBLIC_KEY }}
+          NAEHEN_VAPID_PRIVATE_KEY: ${{ secrets.NAEHEN_VAPID_PRIVATE_KEY }}
+          NAEHEN_VAPID_SUBJECT: ${{ secrets.NAEHEN_VAPID_SUBJECT }}
+        run: |
+          if [ -z "$NAEHEN_SUPABASE_URL" ] || [ -z "$NAEHEN_SUPABASE_SERVICE_ROLE_KEY" ] || [ -z "$NAEHEN_VAPID_PUBLIC_KEY" ] || [ -z "$NAEHEN_VAPID_PRIVATE_KEY" ]; then
+            echo "NÄHEN push secrets not configured yet; skipping push evaluation."
+            exit 0
+          fi
+          mkdir -p /tmp/naehen-push
+          cd /tmp/naehen-push
+          npm init -y >/dev/null 2>&1
+          npm install --silent web-push@3.6.7
+          NODE_PATH=/tmp/naehen-push/node_modules node "$GITHUB_WORKSPACE/naehen/push-alerts.cjs" "$GITHUB_WORKSPACE/naehen/live.json"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
