@@ -391,7 +391,10 @@
       "river quest": "river-quest",
       "talocan": "talocan"
     };
-    const low = String(name || "").toLowerCase().trim();
+    const low = String(name || "")
+      .replace(/[\u200B-\u200D\uFEFF]/g, "")
+      .toLowerCase()
+      .trim();
     const aliases = aliasesForPark(parkSlug);
 
     if (parkSlug === "phantasialand" && known[low]) return known[low];
