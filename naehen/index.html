@@ -153,7 +153,11 @@ const FALLBACK_RIDES = [
 ];
 let rides=[...FALLBACK_RIDES];
 const QUEUE_TIMES_URL='https://queue-times.com/parks/56/queue_times.json';
-const QUEUE_TIMES_PROXY_URL='https://proxy.cors.dev/'+QUEUE_TIMES_URL;
+const QUEUE_TIMES_PROXIES=[
+  ()=>QUEUE_TIMES_URL,
+  ()=>`https://api.allorigins.win/raw?url=${encodeURIComponent(QUEUE_TIMES_URL)}`,
+  ()=>`https://corsproxy.io/?${encodeURIComponent(QUEUE_TIMES_URL)}`
+];
 const LIVE_REFRESH_MS=5*60*1000;
 
 function slugRide(name){
@@ -177,16 +181,23 @@ async function loadLiveWaits(){
   const label=$('#dataLabel');
   try{
     label.textContent='LIVE WIRD GELADEN…';
-    let res;
-    try{
-      res=await fetch(QUEUE_TIMES_URL,{cache:'no-store'});
-      if(!res.ok)throw new Error('Direktabruf HTTP '+res.status);
-    }catch(directError){
-      console.info('Direkter Queue-Times-Abruf blockiert, nutze CORS-Fallback.',directError);
-      res=await fetch(QUEUE_TIMES_PROXY_URL,{cache:'no-store'});
-      if(!res.ok)throw new Error('Proxy HTTP '+res.status);
+    let data=null,lastError=null;
+    for(const makeUrl of QUEUE_TIMES_PROXIES){
+      const controller=new AbortController();
+      const timer=setTimeout(()=>controller.abort(),6500);
+      try{
+        const res=await fetch(makeUrl(),{cache:'no-store',signal:controller.signal});
+        if(!res.ok)throw new Error('HTTP '+res.status);
+        data=await res.json();
+        clearTimeout(timer);
+        break;
+      }catch(err){
+        clearTimeout(timer);
+        lastError=err;
+        console.info('Live-Daten-Quelle nicht erreichbar, versuche nächste.',err);
+      }
     }
-    const data=await res.json();
+    if(!data)throw lastError||new Error('Keine Live-Datenquelle erreichbar');
     const previous=store.get('naehen:lastWaits',{});
     const flattened=[];
     for(const land of (data.lands||[])){
