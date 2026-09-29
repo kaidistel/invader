@@ -872,3 +872,378 @@
     font-size:clamp(30px,8.4vw,48px)!important;
   }
 }
+
+
+/* v39 — Walibi Holland attraction portals */
+#rideSheet[data-park="walibi-holland"]{
+  --wh-bg:#15191a;
+  --wh-bg2:#090d0e;
+  --wh-accent:#ff4a4a;
+  --wh-title:#fff7ec;
+  --wh-panel:#101617eb;
+  --ink:#f6f5ed;
+  --metal:var(--wh-accent);
+  --veil:var(--wh-bg);
+}
+
+#rideSheet[data-park="walibi-holland"] .sheetCard{
+  background:
+    radial-gradient(circle at 88% 8%,color-mix(in srgb,var(--wh-accent) 16%,transparent),transparent 30%),
+    linear-gradient(155deg,var(--wh-bg),var(--wh-bg2))!important;
+  border-top:4px solid var(--wh-accent)!important;
+  color:var(--ink)!important;
+  padding-top:280px;
+}
+
+#rideSheet[data-park="walibi-holland"] .worldArt{
+  display:block!important;
+  inset:0 0 auto!important;
+  width:100%!important;
+  height:370px!important;
+  border:0!important;
+  border-radius:0!important;
+  clip-path:none;
+  overflow:hidden;
+  box-shadow:none!important;
+}
+
+#rideSheet[data-park="walibi-holland"] .worldArt>img{
+  width:100%!important;
+  height:100%!important;
+  left:0!important;
+  object-fit:cover!important;
+  object-position:center 42%;
+  border:0!important;
+  border-radius:0!important;
+  filter:saturate(1.05) contrast(1.04);
+}
+
+#rideSheet[data-park="walibi-holland"] .worldArt:after{
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.02) 0%,rgba(0,0,0,.06) 48%,color-mix(in srgb,var(--wh-bg) 76%,transparent) 79%,var(--wh-bg) 100%)!important;
+}
+
+#rideSheet[data-park="walibi-holland"] #rideTitle{
+  width:100%!important;
+  margin:8px 0 22px!important;
+  padding:0!important;
+  background:none!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  color:var(--wh-title)!important;
+  text-shadow:0 3px 10px #000,0 0 18px color-mix(in srgb,var(--wh-accent) 30%,transparent)!important;
+}
+
+#rideSheet[data-park="walibi-holland"] #worldCaption,
+#rideSheet[data-park="walibi-holland"] #rideZone,
+#rideSheet[data-park="walibi-holland"] .waitCaption{
+  color:color-mix(in srgb,var(--wh-accent) 76%,#fff 24%)!important;
+  text-shadow:0 2px 8px #000d;
+}
+
+#rideSheet[data-park="walibi-holland"] .rideDetailWait{
+  color:var(--wh-title)!important;
+  border-color:color-mix(in srgb,var(--wh-accent) 62%,transparent)!important;
+}
+
+#rideSheet[data-park="walibi-holland"] #rideDetailStatus,
+#rideSheet[data-park="walibi-holland"] .srBox,
+#rideSheet[data-park="walibi-holland"] .message{
+  background:var(--wh-panel)!important;
+  color:var(--ink)!important;
+  border-color:color-mix(in srgb,var(--wh-accent) 35%,transparent)!important;
+}
+
+#rideSheet[data-park="walibi-holland"] .srBox .meta,
+#rideSheet[data-park="walibi-holland"] .srBox .mini,
+#rideSheet[data-park="walibi-holland"] .message{
+  color:color-mix(in srgb,var(--ink) 90%,var(--wh-accent) 10%)!important;
+}
+
+/* YOY — one identity, two deliberately different sides. */
+#rideSheet[data-park="walibi-holland"][data-theme="yoy-chill"]{
+  --wh-bg:#102a38;--wh-bg2:#07131b;--wh-accent:#52d8ff;--wh-title:#e8fbff;--wh-panel:#0a202bea;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="yoy-thrill"]{
+  --wh-bg:#1d3017;--wh-bg2:#0a1408;--wh-accent:#9bf052;--wh-title:#efffdc;--wh-panel:#13220fea;
+}
+#rideSheet[data-park="walibi-holland"][data-theme^="yoy-"] #rideTitle{
+  text-transform:uppercase;
+  letter-spacing:.08em!important;
+  padding:10px 14px!important;
+  border:2px solid var(--wh-accent)!important;
+  clip-path:polygon(0 0,94% 0,100% 30%,100% 100%,6% 100%,0 70%);
+  background:linear-gradient(90deg,color-mix(in srgb,var(--wh-accent) 14%,#0a0d0f),#0a0d0f)!important;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="yoy-thrill"] #rideTitle{
+  transform:skewX(-3deg);
+}
+
+/* UNTAMED — reclaimed timber, steel and wilderness. */
+#rideSheet[data-park="walibi-holland"][data-theme="untamed"]{
+  --wh-bg:#26301f;--wh-bg2:#0c120b;--wh-accent:#c99758;--wh-title:#f2e1bd;--wh-panel:#182015ed;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="untamed"] .sheetCard{
+  background:
+    linear-gradient(90deg,rgba(32,41,27,.98),rgba(10,16,10,.97)),
+    repeating-linear-gradient(0deg,#37291e 0 26px,#2b2119 27px 29px)!important;
+  border-top:6px double #b88b55!important;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="untamed"] #rideTitle{
+  text-transform:uppercase;
+  transform:rotate(-1deg);
+  border-bottom:4px solid #8d6a40!important;
+  padding-bottom:10px!important;
+}
+
+/* Lost Gravity — black/yellow warning graphics and broken geometry. */
+#rideSheet[data-park="walibi-holland"][data-theme="lost-gravity"]{
+  --wh-bg:#191919;--wh-bg2:#070707;--wh-accent:#f5d600;--wh-title:#fff8bb;--wh-panel:#111111ef;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="lost-gravity"] .sheetCard{
+  background:
+    linear-gradient(145deg,#181818,#090909 65%),
+    repeating-linear-gradient(135deg,transparent 0 16px,#f5d60012 16px 22px)!important;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="lost-gravity"] #rideTitle{
+  text-transform:uppercase;
+  letter-spacing:.07em!important;
+  transform:rotate(-2deg);
+  padding:9px 13px!important;
+  border-left:8px solid #f5d600!important;
+  border-bottom:2px dashed #f5d600!important;
+}
+
+/* Xpress — abandoned metro platform. */
+#rideSheet[data-park="walibi-holland"][data-theme="xpress-platform"]{
+  --wh-bg:#202226;--wh-bg2:#090a0d;--wh-accent:#c94343;--wh-title:#ebe6de;--wh-panel:#15171bec;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="xpress-platform"] .worldArt>img{
+  filter:saturate(.62) contrast(1.18) brightness(.88);
+}
+#rideSheet[data-park="walibi-holland"][data-theme="xpress-platform"] #rideTitle{
+  text-transform:uppercase;
+  letter-spacing:.045em!important;
+  padding:11px 14px!important;
+  border:1px solid #8a8c8f!important;
+  border-left:7px solid #b83a3a!important;
+  background:linear-gradient(90deg,#26282dcc,#111216dd)!important;
+}
+
+/* Speed of Sound — music, waveform and saturated neon. */
+#rideSheet[data-park="walibi-holland"][data-theme="speed-of-sound"]{
+  --wh-bg:#2b1434;--wh-bg2:#100817;--wh-accent:#ff8d38;--wh-title:#fff25f;--wh-panel:#1c0e24eb;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="speed-of-sound"] #rideTitle{
+  transform:rotate(-2deg);
+  text-shadow:3px 3px 0 #752f91,0 0 18px #ff9a44aa!important;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="speed-of-sound"] .rideDetailWait{
+  border-block:3px solid #ff8d38;
+  padding-block:10px;
+}
+
+/* Speed Zone icons. */
+#rideSheet[data-park="walibi-holland"][data-theme="goliath"]{
+  --wh-bg:#10263c;--wh-bg2:#07111c;--wh-accent:#4eb8ff;--wh-title:#e5f5ff;--wh-panel:#0c1d2deb;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="goliath"] #rideTitle{
+  text-transform:uppercase;letter-spacing:.07em!important;
+  border-bottom:4px solid #4eb8ff!important;padding-bottom:9px!important;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="space-shot"]{
+  --wh-bg:#222a35;--wh-bg2:#090d13;--wh-accent:#ff5b4e;--wh-title:#f5fbff;--wh-panel:#121a24eb;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="space-shot"] #rideTitle{
+  text-transform:uppercase;letter-spacing:.09em!important;
+  border-left:6px solid #ff5b4e!important;padding-left:13px!important;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="g-force"]{
+  --wh-bg:#272b2d;--wh-bg2:#0c0e0f;--wh-accent:#b9ff44;--wh-title:#f4ffdc;--wh-panel:#181b1cec;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="g-force"] #rideTitle{
+  text-transform:uppercase;letter-spacing:.08em!important;
+  border-block:2px solid #9bd83e!important;padding-block:10px!important;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="skydiver"]{
+  --wh-bg:#183243;--wh-bg2:#07151e;--wh-accent:#8de6ff;--wh-title:#eafcff;--wh-panel:#102631e8;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="skydiver"] #rideTitle{
+  text-transform:uppercase;
+  letter-spacing:.08em!important;
+}
+
+/* Condor — bright Exotic flight. */
+#rideSheet[data-park="walibi-holland"][data-theme="condor"]{
+  --wh-bg:#2d2517;--wh-bg2:#11100b;--wh-accent:#ff8c35;--wh-title:#fff0c9;--wh-panel:#20190fea;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="condor"] #rideTitle{
+  text-transform:uppercase;
+  letter-spacing:.09em!important;
+  border-left:7px solid #ff8c35!important;
+  padding-left:14px!important;
+}
+
+/* Zero Zone — magnetic chaos, purple/teal energy. */
+#rideSheet[data-park="walibi-holland"][data-theme="zero-zone"],
+#rideSheet[data-park="walibi-holland"][data-theme="blast"]{
+  --wh-bg:#1b2034;--wh-bg2:#0a0c16;--wh-accent:#71ead8;--wh-title:#f0e7ff;--wh-panel:#121727eb;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="zero-zone"] #rideTitle,
+#rideSheet[data-park="walibi-holland"][data-theme="blast"] #rideTitle{
+  transform:skewX(-3deg);
+  text-shadow:3px 3px 0 #6a3b97,0 0 15px #58e6d1aa!important;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="blast"]{
+  --wh-accent:#a4f14d;--wh-title:#f4ffc9;
+}
+
+/* OFF ROAD — sand, steel and utility markings. */
+#rideSheet[data-park="walibi-holland"][data-theme="offroad"],
+#rideSheet[data-park="walibi-holland"][data-theme="offroad-water"]{
+  --wh-bg:#33291d;--wh-bg2:#12100c;--wh-accent:#dfaa52;--wh-title:#f5dfb3;--wh-panel:#211a12eb;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="offroad"] #rideTitle,
+#rideSheet[data-park="walibi-holland"][data-theme="offroad-water"] #rideTitle{
+  text-transform:uppercase;
+  letter-spacing:.045em!important;
+  border-block:2px dashed #c99748!important;
+  padding-block:10px!important;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="offroad-water"]{
+  --wh-accent:#66d8ee;--wh-title:#e6fbff;
+}
+
+/* Water attractions each keep their own material language. */
+#rideSheet[data-park="walibi-holland"][data-theme="crazy-river"]{
+  --wh-bg:#263324;--wh-bg2:#0d1510;--wh-accent:#77c7b2;--wh-title:#e8f3cf;--wh-panel:#182418e9;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="crazy-river"] #rideTitle{
+  transform:rotate(-1deg);
+  border-bottom:4px double #826746!important;
+  padding-bottom:9px!important;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="splash-battle"]{
+  --wh-bg:#103148;--wh-bg2:#071822;--wh-accent:#64d8ff;--wh-title:#fff26b;--wh-panel:#0b2636e9;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="splash-battle"] #rideTitle{
+  transform:rotate(-2deg);
+  text-shadow:3px 3px 0 #e44843,0 0 16px #4dd7ffaa!important;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="exotic-river"]{
+  --wh-bg:#1a3d3d;--wh-bg2:#081818;--wh-accent:#f6be54;--wh-title:#fff0bd;--wh-panel:#102d2dea;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="exotic-river"] #rideTitle{
+  text-align:center;
+  border-block:3px double #f6be54!important;
+  padding-block:10px!important;
+}
+
+/* Exotic — deliberately colourful without sacrificing copy contrast. */
+#rideSheet[data-park="walibi-holland"][data-theme="exotic-fiesta"]{
+  --wh-bg:#3a1d30;--wh-bg2:#160b13;--wh-accent:#ffbf44;--wh-title:#fff1b0;--wh-panel:#261420eb;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="exotic-fiesta"] #rideTitle{
+  transform:rotate(-2deg);
+  text-shadow:3px 3px 0 #e34e6c,0 0 15px #ffc14588!important;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="exotic-pavillon"]{
+  --wh-bg:#243840;--wh-bg2:#0c171b;--wh-accent:#f0c56a;--wh-title:#fff2cb;--wh-panel:#17292feb;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="exotic-pavillon"] #rideTitle{
+  text-align:center;
+  border-bottom:2px solid #f0c56a!important;
+  padding-bottom:10px!important;
+}
+
+/* Merlin — graffiti meets a reclaimed castle in Wilderness. */
+#rideSheet[data-park="walibi-holland"][data-theme="merlin-castle"]{
+  --wh-bg:#202b21;--wh-bg2:#0b100c;--wh-accent:#b895d6;--wh-title:#efe3ff;--wh-panel:#151d16ed;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="merlin-castle"] .worldArt>img{
+  filter:saturate(.82) contrast(1.1);
+}
+#rideSheet[data-park="walibi-holland"][data-theme="merlin-castle"] #rideTitle{
+  text-align:center;
+  border-block:4px double #8f72aa!important;
+  padding-block:11px!important;
+}
+
+/* Main Street / park classics. */
+#rideSheet[data-park="walibi-holland"][data-theme="mainstreet-wheel"]{
+  --wh-bg:#2c2836;--wh-bg2:#100e16;--wh-accent:#f4c36c;--wh-title:#fff0c7;--wh-panel:#1c1826e9;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="mainstreet-wheel"] #rideTitle{text-align:center}
+#rideSheet[data-park="walibi-holland"][data-theme="walibi-express"]{
+  --wh-bg:#293028;--wh-bg2:#101410;--wh-accent:#c99759;--wh-title:#f1e0bc;--wh-panel:#1a2019eb;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="walibi-express"] #rideTitle{
+  text-transform:uppercase;
+  border-bottom:4px double #a77d4d!important;
+  padding-bottom:9px!important;
+}
+
+/* Play Ground — colourful, graphic, deliberately youthful. */
+#rideSheet[data-park="walibi-holland"][data-theme="playground-coaster"],
+#rideSheet[data-park="walibi-holland"][data-theme="playground-swing"],
+#rideSheet[data-park="walibi-holland"][data-theme="playground-carousel"],
+#rideSheet[data-park="walibi-holland"][data-theme="tomahawk"]{
+  --wh-bg:#28203a;--wh-bg2:#0f0b18;--wh-accent:#ffb73d;--wh-title:#fff275;--wh-panel:#1b1529eb;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="playground-coaster"] #rideTitle,
+#rideSheet[data-park="walibi-holland"][data-theme="playground-swing"] #rideTitle,
+#rideSheet[data-park="walibi-holland"][data-theme="playground-carousel"] #rideTitle,
+#rideSheet[data-park="walibi-holland"][data-theme="tomahawk"] #rideTitle{
+  transform:rotate(-2deg);
+}
+#rideSheet[data-park="walibi-holland"][data-theme="tomahawk"]{
+  --wh-accent:#f0df43;--wh-title:#fff9c2;
+}
+
+/* Walibi Play Land — playful titles, calm readable information panels. */
+#rideSheet[data-park="walibi-holland"][data-theme="walibi-kids"],
+#rideSheet[data-park="walibi-holland"][data-theme="walibi-kids-flight"],
+#rideSheet[data-park="walibi-holland"][data-theme="walibi-kids-space"]{
+  --wh-bg:#18384a;--wh-bg2:#091a23;--wh-accent:#ffcc49;--wh-title:#fff174;--wh-panel:#102b38ed;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="walibi-kids"] #rideTitle{
+  transform:rotate(-2deg);
+  text-shadow:3px 3px 0 #ed5b66,0 0 14px #62dcff88!important;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="walibi-kids-flight"]{
+  --wh-accent:#82e0ff;--wh-title:#eafaff;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="walibi-kids-space"]{
+  --wh-bg:#23254e;--wh-bg2:#0b0c20;--wh-accent:#a9d8ff;--wh-title:#fff081;
+}
+
+/* Wilderness garden. */
+#rideSheet[data-park="walibi-holland"][data-theme="wilderness-garden"]{
+  --wh-bg:#203322;--wh-bg2:#0b160d;--wh-accent:#a8d37c;--wh-title:#eff7d8;--wh-panel:#152617e9;
+}
+#rideSheet[data-park="walibi-holland"][data-theme="wilderness-garden"] #rideTitle{
+  text-align:center;
+  border-bottom:2px solid #779f5f!important;
+  padding-bottom:9px!important;
+}
+
+@media(max-width:699px){
+  #rideSheet[data-park="walibi-holland"] .sheetCard{
+    padding-top:calc(300px + env(safe-area-inset-top))!important;
+  }
+  #rideSheet[data-park="walibi-holland"] .worldArt{
+    height:calc(400px + env(safe-area-inset-top))!important;
+  }
+  #rideSheet[data-park="walibi-holland"] #rideTitle{
+    font-size:clamp(34px,10vw,56px)!important;
+    line-height:1.04!important;
+  }
+  #rideSheet[data-park="walibi-holland"][data-theme="xpress-platform"] #rideTitle,
+  #rideSheet[data-park="walibi-holland"][data-theme="merlin-castle"] #rideTitle{
+    font-size:clamp(29px,8.5vw,46px)!important;
+  }
+  #rideSheet[data-park="walibi-holland"][data-theme^="yoy-"] #rideTitle{
+    font-size:clamp(34px,10vw,54px)!important;
+  }
+}
