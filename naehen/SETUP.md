@@ -53,7 +53,7 @@ Repository → Settings → Secrets and variables → Actions → New repository
 Benötigt werden:
 
 - `NAEHEN_SUPABASE_URL` = Supabase Project URL
-- `NAEHEN_SUPABASE_SERVICE_ROLE_KEY` = Supabase Service Role Key
+- `NAEHEN_SUPABASE_SECRET_KEY` = Supabase Secret Key (sb_secret_...)
 - `NAEHEN_VAPID_PUBLIC_KEY` = erzeugter VAPID Public Key
 - `NAEHEN_VAPID_PRIVATE_KEY` = erzeugter VAPID Private Key
 - `NAEHEN_VAPID_SUBJECT` = z. B. `mailto:deine-adresse@example.com`
