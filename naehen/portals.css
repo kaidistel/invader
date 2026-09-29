@@ -348,3 +348,147 @@
 #rideSheet[data-world] .worldOrnament{
   display:none!important;
 }
+
+
+/* v18 — carry attraction typography into the home overview.
+   Only attraction names are themed; operational data remains neutral. */
+#rides .ride h3{
+  line-height:1.02;
+  text-wrap:balance;
+}
+
+/* Klugheim */
+#rides .ride[data-world=taron] h3{
+  font-family:'Germania One',Georgia,serif!important;
+  font-weight:400;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:#e0c08d;
+  text-shadow:0 2px 0 #5b3c27,0 4px 9px #000d;
+}
+#rides .ride[data-world=raik] h3{
+  font-family:'Eagle Lake','Grenze Gotisch',Georgia,serif!important;
+  font-weight:400;
+  letter-spacing:.035em;
+  color:#f1d9a5;
+  text-shadow:0 2px 8px #000d;
+}
+
+/* Rookburgh */
+#rides .ride[data-world=fly] h3{
+  font-family:'Steampunk Machinery Font','Stardos Stencil','Barlow Condensed',sans-serif!important;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#ddb26f;
+  text-shadow:0 2px 0 #4b3020,0 5px 12px #000d;
+}
+
+/* Deep in Africa */
+#rides .ride[data-world=black-mamba] h3{
+  font-family:'African','Staatliches','Bebas Neue',sans-serif!important;
+  font-weight:400;
+  letter-spacing:.045em;
+  text-transform:uppercase;
+  color:#f1d98a;
+  text-shadow:0 2px 7px #000d;
+}
+#rides .ride[data-world=deep-in-africa-adventure-trail] h3{
+  font-family:'Special Elite',monospace!important;
+  font-weight:400;
+  letter-spacing:.01em;
+  color:#f0ddb3;
+  text-shadow:0 2px 7px #000d;
+}
+
+/* Mystery */
+#rides .ride[data-world=mystery-castle] h3{
+  font-family:'Old London','UnifrakturCook',Georgia,serif!important;
+  font-weight:400;
+  letter-spacing:.02em;
+  color:#e2d9ee;
+  text-shadow:0 0 8px #b6a0d877,0 2px 7px #000d;
+}
+#rides .ride[data-world=river-quest] h3{
+  font-family:'IM Fell English SC',Georgia,serif!important;
+  font-weight:400;
+  letter-spacing:.025em;
+  color:#ddf3ec;
+  text-shadow:0 2px 7px #000d;
+}
+
+/* Mexico */
+#rides .ride[data-world=colorado-adventure] h3{
+  font-family:'Rye',Georgia,serif!important;
+  font-weight:400;
+  letter-spacing:.02em;
+  color:#f1d3a0;
+  text-shadow:0 2px 0 #5a3822,0 4px 9px #000d;
+}
+#rides .ride[data-world=chiapas] h3{
+  font-family:'Bree Serif','Patua One',Georgia,serif!important;
+  font-weight:400;
+  color:#ffe0a3;
+  text-shadow:0 2px 7px #000d;
+}
+#rides .ride[data-world=talocan] h3{
+  font-family:'Cinzel Decorative','Almendra Display',Georgia,serif!important;
+  font-weight:900;
+  letter-spacing:.035em;
+  text-transform:uppercase;
+  color:#ffc473;
+  text-shadow:0 2px 8px #541a0ddd,0 0 12px #cf6c2d55;
+}
+
+/* Fantasy / Wuze Town */
+#rides .ride[data-world=winjas-fear] h3{
+  font-family:'Macondo','Almendra Display',Georgia,serif!important;
+  font-weight:400;
+  color:#f1d8ff;
+  text-shadow:0 2px 7px #000d;
+}
+#rides .ride[data-world=winjas-force] h3{
+  font-family:'Eagle Lake','Cinzel Decorative',Georgia,serif!important;
+  font-weight:400;
+  color:#d9fff6;
+  text-shadow:0 2px 7px #000d;
+}
+#rides .ride[data-world=crazy-bats] h3{
+  font-family:'Creepster','Luckiest Guy',cursive!important;
+  font-weight:400;
+  letter-spacing:.035em;
+  color:#eaff57;
+  -webkit-text-stroke:.55px #6c278d;
+  text-shadow:2px 2px 0 #ee4bd2,0 0 8px #8c28ff,0 3px 8px #000c;
+}
+
+/* China Town */
+#rides .ride[data-world=geister-rikscha] h3{
+  font-family:'Gang of Three','ZCOOL XiaoWei',serif!important;
+  font-weight:400;
+  letter-spacing:.035em;
+  color:#f1c85f;
+  text-shadow:2px 2px 0 #5e1617,0 0 7px #d69a3555,0 3px 8px #000c;
+}
+
+/* Berlin */
+#rides .ride[data-world=maus-au-chocolat] h3{
+  font-family:'Emilys Candy','Berkshire Swash',cursive!important;
+  font-weight:400;
+  color:#ffe7c2;
+  text-shadow:0 2px 0 #793c37,0 3px 8px #000c;
+}
+#rides .ride[data-world=die-3-mausketiere] h3{
+  font-family:'Limelight','Playfair Display',Georgia,serif!important;
+  font-weight:400;
+  letter-spacing:.025em;
+  text-transform:uppercase;
+  color:#f4ddb4;
+  text-shadow:0 2px 7px #000c;
+}
+#rides .ride[data-world=das-verrueckte-hotel-tartueff] h3{
+  font-family:'Bodoni Moda','Abril Fatface',Georgia,serif!important;
+  font-weight:700;
+  color:#f3d7df;
+  text-shadow:0 2px 7px #000c;
+}
