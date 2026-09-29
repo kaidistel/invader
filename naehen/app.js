@@ -4,7 +4,17 @@
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => Array.from(document.querySelectorAll(s));
   const cfg = window.NAEHEN_CONFIG || {};
-  const LIVE_DATA_URL = "./live.json";
+  const PARKS = {
+    phantasialand: {
+      slug: "phantasialand",
+      name: "Phantasialand",
+      location: "Brühl · Nordrhein-Westfalen",
+      liveDataUrl: "./live.json",
+      cardImage: "./assets/park.webp",
+      cardCopy: "Live-Wartezeiten, Nähprotokoll und deine Phantasialand-Attraktionen.",
+      disclaimer: "Kein offizielles Angebot des Phantasialands."
+    }
+  };
   const LIVE_REFRESH_MS = 5 * 60 * 1000;
   const SR_FRESH_MINUTES = 30;
   const SR_VISIBLE_MINUTES = 60;
@@ -85,6 +95,9 @@
   let rideSearch = "";
   let onlyFavorites = false;
   let lastSheetFocus = null;
+  let activeParkSlug = null;
+  let liveRefreshTimer = null;
+  let liveVisibilityBound = false;
   const WORLD = {
     taron: {label:"KLUGHEIM · DER PULS", line:"Zwischen Basalt und glühendem Stahl.", art:"taron"},
     "river-quest": {label:"MYSTERY · WASSERWEG", line:"Die Burg verschluckt den Fluss.", art:"river-quest"},
@@ -412,6 +425,110 @@
     };
   }
 
+  function activeParkConfig() {
+    return activeParkSlug ? PARKS[activeParkSlug] || null : null;
+  }
+
+  function renderParkPicker() {
+    const grid = $("#parkGrid");
+    if (!grid) return;
+
+    const available = Object.values(PARKS);
+    grid.innerHTML = available.map((park) =>
+      "<button class=\"parkChoice\" type=\"button\" data-park=\"" + escapeHtml(park.slug) + "\">" +
+        "<img class=\"parkChoiceArt\" src=\"" + escapeHtml(park.cardImage) + "\" alt=\"\" loading=\"eager\">" +
+        "<span class=\"parkChoiceCopy\">" +
+          "<span class=\"parkChoiceMeta\">" + escapeHtml(park.location) + "</span>" +
+          "<h2>" + escapeHtml(park.name) + "</h2>" +
+          "<p>" + escapeHtml(park.cardCopy) + "</p>" +
+          "<span class=\"parkChoiceOpen\"><span>Park öffnen</span><span class=\"parkChoiceArrow\" aria-hidden=\"true\">→</span></span>" +
+        "</span>" +
+      "</button>"
+    ).join("");
+
+    const count = $("#parkCount");
+    if (count) count.textContent = available.length + (available.length === 1 ? " Park verfügbar" : " Parks verfügbar");
+
+    grid.querySelectorAll("[data-park]").forEach((button) => {
+      button.addEventListener("click", () => openPark(button.dataset.park));
+    });
+  }
+
+  function stopLiveRefresh() {
+    if (liveRefreshTimer) {
+      window.clearInterval(liveRefreshTimer);
+      liveRefreshTimer = null;
+    }
+  }
+
+  function startLiveRefresh() {
+    stopLiveRefresh();
+    liveRefreshTimer = window.setInterval(() => {
+      if (activeParkSlug) loadLiveWaits();
+    }, LIVE_REFRESH_MS);
+
+    if (!liveVisibilityBound) {
+      liveVisibilityBound = true;
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible" && activeParkSlug) loadLiveWaits();
+      }, { passive: true });
+    }
+  }
+
+  function showParkPicker(options = {}) {
+    stopLiveRefresh();
+    activeParkSlug = null;
+    $("#app")?.classList.add("hidden");
+    $("#nav")?.classList.add("hidden");
+    $("#parkPicker")?.classList.remove("hidden");
+    document.body.classList.remove("modalOpen");
+    document.querySelectorAll(".sheet.show").forEach((sheet) => sheet.classList.remove("show"));
+    renderParkPicker();
+
+    if (options.replaceHistory) {
+      history.replaceState({ naehenParkPicker: true }, "", location.href);
+    }
+  }
+
+  async function openPark(parkSlug, options = {}) {
+    const park = PARKS[parkSlug];
+    if (!park) return;
+
+    activeParkSlug = parkSlug;
+    $("#parkPicker")?.classList.add("hidden");
+    $("#app")?.classList.remove("hidden");
+    $("#nav")?.classList.remove("hidden");
+
+    if (options.pushHistory !== false) {
+      history.pushState({ naehenPark: parkSlug }, "", location.href);
+    }
+
+    const eyebrow = $("#parkDayEyebrow");
+    if (eyebrow) eyebrow.textContent = park.name + " · Parktag";
+    const disclaimer = $("#parkDisclaimer");
+    if (disclaimer) disclaimer.innerHTML = "NÄHEN · Dein unabhängiger Parkbegleiter.<br>" + escapeHtml(park.disclaimer);
+
+    rideSearch = "";
+    onlyFavorites = false;
+    const rideSearchInput = $("#rideSearch");
+    if (rideSearchInput) rideSearchInput.value = "";
+    const favoriteFilter = $("#favoriteFilter");
+    if (favoriteFilter) favoriteFilter.setAttribute("aria-pressed", "false");
+
+    if (!localMode) {
+      await loadAccountState(parkSlug);
+    }
+
+    favorites = favorites.filter((id) => !EXCLUDED_RIDE_IDS.has(id));
+    EXCLUDED_RIDE_IDS.forEach((id) => delete favoriteSettings[id]);
+    persistLocalState();
+
+    switchView("homeView");
+    renderAll();
+    await loadLiveWaits();
+    startLiveRefresh();
+  }
+
   function persistLocalState() {
     store.set("naehen:parkDay", parkDay);
     store.set("naehen:sessions", sessions);
@@ -436,7 +553,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=35", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=36", {
           scope: "./",
           updateViaCache: "none"
         });
@@ -483,8 +600,8 @@
     user = appUser || null;
     localMode = !!useLocalMode;
     ["#installGate", "#setupGate", "#authGate"].forEach(hideGate);
-    $("#app").classList.remove("hidden");
-    $("#nav").classList.remove("hidden");
+    $("#app").classList.add("hidden");
+    $("#nav").classList.add("hidden");
 
     if (localMode) {
       $("#accountMode").textContent = "Lokaler Testmodus";
@@ -500,28 +617,31 @@
       $("#accountMode").textContent = appUser.email || "Account";
       $("#profileName").textContent = (appUser.user_metadata && appUser.user_metadata.username) || (appUser.email ? appUser.email.split("@")[0] : "Parkfan");
       $("#profileMail").textContent = appUser.email || "";
-      await loadAccountState();
     }
 
     favorites = favorites.filter((id) => !EXCLUDED_RIDE_IDS.has(id));
     EXCLUDED_RIDE_IDS.forEach((id) => delete favoriteSettings[id]);
     persistLocalState();
 
-    renderAll();
-    loadLiveWaits();
-    window.setInterval(loadLiveWaits, LIVE_REFRESH_MS);
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible") loadLiveWaits();
-    }, { passive: true });
+    const pickerAccount = $("#parkPickerAccount");
+    if (pickerAccount) {
+      pickerAccount.textContent = localMode
+        ? "Lokaler Testmodus"
+        : ((appUser.user_metadata && appUser.user_metadata.username) || appUser.email || "Account");
+    }
+
+    renderParkPicker();
+    showParkPicker({ replaceHistory: true });
   }
 
-  async function loadAccountState() {
+  async function loadAccountState(parkSlug = activeParkSlug || "phantasialand") {
     if (!supa || !currentUserId()) return;
 
     const activeDayResult = await supa
       .from("park_days")
       .select("*")
       .eq("user_id", currentUserId())
+      .eq("park_slug", parkSlug)
       .is("ended_at", null)
       .order("started_at", { ascending: false })
       .limit(1);
@@ -602,11 +722,14 @@
     const label = $("#dataLabel");
     if (!label) return;
 
+    const park = activeParkConfig();
+    if (!park) return;
+
     try {
       label.textContent = "LIVE WIRD GELADEN…";
       const controller = new AbortController();
       const timer = window.setTimeout(() => controller.abort(), 6500);
-      const response = await fetch(LIVE_DATA_URL + "?t=" + Date.now(), {
+      const response = await fetch(park.liveDataUrl + "?t=" + Date.now(), {
         cache: "no-store",
         signal: controller.signal
       });
@@ -614,16 +737,16 @@
       if (!response.ok) throw new Error("Live-Snapshot HTTP " + response.status);
 
       const data = await response.json();
-      const previous = store.get("naehen:lastWaits", {});
+      const previous = store.get("naehen:lastWaits:" + park.slug, {});
       const flattened = [];
 
       (data.lands || []).forEach((land) => {
         (land.rides || []).forEach((ride) => {
-          flattened.push(Object.assign({}, ride, { zone: land.name || "Phantasialand" }));
+          flattened.push(Object.assign({}, ride, { zone: land.name || park.name }));
         });
       });
       (data.rides || []).forEach((ride) => {
-        flattened.push(Object.assign({}, ride, { zone: "Phantasialand" }));
+        flattened.push(Object.assign({}, ride, { zone: park.name }));
       });
       if (!flattened.length) throw new Error("Keine Attraktionen in Live-Snapshot");
 
@@ -665,7 +788,7 @@
         return aFav - bFav || a.name.localeCompare(b.name, "de");
       });
 
-      store.set("naehen:lastWaits", nowState);
+      store.set("naehen:lastWaits:" + park.slug, nowState);
       label.textContent = "LIVE · GITHUB SYNC";
       renderRides();
     } catch (error) {
@@ -818,13 +941,14 @@
 
     const now = new Date().toISOString();
     const id = createId();
-    const nextDay = { id: id, park_slug: "phantasialand", started_at: now, ended_at: null };
+    const parkSlug = activeParkSlug || "phantasialand";
+    const nextDay = { id: id, park_slug: parkSlug, started_at: now, ended_at: null };
 
     if (supa && currentUserId()) {
       const result = await supa.from("park_days").insert({
         id: id,
         user_id: currentUserId(),
-        park_slug: "phantasialand",
+        park_slug: parkSlug,
         started_at: now
       }).select("*").single();
 
@@ -1090,7 +1214,7 @@
     }
     $("#worldCaption").textContent = world?.line || "Deine nächste Nähung.";
     $("#rideTitle").textContent = selectedDetailRide.name;
-    $("#rideZone").textContent = world?.label || selectedDetailRide.zone || "Phantasialand";
+    $("#rideZone").textContent = world?.label || selectedDetailRide.zone || activeParkConfig()?.name || "Park";
 
     if (selectedDetailRide.source === "queue-times") {
       $("#rideDetailWait").textContent = selectedDetailRide.isOpen ? selectedDetailRide.wait + " min" : "Geschlossen";
@@ -1312,10 +1436,22 @@
     $$("[data-view]").forEach((button) => button.classList.toggle("active", button.dataset.view === viewId));
   }
 
-  window.addEventListener("popstate", () => {
+  window.addEventListener("popstate", (event) => {
     const rideSheet = $("#rideSheet");
     if (rideSheet?.classList.contains("show")) {
       closeSheet("rideSheet", { fromPopState: true });
+      return;
+    }
+
+    if (event.state?.naehenPark) {
+      if (activeParkSlug !== event.state.naehenPark) {
+        openPark(event.state.naehenPark, { pushHistory: false });
+      }
+      return;
+    }
+
+    if (event.state?.naehenParkPicker || activeParkSlug) {
+      showParkPicker();
     }
   });
 
@@ -1438,6 +1574,10 @@
       button.addEventListener("click", () => switchView(button.dataset.view));
     });
 
+    $("#parkSwitchBtn").addEventListener("click", () => {
+      if (history.state?.naehenPark) history.back();
+      else showParkPicker({ replaceHistory: true });
+    });
     $("#avatarBtn").addEventListener("click", () => switchView("profileView"));
     $("#pushSettingsBtn").addEventListener("click", () => {
       renderPushSettings();
