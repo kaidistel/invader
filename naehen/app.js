@@ -17,7 +17,8 @@
   };
   const EXTERNAL_PARK_MODULES = [
     window.NAEHEN_MOVIE_PARK,
-    window.NAEHEN_WALIBI_HOLLAND
+    window.NAEHEN_WALIBI_HOLLAND,
+    window.NAEHEN_EUROPA_PARK
   ].filter((module) => module && module.park && module.park.slug);
 
   const PARK_MODULES = {};
@@ -510,6 +511,39 @@
     );
   }
 
+  async function loadParkArtManifest(parkSlug) {
+    const module = parkModuleFor(parkSlug);
+    const park = PARKS[parkSlug];
+    if (!module || !park?.artManifestUrl || module._artManifestLoaded) return;
+
+    try {
+      const response = await fetch(park.artManifestUrl + "?t=" + Date.now(), { cache: "no-store" });
+      if (!response.ok) throw new Error("Art manifest HTTP " + response.status);
+      const manifest = await response.json();
+
+      Object.entries(manifest.rides || {}).forEach(([rideId, imageUrl]) => {
+        if (module.worlds?.[rideId] && imageUrl) module.worlds[rideId].artUrl = imageUrl;
+      });
+
+      if (manifest.parkCardImage) park.cardImage = manifest.parkCardImage;
+      module._artManifestLoaded = true;
+    } catch (error) {
+      console.warn("Park-Art konnte nicht geladen werden", parkSlug, error);
+    }
+  }
+
+  function hydrateParkPickerArt() {
+    Object.values(PARKS).forEach(async (park) => {
+      if (!park.artManifestUrl) return;
+      await loadParkArtManifest(park.slug);
+      const img = document.querySelector('.parkChoice[data-park="' + park.slug + '"] .parkChoiceArt');
+      if (img && park.cardImage) {
+        img.src = park.cardImage;
+        img.hidden = false;
+      }
+    });
+  }
+
   function activeParkConfig() {
     return activeParkSlug ? PARKS[activeParkSlug] || null : null;
   }
@@ -521,7 +555,9 @@
     const available = Object.values(PARKS);
     grid.innerHTML = available.map((park) =>
       "<button class=\"parkChoice\" type=\"button\" data-park=\"" + escapeHtml(park.slug) + "\">" +
-        "<img class=\"parkChoiceArt\" src=\"" + escapeHtml(park.cardImage) + "\" alt=\"\" loading=\"eager\">" +
+        (park.cardImage
+          ? "<img class=\"parkChoiceArt\" src=\"" + escapeHtml(park.cardImage) + "\" alt=\"\" loading=\"eager\">"
+          : "<img class=\"parkChoiceArt\" alt=\"\" loading=\"eager\" hidden>") +
         "<span class=\"parkChoiceCopy\">" +
           "<span class=\"parkChoiceMeta\">" + escapeHtml(park.location) + "</span>" +
           "<h2>" + escapeHtml(park.name) + "</h2>" +
@@ -537,6 +573,8 @@
     grid.querySelectorAll("[data-park]").forEach((button) => {
       button.addEventListener("click", () => openPark(button.dataset.park));
     });
+
+    hydrateParkPickerArt();
   }
 
   function stopLiveRefresh() {
@@ -581,7 +619,13 @@
     if (!park) return;
 
     activeParkSlug = parkSlug;
+    await loadParkArtManifest(parkSlug);
     document.body.dataset.park = parkSlug;
+    if (park.cardImage) {
+      document.body.style.setProperty("--park-hero-image", 'url("' + park.cardImage.replace(/"/g, '\"') + '")');
+    } else {
+      document.body.style.removeProperty("--park-hero-image");
+    }
     rides = fallbackRidesFor(parkSlug).map((ride) => Object.assign({}, ride));
     selectedRide = null;
     selectedDetailRide = null;
