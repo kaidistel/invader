@@ -500,3 +500,37 @@ to{transform:translateY(0);opacity:1}
   .parkPickerFooter{display:block;line-height:1.8}
   .parkPickerFooter span{display:block}
 }
+
+
+/* v38 — Movie Park Germany park-level atmosphere */
+body[data-park="movie-park-germany"]{
+  --accent:#ffd34f;
+  --accent2:#86d8ff;
+  --line:#53615c;
+}
+
+body[data-park="movie-park-germany"] .parkAtmosphere{
+  background:
+    linear-gradient(180deg,rgba(10,12,13,.24) 0%,rgba(10,12,13,.72) 42%,#101514 84%),
+    url('https://www.movieparkgermany.de/content/dam/mpg/images/attractions/movie-park-studio-tour/2024/MPST_MAIN_2024.jpg') center 25%/cover no-repeat;
+}
+
+body[data-park="movie-park-germany"] .hero{
+  background:
+    linear-gradient(135deg,rgba(39,24,18,.94),rgba(15,21,22,.94)),
+    repeating-linear-gradient(45deg,transparent 0 10px,rgba(255,211,79,.05) 10px 12px);
+  border-color:rgba(255,211,79,.34);
+}
+
+body[data-park="movie-park-germany"] .hero:before{
+  background:linear-gradient(#ffd34f,#ef4343);
+}
+
+body[data-park="movie-park-germany"] .brand b,
+body[data-park="movie-park-germany"] .brandDot{
+  color:#ffd34f;
+}
+
+body[data-park="movie-park-germany"] .ride{
+  border-color:rgba(255,220,151,.24);
+}
