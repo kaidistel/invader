@@ -117,7 +117,16 @@ const PUSH_EXCLUDED_RIDES = new Set([
   "pumpkin-village",
   "pumpkin-boulevard",
   "harvest-market",
-  "magic-forest"
+  "magic-forest",
+  "wb-aquarium",
+  "wb-mine-blast",
+  "wb-silence",
+  "wb-grand-hotel",
+  "wb-arachnophobia",
+  "wb-innocence",
+  "wb-psycho-circus",
+  "wb-bill-a-fairy-tale",
+  "wb-freaky-pizza"
 ]);
 
 async function rest(path, options) {
@@ -133,14 +142,15 @@ async function rest(path, options) {
   return text ? JSON.parse(text) : null;
 }
 
-function flattenLive(data) {
+function flattenLive(data, options = {}) {
   const rows = [];
+  const idPrefix = options.idPrefix || "";
   (data.lands || []).forEach((land) => {
     (land.rides || []).forEach((ride) => rows.push(ride));
   });
   (data.rides || []).forEach((ride) => rows.push(ride));
   return rows.filter((ride) => !/^virtualline:/i.test(String(ride.name || ""))).map((ride) => ({
-    ride_id: slugRide(ride.name),
+    ride_id: idPrefix + slugRide(ride.name),
     ride_name: ride.name,
     wait_time: Number(ride.wait_time) || 0,
     is_open: !!ride.is_open,
@@ -184,7 +194,13 @@ async function sendToUser(userId, payload, subscriptions) {
 }
 
 (async () => {
-  const live = livePaths.flatMap((livePath) => flattenLive(JSON.parse(fs.readFileSync(livePath, "utf8"))));
+  const live = livePaths.flatMap((livePath) => {
+    const isWalibiBelgium = /live-walibi-belgium\.json$/i.test(livePath);
+    return flattenLive(
+      JSON.parse(fs.readFileSync(livePath, "utf8")),
+      { idPrefix: isWalibiBelgium ? "wb-" : "" }
+    );
+  });
   const previous = await rest("live_ride_state?select=*") || [];
   const favorites = await rest("favorites?select=*") || [];
   const subscriptions = await rest("push_subscriptions?select=*") || [];
