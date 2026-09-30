@@ -93,6 +93,16 @@
       icon: "⚡",
       description: "Mindestens 100 km/h genäht.",
       thresholdKmh: 100
+    },
+    "ich-hab-mir-das-nicht-ausgesucht": {
+      id: "ich-hab-mir-das-nicht-ausgesucht",
+      title: "Ich hab mir das nicht Ausgesucht",
+      icon: "🐋",
+      imageUrl: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Humpback_whale_in_ocean.jpg?width=640",
+      imageAlt: "Buckelwal im Meer",
+      description: "Mindestens 30 Minuten Wartezeit überstanden.",
+      lockedDescription: "Warte bei einer Fahrt mindestens 30 Minuten.",
+      thresholdWaitMs: 30 * 60 * 1000
     }
   };
 
@@ -446,7 +456,8 @@
       rideId: context.rideId || null,
       rideName: context.rideName || null,
       parkSlug: context.parkSlug || null,
-      speedKmh: context.speedKmh || null
+      speedKmh: context.speedKmh || null,
+      waitedMinutes: context.waitedMinutes || null
     };
     await persistAchievements();
     renderProfile();
@@ -454,20 +465,35 @@
   }
 
   async function evaluateRideAchievements(session) {
-    if (!session || session.status !== "ridden") return null;
+    if (!session || session.status !== "ridden") return [];
+    const unlockedNow = [];
     const parkSlug = session.parkSlug || activeParkSlug || "phantasialand";
     const speedKmh = Number(session.speedKmh) || rideSpeedKmh(session.rideId, parkSlug);
     const speedAchievement = ACHIEVEMENT_DEFINITIONS.beschleunigger;
 
     if (speedKmh !== null && speedKmh >= speedAchievement.thresholdKmh) {
-      return unlockAchievement("beschleunigger", {
+      const unlocked = await unlockAchievement("beschleunigger", {
         rideId: session.rideId,
         rideName: session.rideName,
         parkSlug: parkSlug,
         speedKmh: speedKmh
       });
+      if (unlocked) unlockedNow.push(unlocked);
     }
-    return null;
+
+    const waitAchievement = ACHIEVEMENT_DEFINITIONS["ich-hab-mir-das-nicht-ausgesucht"];
+    if (Number(session.duration) >= waitAchievement.thresholdWaitMs) {
+      const waitedMinutes = Math.floor(Number(session.duration) / 60000);
+      const unlocked = await unlockAchievement("ich-hab-mir-das-nicht-ausgesucht", {
+        rideId: session.rideId,
+        rideName: session.rideName,
+        parkSlug: parkSlug,
+        waitedMinutes: waitedMinutes
+      });
+      if (unlocked) unlockedNow.push(unlocked);
+    }
+
+    return unlockedNow;
   }
 
   function applyAttractionTypography(element, rideId) {
@@ -802,7 +828,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=55", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=56", {
           scope: "./",
           updateViaCache: "none"
         });
@@ -1300,34 +1326,43 @@
     const count = $("#achievementCount");
     if (!list) return;
 
-    const definition = ACHIEVEMENT_DEFINITIONS.beschleunigger;
-    const unlocked = achievements.beschleunigger || null;
-    if (count) count.textContent = unlocked ? "1 / 1" : "0 / 1";
+    const definitions = Object.values(ACHIEVEMENT_DEFINITIONS);
+    const unlockedCount = definitions.filter((definition) => !!achievements[definition.id]).length;
+    if (count) count.textContent = unlockedCount + " / " + definitions.length;
 
-    if (unlocked) {
-      const detail = [
-        unlocked.rideName || "",
-        unlocked.speedKmh ? unlocked.speedKmh + " km/h" : ""
-      ].filter(Boolean).join(" · ");
+    list.innerHTML = definitions.map((definition) => {
+      const unlocked = achievements[definition.id] || null;
+      const iconMarkup = definition.imageUrl
+        ? "<div class=\"achievementImageWrap\"><img class=\"achievementImage\" src=\"" + escapeHtml(definition.imageUrl) + "\" alt=\"" + escapeHtml(definition.imageAlt || "") + "\" loading=\"lazy\"></div>"
+        : "<div class=\"achievementIcon\" aria-hidden=\"true\">" + escapeHtml(definition.icon || "🏅") + "</div>";
 
-      list.innerHTML =
-        "<div class=\"achievementBadge unlocked\">" +
-          "<div class=\"achievementIcon\" aria-hidden=\"true\">" + definition.icon + "</div>" +
+      if (unlocked) {
+        const detail = [
+          unlocked.rideName || "",
+          unlocked.speedKmh ? unlocked.speedKmh + " km/h" : "",
+          unlocked.waitedMinutes ? unlocked.waitedMinutes + " min gewartet" : ""
+        ].filter(Boolean).join(" · ");
+
+        return "<div class=\"achievementBadge unlocked\" data-achievement=\"" + escapeHtml(definition.id) + "\">" +
+          iconMarkup +
           "<div class=\"achievementCopy\"><b>" + escapeHtml(definition.title) + "</b>" +
           "<span>" + escapeHtml(definition.description) + "</span>" +
           (detail ? "<small>Freigeschaltet mit " + escapeHtml(detail) + "</small>" : "") +
           "</div><div class=\"achievementState\">✓</div>" +
         "</div>";
-    } else {
-      list.innerHTML =
-        "<div class=\"achievementBadge locked\">" +
-          "<div class=\"achievementIcon\" aria-hidden=\"true\">⚡</div>" +
-          "<div class=\"achievementCopy\"><b>" + escapeHtml(definition.title) + "</b>" +
-          "<span>Fahre eine Attraktion mit mindestens " + definition.thresholdKmh + " km/h.</span>" +
-          "<small>Noch nicht freigeschaltet</small></div>" +
-          "<div class=\"achievementState\" aria-hidden=\"true\">🔒</div>" +
-        "</div>";
-    }
+      }
+
+      const lockedText = definition.lockedDescription ||
+        (definition.thresholdKmh ? "Fahre eine Attraktion mit mindestens " + definition.thresholdKmh + " km/h." : definition.description);
+
+      return "<div class=\"achievementBadge locked\" data-achievement=\"" + escapeHtml(definition.id) + "\">" +
+        iconMarkup +
+        "<div class=\"achievementCopy\"><b>" + escapeHtml(definition.title) + "</b>" +
+        "<span>" + escapeHtml(lockedText) + "</span>" +
+        "<small>Noch nicht freigeschaltet</small></div>" +
+        "<div class=\"achievementState\" aria-hidden=\"true\">🔒</div>" +
+      "</div>";
+    }).join("");
   }
 
   function openQueue(rideId) {
@@ -1467,18 +1502,25 @@
       await recordSrReport(finished);
     }
 
-    const unlockedAchievement = status === "ridden"
+    const unlockedAchievements = status === "ridden"
       ? await evaluateRideAchievements(finished)
-      : null;
+      : [];
 
     active = null;
     persistLocalState();
     closeSheet("activeSheet");
     renderAll();
 
-    if (unlockedAchievement) {
-      const speed = unlockedAchievement.speedKmh ? " · " + unlockedAchievement.speedKmh + " km/h" : "";
-      toast("🏅 " + unlockedAchievement.title + " freigeschaltet!" + speed);
+    if (unlockedAchievements.length === 1) {
+      const unlockedAchievement = unlockedAchievements[0];
+      const extra = unlockedAchievement.speedKmh
+        ? " · " + unlockedAchievement.speedKmh + " km/h"
+        : unlockedAchievement.waitedMinutes
+          ? " · " + unlockedAchievement.waitedMinutes + " min"
+          : "";
+      toast("🏅 " + unlockedAchievement.title + " freigeschaltet!" + extra);
+    } else if (unlockedAchievements.length > 1) {
+      toast("🏅 " + unlockedAchievements.length + " Achievements freigeschaltet!");
     } else {
       toast(status === "ridden" ? "🎢 Sauber genäht." : "💀 Vernäht.");
     }
