@@ -96,6 +96,60 @@ function slugRide(name) {
   return low.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ß/g, "ss").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
+const HANSA_LIVE_ALIASES = {
+  '"flower magic" boat tour': "blumenmeer-bootsfahrt",
+  "flower magic boat tour": "blumenmeer-bootsfahrt",
+  '"highlander"': "highlander",
+  "highlander": "highlander",
+  "1903 somerset traffic": "1903-somerset-traffic",
+  "animal babies of peterhof": "die-tierkinder-vom-peterhof",
+  "awilda’s adventure ride": "awildas-abenteuerfahrt",
+  "awilda's adventure ride": "awildas-abenteuerfahrt",
+  "awilda’s lookout": "awildas-ausguck",
+  "awilda's lookout": "awildas-ausguck",
+  "barcos del mar": "barcos-del-mar",
+  "barracuda slide": "barracuda-slide",
+  "beach trucks at the pirates camp": "beach-trucks-im-piraten-camp",
+  "carrousel baltique": "carrousel-baltique",
+  "cog ship ride": "koggenfahrt",
+  "crazy mine": "crazy-mine",
+  "dr livingstone’s safari-flight": "dr-livingstones-safari-flug",
+  "dr livingstone's safari-flight": "dr-livingstones-safari-flug",
+  "einar's fjord cruise": "einars-fjordfahrt",
+  "einar’s fjord cruise": "einars-fjordfahrt",
+  "elin's travels through the sky": "elins-luftreise",
+  "elin’s travels through the sky": "elins-luftreise",
+  "escape of novgorod": "flucht-von-novgorod",
+  "flying orcas": "flying-orcas",
+  "hansa carousel": "hanse-karussell",
+  "hansa swing ride": "hanse-flieger",
+  "hansa-park express": "hansa-park-express",
+  "indian river": "indian-river",
+  "kärnapulten": "kaernapulten",
+  "kaernapulten": "kaernapulten",
+  "luftikus": "luftikus",
+  "midgard serpent": "die-schlange-von-midgard",
+  "nessie": "nessie",
+  "new: cornwall coaster": "cornwall-coaster",
+  "cornwall coaster": "cornwall-coaster",
+  "peterhof tower": "turm-vom-peterhof",
+  "pony express": "pony-post",
+  "pow wow": "pow-wow",
+  "royal scotsman": "royal-scotsman",
+  "safari jeeps": "safari-jeeps",
+  "space scooter": "space-scooter",
+  "stormy dragon boat ride": "sturmfahrt-der-drachenboote",
+  "störtebeker's sea raid": "stoertebekers-kaperfahrt",
+  "störtebeker’s sea raid": "stoertebekers-kaperfahrt",
+  "super splash": "super-splash",
+  "swing boat": "schiffschaukel",
+  "the oath of kärnan": "der-schwur-des-kaernan",
+  "the little tsar": "der-kleine-zar",
+  "viking boat trip": "wikinger-bootsfahrt",
+  "wave rider": "wellenreiter",
+  "wild water ride - the great pike": "wildwasserfahrt-wasserwolf"
+};
+
 const PUSH_EXCLUDED_RIDES = new Set([
   "berliner-einlauten",
   "berliner-einlaufen",
@@ -145,18 +199,22 @@ async function rest(path, options) {
 function flattenLive(data, options = {}) {
   const rows = [];
   const idPrefix = options.idPrefix || "";
+  const aliases = options.aliases || {};
   (data.lands || []).forEach((land) => {
     (land.rides || []).forEach((ride) => rows.push(ride));
   });
   (data.rides || []).forEach((ride) => rows.push(ride));
-  return rows.filter((ride) => !/^virtualline:/i.test(String(ride.name || ""))).map((ride) => ({
-    ride_id: idPrefix + slugRide(ride.name),
-    ride_name: ride.name,
-    wait_time: Number(ride.wait_time) || 0,
-    is_open: !!ride.is_open,
-    source_updated_at: ride.last_updated || null,
-    synced_at: new Date().toISOString()
-  })).filter((ride) => !PUSH_EXCLUDED_RIDES.has(ride.ride_id));
+  return rows.filter((ride) => !/^virtualline:/i.test(String(ride.name || ""))).map((ride) => {
+    const low = String(ride.name || "").replace(/[\u200B-\u200D\uFEFF]/g, "").toLowerCase().trim();
+    return {
+      ride_id: idPrefix + (aliases[low] || slugRide(ride.name)),
+      ride_name: ride.name,
+      wait_time: Number(ride.wait_time) || 0,
+      is_open: !!ride.is_open,
+      source_updated_at: ride.last_updated || null,
+      synced_at: new Date().toISOString()
+    };
+  }).filter((ride) => !PUSH_EXCLUDED_RIDES.has(ride.ride_id));
 }
 
 function eventPayload(type, ride, extra) {
@@ -196,9 +254,13 @@ async function sendToUser(userId, payload, subscriptions) {
 (async () => {
   const live = livePaths.flatMap((livePath) => {
     const isWalibiBelgium = /live-walibi-belgium\.json$/i.test(livePath);
+    const isHansaPark = /live-hansa-park\.json$/i.test(livePath);
     return flattenLive(
       JSON.parse(fs.readFileSync(livePath, "utf8")),
-      { idPrefix: isWalibiBelgium ? "wb-" : "" }
+      {
+        idPrefix: isWalibiBelgium ? "wb-" : isHansaPark ? "hp-" : "",
+        aliases: isHansaPark ? HANSA_LIVE_ALIASES : {}
+      }
     );
   });
   const previous = await rest("live_ride_state?select=*") || [];
