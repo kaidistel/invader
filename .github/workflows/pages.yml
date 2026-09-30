@@ -48,6 +48,12 @@ jobs:
 
           curl --fail --silent --show-error --location \
             --retry 3 --retry-delay 2 --max-time 25 \
+            "https://queue-times.com/parks/14/queue_times.json" \
+            --output "naehen/live-walibi-belgium.json"
+          test -s "naehen/live-walibi-belgium.json"
+
+          curl --fail --silent --show-error --location \
+            --retry 3 --retry-delay 2 --max-time 25 \
             "https://queue-times.com/parks/51/queue_times.json" \
             --output "naehen/live-europa-park.json"
           test -s "naehen/live-europa-park.json"
@@ -80,6 +86,7 @@ jobs:
             "$GITHUB_WORKSPACE/naehen/live.json" \
             "$GITHUB_WORKSPACE/naehen/live-movie-park.json" \
             "$GITHUB_WORKSPACE/naehen/live-walibi-holland.json" \
+            "$GITHUB_WORKSPACE/naehen/live-walibi-belgium.json" \
             "$GITHUB_WORKSPACE/naehen/live-europa-park.json"
 
       - name: Configure Pages
