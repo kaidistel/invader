@@ -720,7 +720,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=50", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=51", {
           scope: "./",
           updateViaCache: "none"
         });
