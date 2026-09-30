@@ -720,7 +720,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=51", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=52", {
           scope: "./",
           updateViaCache: "none"
         });
@@ -739,8 +739,9 @@
       supa = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
     }
 
-    const skippedInstall = store.get("naehen:skipInstall", false);
-    if (!isStandalone() && !skippedInstall) {
+    // Installation is mandatory: browser mode never exposes setup/auth/app.
+    store.remove("naehen:skipInstall");
+    if (!isStandalone()) {
       showGate("#installGate");
       return;
     }
@@ -749,6 +750,12 @@
   }
 
   async function continueAfterInstall() {
+    // Defense in depth: auth is only reachable from the installed PWA.
+    if (!isStandalone()) {
+      showGate("#installGate");
+      return;
+    }
+
     if (!supa) {
       showGate("#setupGate");
       return;
@@ -764,6 +771,11 @@
   }
 
   async function enterApp(appUser, useLocalMode) {
+    if (!isStandalone()) {
+      showGate("#installGate");
+      return;
+    }
+
     user = appUser || null;
     localMode = !!useLocalMode;
     ["#installGate", "#setupGate", "#authGate"].forEach(hideGate);
@@ -1676,22 +1688,37 @@
     $("#installBtn").addEventListener("click", async () => {
       if (isIOS()) {
         $("#iosSteps").classList.remove("hidden");
+        const status = $("#installStatus");
+        if (status) status.textContent = "Nach dem Hinzufügen NÄHEN über das neue Home-Bildschirm-Icon öffnen.";
         return;
       }
       if (deferredInstall) {
         deferredInstall.prompt();
-        await deferredInstall.userChoice;
+        const choice = await deferredInstall.userChoice;
         deferredInstall = null;
-        store.set("naehen:skipInstall", true);
-        await continueAfterInstall();
+        if (choice && choice.outcome === "accepted") {
+          $("#installBtn").textContent = "INSTALLIERT · ÜBER APP-ICON ÖFFNEN";
+          $("#installBtn").disabled = true;
+          const status = $("#installStatus");
+          if (status) status.textContent = "Installation abgeschlossen. Schließe diesen Browser-Tab und öffne NÄHEN über das installierte App-Icon. Erst dort erscheint der Login.";
+          toast("✓ Installiert · jetzt über das NÄHEN-Icon öffnen");
+        }
       } else {
+        const status = $("#installStatus");
+        if (status) status.textContent = "Installiere NÄHEN über das Browser-Menü und öffne anschließend die installierte App.";
         toast("Browser-Menü → App installieren / Zum Startbildschirm");
       }
     });
 
-    $("#previewBtn").addEventListener("click", async () => {
-      store.set("naehen:skipInstall", true);
-      await continueAfterInstall();
+    window.addEventListener("appinstalled", () => {
+      deferredInstall = null;
+      const button = $("#installBtn");
+      if (button) {
+        button.textContent = "INSTALLIERT · ÜBER APP-ICON ÖFFNEN";
+        button.disabled = true;
+      }
+      const status = $("#installStatus");
+      if (status) status.textContent = "Installation abgeschlossen. Login und Registrierung sind ausschließlich in der installierten NÄHEN-App verfügbar.";
     });
 
     $("#localModeBtn").addEventListener("click", async () => {
@@ -1711,6 +1738,10 @@
     });
 
     $("#authBtn").addEventListener("click", async () => {
+      if (!isStandalone()) {
+        showGate("#installGate");
+        return;
+      }
       if (!supa) return;
       const email = $("#email").value.trim();
       const password = $("#password").value;
