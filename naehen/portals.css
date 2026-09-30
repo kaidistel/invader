@@ -1863,3 +1863,196 @@
   #rideSheet[data-park="phantasialand"][data-world="fly"] .worldProp.show{width:120px;height:96px;top:194px}
   #rideSheet[data-park="phantasialand"][data-world="black-mamba"] #rideTitle{min-width:0;width:100%}
 }
+
+
+/* v43 — flagship portal polish: safe title bounds, visible scenic layers, Taron composition fix. */
+#rideSheet[data-park="phantasialand"][data-world="taron"] .worldOrnament,
+#rideSheet[data-park="phantasialand"][data-world="fly"] .worldOrnament,
+#rideSheet[data-park="phantasialand"][data-world="black-mamba"] .worldOrnament,
+#rideSheet[data-park="phantasialand"][data-world="chiapas"] .worldOrnament{
+  display:block!important;
+}
+
+/* Keep decorative type safely inside the viewport even with unusual display-font ascenders. */
+#rideSheet[data-park="phantasialand"][data-world="taron"] #rideTitle,
+#rideSheet[data-park="phantasialand"][data-world="fly"] #rideTitle,
+#rideSheet[data-park="phantasialand"][data-world="black-mamba"] #rideTitle,
+#rideSheet[data-park="phantasialand"][data-world="chiapas"] #rideTitle{
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  overflow:visible!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+  hyphens:none!important;
+  line-height:1.10!important;
+  padding-top:clamp(10px,2.5vw,16px)!important;
+  padding-bottom:clamp(11px,2.8vw,18px)!important;
+  padding-left:clamp(14px,4vw,24px)!important;
+  padding-right:clamp(14px,4vw,24px)!important;
+  transform-origin:center!important;
+}
+
+/* TARON: preserve the official ram graphic, but keep it clear of Close and the title transition. */
+#rideSheet[data-park="phantasialand"][data-world="taron"] .worldBadge{
+  width:96px!important;
+  height:96px!important;
+  top:82px!important;
+  right:24px!important;
+  left:auto!important;
+  opacity:.96!important;
+}
+#rideSheet[data-park="phantasialand"][data-world="taron"] .worldOrnament{
+  top:28px!important;
+  left:18px!important;
+  right:18px!important;
+  height:258px!important;
+}
+#rideSheet[data-park="phantasialand"][data-world="taron"] .worldOrnament:after{
+  left:18px!important;
+  bottom:18px!important;
+  max-width:calc(100% - 150px);
+}
+#rideSheet[data-park="phantasialand"][data-world="taron"] #rideTitle{
+  margin:2px 0 20px!important;
+  font-size:clamp(52px,14.5vw,84px)!important;
+  letter-spacing:.075em!important;
+  transform:skewY(-1.2deg)!important;
+  border-bottom:5px solid #a86839!important;
+}
+
+/* F.L.Y.: make the engineering layers read as part of Rookburgh rather than a generic photo card. */
+#rideSheet[data-park="phantasialand"][data-world="fly"] .worldOrnament{
+  display:block!important;
+  background:
+    radial-gradient(circle at 16px 16px,#d7a76c 0 2px,transparent 3px),
+    radial-gradient(circle at calc(100% - 16px) 16px,#d7a76c 0 2px,transparent 3px);
+}
+#rideSheet[data-park="phantasialand"][data-world="fly"] #rideTitle{
+  margin:0 0 20px!important;
+  font-size:clamp(50px,14vw,78px)!important;
+  letter-spacing:.13em!important;
+}
+
+/* BLACK MAMBA: let the tribal frame and mask actually participate in the hero composition. */
+#rideSheet[data-park="phantasialand"][data-world="black-mamba"] .worldOrnament{
+  display:block!important;
+}
+#rideSheet[data-park="phantasialand"][data-world="black-mamba"] .worldBadge{
+  top:54px!important;
+  right:28px!important;
+  width:110px!important;
+  height:110px!important;
+}
+#rideSheet[data-park="phantasialand"][data-world="black-mamba"] #rideTitle{
+  margin:0 0 20px!important;
+  font-size:clamp(50px,13vw,76px)!important;
+}
+
+/* CHIAPAS: expose the Mexico frame and keep the hand-painted title completely visible. */
+#rideSheet[data-park="phantasialand"][data-world="chiapas"] .worldOrnament{
+  display:block!important;
+}
+#rideSheet[data-park="phantasialand"][data-world="chiapas"] .worldBadge{
+  top:34px!important;
+  left:24px!important;
+  width:172px!important;
+  height:66px!important;
+}
+#rideSheet[data-park="phantasialand"][data-world="chiapas"] #rideTitle{
+  margin:0 0 18px!important;
+  font-size:clamp(40px,10.5vw,61px)!important;
+  transform:none!important;
+}
+
+/* Mystery Castle: restore the pre-v42 full-bleed portal exactly in spirit and remove added badge/prop layers. */
+#rideSheet[data-park="phantasialand"][data-world="mystery-castle"] .worldBadge,
+#rideSheet[data-park="phantasialand"][data-world="mystery-castle"] .worldProp,
+#rideSheet[data-park="phantasialand"][data-world="mystery-castle"] .worldOrnament{
+  display:none!important;
+}
+#rideSheet[data-park="phantasialand"][data-world="mystery-castle"] .sheetCard{
+  text-align:center!important;
+  background:linear-gradient(180deg,#17131d 0%,#181722 48%,#121016 100%)!important;
+  border-top:0!important;
+  border-left:1px solid var(--metal)!important;
+  border-right:1px solid var(--metal)!important;
+  padding-top:270px;
+}
+#rideSheet[data-park="phantasialand"][data-world="mystery-castle"] .worldArt{
+  inset:0 0 auto!important;
+  width:100%!important;
+  height:430px!important;
+  border:0!important;
+  border-radius:0!important;
+  clip-path:none!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+}
+#rideSheet[data-park="phantasialand"][data-world="mystery-castle"] .worldArt>img{
+  width:100%!important;
+  height:100%!important;
+  left:0!important;
+  object-fit:cover!important;
+  object-position:center 34%!important;
+  border:0!important;
+  border-radius:0!important;
+  filter:saturate(.92) contrast(1.04)!important;
+}
+#rideSheet[data-park="phantasialand"][data-world="mystery-castle"] .worldArt:after{
+  background:
+    linear-gradient(180deg,rgba(13,10,18,.06) 0%,rgba(16,12,22,.08) 48%,rgba(24,23,34,.78) 78%,#181722 100%)!important;
+}
+#rideSheet[data-park="phantasialand"][data-world="mystery-castle"] #rideTitle{
+  width:auto!important;
+  max-width:100%!important;
+  margin:10px auto 28px!important;
+  padding:0!important;
+  background:none!important;
+  border:0!important;
+  outline:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  color:#eee7f8!important;
+  line-height:1.04!important;
+  text-shadow:0 3px 12px #000d,0 0 12px #a89abc66!important;
+  overflow:visible!important;
+}
+#rideSheet[data-park="phantasialand"][data-world="mystery-castle"] .rideDetailWait{
+  border-left:0!important;
+  padding-left:0!important;
+}
+
+@media(max-width:430px){
+  #rideSheet[data-park="phantasialand"][data-world="taron"] #rideTitle{
+    font-size:clamp(48px,14vw,66px)!important;
+    letter-spacing:.055em!important;
+  }
+  #rideSheet[data-park="phantasialand"][data-world="fly"] #rideTitle{
+    font-size:clamp(45px,13vw,62px)!important;
+    letter-spacing:.10em!important;
+  }
+  #rideSheet[data-park="phantasialand"][data-world="black-mamba"] #rideTitle{
+    font-size:clamp(42px,12vw,58px)!important;
+  }
+  #rideSheet[data-park="phantasialand"][data-world="chiapas"] #rideTitle{
+    font-size:clamp(38px,10.5vw,52px)!important;
+  }
+  #rideSheet[data-park="phantasialand"][data-world="taron"] .worldBadge{
+    width:82px!important;height:82px!important;top:86px!important;right:20px!important;
+  }
+  #rideSheet[data-park="phantasialand"][data-world="black-mamba"] .worldBadge{
+    width:94px!important;height:94px!important;top:62px!important;right:20px!important;
+  }
+  #rideSheet[data-park="phantasialand"][data-world="mystery-castle"] .sheetCard{
+    padding-top:calc(310px + env(safe-area-inset-top))!important;
+  }
+  #rideSheet[data-park="phantasialand"][data-world="mystery-castle"] .worldArt{
+    height:calc(410px + env(safe-area-inset-top))!important;
+  }
+  #rideSheet[data-park="phantasialand"][data-world="mystery-castle"] #rideTitle{
+    font-size:clamp(38px,11vw,58px)!important;
+    line-height:1.04!important;
+  }
+}
