@@ -721,7 +721,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=53", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=54", {
           scope: "./",
           updateViaCache: "none"
         });
@@ -1151,7 +1151,11 @@
     active = null;
     persistLocalState();
     renderAll();
-    toast("🧵 Parktag gestartet. Jetzt wird genäht.");
+    if (Math.random() < 0.15) {
+      toast("🧵 Parktag gestartet. Ich näh gern.");
+    } else {
+      toast("🧵 Parktag gestartet. Jetzt wird genäht.");
+    }
   }
 
   async function endParkDay() {
