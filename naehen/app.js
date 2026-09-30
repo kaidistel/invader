@@ -86,6 +86,16 @@
     "deep-in-africa-adventure-trail": { singleRider: false }, "das-verrueckte-hotel-tartueff": { singleRider: false }
   };
 
+  const ACHIEVEMENT_DEFINITIONS = {
+    beschleunigger: {
+      id: "beschleunigger",
+      title: "Beschleunigger",
+      icon: "⚡",
+      description: "Mindestens 100 km/h genäht.",
+      thresholdKmh: 100
+    }
+  };
+
   const FALLBACK_RIDES = [
     { id: "taron", name: "Taron", zone: "Mystery" },
     { id: "fly", name: "F.L.Y.", zone: "Rookburgh" },
@@ -365,6 +375,7 @@
   let favoriteSettings = store.get("naehen:favoriteSettings", {});
   let totalRideCount = store.get("naehen:totalRideCount", sessions.filter((s) => s.status === "ridden").length);
   let srReportsLocal = store.get("naehen:srReports", []);
+  let achievements = {};
 
   function attractionFontConfig(rideId, parkSlug = activeParkSlug || "phantasialand") {
     const module = parkModuleFor(parkSlug);
@@ -390,6 +401,75 @@
     return RIDE_CONFIG;
   }
 
+  function rideSpeedKmh(rideId, parkSlug = activeParkSlug || "phantasialand") {
+    const value = Number(rideConfigForPark(parkSlug)?.[rideId]?.speedKmh);
+    return Number.isFinite(value) && value > 0 ? value : null;
+  }
+
+  function achievementStoreKey() {
+    return currentUserId()
+      ? "naehen:achievements:" + currentUserId()
+      : "naehen:achievements:local";
+  }
+
+  function loadAchievementState(appUser = user) {
+    const local = store.get(achievementStoreKey(), {});
+    const cloud = !localMode && appUser?.user_metadata?.naehen_achievements;
+    achievements = cloud && typeof cloud === "object" && !Array.isArray(cloud)
+      ? Object.assign({}, local, cloud)
+      : local;
+    store.set(achievementStoreKey(), achievements);
+  }
+
+  async function persistAchievements() {
+    store.set(achievementStoreKey(), achievements);
+    if (!supa || localMode || !currentUserId()) return;
+
+    try {
+      const result = await supa.auth.updateUser({
+        data: { naehen_achievements: achievements }
+      });
+      if (result?.data?.user) user = result.data.user;
+      if (result?.error) console.warn("Achievements konnten nicht synchronisiert werden", result.error);
+    } catch (error) {
+      console.warn("Achievements konnten nicht synchronisiert werden", error);
+    }
+  }
+
+  async function unlockAchievement(id, context = {}) {
+    const definition = ACHIEVEMENT_DEFINITIONS[id];
+    if (!definition || achievements[id]) return null;
+
+    achievements[id] = {
+      id: id,
+      unlockedAt: Date.now(),
+      rideId: context.rideId || null,
+      rideName: context.rideName || null,
+      parkSlug: context.parkSlug || null,
+      speedKmh: context.speedKmh || null
+    };
+    await persistAchievements();
+    renderProfile();
+    return Object.assign({}, definition, achievements[id]);
+  }
+
+  async function evaluateRideAchievements(session) {
+    if (!session || session.status !== "ridden") return null;
+    const parkSlug = session.parkSlug || activeParkSlug || "phantasialand";
+    const speedKmh = Number(session.speedKmh) || rideSpeedKmh(session.rideId, parkSlug);
+    const speedAchievement = ACHIEVEMENT_DEFINITIONS.beschleunigger;
+
+    if (speedKmh !== null && speedKmh >= speedAchievement.thresholdKmh) {
+      return unlockAchievement("beschleunigger", {
+        rideId: session.rideId,
+        rideName: session.rideName,
+        parkSlug: parkSlug,
+        speedKmh: speedKmh
+      });
+    }
+    return null;
+  }
+
   function applyAttractionTypography(element, rideId) {
     if (!element) return;
     const config = attractionFontConfig(rideId);
@@ -405,6 +485,7 @@
   function enrichRide(ride, parkSlug = activeParkSlug || "phantasialand") {
     const config = rideConfigForPark(parkSlug)[ride.id] || { singleRider: false };
     ride.singleRider = !!config.singleRider;
+    ride.speedKmh = Number.isFinite(Number(config.speedKmh)) ? Number(config.speedKmh) : null;
     ride.parkSlug = parkSlug;
     return ride;
   }
@@ -721,7 +802,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=54", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=55", {
           scope: "./",
           updateViaCache: "none"
         });
@@ -798,6 +879,8 @@
       $("#profileName").textContent = (appUser.user_metadata && appUser.user_metadata.username) || (appUser.email ? appUser.email.split("@")[0] : "Parkfan");
       $("#profileMail").textContent = appUser.email || "";
     }
+
+    loadAchievementState(appUser);
 
     const pickerAccount = $("#parkPickerAccount");
     if (pickerAccount) {
@@ -1212,6 +1295,39 @@
 
   function renderProfile() {
     $("#totalRides").textContent = totalRideCount;
+
+    const list = $("#achievementList");
+    const count = $("#achievementCount");
+    if (!list) return;
+
+    const definition = ACHIEVEMENT_DEFINITIONS.beschleunigger;
+    const unlocked = achievements.beschleunigger || null;
+    if (count) count.textContent = unlocked ? "1 / 1" : "0 / 1";
+
+    if (unlocked) {
+      const detail = [
+        unlocked.rideName || "",
+        unlocked.speedKmh ? unlocked.speedKmh + " km/h" : ""
+      ].filter(Boolean).join(" · ");
+
+      list.innerHTML =
+        "<div class=\"achievementBadge unlocked\">" +
+          "<div class=\"achievementIcon\" aria-hidden=\"true\">" + definition.icon + "</div>" +
+          "<div class=\"achievementCopy\"><b>" + escapeHtml(definition.title) + "</b>" +
+          "<span>" + escapeHtml(definition.description) + "</span>" +
+          (detail ? "<small>Freigeschaltet mit " + escapeHtml(detail) + "</small>" : "") +
+          "</div><div class=\"achievementState\">✓</div>" +
+        "</div>";
+    } else {
+      list.innerHTML =
+        "<div class=\"achievementBadge locked\">" +
+          "<div class=\"achievementIcon\" aria-hidden=\"true\">⚡</div>" +
+          "<div class=\"achievementCopy\"><b>" + escapeHtml(definition.title) + "</b>" +
+          "<span>Fahre eine Attraktion mit mindestens " + definition.thresholdKmh + " km/h.</span>" +
+          "<small>Noch nicht freigeschaltet</small></div>" +
+          "<div class=\"achievementState\" aria-hidden=\"true\">🔒</div>" +
+        "</div>";
+    }
   }
 
   function openQueue(rideId) {
@@ -1251,6 +1367,8 @@
       id: id,
       rideId: selectedRide.id,
       rideName: selectedRide.name,
+      parkSlug: activeParkSlug || "phantasialand",
+      speedKmh: selectedRide.speedKmh || rideSpeedKmh(selectedRide.id),
       type: queueType,
       posted: Number.isFinite(posted) ? posted : null,
       startedAt: now,
@@ -1349,11 +1467,21 @@
       await recordSrReport(finished);
     }
 
+    const unlockedAchievement = status === "ridden"
+      ? await evaluateRideAchievements(finished)
+      : null;
+
     active = null;
     persistLocalState();
     closeSheet("activeSheet");
     renderAll();
-    toast(status === "ridden" ? "🎢 Sauber genäht." : "💀 Vernäht.");
+
+    if (unlockedAchievement) {
+      const speed = unlockedAchievement.speedKmh ? " · " + unlockedAchievement.speedKmh + " km/h" : "";
+      toast("🏅 " + unlockedAchievement.title + " freigeschaltet!" + speed);
+    } else {
+      toast(status === "ridden" ? "🎢 Sauber genäht." : "💀 Vernäht.");
+    }
   }
 
   async function recordSrReport(session) {
