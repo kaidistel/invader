@@ -203,6 +203,7 @@
   rides.forEach((ride) => {
     rideConfig[ride.id] = {singleRider: singleRiderIds.has(ride.id)};
   });
+  rideConfig["goliath"].speedKmh = 106;
 
   window.NAEHEN_WALIBI_HOLLAND = {
     park: {
