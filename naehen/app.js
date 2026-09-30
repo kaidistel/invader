@@ -71,7 +71,7 @@
   };
 
   const RIDE_CONFIG = {
-    "taron": { singleRider: true },
+    "taron": { singleRider: true, speedKmh: 117 },
     "raik": { singleRider: true },
     "fly": { singleRider: false },
     "black-mamba": { singleRider: false },
