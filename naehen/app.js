@@ -19,7 +19,8 @@
     window.NAEHEN_MOVIE_PARK,
     window.NAEHEN_WALIBI_HOLLAND,
     window.NAEHEN_WALIBI_BELGIUM,
-    window.NAEHEN_EUROPA_PARK
+    window.NAEHEN_EUROPA_PARK,
+    window.NAEHEN_HANSA_PARK
   ].filter((module) => module && module.park && module.park.slug);
 
   const PARK_MODULES = {};
@@ -828,7 +829,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=56", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=57", {
           scope: "./",
           updateViaCache: "none"
         });
