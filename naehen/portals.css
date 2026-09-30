@@ -2761,3 +2761,433 @@
     font-size:clamp(30px,8.5vw,48px)!important;
   }
 }
+
+
+/* v57 — HANSA-PARK · 41 attraction portals */
+#rideSheet[data-park="hansa-park"]{
+  --hp-bg:#132027;
+  --hp-bg2:#081015;
+  --hp-accent:#d9bd78;
+  --hp-title:#fff5d7;
+  --hp-panel:#10191eea;
+  --ink:#f7f3e8;
+}
+#rideSheet[data-park="hansa-park"] .sheetCard{
+  padding-top:292px;
+  color:var(--ink)!important;
+  border-top:5px solid var(--hp-accent)!important;
+  background:
+    radial-gradient(circle at 88% 5%,color-mix(in srgb,var(--hp-accent) 17%,transparent),transparent 29%),
+    linear-gradient(155deg,var(--hp-bg),var(--hp-bg2))!important;
+}
+#rideSheet[data-park="hansa-park"] .worldArt{
+  display:block!important;
+  inset:0 0 auto!important;
+  width:100%!important;
+  height:390px!important;
+  border:0!important;
+  border-radius:0!important;
+  clip-path:none!important;
+  overflow:hidden!important;
+  box-shadow:none!important;
+}
+#rideSheet[data-park="hansa-park"] .worldArt>img{
+  width:100%!important;
+  height:100%!important;
+  left:0!important;
+  object-fit:cover!important;
+  object-position:center 45%;
+  border:0!important;
+  border-radius:0!important;
+  filter:saturate(1.04) contrast(1.04);
+}
+#rideSheet[data-park="hansa-park"] .worldArt:after{
+  background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.04) 47%,color-mix(in srgb,var(--hp-bg) 72%,transparent) 78%,var(--hp-bg) 100%)!important;
+}
+#rideSheet[data-park="hansa-park"] #rideTitle{
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  margin:7px 0 22px!important;
+  padding:10px 0 12px!important;
+  color:var(--hp-title)!important;
+  border:0!important;
+  background:none!important;
+  box-shadow:none!important;
+  line-height:1.04!important;
+  overflow:visible!important;
+  overflow-wrap:break-word!important;
+  word-break:normal!important;
+  hyphens:none!important;
+  text-shadow:0 3px 12px #000,0 0 18px color-mix(in srgb,var(--hp-accent) 25%,transparent)!important;
+  transform:none!important;
+}
+#rideSheet[data-park="hansa-park"] #worldCaption,
+#rideSheet[data-park="hansa-park"] #rideZone,
+#rideSheet[data-park="hansa-park"] .waitCaption{
+  color:color-mix(in srgb,var(--hp-accent) 76%,#fff 24%)!important;
+  text-shadow:0 2px 8px #000d;
+}
+#rideSheet[data-park="hansa-park"] .rideDetailWait{
+  color:var(--hp-title)!important;
+}
+#rideSheet[data-park="hansa-park"] #rideDetailStatus,
+#rideSheet[data-park="hansa-park"] .srBox,
+#rideSheet[data-park="hansa-park"] .message{
+  background:var(--hp-panel)!important;
+  color:var(--ink)!important;
+  border-color:color-mix(in srgb,var(--hp-accent) 35%,transparent)!important;
+}
+
+/* KÄRNAN — cold fortress stone, bronze fittings and a broken shield silhouette. */
+#rideSheet[data-park="hansa-park"][data-theme="kaernan-fortress"]{
+  --hp-bg:#171919;--hp-bg2:#070808;--hp-accent:#a77b3f;--hp-title:#e8d3aa;--hp-panel:#111211ef;
+}
+#rideSheet[data-park="hansa-park"][data-theme="kaernan-fortress"] .sheetCard{
+  background:
+    repeating-linear-gradient(97deg,rgba(255,255,255,.018) 0 2px,transparent 2px 42px),
+    radial-gradient(circle at 15% 38%,rgba(136,95,49,.14),transparent 25%),
+    linear-gradient(155deg,#1b1d1c,#070808)!important;
+  border-top:8px double #7d5b32!important;
+}
+#rideSheet[data-park="hansa-park"][data-theme="kaernan-fortress"] #rideTitle{
+  width:min(100%,520px)!important;
+  padding:18px 24px 20px!important;
+  letter-spacing:.065em!important;
+  text-transform:uppercase;
+  background:
+    linear-gradient(95deg,#282723f2,#131411f0),
+    repeating-linear-gradient(84deg,transparent 0 28px,rgba(255,255,255,.035) 28px 30px)!important;
+  border:2px solid #735735!important;
+  box-shadow:inset 0 0 0 3px #111,0 12px 25px #0009!important;
+  clip-path:polygon(2% 10%,11% 3%,20% 8%,31% 2%,42% 7%,53% 1%,64% 8%,75% 3%,87% 9%,98% 5%,100% 84%,94% 97%,81% 92%,69% 99%,55% 93%,42% 100%,28% 92%,14% 98%,0 88%)!important;
+}
+
+/* Flucht von Novgorod — scorched brick and warning-red launch markings. */
+#rideSheet[data-park="hansa-park"][data-theme="novgorod-escape"]{
+  --hp-bg:#251513;--hp-bg2:#090706;--hp-accent:#c65a3e;--hp-title:#f0d2b2;--hp-panel:#1b0f0ded;
+}
+#rideSheet[data-park="hansa-park"][data-theme="novgorod-escape"] .sheetCard{
+  background:
+    repeating-linear-gradient(0deg,rgba(91,39,27,.23) 0 22px,rgba(25,14,11,.20) 22px 25px),
+    linear-gradient(155deg,#261511,#080706)!important;
+}
+#rideSheet[data-park="hansa-park"][data-theme="novgorod-escape"] #rideTitle{
+  padding:15px 19px!important;
+  color:#f0c99f!important;
+  background:linear-gradient(95deg,#2b100cef,#100807ee)!important;
+  border-left:10px solid #a6402e!important;
+  border-bottom:3px solid #582319!important;
+  clip-path:polygon(0 0,96% 0,100% 18%,98% 91%,88% 100%,2% 95%)!important;
+}
+
+/* HIGHLANDER — heraldic Scottish stone with a restrained tartan grid. */
+#rideSheet[data-park="hansa-park"][data-theme="britain-highlander"]{
+  --hp-bg:#17231e;--hp-bg2:#080f0c;--hp-accent:#c49a5b;--hp-title:#f4e4c2;--hp-panel:#101914ed;
+}
+#rideSheet[data-park="hansa-park"][data-theme="britain-highlander"] .sheetCard{
+  background:
+    repeating-linear-gradient(0deg,transparent 0 39px,rgba(129,37,39,.14) 39px 43px),
+    repeating-linear-gradient(90deg,transparent 0 55px,rgba(33,82,61,.16) 55px 60px),
+    linear-gradient(155deg,#1b2822,#080f0c)!important;
+}
+#rideSheet[data-park="hansa-park"][data-theme="britain-highlander"] #rideTitle{
+  padding:16px 18px!important;
+  text-align:center;
+  letter-spacing:.09em!important;
+  border:5px double #a9824b!important;
+  background:linear-gradient(#1d2921ed,#0e1511ef)!important;
+}
+
+/* Cornwall Coaster — cream station sign with red railway trim. */
+#rideSheet[data-park="hansa-park"][data-theme="britain-cornwall"]{
+  --hp-bg:#2a2822;--hp-bg2:#12110e;--hp-accent:#b95043;--hp-title:#30241f;--hp-panel:#201c17ee;
+}
+#rideSheet[data-park="hansa-park"][data-theme="britain-cornwall"] #rideTitle{
+  padding:14px 18px!important;
+  color:#30241f!important;
+  text-shadow:none!important;
+  text-align:center;
+  background:#efe2c5!important;
+  border:5px solid #8e3b34!important;
+  box-shadow:inset 0 0 0 2px #efe2c5,inset 0 0 0 4px #2d2b28,0 10px 22px #0008!important;
+  border-radius:4px!important;
+}
+
+/* Nessie — misty loch crest, unlike the railway styling beside it. */
+#rideSheet[data-park="hansa-park"][data-theme="britain-nessie"]{
+  --hp-bg:#17312c;--hp-bg2:#071411;--hp-accent:#87b69d;--hp-title:#e6f2df;--hp-panel:#0e211ced;
+}
+#rideSheet[data-park="hansa-park"][data-theme="britain-nessie"] #rideTitle{
+  width:min(100%,480px)!important;
+  padding:14px 26px!important;
+  text-align:center;
+  letter-spacing:.045em!important;
+  border:2px solid #7ba58e!important;
+  border-radius:50% / 22%!important;
+  background:radial-gradient(ellipse at center,#24483de9,#0d211bef 72%)!important;
+  box-shadow:0 11px 25px #0008,inset 0 0 24px rgba(188,221,201,.08)!important;
+}
+
+/* 1903 Somerset Traffic — enamel motoring plaque. */
+#rideSheet[data-park="hansa-park"][data-theme="britain-1903"]{
+  --hp-bg:#26302f;--hp-bg2:#101514;--hp-accent:#d7d0b9;--hp-title:#f3ead2;--hp-panel:#18201fee;
+}
+#rideSheet[data-park="hansa-park"][data-theme="britain-1903"] #rideTitle{
+  padding:12px 16px!important;
+  border:3px solid #d9d1bb!important;
+  border-radius:10px!important;
+  background:#284543e8!important;
+  box-shadow:inset 0 0 0 2px #162725,0 9px 22px #0007!important;
+}
+
+/* Royal Scotsman — vintage railway destination board. */
+#rideSheet[data-park="hansa-park"][data-theme="britain-scotsman"]{
+  --hp-bg:#32271e;--hp-bg2:#120e0a;--hp-accent:#cfb47d;--hp-title:#f6e5ba;--hp-panel:#201810ed;
+}
+#rideSheet[data-park="hansa-park"][data-theme="britain-scotsman"] #rideTitle{
+  padding:12px 16px!important;
+  border-top:4px solid #b99d69!important;
+  border-bottom:4px solid #b99d69!important;
+  background:#261b12eb!important;
+  letter-spacing:.08em!important;
+  text-transform:uppercase;
+}
+
+/* Crazy Mine — rough timber claim board with iron edge. */
+#rideSheet[data-park="hansa-park"][data-theme="crazy-mine"]{
+  --hp-bg:#352716;--hp-bg2:#130d07;--hp-accent:#d69a43;--hp-title:#ffe2a2;--hp-panel:#251a0ded;
+}
+#rideSheet[data-park="hansa-park"][data-theme="crazy-mine"] #rideTitle{
+  padding:15px 19px!important;
+  background:
+    repeating-linear-gradient(0deg,#503417 0 22px,#422a13 22px 25px)!important;
+  border:3px solid #24170c!important;
+  border-left:9px solid #b6762f!important;
+  box-shadow:inset 0 0 0 2px #79512a,0 12px 22px #0008!important;
+  transform:rotate(-.35deg)!important;
+}
+
+/* Peterhof — imperial blue and frost-gold, with attraction-specific variants. */
+#rideSheet[data-park="hansa-park"][data-theme^="peterhof-"]{
+  --hp-bg:#16273a;--hp-bg2:#080f18;--hp-accent:#d4b16b;--hp-title:#f5e8c9;--hp-panel:#0f1c2aee;
+}
+#rideSheet[data-park="hansa-park"][data-theme^="peterhof-"] #rideTitle{
+  padding:12px 17px!important;
+  border-top:2px solid #d1ac66!important;
+  border-bottom:2px solid #d1ac66!important;
+  background:linear-gradient(90deg,#17324be9,rgba(12,24,36,.55),#17324be9)!important;
+}
+#rideSheet[data-park="hansa-park"][data-theme="peterhof-waterwolf"] #rideTitle{
+  border:0!important;
+  border-left:7px solid #7da2b8!important;
+  background:linear-gradient(100deg,#102f43ec,transparent)!important;
+  clip-path:polygon(0 0,96% 5%,100% 42%,96% 95%,3% 100%,0 70%)!important;
+}
+#rideSheet[data-park="hansa-park"][data-theme="peterhof-tierkinder"] #rideTitle{
+  border:3px solid #d8bd83!important;
+  border-radius:18px!important;
+  background:#243a4be8!important;
+}
+
+/* Reiche des Nordens — timber, iron and rune shapes, while major KÄRNAN stays unique above. */
+#rideSheet[data-park="hansa-park"][data-theme^="north-"]{
+  --hp-bg:#24241f;--hp-bg2:#0c0d0b;--hp-accent:#b69358;--hp-title:#efe0bc;--hp-panel:#181914ed;
+}
+#rideSheet[data-park="hansa-park"][data-theme^="north-"] #rideTitle{
+  padding:12px 17px!important;
+  border-left:6px solid #9b7848!important;
+  border-bottom:3px solid #56442d!important;
+  background:linear-gradient(90deg,#28261fea,transparent)!important;
+}
+#rideSheet[data-park="hansa-park"][data-theme="north-kaernapulten"] #rideTitle{
+  clip-path:polygon(2% 0,98% 7%,95% 93%,4% 100%,0 58%)!important;
+  border-left:9px solid #8b6a3b!important;
+}
+#rideSheet[data-park="hansa-park"][data-theme="north-stoertebeker"]{
+  --hp-bg:#162729;--hp-bg2:#071012;--hp-accent:#c49a5b;--hp-title:#f1dfb8;--hp-panel:#0d1d20ed;
+}
+#rideSheet[data-park="hansa-park"][data-theme="north-stoertebeker"] #rideTitle{
+  border:2px solid #9a7346!important;
+  clip-path:polygon(4% 0,97% 6%,100% 85%,93% 100%,2% 93%,0 14%)!important;
+}
+
+/* Wikingerland — weathered sea-blue timber with changing title geometry. */
+#rideSheet[data-park="hansa-park"][data-theme^="viking-"]{
+  --hp-bg:#193035;--hp-bg2:#081417;--hp-accent:#bca56d;--hp-title:#f2e4bd;--hp-panel:#102328ed;
+}
+#rideSheet[data-park="hansa-park"][data-theme^="viking-"] #rideTitle{
+  padding:11px 16px!important;
+  border-bottom:4px solid #8b754d!important;
+  background:linear-gradient(95deg,#193b42e8,transparent)!important;
+}
+#rideSheet[data-park="hansa-park"][data-theme="viking-midgard"] #rideTitle{
+  clip-path:polygon(0 14%,9% 0,90% 5%,100% 25%,95% 100%,7% 94%)!important;
+  border:0!important;
+  border-left:7px solid #a28a58!important;
+}
+#rideSheet[data-park="hansa-park"][data-theme="viking-orcas"] #rideTitle{
+  border-radius:50% 12% 50% 12% / 25% 45% 25% 45%!important;
+  border:2px solid #88aeba!important;
+}
+#rideSheet[data-park="hansa-park"][data-theme="viking-dragonboats"] #rideTitle{
+  border-top:3px solid #b19458!important;
+  border-bottom:3px solid #b19458!important;
+  border-left:0!important;
+  letter-spacing:.035em!important;
+}
+
+/* HANSE in EUROPA — maritime civic signage. */
+#rideSheet[data-park="hansa-park"][data-theme^="hanse-"]{
+  --hp-bg:#26302e;--hp-bg2:#0e1413;--hp-accent:#d8c28b;--hp-title:#f7edd3;--hp-panel:#19211fee;
+}
+#rideSheet[data-park="hansa-park"][data-theme^="hanse-"] #rideTitle{
+  padding:11px 15px!important;
+  border:2px solid #bca46f!important;
+  background:linear-gradient(95deg,#243c39e8,#172421e8)!important;
+}
+#rideSheet[data-park="hansa-park"][data-theme="hanse-baltique"] #rideTitle{
+  color:#183f4a!important;
+  text-shadow:none!important;
+  background:#f0e3c5!important;
+  border:4px double #4d7c85!important;
+  border-radius:18px 18px 8px 8px!important;
+}
+#rideSheet[data-park="hansa-park"][data-theme="hanse-flight"] #rideTitle{
+  border:0!important;
+  border-bottom:5px double #c5ac72!important;
+  background:transparent!important;
+  letter-spacing:.12em!important;
+}
+#rideSheet[data-park="hansa-park"][data-theme="hanse-space-scooter"]{
+  --hp-bg:#171c28;--hp-bg2:#080a11;--hp-accent:#d28aff;--hp-title:#f4e9ff;--hp-panel:#101421ed;
+}
+#rideSheet[data-park="hansa-park"][data-theme="hanse-space-scooter"] #rideTitle{
+  border:1px solid #cb8bff!important;
+  border-left:8px solid #6ee7f0!important;
+  background:linear-gradient(90deg,#1a1f36ed,#0d1020ed)!important;
+  clip-path:polygon(0 0,94% 0,100% 32%,97% 100%,5% 100%,0 72%)!important;
+}
+#rideSheet[data-park="hansa-park"][data-theme="hanse-wellenreiter"] #rideTitle{
+  border:0!important;
+  border-bottom:5px solid #71aab2!important;
+  background:linear-gradient(90deg,#18404aee,transparent)!important;
+}
+
+/* Alter Jahrmarkt — each ride gets vintage fair styling without one shared plaque. */
+#rideSheet[data-park="hansa-park"][data-theme^="jahrmarkt-"]{
+  --hp-bg:#3a2e24;--hp-bg2:#15100c;--hp-accent:#e0b06b;--hp-title:#fff0c9;--hp-panel:#261d16ed;
+}
+#rideSheet[data-park="hansa-park"][data-theme^="jahrmarkt-"] #rideTitle{
+  padding:11px 15px!important;
+  border-bottom:4px double #c89452!important;
+  background:linear-gradient(90deg,#3b2a1deb,transparent)!important;
+}
+#rideSheet[data-park="hansa-park"][data-theme="jahrmarkt-blumenmeer"]{
+  --hp-bg:#2d3a2d;--hp-bg2:#10170f;--hp-accent:#e7bdca;--hp-title:#fff1f5;--hp-panel:#1c281ced;
+}
+#rideSheet[data-park="hansa-park"][data-theme="jahrmarkt-blumenmeer"] #rideTitle{
+  border:3px double #dbb5c1!important;
+  border-radius:20px!important;
+  background:#314333e7!important;
+  text-align:center;
+}
+#rideSheet[data-park="hansa-park"][data-theme="jahrmarkt-luftikus"] #rideTitle{
+  border:3px solid #d8b276!important;
+  border-radius:30px 8px 30px 8px!important;
+  background:#59342ae6!important;
+}
+#rideSheet[data-park="hansa-park"][data-theme="jahrmarkt-livingstone"]{
+  --hp-bg:#3a3424;--hp-bg2:#15130c;--hp-accent:#c8ad72;--hp-title:#efe3bf;--hp-panel:#272316ed;
+}
+#rideSheet[data-park="hansa-park"][data-theme="jahrmarkt-livingstone"] #rideTitle{
+  border:1px dashed #c8ad72!important;
+  background:#2d2a1fed!important;
+  transform:rotate(.25deg)!important;
+}
+
+/* Fiesta del Mar — painted coastal sign. */
+#rideSheet[data-park="hansa-park"][data-theme="fiesta-barcos"]{
+  --hp-bg:#123949;--hp-bg2:#061821;--hp-accent:#f0c350;--hp-title:#fff5cf;--hp-panel:#0b2935ed;
+}
+#rideSheet[data-park="hansa-park"][data-theme="fiesta-barcos"] #rideTitle{
+  padding:12px 18px!important;
+  border:3px solid #f0c350!important;
+  border-radius:8px 24px 8px 24px!important;
+  background:#14566ae8!important;
+  transform:rotate(-.3deg)!important;
+}
+
+/* New Lübeck — river frontier vs. pony post. */
+#rideSheet[data-park="hansa-park"][data-theme^="new-luebeck-"]{
+  --hp-bg:#38291b;--hp-bg2:#130d08;--hp-accent:#d29b54;--hp-title:#f4dfb8;--hp-panel:#24190fed;
+}
+#rideSheet[data-park="hansa-park"][data-theme="new-luebeck-river"] #rideTitle{
+  border-left:8px solid #81603d!important;
+  background:linear-gradient(90deg,#3b2818ed,transparent)!important;
+}
+#rideSheet[data-park="hansa-park"][data-theme="new-luebeck-pony"] #rideTitle{
+  padding:13px 16px!important;
+  border:3px solid #76502d!important;
+  background:#4b2f18ed!important;
+  clip-path:polygon(3% 0,97% 5%,100% 90%,92% 100%,4% 95%,0 14%)!important;
+}
+
+/* Pow Wow — textile badge, not another timber western sign. */
+#rideSheet[data-park="hansa-park"][data-theme="adventure-powwow"]{
+  --hp-bg:#342421;--hp-bg2:#130c0b;--hp-accent:#dd8f63;--hp-title:#ffe1c5;--hp-panel:#241714ed;
+}
+#rideSheet[data-park="hansa-park"][data-theme="adventure-powwow"] #rideTitle{
+  padding:14px 20px!important;
+  border:3px dashed #d18960!important;
+  border-radius:28px 8px 28px 8px!important;
+  background:linear-gradient(135deg,#492923ed,#291916ed)!important;
+}
+
+/* Super Splash — bright marine warning plate and spray geometry. */
+#rideSheet[data-park="hansa-park"][data-theme="water-super-splash"]{
+  --hp-bg:#073b52;--hp-bg2:#04151e;--hp-accent:#ffd85b;--hp-title:#fff7cc;--hp-panel:#082b3bed;
+}
+#rideSheet[data-park="hansa-park"][data-theme="water-super-splash"] #rideTitle{
+  padding:13px 17px!important;
+  color:#062331!important;
+  text-shadow:none!important;
+  border:0!important;
+  background:linear-gradient(100deg,#ffe168,#7ee1f2 62%,#43bad0)!important;
+  clip-path:polygon(0 9%,92% 0,100% 24%,97% 93%,7% 100%,0 78%)!important;
+}
+
+/* Park Express — timetable board. */
+#rideSheet[data-park="hansa-park"][data-theme="park-express"]{
+  --hp-bg:#293030;--hp-bg2:#101414;--hp-accent:#d6c08a;--hp-title:#f5ebd0;--hp-panel:#1b2020ed;
+}
+#rideSheet[data-park="hansa-park"][data-theme="park-express"] #rideTitle{
+  padding:10px 15px!important;
+  letter-spacing:.09em!important;
+  border-top:2px solid #cab57e!important;
+  border-bottom:2px solid #cab57e!important;
+  background:#202828e9!important;
+}
+
+/* Keep very long HANSA-PARK names completely inside their decorative treatment. */
+@media(max-width:430px){
+  #rideSheet[data-park="hansa-park"] .sheetCard{padding-top:306px}
+  #rideSheet[data-park="hansa-park"] .worldArt{height:400px!important}
+  #rideSheet[data-park="hansa-park"] #rideTitle{
+    font-size:clamp(32px,9.2vw,52px)!important;
+    line-height:1.04!important;
+    padding-left:12px!important;
+    padding-right:12px!important;
+  }
+  #rideSheet[data-park="hansa-park"][data-theme="kaernan-fortress"] #rideTitle,
+  #rideSheet[data-park="hansa-park"][data-theme="novgorod-escape"] #rideTitle,
+  #rideSheet[data-park="hansa-park"][data-theme="viking-dragonboats"] #rideTitle,
+  #rideSheet[data-park="hansa-park"][data-theme="peterhof-waterwolf"] #rideTitle{
+    font-size:clamp(27px,7.7vw,43px)!important;
+  }
+  #rideSheet[data-park="hansa-park"][data-theme="jahrmarkt-livingstone"] #rideTitle,
+  #rideSheet[data-park="hansa-park"][data-theme="hanse-pirate-camp"] #rideTitle{
+    font-size:clamp(26px,7.2vw,40px)!important;
+  }
+}
