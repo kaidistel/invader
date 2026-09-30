@@ -2223,3 +2223,69 @@
     font-size:10px!important;
   }
 }
+
+
+/* v46 — use the user-supplied attraction logos for F.L.Y. and Chiapas. */
+#rideSheet[data-park="phantasialand"][data-world="fly"] .worldProp,
+#rideSheet[data-park="phantasialand"][data-world="chiapas"] .worldProp{
+  display:none!important;
+}
+
+/* F.L.Y. logo: large Rookburgh sign, original burgundy/silver colours preserved. */
+#rideSheet[data-park="phantasialand"][data-world="fly"] .worldBadge,
+#rideSheet[data-park="phantasialand"][data-world="fly"] .worldBadge.show{
+  display:block!important;
+  width:min(300px,68vw)!important;
+  height:136px!important;
+  left:22px!important;
+  right:auto!important;
+  top:42px!important;
+  object-fit:contain!important;
+  object-position:left center!important;
+  opacity:1!important;
+  filter:drop-shadow(0 10px 16px #000c)!important;
+  transform:none!important;
+  border-radius:4px;
+}
+#rideSheet[data-park="phantasialand"][data-world="fly"] .worldOrnament:after{
+  content:'○  ROOKBURGH · FLIGHT LOG  ○'!important;
+  max-width:190px!important;
+}
+
+/* Chiapas logo: treated like a painted attraction sign rather than a generic ornament. */
+#rideSheet[data-park="phantasialand"][data-world="chiapas"] .worldBadge,
+#rideSheet[data-park="phantasialand"][data-world="chiapas"] .worldBadge.show{
+  display:block!important;
+  width:min(286px,70vw)!important;
+  height:102px!important;
+  left:20px!important;
+  right:auto!important;
+  top:42px!important;
+  object-fit:contain!important;
+  object-position:left center!important;
+  opacity:1!important;
+  filter:drop-shadow(0 7px 12px #3a1c0a99)!important;
+  transform:none!important;
+  border-radius:3px;
+}
+#rideSheet[data-park="phantasialand"][data-world="chiapas"] .worldOrnament:after{
+  content:'✺  MEXICO · RÍO · EXPEDICIÓN  ✺'!important;
+  max-width:180px!important;
+}
+
+@media(max-width:430px){
+  #rideSheet[data-park="phantasialand"][data-world="fly"] .worldBadge,
+  #rideSheet[data-park="phantasialand"][data-world="fly"] .worldBadge.show{
+    width:min(250px,66vw)!important;
+    height:112px!important;
+    top:50px!important;
+    left:18px!important;
+  }
+  #rideSheet[data-park="phantasialand"][data-world="chiapas"] .worldBadge,
+  #rideSheet[data-park="phantasialand"][data-world="chiapas"] .worldBadge.show{
+    width:min(235px,64vw)!important;
+    height:86px!important;
+    top:50px!important;
+    left:18px!important;
+  }
+}
