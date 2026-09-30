@@ -170,8 +170,17 @@
     "tiki trail":"tiki-trail","tiki-trail":"tiki-trail"
   };
 
+  // Walibi Belgium gets park-scoped ride IDs to prevent collisions with
+  // similarly named attractions at Walibi Holland and future parks.
+  const prefixId = (id) => "wb-" + id;
+  const scopedRides = rides.map((ride) => Object.assign({}, ride, { id: prefixId(ride.id) }));
+  const scopedWorlds = Object.fromEntries(Object.entries(worlds).map(([id, value]) => [prefixId(id), value]));
+  const scopedFonts = Object.fromEntries(Object.entries(fonts).map(([id, value]) => [prefixId(id), value]));
+  const scopedAliases = Object.fromEntries(Object.entries(aliases).map(([name, id]) => [name, prefixId(id)]));
+  rides.forEach((ride) => { scopedAliases[ride.name.toLowerCase()] = prefixId(ride.id); });
+
   const rideConfig = {};
-  rides.forEach((ride) => { rideConfig[ride.id] = {singleRider:false}; });
+  scopedRides.forEach((ride) => { rideConfig[ride.id] = {singleRider:false}; });
 
   window.NAEHEN_WALIBI_BELGIUM = {
     park:{
@@ -183,7 +192,11 @@
       cardCopy:"Dock World, Kondaa, Mecalodon, Live-Wartezeiten und dein Nähprotokoll.",
       disclaimer:"Kein offizielles Angebot von Walibi Belgium."
     },
-    rides, worlds, fonts, aliases, rideConfig,
+    rides:scopedRides,
+    worlds:scopedWorlds,
+    fonts:scopedFonts,
+    aliases:scopedAliases,
+    rideConfig,
     exclusions:{
       ids:[],
       namePatterns:[
