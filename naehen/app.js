@@ -178,14 +178,7 @@
       source:"official-attraction-page"
     },
     talocan: {label:"MEXICO · FEUER & WASSER", line:"Im Bann der Elemente.", art:"talocan"},
-    "mystery-castle": {
-      label:"MYSTERY · HAUS VON WINDHOVEN",
-      line:"Ahnengalerie, Chemielabor und der 65-Meter-Turm.",
-      art:"mystery-castle",
-      badgeUrl:"https://www.phantasialand.de/files/uploads/schmuckelemente/mystery/se-burgornament-lila_01.svg",
-      officialUrl:"https://www.phantasialand.de/de/themenpark/einzigartige-attraktionen/mystery-castle/",
-      source:"official-attraction-page"
-    },
+    "mystery-castle": {label:"MYSTERY · DER TURM", line:"Ein Schritt durch das Burgtor.", art:"mystery-castle"},
     "winjas-fear": {label:"WUZE TOWN · FEAR", line:"Der Pfad der Winjas beginnt.", art:"winjas"},
     "winjas-force": {label:"WUZE TOWN · FORCE", line:"Die Kräfte der Wuze rufen.", art:"winjas"},
     "geister-rikscha": {label:"CHINA TOWN · UNTER DER ERDE", line:"Die Laternen weisen den Weg.", art:"geister-rikscha"},
