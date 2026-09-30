@@ -896,3 +896,195 @@ A newly added park is not finished until all of the following are true:
 - [ ] final GitHub Pages deployment succeeds
 
 The Park Selection page is now part of the permanent NÄHEN architecture. Do not bypass or remove it when onboarding future parks unless the user explicitly changes the product direction.
+
+
+---
+
+# 33. Cross-Park Originality — No Theme Cloning
+
+Every attraction must feel like **its own designed world**, even when another park contains an attraction with a similar genre.
+
+Existing NÄHEN attractions are quality references, not templates to copy.
+
+Do not automatically reuse:
+
+- the same Detail layout
+- the same title plaque shape
+- the same hero treatment
+- the same border language
+- the same panel geometry
+- the same material treatment
+- the same color composition
+- the same font
+- the same text-shadow recipe
+- the same decorative motif
+
+simply because two attractions share a broad theme such as:
+
+- Western
+- space / sci-fi
+- pirates
+- medieval
+- jungle
+- water
+- horror
+- racing
+- cartoon
+- steampunk
+- fairground
+
+A new park must not look like a reskinned collection of Phantasialand, Movie Park, Walibi Holland, or any other previously implemented park.
+
+---
+
+# 34. Font Diversity Across Parks
+
+Before assigning a display font to a new attraction, inspect the fonts already used by **all existing parks**.
+
+The preferred workflow is:
+
+1. understand the attraction's actual visual identity
+2. inspect its official logo, signage, architecture and marketing
+3. shortlist suitable fonts
+4. check whether those fonts are already heavily used elsewhere in NÄHEN
+5. prefer a different suitable font when this improves individuality
+6. only reuse an existing font when it is genuinely the strongest thematic match
+
+Do not create repetitive rules such as:
+
+- every Western attraction = Rye
+- every futuristic attraction = Orbitron
+- every pirate attraction = Trade Winds
+- every kids attraction = Luckiest Guy
+- every medieval attraction = Almendra
+- every vintage attraction = Limelight
+
+Those fonts may still be used, but **never as an automatic category default**.
+
+When a font is reused, compensate with clearly different:
+
+- weight
+- spacing
+- casing
+- scale
+- composition
+- title placement
+- material treatment
+- surrounding graphic language
+
+The goal is not artificial uniqueness at any cost.  
+The goal is to prevent NÄHEN from becoming visually repetitive.
+
+---
+
+# 35. Layout Diversity Across Parks
+
+Do not solve every Detail view with the same structure plus different colors.
+
+The underlying functional order may remain consistent for usability, but the visual composition should respond to the attraction itself.
+
+Possible differences include:
+
+- full-bleed vs framed hero
+- asymmetrical vs centered title
+- title integrated into the image vs below it
+- signage-like title treatment
+- industrial label treatment
+- engraved / painted / illuminated / stamped title treatment
+- clipped geometry
+- organic edges
+- architectural framing
+- layered scenery
+- map / dossier / ticket / control-panel / poster / newspaper / laboratory / expedition-log presentation
+- vertical vs horizontal visual rhythm
+- restrained vs highly theatrical atmosphere
+
+Do not mechanically rotate through a small set of predefined templates.
+
+The official attraction imagery and theme research should determine the composition.
+
+---
+
+# 36. Attraction Identity Must Beat Park-Level Consistency
+
+Park-level branding provides the outer shell.
+
+Attraction-level identity controls the immersive Detail experience.
+
+For example:
+
+- two coasters in the same park may need completely different typography and composition
+- two pirate rides in different parks should not automatically share the same pirate styling
+- two sci-fi attractions should reflect their specific fiction, era, technology and visual language
+- two Western attractions should distinguish saloon, mining, railway, outlaw, desert, industrial or cinematic interpretations
+
+Do not reduce an attraction to a generic category.
+
+Ask internally:
+
+> "What makes this exact attraction visually different from every attraction already in NÄHEN?"
+
+If the answer is only a different image and accent color, the design is not finished.
+
+---
+
+# 37. Cross-Park Similarity Check
+
+Before completing the styling of a new attraction, compare it against existing attractions in NÄHEN.
+
+Check whether it unintentionally duplicates:
+
+- font family
+- title composition
+- hero crop
+- plaque shape
+- panel design
+- dominant palette
+- border style
+- decorative geometry
+- atmospheric treatment
+
+If several of these are substantially identical to another attraction without a strong thematic reason, redesign the new one.
+
+A reused font alone is acceptable when justified.
+
+A reused font + same title layout + same materials + same panel treatment is generally not acceptable.
+
+---
+
+# 38. Immersion Standard
+
+The target is not merely "themed."
+
+The target is:
+
+> Opening the Detail view should feel like stepping into the attraction's queue, station, story world or visual universe.
+
+Use official references to infer:
+
+- what the surfaces would feel like
+- what signage would look like
+- how information would be presented inside that world
+- whether the environment feels polished, ruined, futuristic, handmade, luxurious, playful, dangerous, industrial, mystical or cinematic
+- whether typography feels printed, painted, engraved, illuminated, projected, stamped or hand-drawn
+
+Every Detail page should have at least one recognizable visual idea that belongs specifically to that attraction.
+
+---
+
+# 39. Updated Design Definition of Done
+
+An attraction is not visually complete until:
+
+- [ ] its font was chosen deliberately rather than by category habit
+- [ ] cross-park font repetition was checked
+- [ ] its Detail composition differs meaningfully from similar attractions where appropriate
+- [ ] its styling reflects the exact attraction, not only the broad themed area
+- [ ] its official imagery drives the visual direction
+- [ ] its title treatment feels native to its world
+- [ ] its operational information remains readable
+- [ ] its layout does not look like a recolored copy of another NÄHEN attraction
+- [ ] there is at least one attraction-specific visual idea beyond image + accent color
+- [ ] the final result feels immersive and individually authored
+
+When in doubt, prefer more attraction-specific research over reusing an existing NÄHEN pattern.
