@@ -154,9 +154,9 @@
     "river-quest": {label:"MYSTERY · WASSERWEG", line:"Die Burg verschluckt den Fluss.", art:"river-quest"},
     fly: {
       label:"ROOKBURGH · FLUGJOURNAL",
-      line:"Zwischen Druckkesseln, Stahl und Flugmaschinen.",
+      line:"Die Flugmaschine schneidet durch Stahl, Dampf und Rookburgh.",
       art:"fly",
-      propUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/berlin/fly/ga-fly-druckkessel-01.jpg",
+      propUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/berlin/fly/db-fly-07.png",
       badgeUrl:"https://www.phantasialand.de/files/uploads/schmuckelemente/rookburgh/se-ornament-fly-weiss_02.svg",
       officialUrl:"https://www.phantasialand.de/de/rookburgh/fly/",
       source:"official-attraction-page"
@@ -171,8 +171,9 @@
     },
     chiapas: {
       label:"MEXICO · EXPEDITION",
-      line:"Maya-Ruinen, Wasser, Fiesta – und dann 53° hinab.",
+      line:"Zwischen Maya-Ruinen, Wasserfällen und dem Chiapas-Boot.",
       artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/mexico/chiapas/2026/ga-chiapas-2026_03.jpg",
+      propUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/mexico/chiapas/ga_chiapas_07.jpg",
       badgeUrl:"https://www.phantasialand.de/files/uploads/schmuckelemente/mexico/se-ornament-mexico-blau_01.svg",
       officialUrl:"https://www.phantasialand.de/de/themenpark/einzigartige-attraktionen/chiapas-die-wasserbahn/",
       source:"official-attraction-page"
