@@ -2056,3 +2056,170 @@
     line-height:1.04!important;
   }
 }
+
+
+/* v44 — F.L.Y. + Chiapas: ride hardware becomes part of the portal artwork.
+   Uses imagery from the exact official Phantasialand attraction pages. */
+
+/* F.L.Y. — crop the official ride image to the train and mount it like a Rookburgh machine window. */
+#rideSheet[data-park="phantasialand"][data-world="fly"] .worldProp.show{
+  display:block!important;
+  top:174px!important;
+  right:18px!important;
+  width:218px!important;
+  height:138px!important;
+  overflow:hidden!important;
+  border:0!important;
+  outline:0!important;
+  background:#17120f!important;
+  transform:rotate(1.2deg)!important;
+  clip-path:polygon(8% 0,92% 0,100% 16%,100% 84%,92% 100%,8% 100%,0 84%,0 16%)!important;
+  box-shadow:
+    0 0 0 2px #c29462,
+    0 0 0 7px #33251d,
+    0 15px 28px #000d!important;
+}
+#rideSheet[data-park="phantasialand"][data-world="fly"] .worldProp img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  object-position:right center!important;
+  transform:scale(1.08);
+  filter:saturate(.83) sepia(.12) contrast(1.12) brightness(.92);
+}
+#rideSheet[data-park="phantasialand"][data-world="fly"] .worldProp:before{
+  content:'';
+  position:absolute;
+  inset:7px;
+  z-index:2;
+  pointer-events:none;
+  border:1px solid #d4aa78aa;
+  clip-path:inherit;
+  box-shadow:inset 0 0 22px #0007;
+}
+#rideSheet[data-park="phantasialand"][data-world="fly"] .worldProp:after{
+  content:'F.L.Y. · FLUGMASCHINE'!important;
+  position:absolute!important;
+  left:10px!important;
+  right:10px!important;
+  bottom:8px!important;
+  z-index:3!important;
+  padding:5px 7px!important;
+  background:#17130fe8!important;
+  color:#f0c992!important;
+  font:700 10px/1 'Barlow Condensed',sans-serif!important;
+  letter-spacing:1.35px!important;
+  text-align:center;
+  border-top:1px solid #b88755;
+}
+#rideSheet[data-park="phantasialand"][data-world="fly"] .worldBadge{
+  width:178px!important;
+  height:70px!important;
+  left:24px!important;
+  top:42px!important;
+}
+#rideSheet[data-park="phantasialand"][data-world="fly"] .worldOrnament{
+  height:286px!important;
+}
+#rideSheet[data-park="phantasialand"][data-world="fly"] .worldOrnament:after{
+  content:'○  ROOKBURGH AIRRAIL · FLIGHT LOG  ○'!important;
+  left:18px!important;
+  bottom:20px!important;
+  max-width:180px;
+  font-size:13px!important;
+  letter-spacing:1.15px!important;
+}
+
+/* Chiapas — official boat/waterfall scene mounted as a carved Mexico expedition inset. */
+#rideSheet[data-park="phantasialand"][data-world="chiapas"] .worldProp.show{
+  display:block!important;
+  top:174px!important;
+  right:18px!important;
+  width:214px!important;
+  height:136px!important;
+  overflow:hidden!important;
+  border:0!important;
+  outline:0!important;
+  background:#b77a35!important;
+  transform:rotate(-1.4deg)!important;
+  clip-path:polygon(7% 0,93% 0,100% 14%,96% 88%,86% 100%,13% 96%,0 82%,3% 15%)!important;
+  box-shadow:
+    0 0 0 3px #5a351b,
+    0 0 0 8px #d89a45,
+    0 14px 26px #4d2d1a88!important;
+}
+#rideSheet[data-park="phantasialand"][data-world="chiapas"] .worldProp img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  object-position:48% 56%!important;
+  transform:scale(1.52);
+  transform-origin:48% 56%;
+  filter:saturate(1.16) contrast(1.06) brightness(.96);
+}
+#rideSheet[data-park="phantasialand"][data-world="chiapas"] .worldProp:before{
+  content:'';
+  position:absolute;
+  inset:7px;
+  z-index:2;
+  pointer-events:none;
+  border:2px solid #f0c466aa;
+  clip-path:inherit;
+  box-shadow:inset 0 0 20px #4d2a1688;
+}
+#rideSheet[data-park="phantasialand"][data-world="chiapas"] .worldProp:after{
+  content:'CHIAPAS · WASSEREXPEDITION'!important;
+  position:absolute;
+  left:9px;
+  right:9px;
+  bottom:7px;
+  z-index:3;
+  padding:5px 6px;
+  background:#2b696ae8;
+  color:#fff0c9;
+  font:800 9px/1 'Trebuchet MS',system-ui,sans-serif;
+  letter-spacing:1px;
+  text-align:center;
+  border-top:2px solid #e4ad4e;
+}
+#rideSheet[data-park="phantasialand"][data-world="chiapas"] .worldBadge{
+  width:160px!important;
+  height:62px!important;
+  left:23px!important;
+  top:38px!important;
+}
+#rideSheet[data-park="phantasialand"][data-world="chiapas"] .worldOrnament{
+  height:286px!important;
+}
+#rideSheet[data-park="phantasialand"][data-world="chiapas"] .worldOrnament:after{
+  content:'✺  MEXICO · RÍO · EXPEDICIÓN  ✺'!important;
+  left:18px!important;
+  bottom:20px!important;
+  max-width:175px;
+  font-size:12px!important;
+  letter-spacing:.8px!important;
+}
+
+/* Keep both ride-object panels away from title glyphs on narrow phones. */
+@media(max-width:430px){
+  #rideSheet[data-park="phantasialand"][data-world="fly"] .worldProp.show{
+    top:184px!important;
+    right:14px!important;
+    width:176px!important;
+    height:112px!important;
+  }
+  #rideSheet[data-park="phantasialand"][data-world="fly"] .worldOrnament:after{
+    max-width:145px!important;
+    font-size:11px!important;
+  }
+  #rideSheet[data-park="phantasialand"][data-world="chiapas"] .worldProp.show{
+    top:184px!important;
+    right:14px!important;
+    width:176px!important;
+    height:112px!important;
+  }
+  #rideSheet[data-park="phantasialand"][data-world="chiapas"] .worldOrnament:after{
+    max-width:145px!important;
+    font-size:10px!important;
+  }
+}
