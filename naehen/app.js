@@ -143,13 +143,49 @@
   let liveRefreshTimer = null;
   let liveVisibilityBound = false;
   const WORLD = {
-    taron: {label:"KLUGHEIM · DER PULS", line:"Zwischen Basalt und glühendem Stahl.", art:"taron"},
+    taron: {
+      label:"KLUGHEIM · DER PULS",
+      line:"Zwischen Basalt, Schienen und dem Widder von Klugheim.",
+      art:"taron",
+      badgeUrl:"https://www.phantasialand.de/files/uploads/schmuckelemente/mystery/se-widderkopf-lila_01.svg",
+      officialUrl:"https://www.phantasialand.de/de/themenpark/einzigartige-attraktionen/taron/",
+      source:"official-attraction-page"
+    },
     "river-quest": {label:"MYSTERY · WASSERWEG", line:"Die Burg verschluckt den Fluss.", art:"river-quest"},
-    fly: {label:"ROOKBURGH · FLUGJOURNAL", line:"Die Flugmaschine ist bereit.", art:"fly"},
-    "black-mamba": {label:"DEEP IN AFRICA · DSCHUNGEL", line:"Die Schlange erwacht im Fels.", art:"black-mamba"},
-    chiapas: {label:"MEXICO · WASSERFÄLLE", line:"Der Fluss führt durch den Fels.", art:"chiapas"},
+    fly: {
+      label:"ROOKBURGH · FLUGJOURNAL",
+      line:"Zwischen Druckkesseln, Stahl und Flugmaschinen.",
+      art:"fly",
+      propUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/berlin/fly/ga-fly-druckkessel-01.jpg",
+      badgeUrl:"https://www.phantasialand.de/files/uploads/schmuckelemente/rookburgh/se-ornament-fly-weiss_02.svg",
+      officialUrl:"https://www.phantasialand.de/de/rookburgh/fly/",
+      source:"official-attraction-page"
+    },
+    "black-mamba": {
+      label:"DEEP IN AFRICA · DSCHUNGEL",
+      line:"Zwischen Fels, Wasserfall und der Königin der Schlangen.",
+      art:"black-mamba",
+      badgeUrl:"https://www.phantasialand.de/files/uploads/schmuckelemente/africa/se-maske-gelb_01.svg",
+      officialUrl:"https://www.phantasialand.de/de/themenpark/einzigartige-attraktionen/black-mamba/",
+      source:"official-attraction-page"
+    },
+    chiapas: {
+      label:"MEXICO · EXPEDITION",
+      line:"Maya-Ruinen, Wasser, Fiesta – und dann 53° hinab.",
+      artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/mexico/chiapas/2026/ga-chiapas-2026_03.jpg",
+      badgeUrl:"https://www.phantasialand.de/files/uploads/schmuckelemente/mexico/se-ornament-mexico-blau_01.svg",
+      officialUrl:"https://www.phantasialand.de/de/themenpark/einzigartige-attraktionen/chiapas-die-wasserbahn/",
+      source:"official-attraction-page"
+    },
     talocan: {label:"MEXICO · FEUER & WASSER", line:"Im Bann der Elemente.", art:"talocan"},
-    "mystery-castle": {label:"MYSTERY · DER TURM", line:"Ein Schritt durch das Burgtor.", art:"mystery-castle"},
+    "mystery-castle": {
+      label:"MYSTERY · HAUS VON WINDHOVEN",
+      line:"Ahnengalerie, Chemielabor und der 65-Meter-Turm.",
+      art:"mystery-castle",
+      badgeUrl:"https://www.phantasialand.de/files/uploads/schmuckelemente/mystery/se-burgornament-lila_01.svg",
+      officialUrl:"https://www.phantasialand.de/de/themenpark/einzigartige-attraktionen/mystery-castle/",
+      source:"official-attraction-page"
+    },
     "winjas-fear": {label:"WUZE TOWN · FEAR", line:"Der Pfad der Winjas beginnt.", art:"winjas"},
     "winjas-force": {label:"WUZE TOWN · FORCE", line:"Die Kräfte der Wuze rufen.", art:"winjas"},
     "geister-rikscha": {label:"CHINA TOWN · UNTER DER ERDE", line:"Die Laternen weisen den Weg.", art:"geister-rikscha"},
@@ -1345,6 +1381,9 @@
     const artSrc = world ? (world.artUrl || (world.art ? "./assets/" + world.art + ".webp" : "")) : "";
     const rideSheet = $("#rideSheet");
     const worldArtImage = $("#worldArtImage");
+    const worldProp = $("#worldProp");
+    const worldPropImage = $("#worldPropImage");
+    const worldBadgeImage = $("#worldBadgeImage");
     rideSheet.dataset.park = activeParkSlug || "phantasialand";
     rideSheet.dataset.world = world ? selectedDetailRide.id : "default";
     applyAttractionTypography(rideSheet, selectedDetailRide.id);
@@ -1355,6 +1394,24 @@
       } else {
         worldArtImage.removeAttribute("src");
         worldArtImage.hidden = true;
+      }
+    }
+    if (worldPropImage && worldProp) {
+      if (world?.propUrl) {
+        worldPropImage.src = world.propUrl;
+        worldProp.classList.add("show");
+      } else {
+        worldPropImage.removeAttribute("src");
+        worldProp.classList.remove("show");
+      }
+    }
+    if (worldBadgeImage) {
+      if (world?.badgeUrl) {
+        worldBadgeImage.src = world.badgeUrl;
+        worldBadgeImage.classList.add("show");
+      } else {
+        worldBadgeImage.removeAttribute("src");
+        worldBadgeImage.classList.remove("show");
       }
     }
     $("#worldCaption").textContent = world?.line || "Deine nächste Nähung.";
