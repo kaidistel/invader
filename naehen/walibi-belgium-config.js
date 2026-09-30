@@ -4,7 +4,7 @@
   const B = "https://www.walibi.be/nl/ontdek-het-park/";
   const P = {
     thrill: B + "sensatie-attracties/",
-    family: B + "familie-attracties/",
+    family: B + "familieattracties/",
     kids: B + "kinderattracties/"
   };
 
