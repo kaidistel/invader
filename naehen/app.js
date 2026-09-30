@@ -156,10 +156,9 @@
       label:"ROOKBURGH · FLUGJOURNAL",
       line:"Die Flugmaschine schneidet durch Stahl, Dampf und Rookburgh.",
       art:"fly",
-      propUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/berlin/fly/db-fly-07.png",
-      badgeUrl:"https://www.phantasialand.de/files/uploads/schmuckelemente/rookburgh/se-ornament-fly-weiss_02.svg",
+      badgeUrl:"./assets/fly-logo-user.webp",
       officialUrl:"https://www.phantasialand.de/de/rookburgh/fly/",
-      source:"official-attraction-page"
+      source:"user-supplied-logo"
     },
     "black-mamba": {
       label:"DEEP IN AFRICA · DSCHUNGEL",
@@ -173,10 +172,9 @@
       label:"MEXICO · EXPEDITION",
       line:"Zwischen Maya-Ruinen, Wasserfällen und dem Chiapas-Boot.",
       artUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/mexico/chiapas/2026/ga-chiapas-2026_03.jpg",
-      propUrl:"https://static.phlcdn.de/files/uploads/themenpark/images/sommer/mexico/chiapas/ga_chiapas_07.jpg",
-      badgeUrl:"https://www.phantasialand.de/files/uploads/schmuckelemente/mexico/se-ornament-mexico-blau_01.svg",
+      badgeUrl:"./assets/chiapas-logo-user.webp",
       officialUrl:"https://www.phantasialand.de/de/themenpark/einzigartige-attraktionen/chiapas-die-wasserbahn/",
-      source:"official-attraction-page"
+      source:"user-supplied-logo"
     },
     talocan: {label:"MEXICO · FEUER & WASSER", line:"Im Bann der Elemente.", art:"talocan"},
     "mystery-castle": {label:"MYSTERY · DER TURM", line:"Ein Schritt durch das Burgtor.", art:"mystery-castle"},
@@ -722,7 +720,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=45", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=46", {
           scope: "./",
           updateViaCache: "none"
         });
