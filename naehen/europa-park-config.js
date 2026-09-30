@@ -237,6 +237,9 @@
   rides.forEach((ride) => {
     rideConfig[ride.id] = {singleRider: singleRiderIds.has(ride.id)};
   });
+  rideConfig["silver-star"].speedKmh = 130;
+  rideConfig["blue-fire-megacoaster"].speedKmh = 100;
+  rideConfig["wodan-timburcoaster"].speedKmh = 100;
 
   window.NAEHEN_EUROPA_PARK = {
     park: {
