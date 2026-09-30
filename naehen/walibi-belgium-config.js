@@ -181,6 +181,9 @@
 
   const rideConfig = {};
   scopedRides.forEach((ride) => { rideConfig[ride.id] = {singleRider:false}; });
+  rideConfig["wb-kondaa"].speedKmh = 113;
+  rideConfig["wb-pulsar"].speedKmh = 101;
+  rideConfig["wb-dalton-terror"].speedKmh = 110;
 
   window.NAEHEN_WALIBI_BELGIUM = {
     park:{
