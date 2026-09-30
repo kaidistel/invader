@@ -18,6 +18,7 @@
   const EXTERNAL_PARK_MODULES = [
     window.NAEHEN_MOVIE_PARK,
     window.NAEHEN_WALIBI_HOLLAND,
+    window.NAEHEN_WALIBI_BELGIUM,
     window.NAEHEN_EUROPA_PARK
   ].filter((module) => module && module.park && module.park.slug);
 
@@ -720,7 +721,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=52", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=53", {
           scope: "./",
           updateViaCache: "none"
         });
