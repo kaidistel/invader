@@ -715,6 +715,30 @@
     favorites = store.get(parkStoreKey("naehen:favorites", parkSlug), legacy ? store.get("naehen:favorites", []) : []);
     favoriteSettings = store.get(parkStoreKey("naehen:favoriteSettings", parkSlug), legacy ? store.get("naehen:favoriteSettings", {}) : {});
     srReportsLocal = store.get(parkStoreKey("naehen:srReports", parkSlug), legacy ? store.get("naehen:srReports", []) : []);
+    parkArchive = store.get(parkStoreKey("naehen:parkArchive", parkSlug), [])
+      .map((entry) => normalizeArchiveEntry(entry, parkSlug))
+      .filter(Boolean);
+
+    // One-time migration: preserve the last pre-v60 local park day before a new day clears it.
+    if (!parkDay && !parkArchive.length) {
+      const legacySessions = sessions.filter((session) => session.status !== "waiting" && session.endedAt);
+      if (legacySessions.length) {
+        const starts = legacySessions.map((session) => Number(session.startedAt)).filter(Number.isFinite);
+        const ends = legacySessions.map((session) => Number(session.endedAt)).filter(Number.isFinite);
+        if (starts.length && ends.length) {
+          const syntheticDay = {
+            id: "legacy-" + parkSlug + "-" + Math.min(...starts),
+            park_slug: parkSlug,
+            started_at: new Date(Math.min(...starts)).toISOString(),
+            ended_at: new Date(Math.max(...ends)).toISOString(),
+            migrated: true
+          };
+          parkArchive = [{ day: syntheticDay, sessions: legacySessions.map((session) => Object.assign({}, session)) }];
+          store.set(parkStoreKey("naehen:parkArchive", parkSlug), parkArchive);
+        }
+      }
+    }
+
     totalRideCount = store.get(
       parkStoreKey("naehen:totalRideCount", parkSlug),
       sessions.filter((session) => session.status === "ridden").length
@@ -884,6 +908,7 @@
     store.set(parkStoreKey("naehen:favoriteSettings", slug), favoriteSettings);
     store.set(parkStoreKey("naehen:totalRideCount", slug), totalRideCount);
     store.set(parkStoreKey("naehen:srReports", slug), srReportsLocal);
+    store.set(parkStoreKey("naehen:parkArchive", slug), parkArchive);
   }
 
   function supabaseConfigured() {
