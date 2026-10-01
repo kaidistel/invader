@@ -964,7 +964,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=66", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=67", {
           scope: "./",
           updateViaCache: "none"
         });
