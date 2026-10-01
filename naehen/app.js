@@ -2133,36 +2133,46 @@
     toast("🔔 Näh-Alarme sind scharf.");
   }
 
-  function renderRecap(sourceSessions) {
-    const ridden = sourceSessions.filter((s) => s.status === "ridden");
-    const aborted = sourceSessions.filter((s) => s.status === "aborted");
-    const queueMs = ridden.reduce((sum, s) => sum + (s.duration || 0), 0);
-    const srCount = ridden.filter((s) => s.type === "single").length;
-    const counts = {};
-    ridden.forEach((s) => { counts[s.rideName] = (counts[s.rideName] || 0) + 1; });
-    let topRide = "–";
-    let topCount = 0;
-    Object.keys(counts).forEach((name) => {
-      if (counts[name] > topCount) {
-        topRide = name;
-        topCount = counts[name];
-      }
-    });
-
-    const postedComparable = ridden.filter((s) => s.posted !== null && s.duration !== null);
-    const savedMinutes = Math.round(postedComparable.reduce((sum, s) => sum + (Number(s.posted) * 60000 - s.duration), 0) / 60000);
+  function renderRecap(sourceSessions, sourceDay = parkDay) {
+    const day = sourceDay || {
+      park_slug: activeParkSlug || "phantasialand",
+      started_at: new Date().toISOString(),
+      ended_at: new Date().toISOString()
+    };
+    const fact = buildDayFacts(day, sourceSessions, day.park_slug || activeParkSlug || "phantasialand");
+    const comparisonText = fact.postedComparableCount
+      ? (fact.savedMinutes >= 0
+        ? fact.savedMinutes + " Minuten weniger gewartet."
+        : Math.abs(fact.savedMinutes) + " Minuten länger gewartet.")
+      : "Noch nicht genug Vergleichsdaten.";
 
     $("#recapContent").innerHTML =
-      "<div class=\"recapBox\"><div class=\"recapGrid\">" +
-      recapStat(ridden.length + "×", "genäht") +
-      recapStat(minutesRounded(queueMs) + "m", "echte Queue") +
-      recapStat(srCount + "×", "Single Rider") +
-      recapStat(aborted.length + "×", "vernäht") +
+      "<div class=\"recapBox"><div class=\"recapGrid\">" +
+        recapStat(fact.rides + "×", "genäht") +
+        recapStat(formatDurationHuman(fact.queueMs), "echte Queue") +
+        recapStat(fact.uniqueRides, "verschiedene Rides") +
+        recapStat(formatDurationHuman(fact.parkMs), "Parktag") +
       "</div></div>" +
-      "<div class=\"recapBox\"><b>🏆 meistgenäht</b><p>" + escapeHtml(topRide + (topCount ? " ×" + topCount : "")) + "</p></div>" +
-      "<div class=\"recapBox\"><b>⏱ vs. ausgeschildert</b><p>" +
-      (postedComparable.length ? (savedMinutes >= 0 ? savedMinutes + " Minuten weniger gewartet." : Math.abs(savedMinutes) + " Minuten länger gewartet.") : "Noch nicht genug Vergleichsdaten.") +
-      "</p></div>";
+      "<div class=\"recapBox nerdRecap\"><b>🤓 Nerd-Modus</b><div class=\"nerdGrid\">" +
+        recapStat(minutesRounded(fact.avgQueueMs) + "m", "Ø Queue") +
+        recapStat(minutesRounded(fact.medianQueueMs) + "m", "Median") +
+        recapStat(Math.round(fact.queueShare * 100) + "%", "Zeit in Queue") +
+        recapStat(fact.ridesPerHour ? fact.ridesPerHour.toFixed(2) : "0", "Fahrten / Std.") +
+        recapStat(Math.round(fact.singleShare * 100) + "%", "Single Rider") +
+        recapStat(fact.rerides + "×", "Rerides") +
+        recapStat(fact.hundredPlusCount + "×", "100+ km/h") +
+        recapStat(fact.topSpeed ? fact.topSpeed + " km/h" : "–", "Top-Speed") +
+      "</div></div>" +
+      "<div class=\"recapBox"><b>🏆 Meistgenäht</b><p>" +
+        escapeHtml(fact.topRide ? fact.topRide.name + " ×" + fact.topRide.count : "–") +
+      "</p></div>" +
+      "<div class=\"recapBox"><b>🐌 Queue-Extremwerte</b><p>" +
+        escapeHtml(fact.longest ? "Längste: " + fact.longest.rideName + " · " + minutesRounded(fact.longest.duration) + " min" : "Längste: –") +
+        "<br>" +
+        escapeHtml(fact.shortest ? "Kürzeste: " + fact.shortest.rideName + " · " + minutesRounded(fact.shortest.duration) + " min" : "Kürzeste: –") +
+      "</p></div>" +
+      "<div class=\"recapBox"><b>📊 vs. ausgeschildert</b><p>" + escapeHtml(comparisonText) + "</p></div>" +
+      "<div class=\"recapBox"><b>💾 Dauerhaft gespeichert</b><p>Dieser Parktag liegt jetzt im Archiv und bleibt auch nach dem nächsten Parktag erhalten.</p></div>";
   }
 
   function recapStat(value, label) {
