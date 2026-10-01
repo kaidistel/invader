@@ -904,7 +904,7 @@
     $("#nav").classList.add("hidden");
 
     if (localMode) {
-      $("#accountMode").textContent = "Lokaler Testmodus";
+      $("#accountMode").textContent = isDesktopDevMode() ? "DEV-BROWSER · Lokaler Testmodus" : "Lokaler Testmodus";
       $("#profileName").textContent = "Lokaler Parkfan";
       $("#profileMail").textContent = "Nur auf diesem Gerät";
       parkDay = null;
@@ -1926,7 +1926,7 @@
     });
 
     $("#authBtn").addEventListener("click", async () => {
-      if (!isStandalone()) {
+      if (!canEnterApp()) {
         showGate("#installGate");
         return;
       }
