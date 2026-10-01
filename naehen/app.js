@@ -2160,7 +2160,7 @@
       : "Noch nicht genug Vergleichsdaten.";
 
     $("#recapContent").innerHTML =
-      "<div class=\"recapBox"><div class=\"recapGrid\">" +
+      "<div class=\"recapBox\"><div class=\"recapGrid\">" +
         recapStat(fact.rides + "×", "genäht") +
         recapStat(formatDurationHuman(fact.queueMs), "echte Queue") +
         recapStat(fact.uniqueRides, "verschiedene Rides") +
