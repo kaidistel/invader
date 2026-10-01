@@ -19,7 +19,7 @@ export class RideState {
  get ready(){return this.lift>.995&&!this.parking&&!this.estopped&&this.restraintsLocked;}
  raise(){if(!this.restraintsLocked)return false;this.liftTarget=1;this.parking=false;this.estopped=false;return true;}
  park(){this.parking=true;this.rpmTarget=0;this.mode='park';this.manual=0;this.estopped=false;}
- parkArm180(){if(!this.ready)return false;this.rpmTarget=0;this.mode='park180';this.manual=0;this.estopped=false;return true;}
+ parkArm180(){if(!this.ready)return false;this.mode='park180';this.manual=0;this.estopped=false;return true;}
  setRPM(v){if(!this.ready)return false;this.rpmTarget=clamp(Number(v)||0,-12,12);return true;}
  setMode(mode){if(!this.ready)return false;this.mode=mode;this.manual=0;
   if(mode==='hold')this.hold=this.arm+this.armSpeed*Math.abs(this.armSpeed)/(2*PHYSICS.armHoldAcceleration);
