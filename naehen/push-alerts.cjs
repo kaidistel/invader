@@ -1,4 +1,6 @@
 const fs = require("fs");
+const path = require("path");
+const vm = require("vm");
 const webpush = require("web-push");
 
 const livePaths = process.argv.slice(2);
@@ -8,6 +10,27 @@ const SERVICE_KEY = process.env.NAEHEN_SUPABASE_SECRET_KEY || process.env.NAEHEN
 const VAPID_PUBLIC_KEY = process.env.NAEHEN_VAPID_PUBLIC_KEY || "";
 const VAPID_PRIVATE_KEY = process.env.NAEHEN_VAPID_PRIVATE_KEY || "";
 const VAPID_SUBJECT = process.env.NAEHEN_VAPID_SUBJECT || "https://kaidistel.github.io/invader/naehen/";
+
+function loadParkDisplayNames(configFile, exportName) {
+  try {
+    const sandbox = { window: {} };
+    const file = path.join(__dirname, configFile);
+    vm.runInNewContext(fs.readFileSync(file, "utf8"), sandbox, { filename: configFile });
+    const module = sandbox.window[exportName];
+    return new Map((module?.rides || []).map((ride) => [ride.id, ride.name]));
+  } catch (error) {
+    console.warn("Could not load German ride display names from", configFile, error.message || error);
+    return new Map();
+  }
+}
+
+const DISPLAY_NAMES_BY_LIVE_FILE = {
+  "live-movie-park.json": loadParkDisplayNames("movie-park-config.js", "NAEHEN_MOVIE_PARK"),
+  "live-walibi-holland.json": loadParkDisplayNames("walibi-holland-config.js", "NAEHEN_WALIBI_HOLLAND"),
+  "live-walibi-belgium.json": loadParkDisplayNames("walibi-belgium-config.js", "NAEHEN_WALIBI_BELGIUM"),
+  "live-europa-park.json": loadParkDisplayNames("europa-park-config.js", "NAEHEN_EUROPA_PARK"),
+  "live-hansa-park.json": loadParkDisplayNames("hansa-park-config.js", "NAEHEN_HANSA_PARK")
+};
 
 if (!SUPABASE_URL || !SERVICE_KEY || !VAPID_PUBLIC_KEY || !VAPID_PRIVATE_KEY) {
   console.log("NÄHEN push backend not configured; skipping push evaluation.");
@@ -206,9 +229,10 @@ function flattenLive(data, options = {}) {
   (data.rides || []).forEach((ride) => rows.push(ride));
   return rows.filter((ride) => !/^virtualline:/i.test(String(ride.name || ""))).map((ride) => {
     const low = String(ride.name || "").replace(/[\u200B-\u200D\uFEFF]/g, "").toLowerCase().trim();
+    const rideId = idPrefix + (aliases[low] || slugRide(ride.name));
     return {
-      ride_id: idPrefix + (aliases[low] || slugRide(ride.name)),
-      ride_name: ride.name,
+      ride_id: rideId,
+      ride_name: options.displayNames?.get(rideId) || ride.name,
       wait_time: Number(ride.wait_time) || 0,
       is_open: !!ride.is_open,
       source_updated_at: ride.last_updated || null,
@@ -255,11 +279,13 @@ async function sendToUser(userId, payload, subscriptions) {
   const live = livePaths.flatMap((livePath) => {
     const isWalibiBelgium = /live-walibi-belgium\.json$/i.test(livePath);
     const isHansaPark = /live-hansa-park\.json$/i.test(livePath);
+    const liveFile = path.basename(livePath);
     return flattenLive(
       JSON.parse(fs.readFileSync(livePath, "utf8")),
       {
         idPrefix: isWalibiBelgium ? "wb-" : isHansaPark ? "hp-" : "",
-        aliases: isHansaPark ? HANSA_LIVE_ALIASES : {}
+        aliases: isHansaPark ? HANSA_LIVE_ALIASES : {},
+        displayNames: DISPLAY_NAMES_BY_LIVE_FILE[liveFile] || new Map()
       }
     );
   });
