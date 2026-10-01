@@ -1574,7 +1574,7 @@
         recapStat(fact.rerides + "×", "Rerides") +
         recapStat(fact.hundredPlusCount + "×", "100+ km/h") +
         recapStat(fact.topSpeed ? fact.topSpeed + " km/h" : "–", "Top-Speed") +
-      "</div></div>" +
+      "</div><div class=\"nerdDataNote\">Speed-Werte berücksichtigen nur Attraktionen mit hinterlegten technischen Daten.</div></div>" +
       "<div class=\"archiveFactList\">" +
         "<div><span>🏆 Meistgenäht</span><b>" + escapeHtml(fact.topRide ? fact.topRide.name + " ×" + fact.topRide.count : "–") + "</b></div>" +
         "<div><span>🐌 Längste Queue</span><b>" + escapeHtml(fact.longest ? fact.longest.rideName + " · " + minutesRounded(fact.longest.duration) + " min" : "–") + "</b></div>" +
@@ -1699,6 +1699,8 @@
 
   function renderProfile() {
     $("#totalRides").textContent = totalRideCount;
+    const parkDays = $("#totalParkDays");
+    if (parkDays) parkDays.textContent = parkArchive.length;
 
     const list = $("#achievementList");
     const count = $("#achievementCount");
@@ -2175,7 +2177,7 @@
         recapStat(fact.rerides + "×", "Rerides") +
         recapStat(fact.hundredPlusCount + "×", "100+ km/h") +
         recapStat(fact.topSpeed ? fact.topSpeed + " km/h" : "–", "Top-Speed") +
-      "</div></div>" +
+      "</div><div class=\"nerdDataNote\">Speed-Werte nur soweit technische Daten hinterlegt sind.</div></div>" +
       "<div class=\"recapBox\"><b>🏆 Meistgenäht</b><p>" +
         escapeHtml(fact.topRide ? fact.topRide.name + " ×" + fact.topRide.count : "–") +
       "</p></div>" +
