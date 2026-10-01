@@ -558,6 +558,16 @@
     return window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
   }
 
+  function isDesktopDevMode() {
+    const enabled = new URLSearchParams(window.location.search).get("dev") === "1";
+    const mobile = /android|iphone|ipad|ipod|mobile/i.test(navigator.userAgent);
+    return enabled && !mobile;
+  }
+
+  function canEnterApp() {
+    return isStandalone() || isDesktopDevMode();
+  }
+
   function isIOS() {
     return /iphone|ipad|ipod/i.test(navigator.userAgent);
   }
@@ -829,7 +839,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=57", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=58", {
           scope: "./",
           updateViaCache: "none"
         });
@@ -848,9 +858,9 @@
       supa = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
     }
 
-    // Installation is mandatory: browser mode never exposes setup/auth/app.
+    // Installation is mandatory for normal visitors. Desktop ?dev=1 is the explicit test bypass.
     store.remove("naehen:skipInstall");
-    if (!isStandalone()) {
+    if (!canEnterApp()) {
       showGate("#installGate");
       return;
     }
@@ -859,8 +869,8 @@
   }
 
   async function continueAfterInstall() {
-    // Defense in depth: auth is only reachable from the installed PWA.
-    if (!isStandalone()) {
+    // Defense in depth: auth is only reachable from the installed PWA or explicit desktop dev mode.
+    if (!canEnterApp()) {
       showGate("#installGate");
       return;
     }
@@ -880,13 +890,15 @@
   }
 
   async function enterApp(appUser, useLocalMode) {
-    if (!isStandalone()) {
+    if (!canEnterApp()) {
       showGate("#installGate");
       return;
     }
 
     user = appUser || null;
     localMode = !!useLocalMode;
+    if (isDesktopDevMode()) document.documentElement.dataset.devMode = "browser";
+    else delete document.documentElement.dataset.devMode;
     ["#installGate", "#setupGate", "#authGate"].forEach(hideGate);
     $("#app").classList.add("hidden");
     $("#nav").classList.add("hidden");
@@ -902,7 +914,7 @@
       favoriteSettings = {};
       totalRideCount = 0;
     } else {
-      $("#accountMode").textContent = appUser.email || "Account";
+      $("#accountMode").textContent = (isDesktopDevMode() ? "DEV-BROWSER · " : "") + (appUser.email || "Account");
       $("#profileName").textContent = (appUser.user_metadata && appUser.user_metadata.username) || (appUser.email ? appUser.email.split("@")[0] : "Parkfan");
       $("#profileMail").textContent = appUser.email || "";
     }
@@ -912,8 +924,8 @@
     const pickerAccount = $("#parkPickerAccount");
     if (pickerAccount) {
       pickerAccount.textContent = localMode
-        ? "Lokaler Testmodus"
-        : ((appUser.user_metadata && appUser.user_metadata.username) || appUser.email || "Account");
+        ? (isDesktopDevMode() ? "DEV-BROWSER · Lokaler Testmodus" : "Lokaler Testmodus")
+        : ((isDesktopDevMode() ? "DEV-BROWSER · " : "") + ((appUser.user_metadata && appUser.user_metadata.username) || appUser.email || "Account"));
     }
 
     renderParkPicker();
