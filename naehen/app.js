@@ -172,6 +172,41 @@
     });
   }
 
+  function normalizeArchiveEntry(entry, parkSlug = activeParkSlug || "phantasialand") {
+    if (!entry) return null;
+    const day = entry.day || entry.parkDay || entry;
+    const archivedSessions = (entry.sessions || []).map((session) => localizeStoredSession(session, parkSlug));
+    return { day: day, sessions: archivedSessions };
+  }
+
+  function parkDayStartMs(day) {
+    const value = day?.started_at || day?.startedAt;
+    const time = value ? new Date(value).getTime() : 0;
+    return Number.isFinite(time) ? time : 0;
+  }
+
+  function parkDayEndMs(day) {
+    const value = day?.ended_at || day?.endedAt;
+    const time = value ? new Date(value).getTime() : 0;
+    return Number.isFinite(time) ? time : 0;
+  }
+
+  function formatDurationHuman(ms) {
+    const totalMinutes = Math.max(0, Math.round(Number(ms || 0) / 60000));
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    if (hours && minutes) return hours + " Std. " + minutes + " Min.";
+    if (hours) return hours + " Std.";
+    return totalMinutes + " Min.";
+  }
+
+  function median(numbers) {
+    const values = numbers.filter(Number.isFinite).slice().sort((a, b) => a - b);
+    if (!values.length) return 0;
+    const middle = Math.floor(values.length / 2);
+    return values.length % 2 ? values[middle] : (values[middle - 1] + values[middle]) / 2;
+  }
+
   let deferredInstall = null;
   let supa = null;
   let user = null;
@@ -406,6 +441,7 @@
   let favoriteSettings = store.get("naehen:favoriteSettings", {});
   let totalRideCount = store.get("naehen:totalRideCount", sessions.filter((s) => s.status === "ridden").length);
   let srReportsLocal = store.get("naehen:srReports", []);
+  let parkArchive = [];
   let achievements = {};
 
   function attractionFontConfig(rideId, parkSlug = activeParkSlug || "phantasialand") {
