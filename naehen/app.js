@@ -1017,6 +1017,58 @@
     showParkPicker({ replaceHistory: true });
   }
 
+  async function loadCloudParkArchive(parkSlug = activeParkSlug || "phantasialand") {
+    if (!supa || !currentUserId()) {
+      parkArchive = [];
+      return;
+    }
+
+    const daysResult = await supa
+      .from("park_days")
+      .select("*")
+      .eq("user_id", currentUserId())
+      .eq("park_slug", parkSlug)
+      .not("ended_at", "is", null)
+      .order("started_at", { ascending: false });
+
+    if (daysResult.error) {
+      console.warn("Parktag-Archiv konnte nicht geladen werden", daysResult.error);
+      parkArchive = [];
+      return;
+    }
+
+    const days = daysResult.data || [];
+    if (!days.length) {
+      parkArchive = [];
+      return;
+    }
+
+    const dayIds = days.map((day) => day.id);
+    const sessionResult = await supa
+      .from("queue_sessions")
+      .select("*")
+      .eq("user_id", currentUserId())
+      .in("park_day_id", dayIds)
+      .order("started_at", { ascending: true });
+
+    if (sessionResult.error) {
+      console.warn("Archiv-Fahrten konnten nicht geladen werden", sessionResult.error);
+      parkArchive = days.map((day) => ({ day: day, sessions: [] }));
+      return;
+    }
+
+    const grouped = new Map();
+    (sessionResult.data || []).forEach((row) => {
+      if (!grouped.has(row.park_day_id)) grouped.set(row.park_day_id, []);
+      grouped.get(row.park_day_id).push(dbSessionToClient(row, parkSlug));
+    });
+
+    parkArchive = days.map((day) => ({
+      day: day,
+      sessions: grouped.get(day.id) || []
+    }));
+  }
+
   async function loadAccountState(parkSlug = activeParkSlug || "phantasialand") {
     if (!supa || !currentUserId()) return;
 
@@ -1084,6 +1136,7 @@
 
     if (!countResult.error && typeof countResult.count === "number") totalRideCount = countResult.count;
 
+    await loadCloudParkArchive(parkSlug);
     persistLocalState();
   }
 
