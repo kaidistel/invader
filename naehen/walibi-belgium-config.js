@@ -54,20 +54,20 @@
 
   const rides = [
     ["tous-en-boite","Tous en Boite","Dock World"],["stormy","Stormy","Dock World"],["turbine","Turbine","Dock World"],
-    ["4d-bioscoop","4D-bioscoop","Loup-Garou Zone"],["silverton","Silverton","Loup-Garou Zone"],
-    ["4x4-adventure","4x4 Adventure","Fun World"],["fun-recorder","Fun Recorder","Fun World"],["graffiti-shuttle","Graffiti Shuttle","Fun World"],
-    ["bubble-swirl","Bubble Swirl","Fun World"],["mini-tour","Mini Tour","Fun World"],["kondaala","Kondaala","Exotic World"],
-    ["little-swing","Little Swing","Adventure World"],["guitar-riff","Guitar Riff","Adventure World"],["fun-pilot","Fun Pilot","Fun World"],
-    ["palais-du-genie","Palais du Génie","Karma World"],["flash-back","Flash-Back","Dock World"],["grand-carrousel","Grand Carrousel","Adventure World"],
-    ["challenge-of-tutankhamon","Challenge of Tutankhamon","Exotic World"],["tree-house","Tree House","Fun World"],["calamity-mine","Calamity Mine","Adventure World"],
-    ["poneys","Poneys","Adventure World"],["mecalodon","Mecalodon","Dock World"],["tapis-volant","Tapis Volant","Karma World"],
-    ["popcorn-revenge","Popcorn Revenge","Karma World"],["radja-river","Radja River","Karma World"],["melody-road","Melody Road","Loup-Garou Zone"],
-    ["tiki-waka","Tiki-Waka","Exotic World"],["octopus","Octopus","Exotic World"],["wave-swinger","Wave Swinger","Loup-Garou Zone"],
-    ["tiki-trail","Tiki-Trail","Exotic World"],["pulsar","PULSAR","Dock World"],["vampire","Vampire","Loup-Garou Zone"],
+    ["4d-bioscoop","4D-Kino","Loup-Garou Zone"],["silverton","Silverton","Loup-Garou Zone"],
+    ["4x4-adventure","4x4-Abenteuer","Fun World"],["fun-recorder","Fun Recorder","Fun World"],["graffiti-shuttle","Graffiti Shuttle","Fun World"],
+    ["bubble-swirl","Seifenblasen-Wirbel","Fun World"],["mini-tour","Mini-Rundfahrt","Fun World"],["kondaala","Kondaala","Exotic World"],
+    ["little-swing","Kleine Schaukel","Adventure World"],["guitar-riff","Guitar Riff","Adventure World"],["fun-pilot","Fun Pilot","Fun World"],
+    ["palais-du-genie","Palais du Génie","Karma World"],["flash-back","Flash-Back","Dock World"],["grand-carrousel","Großes Karussell","Adventure World"],
+    ["challenge-of-tutankhamon","Challenge of Tutankhamon","Exotic World"],["tree-house","Baumhaus","Fun World"],["calamity-mine","Calamity Mine","Adventure World"],
+    ["poneys","Ponys","Adventure World"],["mecalodon","Mecalodon","Dock World"],["tapis-volant","Fliegender Teppich","Karma World"],
+    ["popcorn-revenge","Popcorn Revenge","Karma World"],["radja-river","Radja River","Karma World"],["melody-road","Melodienstraße","Loup-Garou Zone"],
+    ["tiki-waka","Tiki-Waka","Exotic World"],["octopus","Oktopus","Exotic World"],["wave-swinger","Wellenflieger","Loup-Garou Zone"],
+    ["tiki-trail","Tiki-Pfad","Exotic World"],["pulsar","PULSAR","Dock World"],["vampire","Vampir","Loup-Garou Zone"],
     ["buzzsaw","Buzzsaw","Adventure World"],["kondaa","Kondaa","Exotic World"],["cobra","Cobra","Karma World"],
     ["dalton-terror","Dalton Terror","Adventure World"],["spinning-vibe","Spinning Vibe","Loup-Garou Zone"],
-    ["kids-airlines","Kids Airlines","Adventure World"],["tchou-tchou-express","Tchou-Tchou Express","Adventure World"],
-    ["spinning-taxi","Spinning Taxi","Adventure World"],["loup-garou","Loup-Garou","Loup-Garou Zone"]
+    ["kids-airlines","Kinder-Airlines","Adventure World"],["tchou-tchou-express","Tchou-Tchou Express","Adventure World"],
+    ["spinning-taxi","Dreh-Taxi","Adventure World"],["loup-garou","Loup-Garou","Loup-Garou Zone"]
   ].map(([id,name,zone]) => ({id,name,zone}));
 
   const worlds = {
