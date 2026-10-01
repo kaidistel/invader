@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="NÄHEN">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=59">
+  <link rel="stylesheet" href="./styles.css?v=60">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Staatliches&family=Stardos+Stencil:wght@400;700&family=Bangers&family=Bebas+Neue&family=Cinzel+Decorative:wght@400;700&family=Graduate&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
   <link href="https://fonts.cdnfonts.com/css/gang-of-three" rel="stylesheet">
   <link href="https://fonts.cdnfonts.com/css/old-london" rel="stylesheet">
   <link href="https://fonts2u.com/download/steampunk-machinery-fon-regular.font-face" rel="stylesheet">
-  <link rel="stylesheet" href="./portals.css?v=59">
+  <link rel="stylesheet" href="./portals.css?v=60">
   <title>NÄHEN · Parkday Companion</title>
 </head>
 <body>
@@ -154,6 +154,24 @@
       <div id="log"></div>
     </section>
 
+    <section id="archiveView" class="hidden">
+      <div class="sectionHead">
+        <h2>Parktag-Archiv</h2>
+        <span>DAUERHAFT GESPEICHERT</span>
+      </div>
+      <div class="archiveIntro">
+        <div class="eyebrow">NÄHEN · HISTORY</div>
+        <h2>Deine Parktage verschwinden nicht mehr.</h2>
+        <p>Jeder abgeschlossene Parktag bleibt mit Fahrten, echten Queue-Zeiten und Nerd-Statistiken erhalten.</p>
+      </div>
+      <div id="archiveSummary"></div>
+      <div class="sectionHead archiveListHead">
+        <h2>Gespeicherte Tage</h2>
+        <span id="archiveParkLabel">DIESER PARK</span>
+      </div>
+      <div id="parkArchiveList"></div>
+    </section>
+
     <section id="profileView" class="hidden">
       <div class="sectionHead"><h2>Profil</h2><span>ACCOUNT</span></div>
       <div class="profileBox">
@@ -184,6 +202,7 @@
   <nav class="nav hidden" id="nav">
     <button class="active" data-view="homeView"><span aria-hidden="true">⌂</span>Park</button>
     <button data-view="logView"><span aria-hidden="true">≋</span>Protokoll</button>
+    <button data-view="archiveView"><span aria-hidden="true">▦</span>Archiv</button>
     <button data-view="profileView"><span aria-hidden="true">◎</span>Profil</button>
   </nav>
 
@@ -252,13 +271,23 @@
     </div>
   </section>
 
+  <section class="sheet" id="archiveDetailSheet" role="dialog" aria-modal="true" aria-labelledby="archiveDetailTitle">
+    <div class="sheetCard archiveDetailCard">
+      <button aria-label="Schließen" class="close" data-close="archiveDetailSheet">✕</button>
+      <div class="eyebrow">Gespeicherter Parktag</div>
+      <h2 id="archiveDetailTitle">Parktag</h2>
+      <div class="mini" id="archiveDetailMeta"></div>
+      <div id="archiveDetailContent"></div>
+    </div>
+  </section>
+
   <script defer src="./config.js"></script>
-  <script defer src="./movie-park-config.js?v=59"></script>
-  <script defer src="./walibi-holland-config.js?v=59"></script>
-  <script defer src="./walibi-belgium-config.js?v=59"></script>
-  <script defer src="./europa-park-config.js?v=59"></script>
-  <script defer src="./hansa-park-config.js?v=59"></script>
+  <script defer src="./movie-park-config.js?v=60"></script>
+  <script defer src="./walibi-holland-config.js?v=60"></script>
+  <script defer src="./walibi-belgium-config.js?v=60"></script>
+  <script defer src="./europa-park-config.js?v=60"></script>
+  <script defer src="./hansa-park-config.js?v=60"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script defer src="./app.js?v=59"></script>
+  <script defer src="./app.js?v=60"></script>
 </body>
 </html>
