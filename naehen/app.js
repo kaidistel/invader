@@ -964,7 +964,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=69", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=70", {
           scope: "./",
           updateViaCache: "none"
         });
@@ -1329,7 +1329,29 @@
     if (!container) return;
 
     const hasPublicLive = parkHasPublicLiveWaits();
-    const visibleRides = rides.filter(ride => !isExcludedRide(ride.name, ride.id, activeParkSlug) && (!onlyFavorites || favorites.includes(ride.id)) && ride.name.toLowerCase().includes(rideSearch));
+    const visibleRides = rides
+      .filter(ride => !isExcludedRide(ride.name, ride.id, activeParkSlug) && (!onlyFavorites || favorites.includes(ride.id)) && ride.name.toLowerCase().includes(rideSearch))
+      .sort((a, b) => {
+        if (!hasPublicLive) return a.name.localeCompare(b.name, "de");
+
+        const aHasLive = a.source === "queue-times";
+        const bHasLive = b.source === "queue-times";
+        const aClosed = aHasLive && a.isOpen === false;
+        const bClosed = bHasLive && b.isOpen === false;
+        const aUnknown = !aHasLive || a.isOpen === null || a.isOpen === undefined;
+        const bUnknown = !bHasLive || b.isOpen === null || b.isOpen === undefined;
+
+        const rank = (closed, unknown) => closed ? 2 : unknown ? 1 : 0;
+        const rankDiff = rank(aClosed, aUnknown) - rank(bClosed, bUnknown);
+        if (rankDiff) return rankDiff;
+
+        if (!aClosed && !aUnknown && !bClosed && !bUnknown) {
+          const waitDiff = (Number(b.wait) || 0) - (Number(a.wait) || 0);
+          if (waitDiff) return waitDiff;
+        }
+
+        return a.name.localeCompare(b.name, "de");
+      });
     const cards = visibleRides.map((ride) => {
       const fav = favorites.includes(ride.id);
       const world = worldForRide(ride.id);
