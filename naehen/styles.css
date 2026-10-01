@@ -47,7 +47,7 @@ button,input{font:inherit}
 .queueBar small{font-weight:800;opacity:.7}
 .queueBar strong{display:block}
 .queueTime{font-size:24px;font-weight:950;font-variant-numeric:tabular-nums}
-.nav{position:fixed;z-index:10;bottom:calc(10px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(calc(100% - 24px),536px);background:#111722ef;border:1px solid var(--line);backdrop-filter:blur(16px);border-radius:22px;padding:8px;display:grid;grid-template-columns:repeat(3,1fr);box-shadow:0 15px 50px #000b}
+.nav{position:fixed;z-index:10;bottom:calc(10px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(calc(100% - 24px),536px);background:#111722ef;border:1px solid var(--line);backdrop-filter:blur(16px);border-radius:22px;padding:8px;display:grid;grid-template-columns:repeat(4,1fr);box-shadow:0 15px 50px #000b}
 .nav button{border:0;background:transparent;color:var(--muted);padding:9px;border-radius:14px;font-weight:800;font-size:12px}
 .nav button.active{background:var(--panel2);color:var(--text)}
 .sheet,.gate,.auth{position:fixed;inset:0;z-index:30;background:#080a0ef5;display:none;align-items:flex-end;justify-content:center}
