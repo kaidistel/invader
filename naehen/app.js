@@ -964,7 +964,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=67", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=68", {
           scope: "./",
           updateViaCache: "none"
         });
@@ -2266,7 +2266,7 @@
       $("#" + id)?.classList.toggle("hidden", id !== viewId);
     });
     if (viewId === "archiveView") renderParkArchive();
-    $("[data-view]").forEach((button) => button.classList.toggle("active", button.dataset.view === viewId));
+    $$("[data-view]").forEach((button) => button.classList.toggle("active", button.dataset.view === viewId));
   }
 
   window.addEventListener("popstate", (event) => {
