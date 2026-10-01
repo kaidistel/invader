@@ -67,7 +67,8 @@ Collect:
 - country / region
 - themed areas
 - permanent attractions
-- attraction names exactly as currently used by the park
+- official/source attraction names exactly as currently used by the park
+- the German user-facing attraction name used by NÄHEN
 - attraction type
 - attraction theme / story
 - themed area
@@ -77,6 +78,60 @@ Collect:
 - seasonal or event-only status
 
 Never assume the attraction inventory from memory when current research is possible.
+
+---
+
+# 3.1 German Attraction Names — Hard Rule
+
+**All user-facing attraction names in NÄHEN must be German wherever a German name or sensible German localization exists.**
+
+This applies everywhere the attraction name can appear:
+
+- Home attraction cards
+- Detail views
+- queue / timer sheets
+- active queue bar
+- park-day protocol and recap
+- profile / achievement unlock details
+- favorites and push settings
+- push notifications
+- search results and labels
+
+Live-data providers such as Queue-Times are **data sources, not display-name sources**.
+
+A provider may return an English, Dutch, French or otherwise translated name. That provider name may be retained internally as an alias for matching, but it must never overwrite the German NÄHEN display name once the attraction is configured.
+
+Implementation rule:
+
+```js
+providerName -> alias / stable ride ID -> German NÄHEN display name
+```
+
+Do **not** render:
+
+```js
+ride.name = rawLiveProviderName;
+```
+
+when a configured German display name exists.
+
+For parks outside Germany:
+
+1. use an official German attraction name if the park provides one
+2. otherwise use an established German name when one exists
+3. otherwise translate descriptive/generic attraction names into natural German
+4. keep genuine brand names, character names and proper attraction trademarks unchanged when translating them would destroy the attraction identity
+
+Examples:
+
+- `The Oath of Kärnan` from a live provider -> **Der Schwur des KÄRNAN**
+- `Wild Water Ride - The Great Pike` -> **Wildwasserfahrt – Der Wasserwolf am Ilmensee**
+- `4D-bioscoop` -> **4D-Kino**
+- a genuine branded name such as **Taron**, **Kondaa**, **Silver Star** or **Star Trek™: Operation Enterprise** stays unchanged
+
+Aliases must preserve provider/original spellings so live mapping continues to work.
+
+Stored queue sessions and history must also resolve their ride ID back to the current German configured display name. Old provider-language strings must not leak back into the UI.
 
 ---
 
@@ -456,6 +511,8 @@ Avoid scattering this information across unrelated CSS and JavaScript files when
 Before calling an attraction finished, confirm:
 
 - [ ] attraction exists on current official park site
+- [ ] German user-facing attraction name verified/localized
+- [ ] provider/original non-German names retained only as aliases
 - [ ] permanent vs seasonal status understood
 - [ ] themed area identified
 - [ ] official attraction page opened
@@ -482,6 +539,8 @@ Before calling an attraction finished, confirm:
 Before completing a new park:
 
 - [ ] all permanent attractions from the official site are represented or intentionally excluded
+- [ ] every user-facing attraction name is German or an intentional unchanged brand/proper name
+- [ ] live-provider names cannot overwrite configured German display names
 - [ ] no event-only attractions slipped into permanent inventory
 - [ ] every configured attraction has an official image when available
 - [ ] no random web images were used
