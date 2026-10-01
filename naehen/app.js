@@ -33,7 +33,7 @@
     return PARK_MODULES[parkSlug] || null;
   }
 
-  const LIVE_REFRESH_MS = 5 * 60 * 1000;
+  const LIVE_REFRESH_MS = 60 * 1000;
   const SR_FRESH_MINUTES = 30;
   const SR_VISIBLE_MINUTES = 60;
   const EXCLUDED_RIDE_IDS = new Set(["berliner-einlauten","berliner-einlaufen","berliner-einlauf"]);
@@ -964,7 +964,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=68", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=69", {
           scope: "./",
           updateViaCache: "none"
         });
@@ -1364,7 +1364,7 @@
 
     container.innerHTML = (cards || "<div class=\"empty\">Keine passenden Attraktionen. Passe deine Suche oder den Favoritenfilter an.</div>") +
       (hasPublicLive
-        ? "<a class=\"attribution\" href=\"https://queue-times.com/\" target=\"_blank\" rel=\"noopener\">Powered by <b style=\"color:var(--text)\">Queue-Times.com</b> · Live-Daten ca. alle 5 Min.</a>"
+        ? "<a class=\"attribution\" href=\"https://queue-times.com/\" target=\"_blank\" rel=\"noopener\">Powered by <b style=\"color:var(--text)\">Queue-Times.com</b> · Snapshots ca. alle 2–3 Min. · App prüft jede Minute</a>"
         : "");
 
     container.querySelectorAll(".ride[data-detail]").forEach((card) => {
