@@ -893,35 +893,20 @@
     const favoriteFilter = $("#favoriteFilter");
     if (favoriteFilter) favoriteFilter.setAttribute("aria-pressed", "false");
 
-    let accountStatePromise = Promise.resolve();
-
     if (localMode) {
       loadLocalParkState(parkSlug);
     } else {
-      // Never let Supabase account/history requests block public live waits.
-      parkDay = null;
-      sessions = [];
-      active = null;
-      favorites = [];
-      favoriteSettings = {};
-      parkArchive = [];
-
-      accountStatePromise = loadAccountState(parkSlug)
-        .then(() => {
-          if (activeParkSlug !== parkSlug) return;
-          persistLocalState();
-          renderAll();
-        })
-        .catch((error) => console.warn("Account-Parkdaten konnten nicht geladen werden", error));
+      await loadAccountState(parkSlug);
     }
 
     persistLocalState();
     switchView("homeView");
     renderAll();
 
-    // Public live waits start immediately and independently of Supabase.
+    // Stable sequence: park/account state first, then live snapshot.
+    // HANSA-PARK returns immediately because public live waits are disabled there.
     startLiveRefresh();
-    const livePromise = loadLiveWaits();
+    await loadLiveWaits();
 
     if (!localMode) {
       loadCloudParkArchive(parkSlug)
@@ -933,8 +918,6 @@
         })
         .catch((error) => console.warn("Parktag-Archiv konnte im Hintergrund nicht geladen werden", error));
     }
-
-    await Promise.allSettled([livePromise, accountStatePromise]);
   }
 
   function persistLocalState() {
@@ -964,7 +947,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=63", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=64", {
           scope: "./",
           updateViaCache: "none"
         });
