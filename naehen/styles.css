@@ -13,7 +13,7 @@ button,input{font:inherit}
 .heroLine{display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
 .hero h1{font-size:29px;line-height:1;margin:8px 0 16px;letter-spacing:-1.3px}
 .eyebrow{font-size:11px;font-weight:900;letter-spacing:1.5px;color:var(--accent);text-transform:uppercase}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .stat{background:#0b0f17cc;border:1px solid #252d3f;padding:12px;border-radius:16px}
 .stat strong{display:block;font-size:18px}
 .stat span{color:var(--muted);font-size:11px}
@@ -735,4 +735,161 @@ body[data-park="europa-park"] .parkSwitch{
 }
 @media(max-width:390px){
   .achievementImageWrap{width:52px;height:52px;border-radius:14px}
+}
+
+
+/* v60 — persistent park-day archive + nerd statistics */
+.archiveIntro{
+  position:relative;
+  overflow:hidden;
+  padding:22px;
+  margin-bottom:12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:
+    radial-gradient(circle at 92% 0%,rgba(219,236,157,.15),transparent 36%),
+    linear-gradient(135deg,#1c2c25,#101815);
+}
+.archiveIntro:after{
+  content:"▦";
+  position:absolute;
+  right:18px;
+  bottom:-23px;
+  font-size:108px;
+  line-height:1;
+  color:#dcec9d12;
+  transform:rotate(-8deg);
+  pointer-events:none;
+}
+.archiveIntro h2{position:relative;z-index:1;margin:7px 0 9px;font-size:clamp(24px,6vw,35px);line-height:1.02;max-width:720px}
+.archiveIntro p{position:relative;z-index:1;color:var(--muted);margin:0;max-width:700px;line-height:1.55}
+.archiveSummaryGrid,
+.archiveHeroFacts,
+.nerdGrid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+}
+#archiveSummary{margin-bottom:4px}
+#archiveSummary .recapStat,
+.archiveHeroFacts .recapStat,
+.nerdGrid .recapStat{
+  min-width:0;
+  padding:14px 12px;
+  border:1px solid var(--line);
+  border-radius:7px;
+  background:#14201b;
+}
+#archiveSummary .recapStat b,
+.archiveHeroFacts .recapStat b,
+.nerdGrid .recapStat b{
+  display:block;
+  font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  font-size:clamp(17px,4vw,24px);
+  color:#e8f5bb;
+  overflow-wrap:anywhere;
+}
+.archiveRecord{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  margin-top:8px;
+  padding:12px 14px;
+  border-left:4px solid var(--accent);
+  background:#18251f;
+  font-size:12px;
+}
+.archiveRecord span{color:var(--muted)}
+.archiveRecord b{text-align:right}
+.archiveListHead{margin-top:30px}
+#parkArchiveList{display:grid;gap:10px}
+.archiveDayCard{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:17px;
+  text-align:left;
+  color:var(--text);
+  background:
+    linear-gradient(120deg,rgba(219,236,157,.045),transparent 42%),
+    #151e1a;
+  box-shadow:0 9px 24px #0003;
+  cursor:pointer;
+}
+.archiveDayCard:hover{border-color:#71816f;background-color:#19241f}
+.archiveDayCard:active{transform:translateY(1px)}
+.archiveDayTop{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.archiveDayTop h3{margin:4px 0 0;font-size:19px}
+.archiveChevron{font-size:32px;line-height:.9;color:var(--accent)}
+.archiveDayStats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:15px}
+.archiveDayStats span{
+  min-width:0;
+  padding:9px 10px;
+  border:1px solid #ffffff14;
+  background:#0e1713;
+  font-size:10px;
+  color:var(--muted);
+}
+.archiveDayStats b{display:block;color:var(--text);font-size:13px;margin-bottom:2px;overflow-wrap:anywhere}
+.archiveDayFoot{margin-top:11px;font-size:11px;color:var(--muted)}
+.archiveDayFoot b{color:#e6ecd9}
+.archiveDetailCard{max-height:94vh}
+#archiveDetailMeta{margin-bottom:18px}
+.archiveHeroFacts{margin:15px 0 10px}
+.nerdSection{
+  margin:13px 0;
+  padding:15px;
+  border:1px solid #71825355;
+  border-radius:9px;
+  background:
+    linear-gradient(120deg,rgba(219,236,157,.06),transparent 45%),
+    #101914;
+}
+.nerdTitle{
+  margin-bottom:10px;
+  font:900 10px/1 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:2px;
+  color:var(--accent);
+}
+.archiveFactList{display:grid;gap:1px;margin:13px 0;background:var(--line);border:1px solid var(--line)}
+.archiveFactList>div{
+  display:grid;
+  grid-template-columns:minmax(105px,.7fr) minmax(0,1.3fr);
+  gap:14px;
+  padding:12px 13px;
+  background:#111a16;
+}
+.archiveFactList span{font-size:11px;color:var(--muted)}
+.archiveFactList b{text-align:right;font-size:12px;line-height:1.35;overflow-wrap:anywhere}
+.archiveTimelineHead{margin-top:25px}
+.archiveTimeline{border-top:1px solid var(--line)}
+.archiveRideRow{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:18px;
+  align-items:center;
+  padding:13px 4px;
+  border-bottom:1px solid var(--line);
+}
+.archiveRideRow>div:last-child{text-align:right}
+.archiveRideRow b{display:block;font-size:13px}
+.archiveRideRow small{display:block;margin-top:3px;color:var(--muted);font-size:10px}
+.nerdRecap .nerdGrid{margin-top:12px}
+
+@media(max-width:640px){
+  .archiveSummaryGrid,
+  .archiveHeroFacts,
+  .nerdGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .nav button{font-size:10px;padding:9px 4px}
+}
+@media(max-width:390px){
+  .nav{width:min(calc(100% - 14px),536px);padding:6px}
+  .nav button{font-size:9px;letter-spacing:-.15px;padding:8px 2px}
+  .archiveIntro{padding:18px}
+  .archiveDayCard{padding:14px}
+  .archiveDayStats{grid-template-columns:1fr 1fr}
+  .archiveDayStats span:last-child{grid-column:1/-1}
+  .archiveFactList>div{grid-template-columns:1fr;gap:4px}
+  .archiveFactList b{text-align:left}
 }
