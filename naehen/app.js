@@ -152,6 +152,26 @@
     return EXTERNAL_FALLBACK_RIDES[parkSlug] || FALLBACK_RIDES;
   }
 
+  function canonicalRideForPark(rideId, parkSlug = activeParkSlug || "phantasialand") {
+    return fallbackRidesFor(parkSlug).find((ride) => ride.id === rideId) || null;
+  }
+
+  function canonicalRideName(rideId, parkSlug = activeParkSlug || "phantasialand", fallbackName = "") {
+    return canonicalRideForPark(rideId, parkSlug)?.name || fallbackName || rideId;
+  }
+
+  function canonicalRideZone(rideId, parkSlug = activeParkSlug || "phantasialand", fallbackZone = "") {
+    return canonicalRideForPark(rideId, parkSlug)?.zone || fallbackZone || PARKS[parkSlug]?.name || "Park";
+  }
+
+  function localizeStoredSession(session, parkSlug = activeParkSlug || "phantasialand") {
+    if (!session) return session;
+    return Object.assign({}, session, {
+      rideName: canonicalRideName(session.rideId, parkSlug, session.rideName),
+      parkSlug: session.parkSlug || parkSlug
+    });
+  }
+
   let deferredInstall = null;
   let supa = null;
   let user = null;
