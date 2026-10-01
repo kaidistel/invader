@@ -656,6 +656,9 @@
     if (id === "rideSheet" && !options.fromPopState && history.state?.naehenRideDetail) {
       history.back();
     }
+    if (id === "archiveDetailSheet" && !options.fromPopState && history.state?.naehenArchiveDetail) {
+      history.back();
+    }
   }
 
   function pushRideDetailHistory(rideId) {
@@ -924,7 +927,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=59", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=60", {
           scope: "./",
           updateViaCache: "none"
         });
@@ -1477,6 +1480,9 @@
     const list = $("#parkArchiveList");
     if (!summary || !list) return;
 
+    const parkLabel = $("#archiveParkLabel");
+    if (parkLabel) parkLabel.textContent = (activeParkConfig()?.name || "DIESER PARK").toUpperCase();
+
     const entries = parkArchive.slice().sort((a, b) => parkDayStartMs(b.day) - parkDayStartMs(a.day));
     const facts = entries.map((entry) => buildDayFacts(entry.day, entry.sessions, entry.day?.park_slug || activeParkSlug));
     const totalRides = facts.reduce((sum, fact) => sum + fact.rides, 0);
@@ -1582,6 +1588,13 @@
       "<div class=\"archiveTimeline\">" + timeline + "</div>";
 
     openSheet("archiveDetailSheet");
+    if (!history.state?.naehenArchiveDetail) {
+      history.pushState(
+        Object.assign({}, history.state || {}, { naehenArchiveDetail: true, archiveDayId: dayId }),
+        "",
+        location.href
+      );
+    }
   }
 
   async function startParkDay() {
@@ -2200,6 +2213,12 @@
     const rideSheet = $("#rideSheet");
     if (rideSheet?.classList.contains("show")) {
       closeSheet("rideSheet", { fromPopState: true });
+      return;
+    }
+
+    const archiveSheet = $("#archiveDetailSheet");
+    if (archiveSheet?.classList.contains("show")) {
+      closeSheet("archiveDetailSheet", { fromPopState: true });
       return;
     }
 
