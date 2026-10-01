@@ -997,6 +997,7 @@
       active = null;
       favorites = [];
       favoriteSettings = {};
+      parkArchive = [];
       totalRideCount = 0;
     } else {
       $("#accountMode").textContent = (isDesktopDevMode() ? "DEV-BROWSER · " : "") + (appUser.email || "Account");
@@ -1251,6 +1252,7 @@
     renderRides();
     renderStats();
     renderLog();
+    renderParkArchive();
     renderProfile();
     updateActiveTimer();
   }
@@ -1628,6 +1630,8 @@
     }
 
     const endedAt = new Date().toISOString();
+    const completedDay = Object.assign({}, parkDay, { ended_at: endedAt });
+
     if (supa && currentUserId()) {
       const result = await supa.from("park_days").update({ ended_at: endedAt }).eq("id", parkDay.id).eq("user_id", currentUserId());
       if (result.error) {
@@ -1637,11 +1641,20 @@
       }
     }
 
-    renderRecap(sessions);
+    const archiveEntry = {
+      day: completedDay,
+      sessions: sessions.map((session) => Object.assign({}, session))
+    };
+    parkArchive = [
+      archiveEntry,
+      ...parkArchive.filter((entry) => String(entry.day?.id) !== String(completedDay.id))
+    ];
+
+    renderRecap(sessions, completedDay);
     openSheet("recapSheet");
     parkDay = null;
     persistLocalState();
-    renderParkDay();
+    renderAll();
   }
 
   function renderStats() {
@@ -2166,10 +2179,11 @@
   }
 
   function switchView(viewId) {
-    ["homeView", "logView", "profileView"].forEach((id) => {
-      $("#" + id).classList.toggle("hidden", id !== viewId);
+    ["homeView", "logView", "archiveView", "profileView"].forEach((id) => {
+      $("#" + id)?.classList.toggle("hidden", id !== viewId);
     });
-    $$("[data-view]").forEach((button) => button.classList.toggle("active", button.dataset.view === viewId));
+    if (viewId === "archiveView") renderParkArchive();
+    $("[data-view]").forEach((button) => button.classList.toggle("active", button.dataset.view === viewId));
   }
 
   window.addEventListener("popstate", (event) => {
