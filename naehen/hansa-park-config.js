@@ -207,7 +207,8 @@
       slug:"hansa-park",
       name:"HANSA-PARK",
       location:"Sierksdorf · Schleswig-Holstein",
-      liveDataUrl:"./live-hansa-park.json",
+      liveDataUrl:null,
+      liveWaits:false,
       cardImage:rawWorlds["der-schwur-des-kaernan"].artUrl,
       cardCopy:"Ostsee, KÄRNAN, Cornwall Coaster und 41 Fahrattraktionen zum Nähen.",
       disclaimer:"Kein offizielles Angebot des HANSA-PARK."
