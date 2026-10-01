@@ -192,7 +192,7 @@ export const HOTKEYS=[
     "key": "g",
     "action": "push-loop",
     "label": "G",
-    "description": "Push-to-Loop: halten für Audio-Loop"
+    "description": "Rekommandier-Loop: letzte ~3 Sekunden halten"
   },
   {
     "key": "f1",
