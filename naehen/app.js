@@ -982,7 +982,7 @@
         .eq("park_day_id", parkDay.id)
         .order("started_at", { ascending: false });
 
-      if (!sessionResult.error) sessions = (sessionResult.data || []).map(dbSessionToClient);
+      if (!sessionResult.error) sessions = (sessionResult.data || []).map((row) => dbSessionToClient(row, parkSlug));
 
       const waiting = sessions.find((s) => s.status === "waiting");
       if (waiting) active = waiting;
@@ -1026,11 +1026,12 @@
     persistLocalState();
   }
 
-  function dbSessionToClient(row) {
+  function dbSessionToClient(row, parkSlug = activeParkSlug || "phantasialand") {
     return {
       id: row.id,
       rideId: row.ride_id,
-      rideName: row.ride_name,
+      rideName: canonicalRideName(row.ride_id, parkSlug, row.ride_name),
+      parkSlug: parkSlug,
       type: row.queue_type,
       posted: row.posted_wait,
       startedAt: new Date(row.started_at).getTime(),
