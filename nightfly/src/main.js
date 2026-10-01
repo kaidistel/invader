@@ -143,7 +143,7 @@ function updateUI(){
  $('lift-bar').style.width=state.lift*100+'%';
  $('rpm-target').textContent=state.rpmTarget.toFixed(1).replace('.',',')+' U/min';
  $('power-value').textContent=Math.round(state.power*100)+' %';
- $('status').textContent=state.paused?'PAUSIERT':state.estopped?'NOT-HALT':state.parking?'RÜCKKEHR ZUR STATION':state.ready?'FAHRBETRIEB':state.lift>0?'GESTELL IN BEWEGUNG':'LADESTELLUNG';
+ $('status').textContent=state.paused?'PAUSIERT':state.estopped?'NOT-HALT':state.parking?'RÜCKKEHR ZUR STATION':state.mode==='park180'?'ARM PARKT AUF 180°':state.ready?'FAHRBETRIEB':state.lift>0?'GESTELL IN BEWEGUNG':'LADESTELLUNG';
  $('pause').textContent=state.paused?'▶ Weiter':'Ⅱ Pause';
  for(const [id,mode] of [['pendulum','pendulum'],['arm-hold','hold'],['loop-left','left'],['loop-right','right']])$(id).classList.toggle('selected',state.mode===mode);
  $('brake').classList.toggle('selected',gondolas.every(g=>g.braked));$('release').classList.toggle('selected',gondolas.every(g=>!g.braked));
@@ -213,6 +213,7 @@ function runShortcut(action){
  if(action==='brake-toggle'){setAllBrake(!gondolas.every(g=>g.braked));return;}
  if(action.startsWith('camera-')){chooseCamera(action.slice(7));return;}
  if(action==='help'){$('help-dialog').open?$('help-dialog').close():$('help-dialog').showModal();return;}
+ if(action==='arm-park-180'){heldArrows.clear();state.manual=0;if(!state.parkArm180()){message('180°-Parken ist erst in Fahrstellung möglich.');return;}message('Arm fährt kontrolliert auf 180° Parkposition.');updateUI();return;}
  if(['pause','reset','estop','lower','arm-hold'].includes(action)){heldArrows.clear();state.manual=0;}
  $(action)?.click();
 }
