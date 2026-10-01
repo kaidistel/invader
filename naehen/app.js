@@ -893,22 +893,37 @@
     const favoriteFilter = $("#favoriteFilter");
     if (favoriteFilter) favoriteFilter.setAttribute("aria-pressed", "false");
 
-    if (localMode) {
-      loadLocalParkState(parkSlug);
-    } else {
-      await loadAccountState(parkSlug);
-    }
+    // Always hydrate the last local snapshot first so the park can render immediately,
+    // even when Supabase is slow or temporarily unavailable.
+    loadLocalParkState(parkSlug);
 
     persistLocalState();
     switchView("homeView");
     renderAll();
 
-    // Stable sequence: park/account state first, then live snapshot.
-    // HANSA-PARK returns immediately because public live waits are disabled there.
+    // Public live waits are independent from account sync.
     startLiveRefresh();
-    await loadLiveWaits();
+    const livePromise = loadLiveWaits();
 
     if (!localMode) {
+      loadAccountState(parkSlug)
+        .then(() => {
+          if (activeParkSlug !== parkSlug) return;
+          persistLocalState();
+
+          // Keep whatever live ride objects may already have arrived.
+          // Account sync only refreshes personal state around them.
+          renderParkDay();
+          renderStats();
+          renderLog();
+          renderProfile();
+          renderRides();
+        })
+        .catch((error) => {
+          console.warn("Account-Parkdaten konnten nicht geladen werden", error);
+          if (activeParkSlug === parkSlug) renderAll();
+        });
+
       loadCloudParkArchive(parkSlug)
         .then(() => {
           if (activeParkSlug !== parkSlug) return;
@@ -918,6 +933,8 @@
         })
         .catch((error) => console.warn("Parktag-Archiv konnte im Hintergrund nicht geladen werden", error));
     }
+
+    await livePromise;
   }
 
   function persistLocalState() {
@@ -947,7 +964,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=64", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=65", {
           scope: "./",
           updateViaCache: "none"
         });
