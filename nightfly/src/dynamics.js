@@ -19,6 +19,7 @@ export class RideState {
  get ready(){return this.lift>.995&&!this.parking&&!this.estopped&&this.restraintsLocked;}
  raise(){if(!this.restraintsLocked)return false;this.liftTarget=1;this.parking=false;this.estopped=false;return true;}
  park(){this.parking=true;this.rpmTarget=0;this.mode='park';this.manual=0;this.estopped=false;}
+ parkArm180(){if(!this.ready)return false;this.rpmTarget=0;this.mode='park180';this.manual=0;this.estopped=false;return true;}
  setRPM(v){if(!this.ready)return false;this.rpmTarget=clamp(Number(v)||0,-12,12);return true;}
  setMode(mode){if(!this.ready)return false;this.mode=mode;this.manual=0;
   if(mode==='hold')this.hold=this.arm+this.armSpeed*Math.abs(this.armSpeed)/(2*PHYSICS.armHoldAcceleration);
@@ -38,10 +39,10 @@ export class RideState {
   this.rotor+=this.rpm*TAU/60*dt;
   const gravity=-PHYSICS.armGravity*Math.sin(this.arm);
   let desiredMotor=0;
-  if(this.mode==='hold'||this.mode==='park'||this.estopped){
-   const error=this.mode==='park'?-wrap(this.arm):this.hold-this.arm;
+  if(this.mode==='hold'||this.mode==='park'||this.mode==='park180'||this.estopped){
+   const error=this.mode==='park'?-wrap(this.arm):this.mode==='park180'?wrap(Math.PI-this.arm):this.hold-this.arm;
    const decel=this.estopped?.65:PHYSICS.armHoldAcceleration;
-   const speedTarget=this.mode==='park'?clamp(error*.45,-.42,.42):0;
+   const speedTarget=(this.mode==='park'||this.mode==='park180')?clamp(error*.45,-.42,.42):0;
    desiredMotor=clamp((speedTarget-this.armSpeed)*1.2,-decel,decel);
   }else if(this.manual){
    desiredMotor=this.manual*(.25+this.power*.65);
@@ -57,12 +58,13 @@ export class RideState {
    desiredMotor=clamp((speedTarget-this.armSpeed)*.8,-PHYSICS.armDriveAcceleration,PHYSICS.armDriveAcceleration);
   }
   this.motor=approach(this.motor,clamp(desiredMotor,-1.2,1.2),dt*(this.estopped?.7:PHYSICS.armMotorJerk));
-  const servo=['hold','park','left','right'].includes(this.mode)||this.estopped;
+  const servo=['hold','park','park180','left','right'].includes(this.mode)||this.estopped;
   // Servo modes balance the gravitational load; only the commanded drive ramps.
   const acceleration=(servo?0:gravity)+this.motor-.055*this.armSpeed;
   if(this.lift<.995&&!this.parking&&!this.estopped){this.arm=0;this.armSpeed=0;this.motor=0;}
   else{this.armSpeed=clamp(this.armSpeed+acceleration*dt,-PHYSICS.armMaxSpeed,PHYSICS.armMaxSpeed);this.arm+=this.armSpeed*dt;}
   if(this.mode==='hold'&&Math.abs(this.armSpeed)<.0005){this.armSpeed=0;this.hold=this.arm;this.motor=0;}
+  if(this.mode==='park180'&&Math.abs(wrap(Math.PI-this.arm))<.008&&Math.abs(this.armSpeed)<.015){this.arm=Math.PI;this.armSpeed=0;this.motor=0;this.hold=this.arm;this.mode='hold';}
   if(this.parking){
    const r=wrap(this.rotor);
    if(Math.abs(this.rpm)<.01)this.rotor+=clamp(-r,-.20*dt,.20*dt);
