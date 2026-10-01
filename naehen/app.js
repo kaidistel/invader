@@ -2176,16 +2176,16 @@
         recapStat(fact.hundredPlusCount + "×", "100+ km/h") +
         recapStat(fact.topSpeed ? fact.topSpeed + " km/h" : "–", "Top-Speed") +
       "</div></div>" +
-      "<div class=\"recapBox"><b>🏆 Meistgenäht</b><p>" +
+      "<div class=\"recapBox\"><b>🏆 Meistgenäht</b><p>" +
         escapeHtml(fact.topRide ? fact.topRide.name + " ×" + fact.topRide.count : "–") +
       "</p></div>" +
-      "<div class=\"recapBox"><b>🐌 Queue-Extremwerte</b><p>" +
+      "<div class=\"recapBox\"><b>🐌 Queue-Extremwerte</b><p>" +
         escapeHtml(fact.longest ? "Längste: " + fact.longest.rideName + " · " + minutesRounded(fact.longest.duration) + " min" : "Längste: –") +
         "<br>" +
         escapeHtml(fact.shortest ? "Kürzeste: " + fact.shortest.rideName + " · " + minutesRounded(fact.shortest.duration) + " min" : "Kürzeste: –") +
       "</p></div>" +
-      "<div class=\"recapBox"><b>📊 vs. ausgeschildert</b><p>" + escapeHtml(comparisonText) + "</p></div>" +
-      "<div class=\"recapBox"><b>💾 Dauerhaft gespeichert</b><p>Dieser Parktag liegt jetzt im Archiv und bleibt auch nach dem nächsten Parktag erhalten.</p></div>";
+      "<div class=\"recapBox\"><b>📊 vs. ausgeschildert</b><p>" + escapeHtml(comparisonText) + "</p></div>" +
+      "<div class=\"recapBox\"><b>💾 Dauerhaft gespeichert</b><p>Dieser Parktag liegt jetzt im Archiv und bleibt auch nach dem nächsten Parktag erhalten.</p></div>";
   }
 
   function recapStat(value, label) {
