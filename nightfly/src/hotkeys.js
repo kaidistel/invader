@@ -57,6 +57,12 @@ export const HOTKEYS=[
     "description": "Arm sanft anhalten"
   },
   {
+    "key": "m",
+    "action": "arm-park-180",
+    "label": "M",
+    "description": "Arm auf 180° parken"
+  },
+  {
     "key": "y",
     "action": "loop-left",
     "label": "Y",
