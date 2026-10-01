@@ -670,8 +670,12 @@
   function loadLocalParkState(parkSlug) {
     const legacy = parkSlug === "phantasialand";
     parkDay = store.get(parkStoreKey("naehen:parkDay", parkSlug), legacy ? store.get("naehen:parkDay", null) : null);
-    sessions = store.get(parkStoreKey("naehen:sessions", parkSlug), legacy ? store.get("naehen:sessions", []) : []);
-    active = store.get(parkStoreKey("naehen:active", parkSlug), legacy ? store.get("naehen:active", null) : null);
+    sessions = store.get(parkStoreKey("naehen:sessions", parkSlug), legacy ? store.get("naehen:sessions", []) : [])
+      .map((session) => localizeStoredSession(session, parkSlug));
+    active = localizeStoredSession(
+      store.get(parkStoreKey("naehen:active", parkSlug), legacy ? store.get("naehen:active", null) : null),
+      parkSlug
+    );
     favorites = store.get(parkStoreKey("naehen:favorites", parkSlug), legacy ? store.get("naehen:favorites", []) : []);
     favoriteSettings = store.get(parkStoreKey("naehen:favoriteSettings", parkSlug), legacy ? store.get("naehen:favoriteSettings", {}) : {});
     srReportsLocal = store.get(parkStoreKey("naehen:srReports", parkSlug), legacy ? store.get("naehen:srReports", []) : []);
