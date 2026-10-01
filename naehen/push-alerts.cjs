@@ -28,8 +28,7 @@ const DISPLAY_NAMES_BY_LIVE_FILE = {
   "live-movie-park.json": loadParkDisplayNames("movie-park-config.js", "NAEHEN_MOVIE_PARK"),
   "live-walibi-holland.json": loadParkDisplayNames("walibi-holland-config.js", "NAEHEN_WALIBI_HOLLAND"),
   "live-walibi-belgium.json": loadParkDisplayNames("walibi-belgium-config.js", "NAEHEN_WALIBI_BELGIUM"),
-  "live-europa-park.json": loadParkDisplayNames("europa-park-config.js", "NAEHEN_EUROPA_PARK"),
-  "live-hansa-park.json": loadParkDisplayNames("hansa-park-config.js", "NAEHEN_HANSA_PARK")
+  "live-europa-park.json": loadParkDisplayNames("europa-park-config.js", "NAEHEN_EUROPA_PARK")
 };
 
 if (!SUPABASE_URL || !SERVICE_KEY || !VAPID_PUBLIC_KEY || !VAPID_PRIVATE_KEY) {
@@ -119,59 +118,6 @@ function slugRide(name) {
   return low.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ß/g, "ss").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
-const HANSA_LIVE_ALIASES = {
-  '"flower magic" boat tour': "blumenmeer-bootsfahrt",
-  "flower magic boat tour": "blumenmeer-bootsfahrt",
-  '"highlander"': "highlander",
-  "highlander": "highlander",
-  "1903 somerset traffic": "1903-somerset-traffic",
-  "animal babies of peterhof": "die-tierkinder-vom-peterhof",
-  "awilda’s adventure ride": "awildas-abenteuerfahrt",
-  "awilda's adventure ride": "awildas-abenteuerfahrt",
-  "awilda’s lookout": "awildas-ausguck",
-  "awilda's lookout": "awildas-ausguck",
-  "barcos del mar": "barcos-del-mar",
-  "barracuda slide": "barracuda-slide",
-  "beach trucks at the pirates camp": "beach-trucks-im-piraten-camp",
-  "carrousel baltique": "carrousel-baltique",
-  "cog ship ride": "koggenfahrt",
-  "crazy mine": "crazy-mine",
-  "dr livingstone’s safari-flight": "dr-livingstones-safari-flug",
-  "dr livingstone's safari-flight": "dr-livingstones-safari-flug",
-  "einar's fjord cruise": "einars-fjordfahrt",
-  "einar’s fjord cruise": "einars-fjordfahrt",
-  "elin's travels through the sky": "elins-luftreise",
-  "elin’s travels through the sky": "elins-luftreise",
-  "escape of novgorod": "flucht-von-novgorod",
-  "flying orcas": "flying-orcas",
-  "hansa carousel": "hanse-karussell",
-  "hansa swing ride": "hanse-flieger",
-  "hansa-park express": "hansa-park-express",
-  "indian river": "indian-river",
-  "kärnapulten": "kaernapulten",
-  "kaernapulten": "kaernapulten",
-  "luftikus": "luftikus",
-  "midgard serpent": "die-schlange-von-midgard",
-  "nessie": "nessie",
-  "new: cornwall coaster": "cornwall-coaster",
-  "cornwall coaster": "cornwall-coaster",
-  "peterhof tower": "turm-vom-peterhof",
-  "pony express": "pony-post",
-  "pow wow": "pow-wow",
-  "royal scotsman": "royal-scotsman",
-  "safari jeeps": "safari-jeeps",
-  "space scooter": "space-scooter",
-  "stormy dragon boat ride": "sturmfahrt-der-drachenboote",
-  "störtebeker's sea raid": "stoertebekers-kaperfahrt",
-  "störtebeker’s sea raid": "stoertebekers-kaperfahrt",
-  "super splash": "super-splash",
-  "swing boat": "schiffschaukel",
-  "the oath of kärnan": "der-schwur-des-kaernan",
-  "the little tsar": "der-kleine-zar",
-  "viking boat trip": "wikinger-bootsfahrt",
-  "wave rider": "wellenreiter",
-  "wild water ride - the great pike": "wildwasserfahrt-wasserwolf"
-};
 
 const PUSH_EXCLUDED_RIDES = new Set([
   "berliner-einlauten",
@@ -278,13 +224,12 @@ async function sendToUser(userId, payload, subscriptions) {
 (async () => {
   const live = livePaths.flatMap((livePath) => {
     const isWalibiBelgium = /live-walibi-belgium\.json$/i.test(livePath);
-    const isHansaPark = /live-hansa-park\.json$/i.test(livePath);
     const liveFile = path.basename(livePath);
     return flattenLive(
       JSON.parse(fs.readFileSync(livePath, "utf8")),
       {
-        idPrefix: isWalibiBelgium ? "wb-" : isHansaPark ? "hp-" : "",
-        aliases: isHansaPark ? HANSA_LIVE_ALIASES : {},
+        idPrefix: isWalibiBelgium ? "wb-" : "",
+        aliases: {},
         displayNames: DISPLAY_NAMES_BY_LIVE_FILE[liveFile] || new Map()
       }
     );
