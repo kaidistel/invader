@@ -1383,6 +1383,205 @@
     if (result.error) console.warn("Favorit konnte nicht synchronisiert werden", result.error);
   }
 
+  function buildDayFacts(day, sourceSessions, parkSlug = activeParkSlug || day?.park_slug || "phantasialand") {
+    const allSessions = (sourceSessions || []).map((session) => localizeStoredSession(session, parkSlug));
+    const ridden = allSessions.filter((session) => session.status === "ridden");
+    const aborted = allSessions.filter((session) => session.status === "aborted");
+    const queueDurations = ridden
+      .map((session) => Number(session.duration))
+      .filter((value) => Number.isFinite(value) && value >= 0);
+    const queueMs = queueDurations.reduce((sum, value) => sum + value, 0);
+    const startMs = parkDayStartMs(day);
+    const endMs = parkDayEndMs(day) || (day === parkDay ? Date.now() : startMs);
+    const parkMs = Math.max(0, endMs - startMs);
+    const sortedRidden = ridden.slice().sort((a, b) => Number(a.startedAt || 0) - Number(b.startedAt || 0));
+    const uniqueRideIds = new Set(ridden.map((session) => session.rideId));
+    const counts = {};
+
+    ridden.forEach((session) => {
+      const key = session.rideId || session.rideName;
+      if (!counts[key]) counts[key] = { name: session.rideName, count: 0 };
+      counts[key].count += 1;
+    });
+
+    const topRideEntry = Object.values(counts).sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, "de"))[0] || null;
+    const withDuration = ridden.filter((session) => Number.isFinite(Number(session.duration)));
+    const longest = withDuration.slice().sort((a, b) => Number(b.duration) - Number(a.duration))[0] || null;
+    const shortest = withDuration.slice().sort((a, b) => Number(a.duration) - Number(b.duration))[0] || null;
+    const singleCount = ridden.filter((session) => session.type === "single").length;
+    const postedComparable = ridden.filter((session) =>
+      session.posted !== null &&
+      session.posted !== undefined &&
+      Number.isFinite(Number(session.posted)) &&
+      Number.isFinite(Number(session.duration))
+    );
+    const savedMs = postedComparable.reduce((sum, session) =>
+      sum + (Number(session.posted) * 60000 - Number(session.duration)), 0
+    );
+
+    const speedRows = ridden.map((session) => ({
+      session: session,
+      speedKmh: rideSpeedKmh(session.rideId, parkSlug)
+    })).filter((row) => Number.isFinite(Number(row.speedKmh)));
+    const topSpeedRow = speedRows.slice().sort((a, b) => Number(b.speedKmh) - Number(a.speedKmh))[0] || null;
+    const hundredPlusCount = speedRows.filter((row) => Number(row.speedKmh) >= 100).length;
+
+    return {
+      parkSlug: parkSlug,
+      rides: ridden.length,
+      aborted: aborted.length,
+      uniqueRides: uniqueRideIds.size,
+      rerides: Math.max(0, ridden.length - uniqueRideIds.size),
+      queueMs: queueMs,
+      avgQueueMs: ridden.length ? queueMs / ridden.length : 0,
+      medianQueueMs: median(queueDurations),
+      parkMs: parkMs,
+      outsideQueueMs: Math.max(0, parkMs - queueMs),
+      queueShare: parkMs ? queueMs / parkMs : 0,
+      ridesPerHour: parkMs ? ridden.length / (parkMs / 3600000) : 0,
+      singleCount: singleCount,
+      singleShare: ridden.length ? singleCount / ridden.length : 0,
+      topRide: topRideEntry,
+      longest: longest,
+      shortest: shortest,
+      firstRide: sortedRidden[0] || null,
+      lastRide: sortedRidden[sortedRidden.length - 1] || null,
+      postedComparableCount: postedComparable.length,
+      savedMinutes: Math.round(savedMs / 60000),
+      topSpeed: topSpeedRow ? Number(topSpeedRow.speedKmh) : null,
+      topSpeedRide: topSpeedRow ? topSpeedRow.session : null,
+      hundredPlusCount: hundredPlusCount
+    };
+  }
+
+  function parkDayDateLabel(day) {
+    const startMs = parkDayStartMs(day);
+    if (!startMs) return "Unbekannter Parktag";
+    return new Date(startMs).toLocaleDateString("de-DE", {
+      weekday: "short",
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    });
+  }
+
+  function rideTimeLabel(session) {
+    if (!session?.startedAt) return "–";
+    return new Date(session.startedAt).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
+  }
+
+  function renderParkArchive() {
+    const summary = $("#archiveSummary");
+    const list = $("#parkArchiveList");
+    if (!summary || !list) return;
+
+    const entries = parkArchive.slice().sort((a, b) => parkDayStartMs(b.day) - parkDayStartMs(a.day));
+    const facts = entries.map((entry) => buildDayFacts(entry.day, entry.sessions, entry.day?.park_slug || activeParkSlug));
+    const totalRides = facts.reduce((sum, fact) => sum + fact.rides, 0);
+    const totalQueueMs = facts.reduce((sum, fact) => sum + fact.queueMs, 0);
+    const bestDay = entries.map((entry, index) => ({ entry, fact: facts[index] }))
+      .sort((a, b) => b.fact.rides - a.fact.rides || b.fact.parkMs - a.fact.parkMs)[0] || null;
+
+    summary.innerHTML =
+      "<div class=\"archiveSummaryGrid\">" +
+        recapStat(entries.length, "gespeicherte Parktage") +
+        recapStat(totalRides + "×", "Fahrten im Archiv") +
+        recapStat(formatDurationHuman(totalQueueMs), "Queue insgesamt") +
+        recapStat(entries.length ? (totalRides / entries.length).toFixed(1) : "0", "Fahrten / Parktag") +
+      "</div>" +
+      (bestDay && bestDay.fact.rides
+        ? "<div class=\"archiveRecord\"><span>🏆 Tagesrekord</span><b>" + escapeHtml(parkDayDateLabel(bestDay.entry.day)) + " · " + bestDay.fact.rides + " Fahrten</b></div>"
+        : "");
+
+    if (!entries.length) {
+      list.innerHTML = "<div class=\"empty\">Noch kein abgeschlossener Parktag gespeichert. Dein nächster wird hier dauerhaft archiviert.</div>";
+      return;
+    }
+
+    list.innerHTML = entries.map((entry) => {
+      const day = entry.day;
+      const fact = buildDayFacts(day, entry.sessions, day?.park_slug || activeParkSlug);
+      const parkName = PARKS[day?.park_slug || activeParkSlug]?.name || "Park";
+      const topRide = fact.topRide ? fact.topRide.name + (fact.topRide.count > 1 ? " ×" + fact.topRide.count : "") : "Noch keine Fahrt";
+      return "<button class=\"archiveDayCard\" type=\"button\" data-archive-day=\"" + escapeHtml(day.id) + "\">" +
+        "<div class=\"archiveDayTop\"><div><span class=\"eyebrow\">" + escapeHtml(parkName) + "</span><h3>" + escapeHtml(parkDayDateLabel(day)) + "</h3></div><span class=\"archiveChevron\">›</span></div>" +
+        "<div class=\"archiveDayStats\">" +
+          "<span><b>" + fact.rides + "×</b> Fahrten</span>" +
+          "<span><b>" + escapeHtml(formatDurationHuman(fact.queueMs)) + "</b> Queue</span>" +
+          "<span><b>" + escapeHtml(formatDurationHuman(fact.parkMs)) + "</b> Parkzeit</span>" +
+        "</div>" +
+        "<div class=\"archiveDayFoot\">meistgenäht: <b>" + escapeHtml(topRide) + "</b></div>" +
+      "</button>";
+    }).join("");
+
+    list.querySelectorAll("[data-archive-day]").forEach((button) => {
+      button.addEventListener("click", () => openArchiveDay(button.dataset.archiveDay));
+    });
+  }
+
+  function openArchiveDay(dayId) {
+    const entry = parkArchive.find((item) => String(item.day?.id) === String(dayId));
+    if (!entry) return;
+
+    const day = entry.day;
+    const parkSlug = day?.park_slug || activeParkSlug || "phantasialand";
+    const parkName = PARKS[parkSlug]?.name || "Park";
+    const fact = buildDayFacts(day, entry.sessions, parkSlug);
+    const detail = $("#archiveDetailContent");
+    if (!detail) return;
+
+    $("#archiveDetailTitle").textContent = parkDayDateLabel(day);
+    $("#archiveDetailMeta").textContent = parkName + " · " + formatDurationHuman(fact.parkMs);
+
+    const comparisonText = fact.postedComparableCount
+      ? (fact.savedMinutes >= 0
+        ? fact.savedMinutes + " Min. weniger als ausgeschildert gewartet"
+        : Math.abs(fact.savedMinutes) + " Min. länger als ausgeschildert gewartet")
+      : "Keine ausreichenden Soll-/Ist-Wartezeitdaten";
+
+    const chronological = entry.sessions.slice().sort((a, b) => Number(a.startedAt || 0) - Number(b.startedAt || 0));
+    const timeline = chronological.length
+      ? chronological.map((session) => {
+          const duration = Number.isFinite(Number(session.duration)) ? minutesRounded(session.duration) + " min" : "–";
+          const state = session.status === "ridden" ? "genäht" : session.status === "aborted" ? "vernäht" : "offen";
+          return "<div class=\"archiveRideRow\"><div><b>" + escapeHtml(session.rideName) + "</b><small>" +
+            escapeHtml(rideTimeLabel(session)) + " · " + (session.type === "single" ? "Single Rider" : "Regular") +
+            "</small></div><div><b>" + escapeHtml(duration) + "</b><small>" + escapeHtml(state) + "</small></div></div>";
+        }).join("")
+      : "<div class=\"empty\">Keine Fahrten für diesen Parktag gespeichert.</div>";
+
+    detail.innerHTML =
+      "<div class=\"archiveHeroFacts\">" +
+        recapStat(fact.rides + "×", "genäht") +
+        recapStat(fact.uniqueRides, "verschiedene Rides") +
+        recapStat(formatDurationHuman(fact.queueMs), "echte Queue") +
+        recapStat(formatDurationHuman(fact.outsideQueueMs), "Zeit außerhalb Queue") +
+      "</div>" +
+      "<div class=\"nerdSection\"><div class=\"nerdTitle\">NERD-MODUS</div><div class=\"nerdGrid\">" +
+        recapStat(minutesRounded(fact.avgQueueMs) + "m", "Ø Queue") +
+        recapStat(minutesRounded(fact.medianQueueMs) + "m", "Median-Queue") +
+        recapStat(Math.round(fact.queueShare * 100) + "%", "Parkzeit in Queue") +
+        recapStat(fact.ridesPerHour ? fact.ridesPerHour.toFixed(2) : "0", "Fahrten / Stunde") +
+        recapStat(Math.round(fact.singleShare * 100) + "%", "Single-Rider-Anteil") +
+        recapStat(fact.rerides + "×", "Rerides") +
+        recapStat(fact.hundredPlusCount + "×", "100+ km/h") +
+        recapStat(fact.topSpeed ? fact.topSpeed + " km/h" : "–", "Top-Speed") +
+      "</div></div>" +
+      "<div class=\"archiveFactList\">" +
+        "<div><span>🏆 Meistgenäht</span><b>" + escapeHtml(fact.topRide ? fact.topRide.name + " ×" + fact.topRide.count : "–") + "</b></div>" +
+        "<div><span>🐌 Längste Queue</span><b>" + escapeHtml(fact.longest ? fact.longest.rideName + " · " + minutesRounded(fact.longest.duration) + " min" : "–") + "</b></div>" +
+        "<div><span>⚡ Kürzeste Queue</span><b>" + escapeHtml(fact.shortest ? fact.shortest.rideName + " · " + minutesRounded(fact.shortest.duration) + " min" : "–") + "</b></div>" +
+        "<div><span>🌅 Erste Fahrt</span><b>" + escapeHtml(fact.firstRide ? rideTimeLabel(fact.firstRide) + " · " + fact.firstRide.rideName : "–") + "</b></div>" +
+        "<div><span>🌙 Letzte Fahrt</span><b>" + escapeHtml(fact.lastRide ? rideTimeLabel(fact.lastRide) + " · " + fact.lastRide.rideName : "–") + "</b></div>" +
+        "<div><span>📊 Soll vs. Realität</span><b>" + escapeHtml(comparisonText) + "</b></div>" +
+        (fact.topSpeedRide ? "<div><span>🚀 Schnellste Fahrt</span><b>" + escapeHtml(fact.topSpeedRide.rideName + " · " + fact.topSpeed + " km/h") + "</b></div>" : "") +
+      "</div>" +
+      "<div class=\"sectionHead archiveTimelineHead\"><h2>Tagesprotokoll</h2><span>" + chronological.length + " Einträge</span></div>" +
+      "<div class=\"archiveTimeline\">" + timeline + "</div>";
+
+    openSheet("archiveDetailSheet");
+  }
+
   async function startParkDay() {
     if (parkDay) return;
 
