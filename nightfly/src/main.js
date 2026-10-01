@@ -201,6 +201,87 @@ $('reset').onclick=reset;$('pause').onclick=()=>{state.paused=!state.paused;accu
 $('help').onclick=()=>$('help-dialog').showModal();$('help-close').onclick=()=>$('help-dialog').close();
 document.querySelectorAll('[data-camera]').forEach(b=>b.onclick=()=>chooseCamera(b.dataset.camera));
 $('night').onclick=()=>{night=!night;scene.background.set(night?'#17283f':'#607f89');scene.fog.color.copy(scene.background);sun.intensity=night?.2:3.2;hemi.intensity=night?.55:2.2;renderer.toneMappingExposure=night?1.25:1.0;$('night').classList.toggle('selected',night);};
+
+let micStream=null,micContext=null,micSource=null,micGain=null,micArmed=false,talkHeld=false;
+function refreshMicGain(){
+ if(micGain)micGain.gain.value=talkHeld&&micArmed?Number($('mic-volume').value)/100:0;
+ $('mic-status').textContent=talkHeld&&micArmed?'LIVE':micArmed?'BEREIT':'AUS';
+ $('mic-status').classList.toggle('live',talkHeld&&micArmed);
+ $('mic-toggle').classList.toggle('live',talkHeld&&micArmed);
+}
+async function armMicrophone(){
+ if(micArmed)return true;
+ if(!navigator.mediaDevices?.getUserMedia){message('Mikrofonzugriff wird von diesem Browser nicht unterstützt.');return false;}
+ try{
+  micStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+  micContext=new (window.AudioContext||window.webkitAudioContext)();
+  await micContext.resume();
+  micSource=micContext.createMediaStreamSource(micStream);
+  micGain=micContext.createGain();micGain.gain.value=0;
+  micSource.connect(micGain).connect(micContext.destination);
+  micArmed=true;$('mic-toggle').textContent='🎙 Mikrofon freigegeben';
+  refreshMicGain();message('Mikrofon freigegeben. T gedrückt halten zum Rekommandieren.');
+  return true;
+ }catch(error){
+  console.error(error);message(error?.name==='NotAllowedError'?'Mikrofonzugriff wurde nicht erlaubt.':'Mikrofon konnte nicht gestartet werden.');return false;
+ }
+}
+async function disarmMicrophone(){
+ talkHeld=false;micArmed=false;
+ if(micSource){try{micSource.disconnect();}catch{}micSource=null;}
+ if(micGain){try{micGain.disconnect();}catch{}micGain=null;}
+ if(micStream){for(const track of micStream.getTracks())track.stop();micStream=null;}
+ if(micContext){try{await micContext.close();}catch{}micContext=null;}
+ $('mic-toggle').textContent='🎙 Mikrofon freigeben';refreshMicGain();
+}
+$('mic-toggle').onclick=async()=>{if(micArmed){await disarmMicrophone();message('Mikrofon ausgeschaltet.');}else await armMicrophone();};
+$('mic-volume').oninput=e=>{$('mic-volume-value').textContent=Number(e.target.value)+' %';refreshMicGain();};
+
+function youtubeId(value){
+ try{
+  const url=new URL(value.trim()),host=url.hostname.replace(/^www\./,'').toLowerCase();
+  if(host==='youtu.be')return url.pathname.split('/').filter(Boolean)[0]||null;
+  if(['youtube.com','m.youtube.com','music.youtube.com'].includes(host)){
+   if(url.pathname==='/watch')return url.searchParams.get('v');
+   const m=url.pathname.match(/^\/(?:shorts|embed|live)\/([^/?#]+)/);if(m)return m[1];
+  }
+ }catch{}
+ return null;
+}
+function loadYouTube(){
+ const id=youtubeId($('youtube-url').value);
+ if(!id){message('Bitte einen gültigen YouTube-Link einfügen.');return;}
+ $('youtube-player').src='https://www.youtube.com/embed/'+encodeURIComponent(id)+'?autoplay=1&playsinline=1&rel=0';
+ $('youtube-player-wrap').hidden=false;$('youtube-stop').disabled=false;
+ $('youtube-status').textContent='GELADEN';$('youtube-status').classList.add('live');
+ message('YouTube-Musik geladen. Falls Autoplay blockiert wird, einmal im Player auf Play drücken.');
+}
+function stopYouTube(){
+ $('youtube-player').src='about:blank';$('youtube-player-wrap').hidden=true;$('youtube-stop').disabled=true;
+ $('youtube-status').textContent='BEREIT';$('youtube-status').classList.remove('live');
+}
+$('youtube-load').onclick=loadYouTube;
+$('youtube-stop').onclick=()=>{stopYouTube();message('YouTube-Musik gestoppt.');};
+$('youtube-url').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();loadYouTube();}});
+
+let loopUrl=null,loopHeld=false,loopPreview=false;
+function stopLoop(reset=true){
+ const a=$('loop-audio');a.pause();if(reset)try{a.currentTime=0;}catch{}
+ loopHeld=false;loopPreview=false;$('loop-status').textContent=loopUrl?'BEREIT':'KEIN AUDIO';$('loop-status').classList.remove('live');
+}
+function playLoop(preview=false){
+ const a=$('loop-audio');if(!loopUrl){message('Bitte zuerst eine Loop-Audiodatei auswählen.');return;}
+ loopPreview=preview;loopHeld=!preview;
+ try{a.currentTime=0;}catch{}
+ const p=a.play();if(p?.catch)p.catch(()=>message('Loop konnte nicht abgespielt werden.'));
+ $('loop-status').textContent=preview?'TEST':'LOOP';$('loop-status').classList.add('live');
+}
+$('loop-file').onchange=e=>{
+ const file=e.target.files?.[0];if(loopUrl)URL.revokeObjectURL(loopUrl);loopUrl=file?URL.createObjectURL(file):null;
+ const a=$('loop-audio');stopLoop();a.src=loopUrl||'';$('loop-preview').disabled=!loopUrl;$('loop-stop').disabled=!loopUrl;
+ $('loop-status').textContent=loopUrl?'BEREIT':'KEIN AUDIO';message(loopUrl?'Loop geladen. G gedrückt halten zum Abspielen.':'Loop entfernt.');
+};
+$('loop-preview').onclick=()=>playLoop(true);$('loop-stop').onclick=()=>stopLoop();
 const heldArrows=new Set();
 function applyManualKeys(){
  if(state.ready&&!state.paused){state.mode='free';state.manual=(heldArrows.has('arrowright')?1:0)-(heldArrows.has('arrowleft')?1:0);}
@@ -217,20 +298,29 @@ function runShortcut(action){
  if(['pause','reset','estop','lower','arm-hold'].includes(action)){heldArrows.clear();state.manual=0;}
  $(action)?.click();
 }
-document.addEventListener('keydown',e=>{
+document.addEventListener('keydown',async e=>{
  if(!ready)return;
  const binding=shortcutFor(e,$('help-dialog').open);
  if(!binding)return;
- e.preventDefault();runShortcut(binding.action);
+ e.preventDefault();
+ if(binding.action==='push-talk'){
+  if(!micArmed){const ok=await armMicrophone();if(!ok)return;}
+  talkHeld=true;refreshMicGain();return;
+ }
+ if(binding.action==='push-loop'){if(!loopHeld&&!e.repeat)playLoop(false);return;}
+ runShortcut(binding.action);
 });
 document.addEventListener('keyup',e=>{
  const key=e.key.toLowerCase();
+ if(key==='t'){talkHeld=false;refreshMicGain();}
+ if(key==='g'&&loopHeld)stopLoop();
  if(['arrowleft','arrowright'].includes(key)){
   heldArrows.delete(key);
   state.manual=(heldArrows.has('arrowright')?1:0)-(heldArrows.has('arrowleft')?1:0);
  }
 });
-window.addEventListener('blur',()=>{heldArrows.clear();state.manual=0;});
+window.addEventListener('blur',()=>{heldArrows.clear();state.manual=0;talkHeld=false;refreshMicGain();if(loopHeld)stopLoop();});
+window.addEventListener('beforeunload',()=>{if(loopUrl)URL.revokeObjectURL(loopUrl);if(micStream)for(const track of micStream.getTracks())track.stop();});
 for(const binding of HOTKEYS){
  const button=binding.action.startsWith('camera-')?document.querySelector('[data-camera="'+binding.action.slice(7)+'"]'):$(binding.action);
  if(button){button.dataset.key=binding.label;button.title=binding.description+' ('+binding.label+')';button.setAttribute('aria-keyshortcuts',binding.key===' '?'Space':binding.label);}
