@@ -896,8 +896,23 @@
 
     switchView("homeView");
     renderAll();
-    await loadLiveWaits();
     startLiveRefresh();
+
+    // Live waits are the critical path. Do not let park-day history delay them.
+    const livePromise = loadLiveWaits();
+
+    if (!localMode) {
+      loadCloudParkArchive(parkSlug)
+        .then(() => {
+          if (activeParkSlug !== parkSlug) return;
+          persistLocalState();
+          renderParkArchive();
+          renderProfile();
+        })
+        .catch((error) => console.warn("Parktag-Archiv konnte im Hintergrund nicht geladen werden", error));
+    }
+
+    await livePromise;
   }
 
   function persistLocalState() {
@@ -927,7 +942,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=60", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=61", {
           scope: "./",
           updateViaCache: "none"
         });
@@ -1140,7 +1155,6 @@
 
     if (!countResult.error && typeof countResult.count === "number") totalRideCount = countResult.count;
 
-    await loadCloudParkArchive(parkSlug);
     persistLocalState();
   }
 
