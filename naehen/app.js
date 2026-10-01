@@ -863,7 +863,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=58", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=59", {
           scope: "./",
           updateViaCache: "none"
         });
@@ -1093,8 +1093,9 @@
         nowState[id] = { wait: wait, isOpen: !!raw.is_open, at: Date.now() };
         return enrichRide({
           id: id,
-          name: raw.name,
-          zone: raw.zone,
+          name: canonicalRideName(id, park.slug, raw.name),
+          zone: canonicalRideZone(id, park.slug, raw.zone),
+          providerName: raw.name,
           wait: wait,
           isOpen: !!raw.is_open,
           trend: trend,
