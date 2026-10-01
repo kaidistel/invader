@@ -893,3 +893,5 @@ body[data-park="europa-park"] .parkSwitch{
   .archiveFactList>div{grid-template-columns:1fr;gap:4px}
   .archiveFactList b{text-align:left}
 }
+
+.nerdDataNote{margin-top:10px;font-size:10px;line-height:1.4;color:var(--muted)}
