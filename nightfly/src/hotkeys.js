@@ -183,6 +183,18 @@ export const HOTKEYS=[
     "description": "Abendlicht umschalten"
   },
   {
+    "key": "t",
+    "action": "push-talk",
+    "label": "T",
+    "description": "Push-to-Talk: halten zum Rekommandieren"
+  },
+  {
+    "key": "g",
+    "action": "push-loop",
+    "label": "G",
+    "description": "Push-to-Loop: halten für Audio-Loop"
+  },
+  {
     "key": "f1",
     "action": "help",
     "label": "F1",
@@ -204,6 +216,6 @@ export function shortcutFor(event,helpOpen=false){
  if(target?.matches?.('input[type="range"]')&&key.startsWith('arrow'))return null;
  const binding=HOTKEYS.find(b=>b.key===key);
  if(!binding)return null;
- if(event.repeat&&!['rpm-down','rpm-up','power-down','power-up'].includes(binding.action))return null;
+ if(event.repeat&&!['rpm-down','rpm-up','power-down','power-up','push-talk','push-loop'].includes(binding.action))return null;
  return binding;
 }
