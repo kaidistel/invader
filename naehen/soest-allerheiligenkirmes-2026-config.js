@@ -63,8 +63,8 @@
       new2026:true, manufacturer:"KMG (NL)", type:"XXL", year:2025,
       dimensions:"18 × 13 × 46,5 m", capacity:"20 Personen", priceEuro:null,
       rideIndexUrl:"https://ride-index.de/2025/11/02/tiki-taxi-xxl/",
-      imageUrl:"https://nordkirmes.net/media/1398-whatsapp-image-2025-11-01-at-15-46-31-2-jpeg/?thumbnail=large",
-      imageCredit:"Nordkirmes.net", imageSourceUrl:"https://nordkirmes.net/"
+      imageUrl:"https://www.hamburg-dom-fieber.de/images/hamburg-dom-fieberde/xxl-schaukel-tiki-taki-xxl-og.jpeg.webp",
+      imageCredit:"Hamburg-Dom-Fieber", imageSourceUrl:"https://www.hamburg-dom-fieber.de/xxl-schaukel-tiki-taki-xxl"
     },
     {
       id:"number-1", name:"Number 1", operator:"Isken", operatorFull:"Rudolf Isken (Dortmund)",
@@ -111,8 +111,8 @@
       new2026:false, manufacturer:"Kalbfleisch (D)", type:"Großschaukel", year:1978,
       dimensions:"22 × 9 m", capacity:"50 Personen", priceEuro:null,
       rideIndexUrl:"https://ride-index.de/2005/01/11/nessy/",
-      imageUrl:"https://nordkirmes.net/media/888-d6-2-jpg/",
-      imageCredit:"Nordkirmes.net", imageSourceUrl:"https://nordkirmes.net/"
+      imageUrl:"https://www.medienwerkstatt-online.de/lws_wissen/bilder/35984-1.jpg",
+      imageCredit:"Medienwerkstatt Mühlacker", imageSourceUrl:"https://www.medienwerkstatt-online.de/lws_wissen/vorlagen/showcard.php?id=35984"
     },
     {
       id:"hexentanz", name:"Hexentanz", operator:"Markmann", operatorFull:"Markmann (Bonn)",
@@ -167,8 +167,8 @@
       new2026:false, manufacturer:"Dietz (D)", type:"3-Etagen-Laufgeschäft", year:1996,
       dimensions:"20 × 11 × 14 m", capacity:null, priceEuro:null,
       rideIndexUrl:"https://ride-index.de/2005/01/03/aqua-velis/",
-      imageUrl:"https://nordkirmes.net/gallery/raw-image/923-aqua-velis-hofmann/",
-      imageCredit:"Nordkirmes.net", imageSourceUrl:"https://nordkirmes.net/"
+      imageUrl:"https://www.ummet-eck.de/Bilder/fotosets/1024/1-aqua-velis-rheinkirmes22-c-UMM-chr-schoen.jpg",
+      imageCredit:"Ummet-Eck · Christian Schön", imageSourceUrl:"https://www.ummet-eck.de/"
     },
     {
       id:"wellenflieger", name:"Wellenflieger", operator:"Wendler", operatorFull:"Wendler (Unna)",
