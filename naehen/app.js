@@ -1411,7 +1411,7 @@
   function ridePriceText(ride) {
     const value = Number(ride?.priceEuro);
     if (ride?.priceEuro === null || ride?.priceEuro === undefined || !Number.isFinite(value)) {
-      return "noch nicht bestätigt";
+      return "noch nicht eingetragen";
     }
     return value.toLocaleString("de-DE", {
       minimumFractionDigits: 2,
@@ -1463,12 +1463,10 @@
       "</button>"
     ).join("");
 
-    const pdfUrl = map.sourceUrl || "";
+    const imageUrl = map.imageUrl || "";
     canvas.innerHTML =
-      "<div class=\"soestOriginalPlanWrap\" style=\"--plan-aspect:" + escapeHtml(map.aspectRatio || "1234 / 869") + "\">" +
-        "<object class=\"soestOriginalPlan\" data=\"" + escapeHtml(pdfUrl + "#page=1&view=Fit&toolbar=0&navpanes=0&scrollbar=0") + "\" type=\"application/pdf\">" +
-          "<iframe class=\"soestOriginalPlan\" src=\"" + escapeHtml(pdfUrl + "#page=1&view=Fit&toolbar=0&navpanes=0&scrollbar=0") + "\" title=\"Offizieller Soester Kirmesplan 2026\"></iframe>" +
-        "</object>" +
+      "<div class=\"soestOriginalPlanWrap\" style=\"--plan-aspect:" + escapeHtml(map.aspectRatio || "1310 / 1841") + "\">" +
+        "<img class=\"soestOriginalPlan\" src=\"" + escapeHtml(imageUrl) + "\" alt=\"Offizieller Lageplan der Soester Allerheiligenkirmes 2026\" loading=\"eager\" decoding=\"async\">" +
         "<div class=\"soestPlanHotspots\" aria-label=\"Verlinkte Fahrgeschäfte\">" + hotspots + "</div>" +
       "</div>";
 
@@ -2218,7 +2216,7 @@
       (fair ? "<div class=\"rideFactsEyebrow\">KIRMES-NERD-DATEN</div>" : "") +
       "<div class=\"rideFactGrid\">" + factHtml + "</div>" +
       (fair && ride.priceEuro == null
-        ? "<div class=\"ridePriceNote\">Der Soest-2026-Fahrpreis ist noch nicht bestätigt. Preise anderer Veranstaltungen werden bewusst nicht übernommen.</div>"
+        ? "<div class=\"ridePriceNote\">Fahrpreis noch nicht eingetragen. NÄHEN übernimmt hier bewusst keine Preise automatisch – der Wert wird manuell gepflegt.</div>"
         : "") +
       (links.length ? "<div class=\"rideFactSources\">" + links.join("") + "</div>" : "");
 
