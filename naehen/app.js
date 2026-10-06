@@ -1447,24 +1447,29 @@
       source.hidden = !map.sourceUrl;
     }
 
-    const linkedRides = rides.filter((ride) => !isExcludedRide(ride.name, ride.id, activeParkSlug));
-    const overlayLinks = linkedRides.map((ride) =>
-      "<button type=\"button\" class=\"soestMapOverlayLink\" data-map-ride=\"" + escapeHtml(ride.id) + "\">" +
-        "<b>" + escapeHtml(ride.name) + "</b>" +
-        (ride.operator ? "<small>" + escapeHtml(ride.operator) + "</small>" : "") +
+    const points = (map.points || []).map((point) => {
+      const ride = rides.find((item) => item.id === point.rideId);
+      return ride ? Object.assign({}, point, { ride }) : null;
+    }).filter(Boolean);
+
+    const hotspots = points.map((point) =>
+      "<button class=\"soestPlanHotspot\" type=\"button\" data-map-ride=\"" + escapeHtml(point.ride.id) + "\"" +
+      " style=\"--x:" + Number(point.x) + "%;--y:" + Number(point.y) + "%;--w:" + Number(point.w || 6) + "%;--h:" + Number(point.h || 5) + "%\"" +
+      " aria-label=\"" + escapeHtml(point.ride.name + " – Details öffnen") + "\" title=\"" + escapeHtml(point.ride.name) + "\">" +
+        "<span class=\"soestPlanLinkMark\" aria-hidden=\"true\">↗</span>" +
+        "<span class=\"soestPlanTooltip\"><b>" + escapeHtml(point.ride.name) + "</b>" +
+          (point.ride.operator ? "<small>" + escapeHtml(point.ride.operator) + "</small>" : "") +
+        "</span>" +
       "</button>"
     ).join("");
 
     const pdfUrl = map.sourceUrl || "";
     canvas.innerHTML =
-      "<div class=\"soestOriginalPlanWrap\">" +
-        "<object class=\"soestOriginalPlan\" data=\"" + escapeHtml(pdfUrl + "#page=1&view=FitH&toolbar=0&navpanes=0") + "\" type=\"application/pdf\">" +
-          "<iframe class=\"soestOriginalPlan\" src=\"" + escapeHtml(pdfUrl + "#page=1&view=FitH&toolbar=0&navpanes=0") + "\" title=\"Originaler Soester Kirmesplan 2026\"></iframe>" +
+      "<div class=\"soestOriginalPlanWrap\" style=\"--plan-aspect:" + escapeHtml(map.aspectRatio || "1234 / 869") + "\">" +
+        "<object class=\"soestOriginalPlan\" data=\"" + escapeHtml(pdfUrl + "#page=1&view=Fit&toolbar=0&navpanes=0&scrollbar=0") + "\" type=\"application/pdf\">" +
+          "<iframe class=\"soestOriginalPlan\" src=\"" + escapeHtml(pdfUrl + "#page=1&view=Fit&toolbar=0&navpanes=0&scrollbar=0") + "\" title=\"Offizieller Soester Kirmesplan 2026\"></iframe>" +
         "</object>" +
-        "<div class=\"soestMapOverlayRail\" aria-label=\"Fahrgeschäfte auf dem Originalplan\">" +
-          "<div class=\"soestMapOverlayTitle\">GESCHÄFTE · ANTIPPEN</div>" +
-          "<div class=\"soestMapOverlayScroll\">" + overlayLinks + "</div>" +
-        "</div>" +
+        "<div class=\"soestPlanHotspots\" aria-label=\"Verlinkte Fahrgeschäfte\">" + hotspots + "</div>" +
       "</div>";
 
     key.innerHTML = "";
