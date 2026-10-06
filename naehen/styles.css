@@ -1089,3 +1089,165 @@ body[data-park="soest-allerheiligenkirmes-2026"] .ride .zone{
   .rideFactGrid{grid-template-columns:1fr}
   .ridePricePill{max-width:116px}
 }
+
+
+/* v75 — Soest 2026 official-plan inspired interactive map */
+.venueSpecialMap{
+  margin:18px 0 28px;
+  border:1px solid #9f2433;
+  border-radius:14px;
+  overflow:hidden;
+  background:#f7f5ed;
+  color:#171717;
+  box-shadow:0 18px 45px #0007;
+}
+.venueMapHead{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+  padding:17px 18px 14px;
+  border-bottom:5px solid #bd1f2d;
+  background:#fff;
+}
+.venueMapHead .eyebrow{color:#b41f2a}
+.venueMapHead h2{
+  margin:4px 0 5px;
+  color:#c41f2d;
+  font:950 29px/.95 'Barlow Condensed',system-ui,sans-serif;
+  letter-spacing:-.5px;
+  text-transform:uppercase;
+}
+.venueMapHead p{margin:0;color:#555;font-size:11px}
+.venueMapSource{
+  flex:0 0 auto;
+  padding:8px 10px;
+  border:1px solid #c92935;
+  border-radius:6px;
+  color:#a11621;
+  background:#fff7f3;
+  font:900 9px/1.15 'Barlow Condensed',system-ui,sans-serif;
+  letter-spacing:.65px;
+  text-transform:uppercase;
+  text-decoration:none;
+}
+.venueMapCanvas{padding:12px;background:#ecebe6}
+.soestMapPaper{
+  position:relative;
+  width:100%;
+  aspect-ratio:1/1;
+  overflow:hidden;
+  border:1px solid #b9b8b0;
+  background:#f7f5ed;
+}
+.soestMapBase{display:block;width:100%;height:100%}
+.soestMapLabels{
+  fill:#383838;
+  font:700 2.45px/1 Arial,sans-serif;
+  letter-spacing:.15px;
+}
+.soestMapSpecialists{
+  fill:#fff;
+  font:900 2.5px/1 Arial,sans-serif;
+  letter-spacing:.45px;
+}
+.soestMapPin{
+  --map-x:50%;
+  --map-y:50%;
+  position:absolute;
+  left:var(--map-x);
+  top:var(--map-y);
+  transform:translate(-50%,-50%);
+  z-index:3;
+  display:grid;
+  grid-template-columns:24px auto;
+  align-items:center;
+  gap:5px;
+  min-height:25px;
+  max-width:145px;
+  padding:2px 7px 2px 2px;
+  border:1px solid #8f131f;
+  border-radius:999px;
+  background:#fffef9ef;
+  color:#171717;
+  box-shadow:0 2px 7px #0004;
+  cursor:pointer;
+  text-align:left;
+}
+.soestMapPin span,
+.soestMapKeyItem>span{
+  display:grid;
+  place-items:center;
+  width:21px;
+  height:21px;
+  border-radius:50%;
+  background:#d92331;
+  color:#fff;
+  font:900 9px/1 Arial,sans-serif;
+}
+.soestMapPin b{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font:900 8px/1 'Barlow Condensed',system-ui,sans-serif;
+  text-transform:uppercase;
+}
+.soestMapPin:hover,.soestMapPin:focus-visible{
+  z-index:8;
+  border-color:#111;
+  transform:translate(-50%,-50%) scale(1.07);
+}
+.venueMapNote{
+  margin:0;
+  padding:0 16px 12px;
+  color:#666;
+  background:#ecebe6;
+  font-size:9px;
+  line-height:1.4;
+}
+.venueMapKey{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:1px;
+  padding:1px;
+  background:#d4d2ca;
+  border-top:1px solid #c5c2b8;
+}
+.soestMapKeyItem{
+  display:grid;
+  grid-template-columns:28px minmax(0,1fr);
+  gap:8px;
+  align-items:center;
+  min-width:0;
+  padding:8px 9px;
+  border:0;
+  background:#fbfaf5;
+  color:#171717;
+  cursor:pointer;
+  text-align:left;
+}
+.soestMapKeyItem:hover,.soestMapKeyItem:focus-visible{background:#fff2dc}
+.soestMapKeyItem b{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font:900 10px/1.1 'Barlow Condensed',system-ui,sans-serif;
+  text-transform:uppercase;
+}
+.soestMapKeyItem small{
+  display:block;
+  margin-top:2px;
+  color:#777;
+  font:700 8px/1.1 system-ui,sans-serif;
+}
+body:not([data-park="soest-allerheiligenkirmes-2026"]) .venueSpecialMap{display:none!important}
+@media(max-width:650px){
+  .venueMapHead{display:block;padding:14px}
+  .venueMapSource{display:inline-block;margin-top:10px}
+  .venueMapCanvas{padding:7px}
+  .soestMapPin{grid-template-columns:20px auto;max-width:105px;padding-right:5px}
+  .soestMapPin span{width:18px;height:18px;font-size:8px}
+  .soestMapPin b{font-size:6.5px}
+  .venueMapKey{grid-template-columns:1fr}
+}
