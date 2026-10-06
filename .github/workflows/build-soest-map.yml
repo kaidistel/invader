@@ -1,0 +1,72 @@
+name: Build Soest 2026 map asset
+
+on:
+  push:
+    paths:
+      - ".github/workflows/build-soest-map.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build-map:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install PDF tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils
+          python3 -m pip install --quiet pillow
+
+      - name: Download official Soest programme PDF
+        run: |
+          curl --fail --location --retry 4 --retry-delay 2 \
+            "https://www.so-ist-soest.de/de-wAssets/docs/veranstaltungen/Allerheiligenkirmes/Allerheiligenkirmes-Soest-Programmplan-2026.pdf" \
+            --output /tmp/soest-2026.pdf
+
+      - name: Render, crop and rotate map clockwise
+        run: |
+          pdftoppm -f 2 -l 2 -singlefile -png -r 180 /tmp/soest-2026.pdf /tmp/soest-page
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+
+          src = Image.open("/tmp/soest-page.png").convert("RGB")
+          w, h = src.size
+
+          # Page 2 contains the official map plus a vertical ad strip on the right.
+          # The map itself has the same proportions as the supplied official plan.
+          crop_w = min(w, round(h * 1841 / 1310))
+          plan = src.crop((0, 0, crop_w, h))
+
+          # The PDF prints the plan sideways. Rotate it once clockwise.
+          plan = plan.rotate(-90, expand=True)
+          plan = plan.resize((1310, 1841), Image.Resampling.LANCZOS)
+
+          # Keep the lettering readable while avoiding a multi-megabyte PWA asset.
+          plan = plan.quantize(
+              colors=192,
+              method=Image.Quantize.MEDIANCUT,
+              dither=Image.Dither.FLOYDSTEINBERG,
+          )
+
+          out = Path("naehen/assets/soest-allerheiligenkirmes-2026-lageplan.png")
+          out.parent.mkdir(parents=True, exist_ok=True)
+          plan.save(out, optimize=True, compress_level=9)
+          print(out, out.stat().st_size)
+          PY
+
+      - name: Commit generated PNG
+        run: |
+          if git diff --quiet -- naehen/assets/soest-allerheiligenkirmes-2026-lageplan.png; then
+            echo "Map asset unchanged."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add naehen/assets/soest-allerheiligenkirmes-2026-lageplan.png
+          git commit -m "chore(naehen): add official Soest 2026 map PNG"
+          git push
