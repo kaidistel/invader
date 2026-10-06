@@ -1441,40 +1441,20 @@
     if (title) title.textContent = map.title || "Kirmesplan";
     if (subtitle) subtitle.textContent = map.subtitle || "";
     if (note) note.textContent = map.note || "";
+
     if (source) {
       source.href = map.sourceUrl || "#";
       source.textContent = map.sourceLabel || "Originalplan öffnen";
       source.hidden = !map.sourceUrl;
     }
 
-    const points = (map.points || []).map((point) => {
-      const ride = rides.find((item) => item.id === point.rideId);
-      return ride ? Object.assign({}, point, { ride }) : null;
-    }).filter(Boolean);
-
-    const hotspots = points.map((point) =>
-      "<button class=\"soestPlanHotspot\" type=\"button\" data-map-ride=\"" + escapeHtml(point.ride.id) + "\"" +
-      " style=\"--x:" + Number(point.x) + "%;--y:" + Number(point.y) + "%;--w:" + Number(point.w || 6) + "%;--h:" + Number(point.h || 5) + "%\"" +
-      " aria-label=\"" + escapeHtml(point.ride.name + " – Details öffnen") + "\" title=\"" + escapeHtml(point.ride.name) + "\">" +
-        "<span class=\"soestPlanLinkMark\" aria-hidden=\"true\">↗</span>" +
-        "<span class=\"soestPlanTooltip\"><b>" + escapeHtml(point.ride.name) + "</b>" +
-          (point.ride.operator ? "<small>" + escapeHtml(point.ride.operator) + "</small>" : "") +
-        "</span>" +
-      "</button>"
-    ).join("");
-
     const imageUrl = map.imageUrl || "";
     canvas.innerHTML =
       "<div class=\"soestOriginalPlanWrap\" style=\"--plan-aspect:" + escapeHtml(map.aspectRatio || "1310 / 1841") + "\">" +
         "<img class=\"soestOriginalPlan\" src=\"" + escapeHtml(imageUrl) + "\" alt=\"Offizieller Lageplan der Soester Allerheiligenkirmes 2026\" loading=\"eager\" decoding=\"async\">" +
-        "<div class=\"soestPlanHotspots\" aria-label=\"Verlinkte Fahrgeschäfte\">" + hotspots + "</div>" +
       "</div>";
 
     key.innerHTML = "";
-
-    section.querySelectorAll("[data-map-ride]").forEach((button) => {
-      button.addEventListener("click", () => openRideDetail(button.dataset.mapRide));
-    });
   }
 
   function renderRides() {
