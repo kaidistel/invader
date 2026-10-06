@@ -1093,7 +1093,7 @@ body[data-park="soest-allerheiligenkirmes-2026"] .ride .zone{
 
 
 
-/* v76 — Soest 2026 original PDF plan + clickable overlay */
+/* v77 — Soest 2026: original plan with ride hotspots */
 .venueSpecialMap{
   margin:18px 0 28px;
   border:1px solid #9f2433;
@@ -1133,77 +1133,117 @@ body[data-park="soest-allerheiligenkirmes-2026"] .ride .zone{
   text-transform:uppercase;
   text-decoration:none;
 }
-.venueMapCanvas{padding:10px;background:#d9d8d2}
+.venueMapCanvas{padding:8px;background:#d9d8d2}
 .soestOriginalPlanWrap{
+  --plan-aspect:1234 / 869;
   position:relative;
-  min-height:740px;
-  background:#fff;
+  width:100%;
+  aspect-ratio:var(--plan-aspect);
   overflow:hidden;
-  border:1px solid #b7b5ae;
+  border:1px solid #aaa8a1;
+  background:#fff;
 }
 .soestOriginalPlan{
+  position:absolute;
+  inset:0;
   display:block;
   width:100%;
-  height:740px;
+  height:100%;
   border:0;
   background:#fff;
 }
-.soestMapOverlayRail{
+.soestPlanHotspots{
   position:absolute;
+  inset:0;
   z-index:5;
-  top:12px;
-  right:12px;
-  width:min(215px,32%);
-  max-height:calc(100% - 24px);
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-  border:1px solid #8e131f;
-  border-radius:9px;
-  background:#fffdf7ed;
-  box-shadow:0 9px 28px #0006;
-  backdrop-filter:blur(5px);
+  pointer-events:none;
 }
-.soestMapOverlayTitle{
-  padding:9px 10px 8px;
-  color:#fff;
-  background:#bd1f2d;
-  font:900 10px/1 'Barlow Condensed',system-ui,sans-serif;
-  letter-spacing:1.1px;
-}
-.soestMapOverlayScroll{
-  overflow:auto;
-  padding:5px;
-  scrollbar-width:thin;
-}
-.soestMapOverlayLink{
-  width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-  padding:8px 8px;
-  border:0;
-  border-bottom:1px solid #ded8cd;
-  background:transparent;
-  color:#181818;
+.soestPlanHotspot{
+  --x:50%;
+  --y:50%;
+  --w:6%;
+  --h:5%;
+  position:absolute;
+  left:var(--x);
+  top:var(--y);
+  width:var(--w);
+  height:var(--h);
+  min-width:27px;
+  min-height:25px;
+  transform:translate(-50%,-50%);
+  border:2px solid rgba(189,31,45,.76);
+  border-radius:5px;
+  background:rgba(255,228,75,.10);
+  box-shadow:0 0 0 1px rgba(255,255,255,.72),0 2px 8px #0003;
   cursor:pointer;
+  pointer-events:auto;
+}
+.soestPlanHotspot:hover,
+.soestPlanHotspot:focus-visible{
+  z-index:8;
+  border-color:#111;
+  background:rgba(255,221,49,.34);
+  outline:2px solid #fff;
+  outline-offset:1px;
+}
+.soestPlanLinkMark{
+  position:absolute;
+  top:-8px;
+  right:-8px;
+  display:grid;
+  place-items:center;
+  width:19px;
+  height:19px;
+  border:2px solid #fff;
+  border-radius:50%;
+  background:#c91f2c;
+  color:#fff;
+  font:950 10px/1 system-ui,sans-serif;
+  box-shadow:0 2px 5px #0005;
+}
+.soestPlanTooltip{
+  position:absolute;
+  left:50%;
+  bottom:calc(100% + 8px);
+  transform:translateX(-50%) translateY(4px);
+  min-width:110px;
+  max-width:190px;
+  padding:7px 8px;
+  border-radius:5px;
+  background:#161616f2;
+  color:#fff;
+  box-shadow:0 5px 18px #0007;
+  opacity:0;
+  visibility:hidden;
+  transition:.12s ease;
+  pointer-events:none;
   text-align:left;
 }
-.soestMapOverlayLink:last-child{border-bottom:0}
-.soestMapOverlayLink:hover,.soestMapOverlayLink:focus-visible{
-  background:#fff0cb;
-  outline:2px solid #c41f2d;
-  outline-offset:-2px;
+.soestPlanTooltip:after{
+  content:'';
+  position:absolute;
+  left:50%;
+  top:100%;
+  transform:translateX(-50%);
+  border:5px solid transparent;
+  border-top-color:#161616f2;
 }
-.soestMapOverlayLink b{
+.soestPlanTooltip b{
+  display:block;
   font:900 10px/1.1 'Barlow Condensed',system-ui,sans-serif;
   text-transform:uppercase;
 }
-.soestMapOverlayLink small{
-  flex:0 0 auto;
-  color:#777;
-  font:700 8px/1 system-ui,sans-serif;
+.soestPlanTooltip small{
+  display:block;
+  margin-top:2px;
+  color:#ddd;
+  font:700 8px/1.2 system-ui,sans-serif;
+}
+.soestPlanHotspot:hover .soestPlanTooltip,
+.soestPlanHotspot:focus-visible .soestPlanTooltip{
+  opacity:1;
+  visibility:visible;
+  transform:translateX(-50%) translateY(0);
 }
 .venueMapNote{
   margin:0;
@@ -1218,38 +1258,21 @@ body:not([data-park="soest-allerheiligenkirmes-2026"]) .venueSpecialMap{display:
 @media(max-width:650px){
   .venueMapHead{display:block;padding:14px}
   .venueMapSource{display:inline-block;margin-top:10px}
-  .venueMapCanvas{padding:6px}
-  .soestOriginalPlanWrap{min-height:620px}
-  .soestOriginalPlan{height:620px}
-  .soestMapOverlayRail{
-    top:auto;
-    right:7px;
-    left:7px;
-    bottom:7px;
-    width:auto;
-    max-height:42%;
+  .venueMapCanvas{padding:4px;overflow:auto}
+  .soestOriginalPlanWrap{
+    width:760px;
+    max-width:none;
   }
-  .soestMapOverlayTitle{padding:8px 9px}
-  .soestMapOverlayScroll{
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:1px;
-    background:#ded8cd;
-    padding:1px;
+  .soestPlanHotspot{
+    border-width:2px;
+    min-width:31px;
+    min-height:29px;
+    background:rgba(255,228,75,.15);
   }
-  .soestMapOverlayLink{
-    display:block;
-    min-width:0;
-    padding:7px 8px;
-    border:0;
-    background:#fffdf7f3;
+  .soestPlanLinkMark{
+    width:18px;
+    height:18px;
+    top:-7px;
+    right:-7px;
   }
-  .soestMapOverlayLink b,
-  .soestMapOverlayLink small{
-    display:block;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-  }
-  .soestMapOverlayLink small{margin-top:2px}
 }
