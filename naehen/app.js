@@ -1641,6 +1641,8 @@
     if (parkLabel) parkLabel.textContent = (activeParkConfig()?.name || "DIESER PARK").toUpperCase();
 
     const entries = parkArchive.slice().sort((a, b) => parkDayStartMs(b.day) - parkDayStartMs(a.day));
+    const dayWord = visitDayWord();
+    const dayPlural = visitDayPlural();
     const facts = entries.map((entry) => buildDayFacts(entry.day, entry.sessions, entry.day?.park_slug || activeParkSlug));
     const totalRides = facts.reduce((sum, fact) => sum + fact.rides, 0);
     const totalQueueMs = facts.reduce((sum, fact) => sum + fact.queueMs, 0);
@@ -1649,17 +1651,17 @@
 
     summary.innerHTML =
       "<div class=\"archiveSummaryGrid\">" +
-        recapStat(entries.length, "gespeicherte Parktage") +
+        recapStat(entries.length, "gespeicherte " + dayPlural) +
         recapStat(totalRides + "×", "Fahrten im Archiv") +
         recapStat(formatDurationHuman(totalQueueMs), "Queue insgesamt") +
-        recapStat(entries.length ? (totalRides / entries.length).toFixed(1) : "0", "Fahrten / Parktag") +
+        recapStat(entries.length ? (totalRides / entries.length).toFixed(1) : "0", "Fahrten / " + dayWord) +
       "</div>" +
       (bestDay && bestDay.fact.rides
         ? "<div class=\"archiveRecord\"><span>🏆 Tagesrekord</span><b>" + escapeHtml(parkDayDateLabel(bestDay.entry.day)) + " · " + bestDay.fact.rides + " Fahrten</b></div>"
         : "");
 
     if (!entries.length) {
-      list.innerHTML = "<div class=\"empty\">Noch kein abgeschlossener Parktag gespeichert. Dein nächster wird hier dauerhaft archiviert.</div>";
+      list.innerHTML = "<div class=\"empty\">Noch kein abgeschlossener " + dayWord + " gespeichert. Dein nächster wird hier dauerhaft archiviert.</div>";
       return;
     }
 
@@ -1673,7 +1675,7 @@
         "<div class=\"archiveDayStats\">" +
           "<span><b>" + fact.rides + "×</b> Fahrten</span>" +
           "<span><b>" + escapeHtml(formatDurationHuman(fact.queueMs)) + "</b> Queue</span>" +
-          "<span><b>" + escapeHtml(formatDurationHuman(fact.parkMs)) + "</b> Parkzeit</span>" +
+          "<span><b>" + escapeHtml(formatDurationHuman(fact.parkMs)) + "</b> Besuchszeit</span>" +
         "</div>" +
         "<div class=\"archiveDayFoot\">meistgenäht: <b>" + escapeHtml(topRide) + "</b></div>" +
       "</button>";
@@ -1691,6 +1693,8 @@
     const day = entry.day;
     const parkSlug = day?.park_slug || activeParkSlug || "phantasialand";
     const parkName = PARKS[parkSlug]?.name || "Park";
+    const dayWord = visitDayWord(parkSlug);
+    const supportsPostedWait = PARKS[parkSlug]?.supportsPostedWait !== false;
     const fact = buildDayFacts(day, entry.sessions, parkSlug);
     const detail = $("#archiveDetailContent");
     if (!detail) return;
@@ -1725,7 +1729,7 @@
       "<div class=\"nerdSection\"><div class=\"nerdTitle\">NERD-MODUS</div><div class=\"nerdGrid\">" +
         recapStat(minutesRounded(fact.avgQueueMs) + "m", "Ø Queue") +
         recapStat(minutesRounded(fact.medianQueueMs) + "m", "Median-Queue") +
-        recapStat(Math.round(fact.queueShare * 100) + "%", "Parkzeit in Queue") +
+        recapStat(Math.round(fact.queueShare * 100) + "%", (venueIsFair(parkSlug) ? "Kirmeszeit" : "Parkzeit") + " in Queue") +
         recapStat(fact.ridesPerHour ? fact.ridesPerHour.toFixed(2) : "0", "Fahrten / Stunde") +
         recapStat(Math.round(fact.singleShare * 100) + "%", "Single-Rider-Anteil") +
         recapStat(fact.rerides + "×", "Rerides") +
@@ -1738,7 +1742,7 @@
         "<div><span>⚡ Kürzeste Queue</span><b>" + escapeHtml(fact.shortest ? fact.shortest.rideName + " · " + minutesRounded(fact.shortest.duration) + " min" : "–") + "</b></div>" +
         "<div><span>🌅 Erste Fahrt</span><b>" + escapeHtml(fact.firstRide ? rideTimeLabel(fact.firstRide) + " · " + fact.firstRide.rideName : "–") + "</b></div>" +
         "<div><span>🌙 Letzte Fahrt</span><b>" + escapeHtml(fact.lastRide ? rideTimeLabel(fact.lastRide) + " · " + fact.lastRide.rideName : "–") + "</b></div>" +
-        "<div><span>📊 Soll vs. Realität</span><b>" + escapeHtml(comparisonText) + "</b></div>" +
+        (supportsPostedWait ? "<div><span>📊 Soll vs. Realität</span><b>" + escapeHtml(comparisonText) + "</b></div>" : "") +
         (fact.topSpeedRide ? "<div><span>🚀 Schnellste Fahrt</span><b>" + escapeHtml(fact.topSpeedRide.rideName + " · " + fact.topSpeed + " km/h") + "</b></div>" : "") +
       "</div>" +
       "<div class=\"sectionHead archiveTimelineHead\"><h2>Tagesprotokoll</h2><span>" + chronological.length + " Einträge</span></div>" +
@@ -2336,7 +2340,10 @@
       started_at: new Date().toISOString(),
       ended_at: new Date().toISOString()
     };
-    const fact = buildDayFacts(day, sourceSessions, day.park_slug || activeParkSlug || "phantasialand");
+    const dayParkSlug = day.park_slug || activeParkSlug || "phantasialand";
+    const dayWord = visitDayWord(dayParkSlug);
+    const supportsPostedWait = PARKS[dayParkSlug]?.supportsPostedWait !== false;
+    const fact = buildDayFacts(day, sourceSessions, dayParkSlug);
     const comparisonText = fact.postedComparableCount
       ? (fact.savedMinutes >= 0
         ? fact.savedMinutes + " Minuten weniger gewartet."
@@ -2348,7 +2355,7 @@
         recapStat(fact.rides + "×", "genäht") +
         recapStat(formatDurationHuman(fact.queueMs), "echte Queue") +
         recapStat(fact.uniqueRides, "verschiedene Rides") +
-        recapStat(formatDurationHuman(fact.parkMs), "Parktag") +
+        recapStat(formatDurationHuman(fact.parkMs), dayWord) +
       "</div></div>" +
       "<div class=\"recapBox nerdRecap\"><b>🤓 Nerd-Modus</b><div class=\"nerdGrid\">" +
         recapStat(minutesRounded(fact.avgQueueMs) + "m", "Ø Queue") +
@@ -2368,8 +2375,8 @@
         "<br>" +
         escapeHtml(fact.shortest ? "Kürzeste: " + fact.shortest.rideName + " · " + minutesRounded(fact.shortest.duration) + " min" : "Kürzeste: –") +
       "</p></div>" +
-      "<div class=\"recapBox\"><b>📊 vs. ausgeschildert</b><p>" + escapeHtml(comparisonText) + "</p></div>" +
-      "<div class=\"recapBox\"><b>💾 Dauerhaft gespeichert</b><p>Dieser Parktag liegt jetzt im Archiv und bleibt auch nach dem nächsten Parktag erhalten.</p></div>";
+      (supportsPostedWait ? "<div class=\"recapBox\"><b>📊 vs. ausgeschildert</b><p>" + escapeHtml(comparisonText) + "</p></div>" : "") +
+      "<div class=\"recapBox\"><b>💾 Dauerhaft gespeichert</b><p>Dieser " + dayWord + " liegt jetzt im Archiv und bleibt auch nach dem nächsten " + dayWord + " erhalten.</p></div>";
   }
 
   function recapStat(value, label) {
