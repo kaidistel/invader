@@ -3191,3 +3191,159 @@
     font-size:clamp(26px,7.2vw,40px)!important;
   }
 }
+
+
+/* v73 — Soester Allerheiligenkirmes 2026 attraction portals */
+#rideSheet[data-park="soest-allerheiligenkirmes-2026"]{
+  --fair-a:#ffd15f;
+  --fair-b:#ff3f87;
+  --fair-c:#62e6ff;
+  --fair-bg:#1c1117;
+  --fair-bg2:#0c0a0d;
+}
+#rideSheet[data-park="soest-allerheiligenkirmes-2026"] .sheetCard{
+  padding-top:288px;
+  color:#fff7e9!important;
+  border-top:5px solid var(--fair-a)!important;
+  background:
+    radial-gradient(circle at 85% 7%,color-mix(in srgb,var(--fair-b) 18%,transparent),transparent 28%),
+    linear-gradient(160deg,var(--fair-bg),var(--fair-bg2))!important;
+}
+#rideSheet[data-park="soest-allerheiligenkirmes-2026"] .worldArt{
+  display:block!important;
+  inset:0 0 auto!important;
+  width:100%!important;
+  height:355px!important;
+  overflow:hidden!important;
+  border:0!important;
+  border-radius:0!important;
+  clip-path:polygon(0 0,100% 0,100% 89%,91% 96%,78% 92%,64% 100%,49% 93%,34% 100%,19% 92%,7% 97%,0 90%)!important;
+  background:
+    radial-gradient(circle at 18% 21%,var(--fair-a) 0 2px,transparent 3px),
+    radial-gradient(circle at 74% 15%,var(--fair-c) 0 3px,transparent 4px),
+    radial-gradient(circle at 51% 26%,var(--fair-b) 0 4px,transparent 5px),
+    repeating-linear-gradient(116deg,color-mix(in srgb,var(--fair-b) 20%,#1b1117) 0 18px,#121015 18px 36px)!important;
+}
+#rideSheet[data-park="soest-allerheiligenkirmes-2026"] .worldArt:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 42px,rgba(255,255,255,.04) 42px 44px),
+    linear-gradient(180deg,transparent 0 60%,rgba(0,0,0,.18) 75%,var(--fair-bg) 100%);
+}
+#rideSheet[data-park="soest-allerheiligenkirmes-2026"] .worldArt:after{
+  background:linear-gradient(180deg,transparent 0 55%,color-mix(in srgb,var(--fair-bg) 50%,transparent) 78%,var(--fair-bg) 100%)!important;
+}
+#rideSheet[data-park="soest-allerheiligenkirmes-2026"] #rideTitle{
+  width:100%!important;
+  max-width:100%!important;
+  margin:8px 0 20px!important;
+  padding:12px 14px 14px!important;
+  color:#fff3cc!important;
+  border:2px solid color-mix(in srgb,var(--fair-a) 65%,transparent)!important;
+  border-left-width:7px!important;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--fair-bg) 92%,black),transparent)!important;
+  box-shadow:0 12px 25px #0007!important;
+  text-shadow:0 3px 8px #000,0 0 17px color-mix(in srgb,var(--fair-b) 25%,transparent)!important;
+  line-height:1.03!important;
+  overflow:visible!important;
+}
+#rideSheet[data-park="soest-allerheiligenkirmes-2026"] #rideZone,
+#rideSheet[data-park="soest-allerheiligenkirmes-2026"] #worldCaption{
+  color:#ffe6a9!important;
+  text-shadow:0 2px 8px #000;
+}
+#rideSheet[data-park="soest-allerheiligenkirmes-2026"] #rideDetailStatus,
+#rideSheet[data-park="soest-allerheiligenkirmes-2026"] .message,
+#rideSheet[data-park="soest-allerheiligenkirmes-2026"] .srBox{
+  border-color:color-mix(in srgb,var(--fair-a) 32%,transparent)!important;
+  background:#120e12e8!important;
+  color:#f8efe4!important;
+}
+
+/* Every Soest business gets its own light palette. */
+#rideSheet[data-theme="fair-mythos"]{--fair-a:#e1bd78;--fair-b:#6c478d;--fair-c:#b8d5ff;--fair-bg:#21182a;--fair-bg2:#0c0910}
+#rideSheet[data-theme="fair-eyecatcher"]{--fair-a:#f7df56;--fair-b:#ff4da0;--fair-c:#51efff;--fair-bg:#24121f;--fair-bg2:#090b10}
+#rideSheet[data-theme="fair-punk"]{--fair-a:#dfff45;--fair-b:#ff2f9e;--fair-c:#6f7cff;--fair-bg:#28102b;--fair-bg2:#0a0710}
+#rideSheet[data-theme="fair-shock"]{--fair-a:#7deaff;--fair-b:#386dff;--fair-c:#fff264;--fair-bg:#101a2e;--fair-bg2:#070a12}
+#rideSheet[data-theme="fair-avenger"]{--fair-a:#d9dce3;--fair-b:#cc3434;--fair-c:#7c8ea8;--fair-bg:#24191b;--fair-bg2:#0d0c0e}
+#rideSheet[data-theme="fair-bamboo"]{--fair-a:#ffe65e;--fair-b:#65cc61;--fair-c:#f65f5f;--fair-bg:#17311f;--fair-bg2:#09130c}
+#rideSheet[data-theme="fair-sound"]{--fair-a:#65ecff;--fair-b:#b84cff;--fair-c:#ff4c9e;--fair-bg:#13172d;--fair-bg2:#080911}
+#rideSheet[data-theme="fair-tiki"]{--fair-a:#ffdd52;--fair-b:#ff6b45;--fair-c:#4fe3c6;--fair-bg:#28301c;--fair-bg2:#0e130a}
+#rideSheet[data-theme="fair-number1"]{--fair-a:#f9f3d0;--fair-b:#db3434;--fair-c:#3e74d8;--fair-bg:#251b18;--fair-bg2:#0d0c0a}
+#rideSheet[data-theme="fair-hangover"]{--fair-a:#f4d668;--fair-b:#8a2525;--fair-c:#d9dde4;--fair-bg:#1e1712;--fair-bg2:#080807}
+#rideSheet[data-theme="fair-heidi"]{--fair-a:#f5d66c;--fair-b:#d44d5f;--fair-c:#91ce75;--fair-bg:#2b2517;--fair-bg2:#0f0d09}
+#rideSheet[data-theme="fair-look360"]{--fair-a:#dfefff;--fair-b:#5ca6d8;--fair-c:#ffc85c;--fair-bg:#172733;--fair-bg2:#081016}
+#rideSheet[data-theme="fair-beast"]{--fair-a:#ee6d4b;--fair-b:#5a1717;--fair-c:#d4b177;--fair-bg:#271714;--fair-bg2:#0b0807}
+#rideSheet[data-theme="fair-nessy"]{--fair-a:#9fe0d0;--fair-b:#397a70;--fair-c:#d8c779;--fair-bg:#16302d;--fair-bg2:#07100f}
+#rideSheet[data-theme="fair-hexentanz"]{--fair-a:#d0a2e8;--fair-b:#6c2e7f;--fair-c:#e8cc76;--fair-bg:#221429;--fair-bg2:#0b0710}
+#rideSheet[data-theme="fair-monster"]{--fair-a:#9adb5c;--fair-b:#a83e70;--fair-c:#e6da62;--fair-bg:#1b2b19;--fair-bg2:#091009}
+#rideSheet[data-theme="fair-intoxx"]{--fair-a:#9bff56;--fair-b:#28b8a2;--fair-c:#a34dff;--fair-bg:#10261f;--fair-bg2:#060d0a}
+#rideSheet[data-theme="fair-jules-verne"]{--fair-a:#d7a95c;--fair-b:#7c5734;--fair-c:#73b8c6;--fair-bg:#292016;--fair-bg2:#0f0c08}
+#rideSheet[data-theme="fair-shake"]{--fair-a:#f7e34d;--fair-b:#ef426f;--fair-c:#41dbe9;--fair-bg:#2b1420;--fair-bg2:#0b080d}
+#rideSheet[data-theme="fair-musikexpress"]{--fair-a:#ffdd68;--fair-b:#d83f4e;--fair-c:#77a8ff;--fair-bg:#26191a;--fair-bg2:#0d090a}
+#rideSheet[data-theme="fair-aqua"]{--fair-a:#7eeaff;--fair-b:#3687d8;--fair-c:#eafcff;--fair-bg:#0f2935;--fair-bg2:#061015}
+#rideSheet[data-theme="fair-wellenflieger"]{--fair-a:#f0d88b;--fair-b:#5f91c8;--fair-c:#f6f2de;--fair-bg:#1c2731;--fair-bg2:#091015}
+#rideSheet[data-theme="fair-highway"]{--fair-a:#ffe76b;--fair-b:#e63b3b;--fair-c:#54a8ff;--fair-bg:#271a19;--fair-bg2:#0d0909}
+#rideSheet[data-theme="fair-hoelle"]{--fair-a:#ff6a3d;--fair-b:#8d1212;--fair-c:#d7a55c;--fair-bg:#260d0b;--fair-bg2:#090504}
+
+/* Attraction-specific title silhouettes. */
+#rideSheet[data-theme="fair-punk"] #rideTitle{
+  transform:rotate(-1.2deg)!important;
+  clip-path:polygon(0 7%,96% 0,100% 86%,88% 100%,4% 93%)!important;
+  border-left:9px solid #dfff45!important;
+}
+#rideSheet[data-theme="fair-hangover"] #rideTitle{
+  text-align:center;
+  letter-spacing:.08em!important;
+  border:5px double #d8b44f!important;
+  background:#151310eb!important;
+}
+#rideSheet[data-theme="fair-heidi"] #rideTitle{
+  border-radius:18px 4px 18px 4px!important;
+  border-color:#e4c45e!important;
+  background:linear-gradient(90deg,#583221e8,#203719e8)!important;
+}
+#rideSheet[data-theme="fair-tiki"] #rideTitle{
+  border-radius:30px 8px 30px 8px!important;
+  border-color:#f2d54d!important;
+  background:linear-gradient(110deg,#33551fdd,#8c351bdd)!important;
+}
+#rideSheet[data-theme="fair-jules-verne"] #rideTitle{
+  border:4px double #b98b4b!important;
+  background:#292117eb!important;
+  letter-spacing:.045em!important;
+}
+#rideSheet[data-theme="fair-shake"] #rideTitle{
+  transform:rotate(.65deg)!important;
+  border:3px solid #f1db55!important;
+  background:linear-gradient(95deg,#6e2137ea,#153b49e8)!important;
+}
+#rideSheet[data-theme="fair-hoelle"] #rideTitle{
+  border:0!important;
+  border-left:9px solid #c42b1c!important;
+  background:linear-gradient(90deg,#3b0b08ef,#130504e8)!important;
+  clip-path:polygon(0 0,96% 4%,100% 22%,96% 100%,4% 94%,0 77%)!important;
+}
+#rideSheet[data-theme="fair-eyecatcher"] #rideTitle,
+#rideSheet[data-theme="fair-sound"] #rideTitle,
+#rideSheet[data-theme="fair-intoxx"] #rideTitle{
+  border:1px solid var(--fair-c)!important;
+  border-left:8px solid var(--fair-b)!important;
+  background:linear-gradient(90deg,#171327ed,#091117e8)!important;
+}
+
+@media(max-width:430px){
+  #rideSheet[data-park="soest-allerheiligenkirmes-2026"] .sheetCard{padding-top:300px}
+  #rideSheet[data-park="soest-allerheiligenkirmes-2026"] .worldArt{height:370px!important}
+  #rideSheet[data-park="soest-allerheiligenkirmes-2026"] #rideTitle{
+    font-size:clamp(30px,8.4vw,46px)!important;
+    padding-left:12px!important;
+    padding-right:12px!important;
+  }
+  #rideSheet[data-theme="fair-hangover"] #rideTitle,
+  #rideSheet[data-theme="fair-jules-verne"] #rideTitle{
+    font-size:clamp(26px,7.3vw,40px)!important;
+  }
+}
