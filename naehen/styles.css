@@ -1277,3 +1277,40 @@ body:not([data-park="soest-allerheiligenkirmes-2026"]) .venueSpecialMap{display:
     right:-7px;
   }
 }
+
+
+/* v79 — Soest: stable official PNG, ride cards remain below */
+body[data-park="soest-allerheiligenkirmes-2026"] .venueMapCanvas{
+  padding:8px;
+  overflow:visible;
+  background:#d9d8d2;
+}
+body[data-park="soest-allerheiligenkirmes-2026"] .soestOriginalPlanWrap{
+  width:min(100%,680px);
+  margin:0 auto;
+  aspect-ratio:1310 / 1841;
+  overflow:hidden;
+  border:1px solid #aaa8a1;
+  background:#fff;
+  box-shadow:0 5px 18px #0003;
+}
+body[data-park="soest-allerheiligenkirmes-2026"] .soestOriginalPlan{
+  position:absolute;
+  inset:0;
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  background:#fff;
+}
+body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanHotspots,
+body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanHotspot{
+  display:none!important;
+}
+@media(max-width:650px){
+  body[data-park="soest-allerheiligenkirmes-2026"] .venueMapCanvas{padding:3px}
+  body[data-park="soest-allerheiligenkirmes-2026"] .soestOriginalPlanWrap{
+    width:100%;
+    max-width:none;
+  }
+}
