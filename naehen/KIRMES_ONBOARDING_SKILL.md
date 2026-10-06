@@ -109,7 +109,15 @@ Hard rules:
 - keep the field visible even while unknown so it can be filled later
 - the card and detail view should both make the price easy to find
 
-Prices are volatile operational data and need an event/date-specific source.
+Prices are volatile operational data.
+
+For NÄHEN fair modules, **Fahrpreise are manual-entry data only**:
+- never web-research a Fahrpreis on your own
+- never auto-fill a Fahrpreis from search results, Ride-Index, operator pages, social posts, another fair or a previous year
+- keep `priceEuro: null` until the user explicitly supplies the price to enter
+- even a seemingly current event-specific price must not be inserted automatically
+
+The user is the source of truth for Fahrpreis values.
 
 ---
 
