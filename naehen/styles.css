@@ -965,3 +965,127 @@ body[data-park="soest-allerheiligenkirmes-2026"] .btn.primary{
   letter-spacing:1px;
   text-transform:uppercase;
 }
+
+
+/* v74 — fair price, operator and Ride-Index facts */
+body[data-park="soest-allerheiligenkirmes-2026"] .ride{
+  min-height:190px;
+}
+body[data-park="soest-allerheiligenkirmes-2026"] .rideArt{
+  filter:saturate(1.08) contrast(1.04) brightness(.78);
+}
+body[data-park="soest-allerheiligenkirmes-2026"] .ride .zone{
+  font-weight:800;
+  letter-spacing:.15px;
+}
+.ridePricePill{
+  display:inline-flex;
+  flex-direction:column;
+  justify-content:center;
+  min-height:29px;
+  padding:4px 8px 3px;
+  border:1px solid #6ee8ff70;
+  border-radius:4px;
+  color:#dffaff!important;
+  background:#14333cbf;
+  line-height:1!important;
+}
+.ridePricePill span{
+  font:900 7px/1 'Barlow Condensed',system-ui,sans-serif!important;
+  letter-spacing:1px;
+  color:#87dce9!important;
+}
+.ridePricePill b{
+  margin-top:3px;
+  font:900 10px/1 'Barlow Condensed',system-ui,sans-serif!important;
+  color:#fff!important;
+  white-space:nowrap;
+}
+.rideExtraFacts{
+  margin:14px 0;
+  padding:14px;
+  border:1px solid #ffffff1c;
+  border-radius:9px;
+  background:#0c1210cc;
+}
+.rideFactsEyebrow{
+  margin-bottom:10px;
+  color:#ffd779;
+  font:900 9px/1 'Barlow Condensed',system-ui,sans-serif;
+  letter-spacing:1.8px;
+}
+.rideFactGrid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+}
+.rideFactCard{
+  min-width:0;
+  padding:10px 11px;
+  border:1px solid #ffffff12;
+  border-radius:6px;
+  background:#111916;
+}
+.rideFactCard span{
+  display:block;
+  margin-bottom:4px;
+  color:#94a69c;
+  font:900 8px/1 'Barlow Condensed',system-ui,sans-serif;
+  letter-spacing:1.1px;
+  text-transform:uppercase;
+}
+.rideFactCard b{
+  display:block;
+  color:#edf1ea;
+  font-size:12px;
+  line-height:1.3;
+  overflow-wrap:anywhere;
+}
+.rideFactCard.price{
+  border-color:#ffd15f55;
+  background:
+    radial-gradient(circle at 95% 0%,#ffd15f16,transparent 40%),
+    #1c1810;
+}
+.rideFactCard.price span{color:#e2b950}
+.rideFactCard.price b{color:#ffe9a5}
+.rideFactCard.operator{
+  border-color:#62e6ff35;
+}
+.ridePriceNote{
+  margin-top:8px;
+  padding:9px 10px;
+  border-left:3px solid #d0a743;
+  background:#201b10;
+  color:#c7b991;
+  font-size:10px;
+  line-height:1.45;
+}
+.rideFactSources{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:10px;
+}
+.rideFactSources a{
+  display:inline-flex;
+  align-items:center;
+  min-height:28px;
+  padding:5px 8px;
+  border:1px solid #ffffff17;
+  border-radius:5px;
+  background:#101714;
+  color:#bcd6cb;
+  font-size:9px;
+  font-weight:800;
+  text-decoration:none;
+}
+.rideFactSources a:hover{
+  color:#fff;
+  border-color:#ffffff38;
+}
+
+@media(max-width:390px){
+  .rideFactGrid{grid-template-columns:1fr}
+  .ridePricePill{max-width:116px}
+}
