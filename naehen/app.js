@@ -993,7 +993,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=73", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=74", {
           scope: "./",
           updateViaCache: "none"
         });
@@ -1408,6 +1408,17 @@
     }
   }
 
+  function ridePriceText(ride) {
+    const value = Number(ride?.priceEuro);
+    if (ride?.priceEuro === null || ride?.priceEuro === undefined || !Number.isFinite(value)) {
+      return "noch nicht bestätigt";
+    }
+    return value.toLocaleString("de-DE", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }) + " €";
+  }
+
   function renderRides() {
     const container = $("#rides");
     if (!container) return;
@@ -1453,7 +1464,11 @@
       const updated = hasPublicLive && ride.lastUpdated ? " · Stand " + new Date(ride.lastUpdated).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }) : "";
       const sr = ride.singleRider ? "<span>👤 SR</span><span>·</span>" : "";
       const newBadge = ride.new2026 ? "<span class=\"rideBadgeNew\">✦ NEU 2026</span>" : "";
-      const operatorText = ride.operator ? " · " + ride.operator : "";
+      const fair = venueIsFair();
+      const priceBadge = fair ? "<span class=\"ridePricePill\"><span>FAHRPREIS</span><b>" + escapeHtml(ridePriceText(ride)) + "</b></span>" : "";
+      const operatorLine = fair && ride.operator
+        ? "Schausteller: " + ride.operator + " · " + ride.zone
+        : ride.zone;
       const queueDisabled = closed ? " disabled" : "";
 
       return "<article class=\"ride\" data-park=\"" + escapeHtml(activeParkSlug || "phantasialand") + "\" data-world=\"" + escapeHtml(ride.id) + "\" data-detail=\"" + escapeHtml(ride.id) + "\">" +
@@ -1461,9 +1476,9 @@
         "<div class=\"rideMain\">" +
           "<div class=\"rideTop\">" +
             "<button class=\"fav " + (fav ? "on" : "") + "\" data-fav=\"" + ride.id + "\" aria-label=\"Favorit für " + escapeHtml(ride.name) + "\" aria-pressed=\"" + fav + "\">★</button>" +
-            "<div><h3>" + escapeHtml(ride.name) + "</h3><div class=\"zone\">" + escapeHtml(ride.zone + operatorText + updated) + "</div></div>" +
+            "<div><h3>" + escapeHtml(ride.name) + "</h3><div class=\"zone\">" + escapeHtml(operatorLine + updated) + "</div></div>" +
           "</div>" +
-          "<div class=\"meta\">" + newBadge + sr +
+          "<div class=\"meta\">" + newBadge + priceBadge + sr +
             (hasPublicLive ? "<span class=\"trend " + ride.trend + "\">" + escapeHtml(trendText) + "</span><span>·</span>" : "") +
             "<button class=\"btn secondary\" style=\"padding:7px 10px;font-size:11px\" data-queue=\"" + ride.id + "\"" + queueDisabled + ">" + (closed ? "ZU" : "ANSTELLEN") + "</button>" +
             "<button class=\"btn ghost\" style=\"padding:7px 4px;font-size:11px\" data-detail-btn=\"" + ride.id + "\">DETAILS</button>" +
@@ -2096,6 +2111,59 @@
     }
   }
 
+  function renderRideExtraFacts(ride, world) {
+    const box = $("#rideExtraFacts");
+    if (!box) return;
+
+    const hasFacts = ride && (
+      ride.operatorFull || ride.operator || ride.manufacturer || ride.type ||
+      ride.year || ride.dimensions || ride.capacity || ride.rideIndexUrl ||
+      ride.priceEuro !== undefined
+    );
+
+    if (!hasFacts) {
+      box.innerHTML = "";
+      box.classList.add("hidden");
+      return;
+    }
+
+    const fair = venueIsFair();
+    const facts = [];
+    if (fair) facts.push(["Fahrpreis", ridePriceText(ride), "price"]);
+    if (ride.operatorFull || ride.operator) facts.push(["Schausteller", ride.operatorFull || ride.operator, "operator"]);
+    if (ride.manufacturer) facts.push(["Hersteller", ride.manufacturer, ""]);
+    if (ride.type) facts.push(["Typ", ride.type, ""]);
+    if (ride.year) facts.push(["Baujahr", String(ride.year), ""]);
+    if (ride.dimensions) facts.push(["Maße / Höhe", ride.dimensions, ""]);
+    if (ride.capacity) facts.push(["Kapazität", ride.capacity, ""]);
+
+    const factHtml = facts.map(([label, value, extraClass]) =>
+      "<div class=\"rideFactCard " + escapeHtml(extraClass || "") + "\">" +
+        "<span>" + escapeHtml(label) + "</span><b>" + escapeHtml(value) + "</b>" +
+      "</div>"
+    ).join("");
+
+    const links = [];
+    if (ride.rideIndexUrl) {
+      links.push("<a href=\"" + escapeHtml(ride.rideIndexUrl) + "\" target=\"_blank\" rel=\"noopener\">Ride-Index Steckbrief ↗</a>");
+    }
+    if (world?.imageSourceUrl || ride.imageSourceUrl) {
+      const sourceUrl = world?.imageSourceUrl || ride.imageSourceUrl;
+      const credit = world?.imageCredit || ride.imageCredit || "Bildquelle";
+      links.push("<a href=\"" + escapeHtml(sourceUrl) + "\" target=\"_blank\" rel=\"noopener\">Bild: " + escapeHtml(credit) + " ↗</a>");
+    }
+
+    box.innerHTML =
+      (fair ? "<div class=\"rideFactsEyebrow\">KIRMES-NERD-DATEN</div>" : "") +
+      "<div class=\"rideFactGrid\">" + factHtml + "</div>" +
+      (fair && ride.priceEuro == null
+        ? "<div class=\"ridePriceNote\">Der Soest-2026-Fahrpreis ist noch nicht bestätigt. Preise anderer Veranstaltungen werden bewusst nicht übernommen.</div>"
+        : "") +
+      (links.length ? "<div class=\"rideFactSources\">" + links.join("") + "</div>" : "");
+
+    box.classList.remove("hidden");
+  }
+
   async function openRideDetail(rideId) {
     selectedDetailRide = rides.find((ride) => ride.id === rideId) || fallbackRidesFor().find((ride) => ride.id === rideId);
     if (!selectedDetailRide) return;
@@ -2163,8 +2231,12 @@
       $("#rideDetailStatus").textContent = "Aktuell keine Live-Wartezeit verfügbar.";
     }
 
+    renderRideExtraFacts(selectedDetailRide, world);
+
     $("#rideQueueBtn").disabled = publicLive && selectedDetailRide.source === "queue-times" && !selectedDetailRide.isOpen;
-    $("#srCommunity").innerHTML = "<div class=\"message\">Single-Rider-Informationen laden…</div>";
+    $("#srCommunity").innerHTML = venueIsFair()
+      ? ""
+      : "<div class=\"message\">Single-Rider-Informationen laden…</div>";
     openSheet("rideSheet");
     pushRideDetailHistory(selectedDetailRide.id);
     await renderSrCommunity(selectedDetailRide);
@@ -2172,6 +2244,10 @@
 
   async function renderSrCommunity(ride) {
     const box = $("#srCommunity");
+    if (venueIsFair() && !ride.singleRider) {
+      box.innerHTML = "";
+      return;
+    }
     if (!ride.singleRider) {
       box.innerHTML = "<div class=\"srBox\"><b>👤 Single Rider</b><p class=\"meta\">Für diese Attraktion ist in NÄHEN keine separate Single-Rider-Nutzung hinterlegt.</p></div>";
       return;
