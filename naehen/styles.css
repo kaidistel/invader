@@ -895,3 +895,73 @@ body[data-park="europa-park"] .parkSwitch{
 }
 
 .nerdDataNote{margin-top:10px;font-size:10px;line-height:1.4;color:var(--muted)}
+
+
+/* v73 — Kirmes platform + Soester Allerheiligenkirmes 2026 */
+.parkChoice[data-kind="fair"]{
+  border-color:#ffca5f78;
+  background:
+    radial-gradient(circle at 15% 18%,#ff3d8d33 0 4px,transparent 5px),
+    radial-gradient(circle at 31% 11%,#ffd45b42 0 3px,transparent 4px),
+    radial-gradient(circle at 73% 20%,#5de7ff3d 0 4px,transparent 5px),
+    repeating-linear-gradient(118deg,#2a151c 0 18px,#17161b 18px 36px);
+}
+.parkChoice[data-kind="fair"]:before{
+  background:
+    radial-gradient(circle at 50% 15%,rgba(255,213,92,.15),transparent 31%),
+    linear-gradient(180deg,rgba(9,6,10,.08) 0%,rgba(9,6,10,.18) 30%,rgba(9,6,10,.92) 86%,#09080b 100%),
+    repeating-linear-gradient(90deg,transparent 0 34px,rgba(255,255,255,.025) 34px 36px);
+}
+.parkChoice[data-kind="fair"] .parkChoiceMeta{color:#ffd878}
+.parkChoice[data-kind="fair"] .parkChoiceOpen{color:#ffe49a;border-top-color:#ffca5f45}
+.parkChoice[data-kind="fair"] h2{text-shadow:0 3px 0 #7e2438,0 6px 18px #000}
+
+body[data-park="soest-allerheiligenkirmes-2026"]{
+  --accent:#ffd15f;
+  --accent2:#62e6ff;
+  --line:#644a58;
+}
+body[data-park="soest-allerheiligenkirmes-2026"] .parkAtmosphere{
+  background:
+    radial-gradient(circle at 14% 10%,rgba(255,53,132,.16),transparent 25%),
+    radial-gradient(circle at 87% 7%,rgba(82,222,255,.13),transparent 24%),
+    linear-gradient(180deg,rgba(14,8,13,.12),rgba(14,8,13,.74) 47%,#100c10 88%),
+    repeating-linear-gradient(115deg,#2b1821 0 22px,#151317 22px 44px);
+}
+body[data-park="soest-allerheiligenkirmes-2026"] .hero{
+  border-color:#ffd15f55;
+  background:
+    radial-gradient(circle at 90% 5%,rgba(255,64,137,.15),transparent 28%),
+    linear-gradient(135deg,#2a171fee,#111317f2);
+}
+body[data-park="soest-allerheiligenkirmes-2026"] .hero:before{
+  background:linear-gradient(#ffd15f 0 33%,#ff3f87 33% 66%,#62e6ff 66%);
+}
+body[data-park="soest-allerheiligenkirmes-2026"] .brand b,
+body[data-park="soest-allerheiligenkirmes-2026"] .brandDot{color:#ffd15f}
+body[data-park="soest-allerheiligenkirmes-2026"] .ride{
+  border-color:#ffcf7050;
+  background:#21181d;
+}
+body[data-park="soest-allerheiligenkirmes-2026"] .ride:after{
+  background:linear-gradient(0deg,#120c10 4%,#120c10d6 43%,#120c1035 100%);
+}
+body[data-park="soest-allerheiligenkirmes-2026"] .ride .zone{color:#ffe0a3}
+body[data-park="soest-allerheiligenkirmes-2026"] .btn.primary{
+  background:linear-gradient(#ffe38d,#efb943);
+  border-color:#ffedb2;
+  color:#1c1206;
+}
+.rideBadgeNew{
+  display:inline-flex;
+  align-items:center;
+  min-height:22px;
+  padding:3px 7px;
+  border:1px solid #ffe19a77;
+  border-radius:4px;
+  color:#ffe59f!important;
+  background:#7c2b41b8;
+  font:900 9px/1 'Barlow Condensed',system-ui,sans-serif!important;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
