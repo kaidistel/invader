@@ -1771,7 +1771,7 @@
       }).select("*").single();
 
       if (result.error) {
-        toast("Parktag konnte nicht synchronisiert werden");
+        toast(visitDayWord(parkSlug) + " konnte nicht synchronisiert werden");
         console.warn(result.error);
         return;
       }
@@ -1785,9 +1785,9 @@
     persistLocalState();
     renderAll();
     if (Math.random() < 0.15) {
-      toast("🧵 Parktag gestartet. Ich näh gern.");
+      toast("🧵 " + visitDayWord(parkSlug) + " gestartet. Ich näh gern.");
     } else {
-      toast("🧵 Parktag gestartet. Jetzt wird genäht.");
+      toast("🧵 " + visitDayWord(parkSlug) + " gestartet. Jetzt wird genäht.");
     }
   }
 
@@ -1805,7 +1805,7 @@
     if (supa && currentUserId()) {
       const result = await supa.from("park_days").update({ ended_at: endedAt }).eq("id", parkDay.id).eq("user_id", currentUserId());
       if (result.error) {
-        toast("Parktag konnte nicht beendet werden");
+        toast(visitDayWord(completedDay.park_slug || activeParkSlug) + " konnte nicht beendet werden");
         console.warn(result.error);
         return;
       }
@@ -1904,7 +1904,7 @@
 
   function openQueue(rideId) {
     if (!parkDay) {
-      toast("Erst Parktag starten – dann wird genäht.");
+      toast("Erst " + visitDayWord() + " starten – dann wird genäht.");
       return;
     }
     if (active) {
@@ -1917,7 +1917,10 @@
 
     queueType = "regular";
     $("#sheetRide").textContent = selectedRide.name;
-    $("#postedWait").value = selectedRide.source === "queue-times" && selectedRide.isOpen ? selectedRide.wait : "";
+    const postedWaitField = $("#postedWaitField");
+    const supportsPostedWait = activeParkConfig()?.supportsPostedWait !== false;
+    if (postedWaitField) postedWaitField.classList.toggle("hidden", !supportsPostedWait);
+    $("#postedWait").value = supportsPostedWait && selectedRide.source === "queue-times" && selectedRide.isOpen ? selectedRide.wait : "";
 
     const singleButton = $("[data-qtype=\"single\"]");
     singleButton.disabled = !selectedRide.singleRider;
@@ -2140,7 +2143,14 @@
     waitCaption?.classList.toggle("hidden", !publicLive);
 
     if (!publicLive) {
-      $("#rideDetailStatus").textContent = "Der HANSA-PARK veröffentlicht keine öffentlichen Live-Wartezeiten. Deinen eigenen Queue-Timer kannst du trotzdem nutzen.";
+      const park = activeParkConfig();
+      const rideFacts = [
+        selectedDetailRide.operator ? "Betreiber: " + selectedDetailRide.operator : "",
+        selectedDetailRide.new2026 ? "Neu 2026" : ""
+      ].filter(Boolean);
+      const noLiveText = park?.noLiveMessage ||
+        ("Für " + (park?.name || "dieses Ziel") + " sind in NÄHEN keine öffentlichen Live-Wartezeiten hinterlegt. Deinen eigenen Queue-Timer kannst du trotzdem nutzen.");
+      $("#rideDetailStatus").textContent = (rideFacts.length ? rideFacts.join(" · ") + " · " : "") + noLiveText;
     } else if (selectedDetailRide.source === "queue-times") {
       $("#rideDetailWait").textContent = selectedDetailRide.isOpen ? selectedDetailRide.wait + " min" : "Geschlossen";
       $("#rideDetailStatus").textContent = selectedDetailRide.isOpen ? "Als geöffnet gemeldet · Daten von Queue-Times, keine offizielle Park-Livezeit." : "Attraktion wird aktuell als geschlossen gemeldet.";
@@ -2203,7 +2213,10 @@
     if (!container) return;
 
     if (!parkHasPublicLiveWaits()) {
-      container.innerHTML = "<div class=\"empty\">Für den HANSA-PARK gibt es keine öffentlichen Live-Wartezeiten. Wartezeit-Alarme sind deshalb hier deaktiviert.</div>";
+      const park = activeParkConfig();
+      const message = park?.noLiveAlarmMessage ||
+        ("Für " + (park?.name || "dieses Ziel") + " gibt es keine öffentlichen Live-Wartezeiten. Wartezeit-Alarme sind deshalb hier deaktiviert.");
+      container.innerHTML = "<div class=\"empty\">" + escapeHtml(message) + "</div>";
       return;
     }
 
