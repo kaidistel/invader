@@ -85,6 +85,102 @@ If an operator is unknown, leave it empty instead of inventing one.
 
 ---
 
+# 4.1 Fahrpreis Is Event-Specific
+
+Fahrpreis is a first-class fair field.
+
+Store it per event lineup:
+
+```js
+priceEuro: null
+```
+
+or, when confirmed for that exact event/year:
+
+```js
+priceEuro: 7
+```
+
+Hard rules:
+
+- never copy a price from another city, fair or previous year and present it as current
+- never infer a Soest price from Wiesn, Crange, Düsseldorf, etc.
+- if the current event-specific price is unknown, render **„noch nicht bestätigt“**
+- keep the field visible even while unknown so it can be filled later
+- the card and detail view should both make the price easy to find
+
+Prices are volatile operational data and need an event/date-specific source.
+
+---
+
+# 4.2 Ride-Index / Technical Nerd Data
+
+For German travelling rides, Ride-Index is a preferred research source for:
+
+- full Schausteller / operator name
+- manufacturer
+- ride type
+- construction year
+- dimensions / height
+- capacity
+- previous names / owners when useful
+- premiere information
+
+Store the source URL on the ride:
+
+```js
+rideIndexUrl: "https://ride-index.de/..."
+```
+
+Expose a source link in the detail view.
+
+Do not fill missing technical facts from guesswork. If Ride-Index has no manufacturer/year, leave the field empty or verify it from an official operator/manufacturer source.
+
+The Schausteller remains especially important and should be more visually prominent than secondary technical facts.
+
+---
+
+# 4.3 Attraction Images
+
+Every important fair ride should receive an actual image of the correct travelling ride, not merely a generic ride of the same type.
+
+Preferred source order:
+
+1. official operator / attraction website
+2. official event / city press image
+3. Ride-Index or established fairground database
+4. reputable fairground photo archive / community source
+
+Store:
+
+```js
+imageUrl
+imageCredit
+imageSourceUrl
+```
+
+The detail page must provide the image credit/source when available.
+
+Never use a photo of a similarly named but different operator's ride.
+
+---
+
+# 4.4 Font Variety Is Mandatory
+
+Travelling rides often have unusually strong individual signage. Reflect that instead of applying one generic carnival font repeatedly.
+
+For one fair lineup:
+
+- compare all attraction fonts before completion
+- avoid repeating the same font unless two rides genuinely share a visual identity
+- use the ride's façade/sign/logo as the typography reference
+- preserve readability and mobile safe areas
+- operational NÄHEN UI remains in the normal product font
+
+A 20+ ride fair should not visually collapse into four recycled font families.
+
+---
+
 # 5. New-for-Year Markers
 
 If a lineup identifies a ride as new, store this explicitly, e.g.:
@@ -270,7 +366,12 @@ A Kirmes onboarding is complete only when:
 - [ ] event slug is year-safe
 - [ ] official dates are verified
 - [ ] full supplied/verified lineup is represented
-- [ ] all known operators are stored and visible
+- [ ] all known operators are stored and visually prominent
+- [ ] Ride-Index / official technical data is linked where available
+- [ ] every ride has a Fahrpreis field; unknown event-specific prices explicitly stay unconfirmed
+- [ ] current-event prices are never copied from other fairs
+- [ ] correct ride images are included with source/credit where available
+- [ ] attraction fonts were reviewed for lineup-wide variety
 - [ ] all confirmed new-for-year rides are visibly marked
 - [ ] no public wait times are fabricated
 - [ ] personal queue timer works
