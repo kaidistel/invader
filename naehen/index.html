@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="NÄHEN">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=74">
+  <link rel="stylesheet" href="./styles.css?v=75">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Staatliches&family=Stardos+Stencil:wght@400;700&family=Bangers&family=Bebas+Neue&family=Cinzel+Decorative:wght@400;700&family=Graduate&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
@@ -18,9 +18,9 @@
   <link href="https://fonts.cdnfonts.com/css/gang-of-three" rel="stylesheet">
   <link href="https://fonts.cdnfonts.com/css/old-london" rel="stylesheet">
   <link href="https://fonts2u.com/download/steampunk-machinery-fon-regular.font-face" rel="stylesheet">
-  <link rel="stylesheet" href="./portals.css?v=74">
+  <link rel="stylesheet" href="./portals.css?v=75">
   <title>NÄHEN · Parkday Companion</title>
-  <link rel="stylesheet" href="./ride-3d.css?v=74">
+  <link rel="stylesheet" href="./ride-3d.css?v=75">
 </head>
 <body>
   <div class="parkAtmosphere" aria-hidden="true"></div>
@@ -140,6 +140,20 @@
           <div class="stat"><strong id="srToday">0×</strong><span>Single Rider</span></div>
         </div>
       </div>
+
+      <section class="venueSpecialMap hidden" id="venueSpecialMap" aria-labelledby="venueMapTitle">
+        <div class="venueMapHead">
+          <div>
+            <div class="eyebrow">SOEST · SONDERANSICHT</div>
+            <h2 id="venueMapTitle">Kirmesplan 2026</h2>
+            <p id="venueMapSubtitle"></p>
+          </div>
+          <a id="venueMapSource" class="venueMapSource" href="#" target="_blank" rel="noopener">Offizieller Lageplan</a>
+        </div>
+        <div id="venueMapCanvas" class="venueMapCanvas"></div>
+        <p id="venueMapNote" class="venueMapNote"></p>
+        <div id="venueMapKey" class="venueMapKey" aria-label="Geschäfte auf dem Kirmesplan"></div>
+      </section>
 
       <div class="sectionHead">
         <h2>Deine Nähchancen</h2>
@@ -286,14 +300,14 @@
   </section>
 
   <script defer src="./config.js"></script>
-  <script defer src="./movie-park-config.js?v=74"></script>
-  <script defer src="./walibi-holland-config.js?v=74"></script>
-  <script defer src="./walibi-belgium-config.js?v=74"></script>
-  <script defer src="./europa-park-config.js?v=74"></script>
-  <script defer src="./hansa-park-config.js?v=74"></script>
-  <script defer src="./soest-allerheiligenkirmes-2026-config.js?v=74"></script>
+  <script defer src="./movie-park-config.js?v=75"></script>
+  <script defer src="./walibi-holland-config.js?v=75"></script>
+  <script defer src="./walibi-belgium-config.js?v=75"></script>
+  <script defer src="./europa-park-config.js?v=75"></script>
+  <script defer src="./hansa-park-config.js?v=75"></script>
+  <script defer src="./soest-allerheiligenkirmes-2026-config.js?v=75"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script defer src="./app.js?v=74"></script>
-  <script type="module" src="./ride-3d.js?v=74"></script>
+  <script defer src="./app.js?v=75"></script>
+  <script type="module" src="./ride-3d.js?v=75"></script>
 </body>
 </html>
