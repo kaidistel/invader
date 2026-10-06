@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="NÄHEN">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=72">
+  <link rel="stylesheet" href="./styles.css?v=73">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Staatliches&family=Stardos+Stencil:wght@400;700&family=Bangers&family=Bebas+Neue&family=Cinzel+Decorative:wght@400;700&family=Graduate&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
@@ -17,9 +17,9 @@
   <link href="https://fonts.cdnfonts.com/css/gang-of-three" rel="stylesheet">
   <link href="https://fonts.cdnfonts.com/css/old-london" rel="stylesheet">
   <link href="https://fonts2u.com/download/steampunk-machinery-fon-regular.font-face" rel="stylesheet">
-  <link rel="stylesheet" href="./portals.css?v=72">
+  <link rel="stylesheet" href="./portals.css?v=73">
   <title>NÄHEN · Parkday Companion</title>
-  <link rel="stylesheet" href="./ride-3d.css?v=72">
+  <link rel="stylesheet" href="./ride-3d.css?v=73">
 </head>
 <body>
   <div class="parkAtmosphere" aria-hidden="true"></div>
@@ -94,13 +94,13 @@
       </header>
 
       <div class="parkPickerIntro">
-        <div class="eyebrow">Park auswählen</div>
+        <div class="eyebrow">Ziel auswählen</div>
         <h1 id="parkPickerTitle">Wo wird heute genäht?</h1>
-        <p>Wähle deinen Park. Jeder Park bekommt seine eigene NÄHEN-Welt mit Attraktionen, Live-Daten und individuellem Theming.</p>
+        <p>Wähle Freizeitpark oder Kirmes. Jedes Ziel bekommt seine eigene NÄHEN-Welt mit Fahrgeschäften, persönlichem Queue-Timer und – wo verfügbar – Live-Daten.</p>
       </div>
 
       <div class="parkGrid" id="parkGrid"></div>
-      <div class="parkPickerFooter"><span id="parkCount">1 Park verfügbar</span><span>Weitere Parks folgen.</span></div>
+      <div class="parkPickerFooter"><span id="parkCount">1 Ziel verfügbar</span><span>Weitere Parks & Kirmessen folgen.</span></div>
     </div>
   </section>
 
@@ -119,13 +119,13 @@
         <div class="mini" id="accountMode">Account</div>
       </div>
       <div class="topbarActions">
-        <button class="parkSwitch" id="parkSwitchBtn" type="button" aria-label="Zur Parkauswahl">← PARKS</button>
+        <button class="parkSwitch" id="parkSwitchBtn" type="button" aria-label="Zur Auswahl">← AUSWAHL</button>
         <button class="avatar" id="avatarBtn" aria-label="Profil öffnen">🧵</button>
       </div>
     </header>
 
     <section id="homeView">
-      <div class="hero"><div class="heroIndex" aria-hidden="true">01 / PARKDAY</div>
+      <div class="hero"><div class="heroIndex" id="visitDayIndex" aria-hidden="true">01 / PARKDAY</div>
         <div class="heroLine">
           <div>
             <div class="eyebrow" id="parkDayEyebrow">Phantasialand · Parktag</div>
@@ -157,13 +157,13 @@
 
     <section id="archiveView" class="hidden">
       <div class="sectionHead">
-        <h2>Parktag-Archiv</h2>
+        <h2 id="archiveViewTitle">Parktag-Archiv</h2>
         <span>DAUERHAFT GESPEICHERT</span>
       </div>
       <div class="archiveIntro">
         <div class="eyebrow">NÄHEN · HISTORY</div>
-        <h2>Deine Parktage verschwinden nicht mehr.</h2>
-        <p>Jeder abgeschlossene Parktag bleibt mit Fahrten, echten Queue-Zeiten und Nerd-Statistiken erhalten.</p>
+        <h2 id="archiveIntroTitle">Deine Parktage verschwinden nicht mehr.</h2>
+        <p id="archiveIntroCopy">Jeder abgeschlossene Parktag bleibt mit Fahrten, echten Queue-Zeiten und Nerd-Statistiken erhalten.</p>
       </div>
       <div id="archiveSummary"></div>
       <div class="sectionHead archiveListHead">
@@ -188,7 +188,7 @@
       <div class="profileBox">
         <h3>🧵 Nähbilanz</h3>
         <p class="meta">Gesamtfahrten auf diesem Account/Gerät: <b id="totalRides">0</b></p>
-        <p class="meta">Gespeicherte Parktage in diesem Park: <b id="totalParkDays">0</b></p>
+        <p class="meta"><span id="profileDayCountLabel">Gespeicherte Parktage in diesem Park</span>: <b id="totalParkDays">0</b></p>
       </div>
       <div class="profileBox">
         <div class="achievementHead">
@@ -230,7 +230,7 @@
         <button class="on" data-qtype="regular">Regular</button>
         <button data-qtype="single">Single Rider</button>
       </div>
-      <div class="form">
+      <div class="form" id="postedWaitField">
         <label>ANGEZEIGTE WARTEZEIT (OPTIONAL)</label>
         <input id="postedWait" inputmode="numeric" type="number" min="0" placeholder="z. B. 30">
       </div>
@@ -266,7 +266,7 @@
   <section class="sheet" id="recapSheet">
     <div class="sheetCard">
       <button aria-label="Schließen" class="close" data-close="recapSheet">✕</button>
-      <div class="eyebrow">Parktag abgeschlossen</div>
+      <div class="eyebrow" id="recapDayEyebrow">Parktag abgeschlossen</div>
       <h2>🧵 Nähbilanz</h2>
       <div id="recapContent"></div>
       <button class="btn primary full" data-close="recapSheet">SAUBER GENÄHT</button>
@@ -276,7 +276,7 @@
   <section class="sheet" id="archiveDetailSheet" role="dialog" aria-modal="true" aria-labelledby="archiveDetailTitle">
     <div class="sheetCard archiveDetailCard">
       <button aria-label="Schließen" class="close" data-close="archiveDetailSheet">✕</button>
-      <div class="eyebrow">Gespeicherter Parktag</div>
+      <div class="eyebrow" id="archiveDetailEyebrow">Gespeicherter Parktag</div>
       <h2 id="archiveDetailTitle">Parktag</h2>
       <div class="mini" id="archiveDetailMeta"></div>
       <div id="archiveDetailContent"></div>
@@ -284,13 +284,14 @@
   </section>
 
   <script defer src="./config.js"></script>
-  <script defer src="./movie-park-config.js?v=72"></script>
-  <script defer src="./walibi-holland-config.js?v=72"></script>
-  <script defer src="./walibi-belgium-config.js?v=72"></script>
-  <script defer src="./europa-park-config.js?v=72"></script>
-  <script defer src="./hansa-park-config.js?v=72"></script>
+  <script defer src="./movie-park-config.js?v=73"></script>
+  <script defer src="./walibi-holland-config.js?v=73"></script>
+  <script defer src="./walibi-belgium-config.js?v=73"></script>
+  <script defer src="./europa-park-config.js?v=73"></script>
+  <script defer src="./hansa-park-config.js?v=73"></script>
+  <script defer src="./soest-allerheiligenkirmes-2026-config.js?v=73"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script defer src="./app.js?v=72"></script>
-  <script type="module" src="./ride-3d.js?v=72"></script>
+  <script defer src="./app.js?v=73"></script>
+  <script type="module" src="./ride-3d.js?v=73"></script>
 </body>
 </html>
