@@ -964,7 +964,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=70", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=71", {
           scope: "./",
           updateViaCache: "none"
         });
@@ -1197,6 +1197,54 @@
     };
   }
 
+  async function fetchRealtimeLivePayload(park) {
+    if (!supa || !currentUserId() || !cfg.supabaseUrl || !cfg.supabaseAnonKey) return null;
+
+    try {
+      const sessionResult = await supa.auth.getSession();
+      const accessToken = sessionResult?.data?.session?.access_token;
+      if (!accessToken) return null;
+
+      const controller = new AbortController();
+      const timer = window.setTimeout(() => controller.abort(), 6500);
+      const response = await fetch(
+        cfg.supabaseUrl.replace(/\/$/, "") + "/functions/v1/live-waits?park=" + encodeURIComponent(park.slug) + "&t=" + Date.now(),
+        {
+          cache: "no-store",
+          signal: controller.signal,
+          headers: {
+            "Accept": "application/json",
+            "apikey": cfg.supabaseAnonKey,
+            "Authorization": "Bearer " + accessToken
+          }
+        }
+      );
+      window.clearTimeout(timer);
+      if (!response.ok) throw new Error("Edge-Live HTTP " + response.status);
+      return await response.json();
+    } catch (error) {
+      console.warn("Realtime-Liveproxy nicht erreichbar", error);
+      return null;
+    }
+  }
+
+  async function fetchSnapshotFallback(park) {
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), 6500);
+    try {
+      const response = await fetch(park.liveDataUrl + "?t=" + Date.now(), {
+        cache: "no-store",
+        signal: controller.signal
+      });
+      if (!response.ok) throw new Error("Live-Snapshot HTTP " + response.status);
+      const data = await response.json();
+      data._naehen = Object.assign({}, data._naehen || {}, { source: "github-fallback" });
+      return data;
+    } finally {
+      window.clearTimeout(timer);
+    }
+  }
+
   async function loadLiveWaits() {
     const label = $("#dataLabel");
     if (!label) return;
@@ -1213,16 +1261,9 @@
 
     try {
       label.textContent = "LIVE WIRD GELADEN…";
-      const controller = new AbortController();
-      const timer = window.setTimeout(() => controller.abort(), 6500);
-      const response = await fetch(park.liveDataUrl + "?t=" + Date.now(), {
-        cache: "no-store",
-        signal: controller.signal
-      });
-      window.clearTimeout(timer);
-      if (!response.ok) throw new Error("Live-Snapshot HTTP " + response.status);
 
-      const data = await response.json();
+      let data = await fetchRealtimeLivePayload(park);
+      if (!data) data = await fetchSnapshotFallback(park);
       const previous = store.get("naehen:lastWaits:" + park.slug, {});
       const flattened = [];
 
@@ -1283,7 +1324,18 @@
       });
 
       store.set("naehen:lastWaits:" + park.slug, nowState);
-      label.textContent = "LIVE · GITHUB SYNC";
+
+      const liveMeta = data._naehen || {};
+      const ageMs = Number(liveMeta.ageMs) || 0;
+      if (liveMeta.source === "queue-times-direct") {
+        label.textContent = "LIVE · DIREKT";
+      } else if (liveMeta.source === "edge-cache") {
+        label.textContent = "LIVE · " + Math.max(0, Math.round(ageMs / 1000)) + "s ALT";
+      } else if (liveMeta.source === "stale-cache") {
+        label.textContent = "LIVE-FALLBACK · " + Math.max(1, Math.round(ageMs / 60000)) + " MIN ALT";
+      } else {
+        label.textContent = "LIVE · BACKUP-SNAPSHOT";
+      }
       renderRides();
     } catch (error) {
       console.warn("Live-Snapshot konnte nicht geladen werden", error);
@@ -1386,7 +1438,7 @@
 
     container.innerHTML = (cards || "<div class=\"empty\">Keine passenden Attraktionen. Passe deine Suche oder den Favoritenfilter an.</div>") +
       (hasPublicLive
-        ? "<a class=\"attribution\" href=\"https://queue-times.com/\" target=\"_blank\" rel=\"noopener\">Powered by <b style=\"color:var(--text)\">Queue-Times.com</b> · Snapshots ca. alle 2–3 Min. · App prüft jede Minute</a>"
+        ? "<a class=\"attribution\" href=\"https://queue-times.com/\" target=\"_blank\" rel=\"noopener\">Powered by <b style=\"color:var(--text)\">Queue-Times.com</b> · Liveproxy ca. alle 45 Sek. frisch · App prüft jede Minute</a>"
         : "");
 
     container.querySelectorAll(".ride[data-detail]").forEach((card) => {
