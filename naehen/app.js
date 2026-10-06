@@ -20,7 +20,8 @@
     window.NAEHEN_WALIBI_HOLLAND,
     window.NAEHEN_WALIBI_BELGIUM,
     window.NAEHEN_EUROPA_PARK,
-    window.NAEHEN_HANSA_PARK
+    window.NAEHEN_HANSA_PARK,
+    window.NAEHEN_SOEST_ALLERHEILIGENKIRMES_2026
   ].filter((module) => module && module.park && module.park.slug);
 
   const PARK_MODULES = {};
@@ -785,6 +786,18 @@
     return activeParkSlug ? PARKS[activeParkSlug] || null : null;
   }
 
+  function venueIsFair(parkSlug = activeParkSlug) {
+    return !!(parkSlug && PARKS[parkSlug]?.kind === "fair");
+  }
+
+  function visitDayWord(parkSlug = activeParkSlug) {
+    return venueIsFair(parkSlug) ? "Kirmestag" : "Parktag";
+  }
+
+  function visitDayPlural(parkSlug = activeParkSlug) {
+    return venueIsFair(parkSlug) ? "Kirmestage" : "Parktage";
+  }
+
   function parkHasPublicLiveWaits(parkSlug = activeParkSlug) {
     const park = parkSlug ? PARKS[parkSlug] : null;
     return !!(park && park.liveWaits !== false && park.liveDataUrl);
@@ -795,22 +808,23 @@
     if (!grid) return;
 
     const available = Object.values(PARKS);
-    grid.innerHTML = available.map((park) =>
-      "<button class=\"parkChoice\" type=\"button\" data-park=\"" + escapeHtml(park.slug) + "\">" +
+    grid.innerHTML = available.map((park) => {
+      const fair = park.kind === "fair";
+      return "<button class=\"parkChoice\" type=\"button\" data-park=\"" + escapeHtml(park.slug) + "\" data-kind=\"" + (fair ? "fair" : "park") + "\">" +
         (park.cardImage
           ? "<img class=\"parkChoiceArt\" src=\"" + escapeHtml(park.cardImage) + "\" alt=\"\" loading=\"eager\">"
           : "<img class=\"parkChoiceArt\" alt=\"\" loading=\"eager\" hidden>") +
         "<span class=\"parkChoiceCopy\">" +
-          "<span class=\"parkChoiceMeta\">" + escapeHtml(park.location) + "</span>" +
+          "<span class=\"parkChoiceMeta\">" + (fair ? "KIRMES · " : "") + escapeHtml(park.location) + "</span>" +
           "<h2>" + escapeHtml(park.name) + "</h2>" +
           "<p>" + escapeHtml(park.cardCopy) + "</p>" +
-          "<span class=\"parkChoiceOpen\"><span>Park öffnen</span><span class=\"parkChoiceArrow\" aria-hidden=\"true\">→</span></span>" +
+          "<span class=\"parkChoiceOpen\"><span>" + (fair ? "Kirmes öffnen" : "Park öffnen") + "</span><span class=\"parkChoiceArrow\" aria-hidden=\"true\">→</span></span>" +
         "</span>" +
-      "</button>"
-    ).join("");
+      "</button>";
+    }).join("");
 
     const count = $("#parkCount");
-    if (count) count.textContent = available.length + (available.length === 1 ? " Park verfügbar" : " Parks verfügbar");
+    if (count) count.textContent = available.length + (available.length === 1 ? " Ziel verfügbar" : " Ziele verfügbar");
 
     grid.querySelectorAll("[data-park]").forEach((button) => {
       button.addEventListener("click", () => openPark(button.dataset.park));
@@ -881,10 +895,25 @@
       history.pushState({ naehenPark: parkSlug }, "", location.href);
     }
 
+    const dayWord = visitDayWord(parkSlug);
     const eyebrow = $("#parkDayEyebrow");
-    if (eyebrow) eyebrow.textContent = park.name + " · Parktag";
+    if (eyebrow) eyebrow.textContent = park.name + " · " + dayWord;
+    const dayIndex = $("#visitDayIndex");
+    if (dayIndex) dayIndex.textContent = "01 / " + (venueIsFair(parkSlug) ? "KIRMESTAG" : "PARKDAY");
+    const archiveTitle = $("#archiveViewTitle");
+    if (archiveTitle) archiveTitle.textContent = dayWord + "-Archiv";
+    const archiveIntroTitle = $("#archiveIntroTitle");
+    if (archiveIntroTitle) archiveIntroTitle.textContent = "Deine " + visitDayPlural(parkSlug) + " verschwinden nicht mehr.";
+    const archiveIntroCopy = $("#archiveIntroCopy");
+    if (archiveIntroCopy) archiveIntroCopy.textContent = "Jeder abgeschlossene " + dayWord + " bleibt mit Fahrten, echten Queue-Zeiten und Nerd-Statistiken erhalten.";
+    const profileDayCountLabel = $("#profileDayCountLabel");
+    if (profileDayCountLabel) profileDayCountLabel.textContent = "Gespeicherte " + visitDayPlural(parkSlug) + " in diesem " + (venueIsFair(parkSlug) ? "Event" : "Park");
+    const recapEyebrow = $("#recapDayEyebrow");
+    if (recapEyebrow) recapEyebrow.textContent = dayWord + " abgeschlossen";
+    const archiveDetailEyebrow = $("#archiveDetailEyebrow");
+    if (archiveDetailEyebrow) archiveDetailEyebrow.textContent = "Gespeicherter " + dayWord;
     const disclaimer = $("#parkDisclaimer");
-    if (disclaimer) disclaimer.innerHTML = "NÄHEN · Dein unabhängiger Parkbegleiter.<br>" + escapeHtml(park.disclaimer);
+    if (disclaimer) disclaimer.innerHTML = "NÄHEN · Dein unabhängiger " + (venueIsFair(parkSlug) ? "Kirmesbegleiter" : "Parkbegleiter") + ".<br>" + escapeHtml(park.disclaimer);
 
     rideSearch = "";
     onlyFavorites = false;
@@ -964,7 +993,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=72", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=73", {
           scope: "./",
           updateViaCache: "none"
         });
