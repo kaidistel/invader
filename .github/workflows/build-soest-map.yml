@@ -61,7 +61,7 @@ jobs:
 
       - name: Commit generated PNG
         run: |
-          if git diff --quiet -- naehen/assets/soest-allerheiligenkirmes-2026-lageplan.png; then
+          if [ -z "$(git status --porcelain -- naehen/assets/soest-allerheiligenkirmes-2026-lageplan.png)" ]; then
             echo "Map asset unchanged."
             exit 0
           fi
