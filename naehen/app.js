@@ -1438,63 +1438,36 @@
     }
 
     section.classList.remove("hidden");
-    if (title) title.textContent = map.title || "Lageplan";
+    if (title) title.textContent = map.title || "Kirmesplan";
     if (subtitle) subtitle.textContent = map.subtitle || "";
     if (note) note.textContent = map.note || "";
     if (source) {
       source.href = map.sourceUrl || "#";
-      source.textContent = map.sourceLabel || "Offizieller Lageplan";
+      source.textContent = map.sourceLabel || "Originalplan öffnen";
       source.hidden = !map.sourceUrl;
     }
 
-    const points = (map.points || []).map((point) => {
-      const ride = rides.find((item) => item.id === point.rideId);
-      return ride ? Object.assign({}, point, { ride }) : null;
-    }).filter(Boolean);
-
-    const markerHtml = points.map((point) =>
-      "<button class=\"soestMapPin\" type=\"button\" data-map-ride=\"" + escapeHtml(point.ride.id) + "\" " +
-      "style=\"--map-x:" + Number(point.x) + "%;--map-y:" + Number(point.y) + "%\" " +
-      "aria-label=\"" + escapeHtml(point.ride.name + " von " + (point.ride.operator || "Schausteller")) + "\">" +
-      "<span>" + escapeHtml(String(point.n || "")) + "</span>" +
-      "<b>" + escapeHtml(point.ride.name) + "</b>" +
+    const linkedRides = rides.filter((ride) => !isExcludedRide(ride.name, ride.id, activeParkSlug));
+    const overlayLinks = linkedRides.map((ride) =>
+      "<button type=\"button\" class=\"soestMapOverlayLink\" data-map-ride=\"" + escapeHtml(ride.id) + "\">" +
+        "<b>" + escapeHtml(ride.name) + "</b>" +
+        (ride.operator ? "<small>" + escapeHtml(ride.operator) + "</small>" : "") +
       "</button>"
     ).join("");
 
+    const pdfUrl = map.sourceUrl || "";
     canvas.innerHTML =
-      "<div class=\"soestMapPaper\">" +
-        "<svg class=\"soestMapBase\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"Schematischer Soest-Kirmesplan 2026 nach dem offiziellen Programmplan\">" +
-          "<rect width=\"100\" height=\"100\" fill=\"#f7f5ed\"/>" +
-          "<g fill=\"#d8d8d2\" stroke=\"#c9c9c2\" stroke-width=\".45\">" +
-            "<path d=\"M4 4h22v13H13v12H4z\"/><path d=\"M31 3h20v12H38v11H28V10z\"/>" +
-            "<path d=\"M58 4h20v10h15v17H73V20H57z\"/><path d=\"M3 35h20v20H8v13H1z\"/>" +
-            "<path d=\"M29 31h18v15H35v14H20V48h9z\"/><path d=\"M53 29h18v18h-9v11H49V42z\"/>" +
-            "<path d=\"M76 36h20v21H86v10H72V53h7z\"/><path d=\"M9 72h20v18H3V82z\"/>" +
-            "<path d=\"M35 68h17v12h9v17H39V86H29V76z\"/><path d=\"M67 68h13v12h18v17H77V89H62V77z\"/>" +
-          "</g>" +
-          "<g fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\">" +
-            "<path d=\"M50 7 C48 18 42 24 36 34 S42 48 51 55 S65 62 70 74 S65 87 58 93\" stroke=\"#f3db58\" stroke-width=\"9\" opacity=\".92\"/>" +
-            "<path d=\"M51 15 C63 24 75 30 80 42 S77 58 72 68\" stroke=\"#f3db58\" stroke-width=\"8\" opacity=\".92\"/>" +
-            "<path d=\"M37 34 C27 42 22 54 30 66 S43 78 55 82\" stroke=\"#f3db58\" stroke-width=\"7\" opacity=\".92\"/>" +
-            "<path d=\"M50 19 C45 29 42 39 49 49 S61 60 67 72\" stroke=\"#b82228\" stroke-width=\"3.8\"/>" +
-          "</g>" +
-          "<path d=\"M86 55 C90 64 88 75 82 86\" fill=\"none\" stroke=\"#55a8d9\" stroke-width=\"2.2\"/>" +
-          "<g class=\"soestMapLabels\">" +
-            "<text x=\"43\" y=\"5\">BAHNHOF</text><text x=\"46\" y=\"48\">MARKT</text>" +
-            "<text x=\"63\" y=\"45\">KOHLBRINK</text><text x=\"78\" y=\"70\">GROSSER TEICH</text>" +
-            "<text x=\"58\" y=\"80\">ST. PATROKLI</text><text x=\"80\" y=\"54\">WIESENSTRASSE</text>" +
-          "</g>" +
-          "<g class=\"soestMapSpecialists\"><text x=\"53\" y=\"32\" transform=\"rotate(39 53 32)\">SPEZIALISTEN</text></g>" +
-        "</svg>" +
-        markerHtml +
+      "<div class=\"soestOriginalPlanWrap\">" +
+        "<object class=\"soestOriginalPlan\" data=\"" + escapeHtml(pdfUrl + "#page=1&view=FitH&toolbar=0&navpanes=0") + "\" type=\"application/pdf\">" +
+          "<iframe class=\"soestOriginalPlan\" src=\"" + escapeHtml(pdfUrl + "#page=1&view=FitH&toolbar=0&navpanes=0") + "\" title=\"Originaler Soester Kirmesplan 2026\"></iframe>" +
+        "</object>" +
+        "<div class=\"soestMapOverlayRail\" aria-label=\"Fahrgeschäfte auf dem Originalplan\">" +
+          "<div class=\"soestMapOverlayTitle\">GESCHÄFTE · ANTIPPEN</div>" +
+          "<div class=\"soestMapOverlayScroll\">" + overlayLinks + "</div>" +
+        "</div>" +
       "</div>";
 
-    key.innerHTML = points.map((point) =>
-      "<button type=\"button\" class=\"soestMapKeyItem\" data-map-ride=\"" + escapeHtml(point.ride.id) + "\">" +
-        "<span>" + escapeHtml(String(point.n || "")) + "</span>" +
-        "<div><b>" + escapeHtml(point.ride.name) + "</b><small>" + escapeHtml(point.ride.operator || "") + "</small></div>" +
-      "</button>"
-    ).join("");
+    key.innerHTML = "";
 
     section.querySelectorAll("[data-map-ride]").forEach((button) => {
       button.addEventListener("click", () => openRideDetail(button.dataset.mapRide));
