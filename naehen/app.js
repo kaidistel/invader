@@ -1283,7 +1283,7 @@
 
     if (!parkHasPublicLiveWaits(park.slug)) {
       rides = fallbackRidesFor(park.slug).map((ride) => Object.assign({}, ride));
-      label.textContent = "KEINE ÖFFENTLICHEN LIVE-WARTEZEITEN";
+      label.textContent = park.noLiveLabel || "KEINE ÖFFENTLICHEN LIVE-WARTEZEITEN";
       renderRides();
       return;
     }
@@ -1389,19 +1389,22 @@
     const headline = $("#parkDayHeadline");
     if (!button || !headline) return;
 
+    const fair = venueIsFair();
+    const dayWord = fair ? "KIRMESTAG" : "PARKTAG";
+
     if (parkDay) {
-      button.textContent = "PARKTAG BEENDEN";
+      button.textContent = dayWord + " BEENDEN";
       button.classList.remove("primary");
       button.classList.add("secondary");
       const start = new Date(parkDay.started_at || parkDay.startedAt || Date.now());
       headline.textContent = "Seit " + start.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }) + " wird genäht.";
-      $("#logDayLabel").textContent = "AKTUELLER PARKTAG";
+      $("#logDayLabel").textContent = "AKTUELLER " + dayWord;
     } else {
-      button.textContent = "PARKTAG STARTEN";
+      button.textContent = dayWord + " STARTEN";
       button.classList.remove("secondary");
       button.classList.add("primary");
       headline.textContent = sessions.length ? "Letzte Nähbilanz steht." : "Heute wird genäht.";
-      $("#logDayLabel").textContent = sessions.length ? "LETZTER PARKTAG" : "NOCH NICHT GESTARTET";
+      $("#logDayLabel").textContent = sessions.length ? "LETZTER " + dayWord : "NOCH NICHT GESTARTET";
     }
   }
 
@@ -1413,7 +1416,10 @@
     const visibleRides = rides
       .filter(ride => !isExcludedRide(ride.name, ride.id, activeParkSlug) && (!onlyFavorites || favorites.includes(ride.id)) && ride.name.toLowerCase().includes(rideSearch))
       .sort((a, b) => {
-        if (!hasPublicLive) return a.name.localeCompare(b.name, "de");
+        if (!hasPublicLive) {
+          if (activeParkConfig()?.sortMode === "configured") return 0;
+          return a.name.localeCompare(b.name, "de");
+        }
 
         const aHasLive = a.source === "queue-times";
         const bHasLive = b.source === "queue-times";
@@ -1446,6 +1452,8 @@
       const trendText = !hasLive ? "warte auf Live-Daten" : closed ? "aktuell geschlossen" : ride.delta ? arrow + " " + Math.abs(ride.delta) + " min" : "→ stabil";
       const updated = hasPublicLive && ride.lastUpdated ? " · Stand " + new Date(ride.lastUpdated).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }) : "";
       const sr = ride.singleRider ? "<span>👤 SR</span><span>·</span>" : "";
+      const newBadge = ride.new2026 ? "<span class=\"rideBadgeNew\">✦ NEU 2026</span>" : "";
+      const operatorText = ride.operator ? " · " + ride.operator : "";
       const queueDisabled = closed ? " disabled" : "";
 
       return "<article class=\"ride\" data-park=\"" + escapeHtml(activeParkSlug || "phantasialand") + "\" data-world=\"" + escapeHtml(ride.id) + "\" data-detail=\"" + escapeHtml(ride.id) + "\">" +
@@ -1453,9 +1461,9 @@
         "<div class=\"rideMain\">" +
           "<div class=\"rideTop\">" +
             "<button class=\"fav " + (fav ? "on" : "") + "\" data-fav=\"" + ride.id + "\" aria-label=\"Favorit für " + escapeHtml(ride.name) + "\" aria-pressed=\"" + fav + "\">★</button>" +
-            "<div><h3>" + escapeHtml(ride.name) + "</h3><div class=\"zone\">" + escapeHtml(ride.zone + updated) + "</div></div>" +
+            "<div><h3>" + escapeHtml(ride.name) + "</h3><div class=\"zone\">" + escapeHtml(ride.zone + operatorText + updated) + "</div></div>" +
           "</div>" +
-          "<div class=\"meta\">" + sr +
+          "<div class=\"meta\">" + newBadge + sr +
             (hasPublicLive ? "<span class=\"trend " + ride.trend + "\">" + escapeHtml(trendText) + "</span><span>·</span>" : "") +
             "<button class=\"btn secondary\" style=\"padding:7px 10px;font-size:11px\" data-queue=\"" + ride.id + "\"" + queueDisabled + ">" + (closed ? "ZU" : "ANSTELLEN") + "</button>" +
             "<button class=\"btn ghost\" style=\"padding:7px 4px;font-size:11px\" data-detail-btn=\"" + ride.id + "\">DETAILS</button>" +
