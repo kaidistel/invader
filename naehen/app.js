@@ -21,7 +21,8 @@
     window.NAEHEN_WALIBI_BELGIUM,
     window.NAEHEN_EUROPA_PARK,
     window.NAEHEN_HANSA_PARK,
-    window.NAEHEN_SOEST_ALLERHEILIGENKIRMES_2026
+    window.NAEHEN_SOEST_ALLERHEILIGENKIRMES_2026,
+    window.NAEHEN_BOCHOLT_KIRMES_2026
   ].filter((module) => module && module.park && module.park.slug);
 
   const PARK_MODULES = {};
@@ -1455,10 +1456,14 @@
     const missing = sessionsForReceipt.length - priced.length;
     const average = priced.length ? total / priced.length : 0;
     const dayDate = sourceDay?.started_at || sourceDay?.startedAt || Date.now();
+    const receiptParkSlug = sourceDay?.park_slug || sourceDay?.parkSlug || sessionsForReceipt[0]?.parkSlug || activeParkSlug || "phantasialand";
+    const receiptPark = PARKS[receiptParkSlug] || {};
+    const receiptTitle = String(receiptPark.receiptTitle || receiptPark.name || "Kirmes").toUpperCase();
+    const receiptLocation = receiptPark.receiptLocation ? "<br>" + escapeHtml(String(receiptPark.receiptLocation).toUpperCase()) : "";
 
     return "<div class=\"fairReceipt\">" +
       "<div class=\"fairReceiptBrand\">NÄHEN.</div>" +
-      "<div class=\"fairReceiptMeta\">ALLERHEILIGENKIRMES · SOEST 2026<br>" +
+      "<div class=\"fairReceiptMeta\">" + escapeHtml(receiptTitle) + receiptLocation + "<br>" +
         escapeHtml(new Date(dayDate).toLocaleDateString("de-DE")) +
       "</div>" +
       "<div class=\"fairReceiptRule\"></div>" +
@@ -1482,6 +1487,7 @@
     const key = $("#venueMapKey");
     const source = $("#venueMapSource");
     const title = $("#venueMapTitle");
+    const eyebrow = $("#venueMapEyebrow");
     const subtitle = $("#venueMapSubtitle");
     const note = $("#venueMapNote");
     if (!section || !canvas || !key) return;
@@ -1495,6 +1501,7 @@
     }
 
     section.classList.remove("hidden");
+    if (eyebrow) eyebrow.textContent = map.eyebrow || "KIRMES · LAGEPLAN";
     if (title) title.textContent = map.title || "Kirmesplan";
     if (subtitle) subtitle.textContent = map.subtitle || "";
     if (note) note.textContent = map.note || "";
@@ -1512,7 +1519,7 @@
     }).filter(Boolean);
 
     const pointHtml = points.map((point) =>
-      "<button type=\"button\" class=\"soestPlanLink\" data-map-ride=\"" + escapeHtml(point.ride.id) + "\"" +
+      "<button type=\"button\" class=\"soestPlanLink" + (point.alwaysLabel ? " mapAlwaysLabel" : "") + "\" data-map-ride=\"" + escapeHtml(point.ride.id) + "\"" +
         " style=\"--map-x:" + Number(point.x) + "%;--map-y:" + Number(point.y) + "%\"" +
         " aria-label=\"" + escapeHtml(point.ride.name + " öffnen") + "\">" +
         "<span aria-hidden=\"true\">↗</span>" +
@@ -1521,9 +1528,10 @@
     ).join("");
 
     const imageUrl = map.imageUrl || "";
+    const imageAlt = map.imageAlt || ("Lageplan " + (activeParkConfig()?.name || "Kirmes"));
     canvas.innerHTML =
       "<div class=\"soestOriginalPlanWrap\" style=\"--plan-aspect:" + escapeHtml(map.aspectRatio || "1310 / 1841") + "\">" +
-        "<img class=\"soestOriginalPlan\" src=\"" + escapeHtml(imageUrl) + "\" alt=\"Offizieller Lageplan der Soester Allerheiligenkirmes 2026\" loading=\"eager\" decoding=\"async\">" +
+        "<img class=\"soestOriginalPlan\" src=\"" + escapeHtml(imageUrl) + "\" alt=\"" + escapeHtml(imageAlt) + "\" loading=\"eager\" decoding=\"async\">" +
         "<div class=\"soestPlanHotspots\" aria-label=\"Fahrgeschäfte auf dem Lageplan\">" + pointHtml + "</div>" +
       "</div>";
 
