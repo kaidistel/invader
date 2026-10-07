@@ -1225,6 +1225,7 @@
       endedAt: row.ended_at ? new Date(row.ended_at).getTime() : null,
       duration: typeof row.wait_seconds === "number" ? row.wait_seconds * 1000 : null,
       status: row.status,
+      priceEuro: row.price_euro === null || row.price_euro === undefined ? null : Number(row.price_euro),
       parkDayId: row.park_day_id,
       synced: true
     };
@@ -1452,21 +1453,24 @@
       .filter((price) => Number.isFinite(price) && price >= 0);
     const total = priced.reduce((sum, price) => sum + price, 0);
     const missing = sessionsForReceipt.length - priced.length;
+    const average = priced.length ? total / priced.length : 0;
     const dayDate = sourceDay?.started_at || sourceDay?.startedAt || Date.now();
 
     return "<div class=\"fairReceipt\">" +
-      "<div class=\"fairReceiptBrand\">NÄHEN KIRMESKASSE</div>" +
-      "<div class=\"fairReceiptMeta\">SOEST · ALLERHEILIGENKIRMES 2026<br>" +
+      "<div class=\"fairReceiptBrand\">NÄHEN.</div>" +
+      "<div class=\"fairReceiptMeta\">ALLERHEILIGENKIRMES · SOEST 2026<br>" +
         escapeHtml(new Date(dayDate).toLocaleDateString("de-DE")) +
       "</div>" +
       "<div class=\"fairReceiptRule\"></div>" +
-      (rows || "<div class=\"fairReceiptEmpty\">Noch keine bezahlte Fahrt.</div>") +
+      (rows || "<div class=\"fairReceiptEmpty\">Noch keine Fahrt auf diesem Kirmestag.</div>") +
       "<div class=\"fairReceiptRule\"></div>" +
-      "<div class=\"fairReceiptTotal\"><span>SUMME</span><b>" + escapeHtml(formatEuro(total)) + "</b></div>" +
+      "<div class=\"fairReceiptTotal\"><span>GESAMT</span><b>" + escapeHtml(formatEuro(total)) + "</b></div>" +
       "<div class=\"fairReceiptFoot\">" +
         sessionsForReceipt.length + " Fahrt" + (sessionsForReceipt.length === 1 ? "" : "en") +
-        (missing ? " · " + missing + " Preis" + (missing === 1 ? "" : "e") + " fehlt/fehlen" : "") +
-        "<br>Alle Preise wurden manuell von dir eingetragen." +
+        (priced.length ? " · Ø " + escapeHtml(formatEuro(average)) + " / Fahrt" : "") +
+        (missing ? "<br>" + missing + " Preis" + (missing === 1 ? "" : "e") + " fehlt/fehlen" : "") +
+        "<br>Alle Fahrpreise wurden pro Fahrt manuell von dir eingetragen." +
+        "<br><b>Danke fürs Nähen.</b>" +
       "</div>" +
     "</div>";
   }
@@ -2058,10 +2062,9 @@
     const fair = venueIsFair();
     if (fairPriceField) fairPriceField.classList.toggle("hidden", !fair);
     if (fairPriceInput) {
-      const previousPrice = manualFairPrice(selectedRide.id);
-      fairPriceInput.value = fair && previousPrice !== null
-        ? previousPrice.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-        : "";
+      // Every fair ride gets a fresh, explicit price from the visitor.
+      // No cached/default price is prefilled because vouchers and prices can differ per ride.
+      fairPriceInput.value = "";
     }
 
     const singleButton = $("[data-qtype=\"single\"]");
@@ -2127,6 +2130,7 @@
         ride_name: active.rideName,
         queue_type: active.type,
         posted_wait: active.posted,
+        price_euro: active.priceEuro,
         started_at: new Date(active.startedAt).toISOString(),
         status: "waiting"
       });
@@ -2191,6 +2195,7 @@
       const result = await supa.from("queue_sessions").update({
         ended_at: new Date(ended).toISOString(),
         wait_seconds: Math.round(finished.duration / 1000),
+        price_euro: finished.priceEuro,
         status: status
       }).eq("id", finished.id).eq("user_id", currentUserId());
 
