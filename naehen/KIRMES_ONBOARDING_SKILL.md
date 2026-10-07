@@ -165,6 +165,22 @@ Preferred source order:
 3. Ride-Index or established fairground database
 4. reputable fairground photo archive / community source
 
+### Mandatory image-quality gate
+
+Only use a ride image when **both identity and image quality are good enough**.
+
+Hard rules:
+
+- the photo must show the exact travelling ride and the correct current operator; a ride of the same model/type is not acceptable
+- prefer current/recent appearance when a ride has received a new façade, backwall, gondola design or major visual redesign
+- use high-resolution originals whenever available; target at least about **1000 px on the long side**, preferably 1200–2000+ px
+- never intentionally use a thumbnail, forum preview, tiny social-media preview or visibly compressed/muddy image when a larger source exists
+- URLs containing known small-size variants such as `/678/`, `thumbnail`, `small` or similar must be upgraded to the larger/original variant when the source provides one
+- if a candidate image is ambiguous, wrong, too small or visibly poor quality, reject it
+- **no image is better than a wrong image**
+- before completion, visually audit every attraction image for operator identity, sharpness and usable crop
+- for especially important rides, prefer a stable local high-resolution asset when source/licensing permits
+
 Store:
 
 ```js
@@ -649,6 +665,8 @@ A Kirmes onboarding is complete only when:
 - [ ] archived/synced receipts retain the exact entered prices
 - [ ] current-event prices are never copied/researched automatically
 - [ ] correct ride images are included with source/credit where available
+- [ ] every ride image passed the high-resolution quality gate; no thumbnails/low-res previews remain when a larger source exists
+- [ ] image identity was visually checked against the exact operator/ride, especially for same-type rides such as Break Dance
 - [ ] attraction fonts were reviewed for lineup-wide variety
 - [ ] all confirmed new-for-year rides are visibly marked
 - [ ] no public wait times are fabricated
