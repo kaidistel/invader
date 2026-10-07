@@ -444,6 +444,7 @@
   let srReportsLocal = store.get("naehen:srReports", []);
   let parkArchive = [];
   let achievements = {};
+  let fairPrices = {};
 
   function attractionFontConfig(rideId, parkSlug = activeParkSlug || "phantasialand") {
     const module = parkModuleFor(parkSlug);
@@ -718,6 +719,8 @@
     );
     favorites = store.get(parkStoreKey("naehen:favorites", parkSlug), legacy ? store.get("naehen:favorites", []) : []);
     favoriteSettings = store.get(parkStoreKey("naehen:favoriteSettings", parkSlug), legacy ? store.get("naehen:favoriteSettings", {}) : {});
+    fairPrices = store.get(parkStoreKey("naehen:fairPrices", parkSlug), {});
+    if (!fairPrices || typeof fairPrices !== "object" || Array.isArray(fairPrices)) fairPrices = {};
     srReportsLocal = store.get(parkStoreKey("naehen:srReports", parkSlug), legacy ? store.get("naehen:srReports", []) : []);
     parkArchive = store.get(parkStoreKey("naehen:parkArchive", parkSlug), [])
       .map((entry) => normalizeArchiveEntry(entry, parkSlug))
@@ -975,6 +978,7 @@
     else store.remove(parkStoreKey("naehen:active", slug));
     store.set(parkStoreKey("naehen:favorites", slug), favorites);
     store.set(parkStoreKey("naehen:favoriteSettings", slug), favoriteSettings);
+    store.set(parkStoreKey("naehen:fairPrices", slug), fairPrices);
     store.set(parkStoreKey("naehen:totalRideCount", slug), totalRideCount);
     store.set(parkStoreKey("naehen:srReports", slug), srReportsLocal);
     store.set(parkStoreKey("naehen:parkArchive", slug), parkArchive);
@@ -993,7 +997,7 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=74", {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=80", {
           scope: "./",
           updateViaCache: "none"
         });
@@ -1408,16 +1412,65 @@
     }
   }
 
-  function ridePriceText(ride) {
-    const value = Number(ride?.priceEuro);
-    if (ride?.priceEuro === null || ride?.priceEuro === undefined || !Number.isFinite(value)) {
-      return "noch nicht eingetragen";
-    }
-    return value.toLocaleString("de-DE", {
+  function manualFairPrice(rideId) {
+    const value = Number(fairPrices?.[rideId]);
+    return Number.isFinite(value) && value >= 0 ? value : null;
+  }
+
+  function formatEuro(value) {
+    const number = Number(value);
+    if (!Number.isFinite(number)) return "–";
+    return number.toLocaleString("de-DE", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     }) + " €";
   }
+
+  function ridePriceText(ride) {
+    const value = manualFairPrice(ride?.id);
+    return value === null ? "manuell eintragen" : formatEuro(value);
+  }
+
+  function fairReceiptHtml(sourceSessions, sourceDay) {
+    const sessionsForReceipt = (sourceSessions || [])
+      .filter((session) => session.status === "ridden")
+      .slice()
+      .sort((a, b) => Number(a.startedAt || 0) - Number(b.startedAt || 0));
+
+    const rows = sessionsForReceipt.map((session, index) => {
+      const price = Number(session.priceEuro);
+      const hasPrice = Number.isFinite(price) && price >= 0;
+      return "<div class=\"fairReceiptRow\">" +
+        "<span class=\"fairReceiptQty\">" + String(index + 1).padStart(2, "0") + "</span>" +
+        "<div><b>" + escapeHtml(session.rideName || "Fahrt") + "</b><small>" + escapeHtml(rideTimeLabel(session)) + "</small></div>" +
+        "<strong>" + escapeHtml(hasPrice ? formatEuro(price) : "PREIS FEHLT") + "</strong>" +
+      "</div>";
+    }).join("");
+
+    const priced = sessionsForReceipt
+      .map((session) => Number(session.priceEuro))
+      .filter((price) => Number.isFinite(price) && price >= 0);
+    const total = priced.reduce((sum, price) => sum + price, 0);
+    const missing = sessionsForReceipt.length - priced.length;
+    const dayDate = sourceDay?.started_at || sourceDay?.startedAt || Date.now();
+
+    return "<div class=\"fairReceipt\">" +
+      "<div class=\"fairReceiptBrand\">NÄHEN KIRMESKASSE</div>" +
+      "<div class=\"fairReceiptMeta\">SOEST · ALLERHEILIGENKIRMES 2026<br>" +
+        escapeHtml(new Date(dayDate).toLocaleDateString("de-DE")) +
+      "</div>" +
+      "<div class=\"fairReceiptRule\"></div>" +
+      (rows || "<div class=\"fairReceiptEmpty\">Noch keine bezahlte Fahrt.</div>") +
+      "<div class=\"fairReceiptRule\"></div>" +
+      "<div class=\"fairReceiptTotal\"><span>SUMME</span><b>" + escapeHtml(formatEuro(total)) + "</b></div>" +
+      "<div class=\"fairReceiptFoot\">" +
+        sessionsForReceipt.length + " Fahrt" + (sessionsForReceipt.length === 1 ? "" : "en") +
+        (missing ? " · " + missing + " Preis" + (missing === 1 ? "" : "e") + " fehlt/fehlen" : "") +
+        "<br>Alle Preise wurden manuell von dir eingetragen." +
+      "</div>" +
+    "</div>";
+  }
+
 
   function renderSpecialVenueMap() {
     const section = $("#venueSpecialMap");
@@ -1448,13 +1501,32 @@
       source.hidden = !map.sourceUrl;
     }
 
+    const points = (map.points || []).map((point) => {
+      const ride = rides.find((item) => item.id === point.rideId) ||
+        fallbackRidesFor().find((item) => item.id === point.rideId);
+      return ride ? Object.assign({}, point, { ride }) : null;
+    }).filter(Boolean);
+
+    const pointHtml = points.map((point) =>
+      "<button type=\"button\" class=\"soestPlanLink\" data-map-ride=\"" + escapeHtml(point.ride.id) + "\"" +
+        " style=\"--map-x:" + Number(point.x) + "%;--map-y:" + Number(point.y) + "%\"" +
+        " aria-label=\"" + escapeHtml(point.ride.name + " öffnen") + "\">" +
+        "<span aria-hidden=\"true\">↗</span>" +
+        "<b>" + escapeHtml(point.ride.name) + "</b>" +
+      "</button>"
+    ).join("");
+
     const imageUrl = map.imageUrl || "";
     canvas.innerHTML =
       "<div class=\"soestOriginalPlanWrap\" style=\"--plan-aspect:" + escapeHtml(map.aspectRatio || "1310 / 1841") + "\">" +
         "<img class=\"soestOriginalPlan\" src=\"" + escapeHtml(imageUrl) + "\" alt=\"Offizieller Lageplan der Soester Allerheiligenkirmes 2026\" loading=\"eager\" decoding=\"async\">" +
+        "<div class=\"soestPlanHotspots\" aria-label=\"Fahrgeschäfte auf dem Lageplan\">" + pointHtml + "</div>" +
       "</div>";
 
     key.innerHTML = "";
+    section.querySelectorAll("[data-map-ride]").forEach((button) => {
+      button.addEventListener("click", () => openRideDetail(button.dataset.mapRide));
+    });
   }
 
   function renderRides() {
@@ -1799,6 +1871,7 @@
         (supportsPostedWait ? "<div><span>📊 Soll vs. Realität</span><b>" + escapeHtml(comparisonText) + "</b></div>" : "") +
         (fact.topSpeedRide ? "<div><span>🚀 Schnellste Fahrt</span><b>" + escapeHtml(fact.topSpeedRide.rideName + " · " + fact.topSpeed + " km/h") + "</b></div>" : "") +
       "</div>" +
+      (venueIsFair(parkSlug) ? fairReceiptHtml(entry.sessions, day) : "") +
       "<div class=\"sectionHead archiveTimelineHead\"><h2>Tagesprotokoll</h2><span>" + chronological.length + " Einträge</span></div>" +
       "<div class=\"archiveTimeline\">" + timeline + "</div>";
 
@@ -1980,6 +2053,17 @@
     if (postedWaitField) postedWaitField.classList.toggle("hidden", !supportsPostedWait);
     $("#postedWait").value = supportsPostedWait && selectedRide.source === "queue-times" && selectedRide.isOpen ? selectedRide.wait : "";
 
+    const fairPriceField = $("#fairPriceField");
+    const fairPriceInput = $("#fairPriceInput");
+    const fair = venueIsFair();
+    if (fairPriceField) fairPriceField.classList.toggle("hidden", !fair);
+    if (fairPriceInput) {
+      const previousPrice = manualFairPrice(selectedRide.id);
+      fairPriceInput.value = fair && previousPrice !== null
+        ? previousPrice.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+        : "";
+    }
+
     const singleButton = $("[data-qtype=\"single\"]");
     singleButton.disabled = !selectedRide.singleRider;
     singleButton.textContent = selectedRide.singleRider ? "Single Rider" : "Single Rider · nicht vorhanden";
@@ -1993,6 +2077,21 @@
 
     const input = $("#postedWait").value.trim();
     const posted = input === "" ? null : Math.max(0, Number(input));
+
+    let manualPrice = null;
+    if (venueIsFair()) {
+      const priceInput = $("#fairPriceInput");
+      const rawPrice = (priceInput?.value || "").trim().replace(",", ".");
+      const parsedPrice = Number(rawPrice);
+      if (!rawPrice || !Number.isFinite(parsedPrice) || parsedPrice < 0) {
+        toast("💶 Fahrpreis bitte manuell eintragen.");
+        priceInput?.focus();
+        return;
+      }
+      manualPrice = Math.round(parsedPrice * 100) / 100;
+      fairPrices[selectedRide.id] = manualPrice;
+    }
+
     const now = Date.now();
     const id = createId();
 
@@ -2004,6 +2103,7 @@
       speedKmh: selectedRide.speedKmh || rideSpeedKmh(selectedRide.id),
       type: queueType,
       posted: Number.isFinite(posted) ? posted : null,
+      priceEuro: manualPrice,
       startedAt: now,
       endedAt: null,
       duration: null,
@@ -2060,7 +2160,8 @@
     $("#activeTime").textContent = value;
     $("#activeRide").textContent = active.rideName;
     $("#activeMeta").textContent = (active.type === "single" ? "Single Rider" : "Regular Queue") +
-      (active.posted !== null ? " · ausgeschildert " + active.posted + " min" : "");
+      (active.posted !== null ? " · ausgeschildert " + active.posted + " min" : "") +
+      (Number.isFinite(Number(active.priceEuro)) ? " · " + formatEuro(active.priceEuro) : "");
   }
 
   function openActive() {
@@ -2195,8 +2296,8 @@
     box.innerHTML =
       (fair ? "<div class=\"rideFactsEyebrow\">KIRMES-NERD-DATEN</div>" : "") +
       "<div class=\"rideFactGrid\">" + factHtml + "</div>" +
-      (fair && ride.priceEuro == null
-        ? "<div class=\"ridePriceNote\">Fahrpreis noch nicht eingetragen. NÄHEN übernimmt hier bewusst keine Preise automatisch – der Wert wird manuell gepflegt.</div>"
+      (fair
+        ? "<div class=\"ridePriceNote\">Fahrpreise kommen ausschließlich von dir. Beim Anstellen gibst du den aktuellen Preis manuell ein; NÄHEN recherchiert oder übernimmt nichts automatisch.</div>"
         : "") +
       (links.length ? "<div class=\"rideFactSources\">" + links.join("") + "</div>" : "");
 
@@ -2491,6 +2592,7 @@
         escapeHtml(fact.shortest ? "Kürzeste: " + fact.shortest.rideName + " · " + minutesRounded(fact.shortest.duration) + " min" : "Kürzeste: –") +
       "</p></div>" +
       (supportsPostedWait ? "<div class=\"recapBox\"><b>📊 vs. ausgeschildert</b><p>" + escapeHtml(comparisonText) + "</p></div>" : "") +
+      (venueIsFair(dayParkSlug) ? fairReceiptHtml(sourceSessions, day) : "") +
       "<div class=\"recapBox\"><b>💾 Dauerhaft gespeichert</b><p>Dieser " + dayWord + " liegt jetzt im Archiv und bleibt auch nach dem nächsten " + dayWord + " erhalten.</p></div>";
   }
 
