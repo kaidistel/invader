@@ -1,0 +1,104 @@
+name: Build Bocholt 2026 assets
+
+on:
+  push:
+    paths:
+      - ".github/workflows/build-bocholt-assets.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build-bocholt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install image tools
+        run: python3 -m pip install --quiet pillow
+
+      - name: Rebuild crisp map and download local ride artwork
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageOps, ImageFilter
+          from urllib.request import Request, urlopen
+          from io import BytesIO
+
+          assets = Path("naehen/assets")
+          assets.mkdir(parents=True, exist_ok=True)
+
+          # The user-supplied plan is square. Rebuild the tiny PWA copy at a
+          # useful display resolution with high-quality resampling and light sharpening.
+          plan_path = assets / "bocholt-kirmes-2026-plan.webp"
+          plan = Image.open(plan_path).convert("RGB")
+          plan = plan.resize((1400, 1400), Image.Resampling.LANCZOS)
+          plan = plan.filter(ImageFilter.UnsharpMask(radius=1.6, percent=155, threshold=2))
+          plan.save(plan_path, "WEBP", quality=92, method=6)
+          print("map", plan_path, plan_path.stat().st_size)
+
+          sources = {
+            "bocholt-kirmes-2026-background.webp": "https://www.bocholt.de/bocholt_media/veranstaltungen/kirmes/2022/2022-10-13_Kirmes_Riesenrad_Foto_Stadt_Bocholt_169.jpg?height=2500&width=3750",
+            "bocholt-look-360.webp": "https://look-panorama.com/_ipx/f_jpeg%26s_2048x1366/https%3A/cdn.cityoffer.net/generated/file-manager/cms-551/content/crop-focalpoint-0-5-0-5-1-2040-1360-look360panorama-personen-01-web.jpg",
+            "bocholt-skyfall.webp": "https://www.oktoberfest.de/sites/default/files/styles/3_2_w1216/public/2023-08/skyfall_sebastian_lehner-0291.jpg?h=56d0ca2e",
+            "bocholt-break-dance.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-erwachsene/break-dance/_/2022-10-13_kirmes-feuerwerk-008.jpg?height=3376&width=6000",
+            "bocholt-invader.webp": "https://funfair-entertainment.de/assets/news/funfair-news-20260622-125325-a3cef81b-1200.webp",
+            "bocholt-excalibur.webp": "https://www.ummet-eck.de/Bilder/fotosets/1024/excalibur-hpe-bruch-palmkirmes-c-ummet-eck-12.jpg",
+            "bocholt-disco-jet.webp": "https://www.ummet-eck.de/Bilder/fotosets/1024/4-disco-jet-herbstsend22-c-ummeteck-chr-schoen.jpg",
+            "bocholt-fighter.webp": "https://www.kirmesecke.de/Bilder/fotosets/1024/4-fighter-sterkrade22-c-UMM-chr-schoen.jpg",
+            "bocholt-shake-and-roll.webp": "https://www.ummet-eck.de/Bilder/fotosets/1024/9-shake-roll--simjue-2022-c-ummeteck-christian-schoen.jpg",
+            "bocholt-villa-wahnsinn.webp": "https://www.ummet-eck.de/Bilder/fotosets/1024/24-allerheiligenkirmes-soest-2022-c-ummeteck-chr-schoen.jpg",
+            "bocholt-fahrt-zur-hoelle.webp": "https://www.fellerhoff-geisterbahn.de/gallery/20250718_113412.jpg",
+            "bocholt-jumpstreet.webp": "https://kermisplanner.nl/uploads/attractions/attraction-jump-street/1676322585_6ae2d8f1392e7c8b4ca5.jpg",
+            "bocholt-wellenflug.webp": "https://www.wellenflug.com/files/images/1920/67.jpg",
+            "bocholt-sound-wave.webp": "https://nordkirmes.net/media/1541-l%C3%BCn23-jpg/",
+            "bocholt-raupenbahn.webp": "https://i.postimg.cc/BnjTvqFb/IMGP4296.jpg",
+            "bocholt-highway-no-1.webp": "https://www.presse-service.de/data.aspx/medien/302701P.jpg",
+            "bocholt-1001-nacht.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/1001-nacht/_/Kinderkraussell_1001Nacht_Breuer%202.jpg?height=3376&width=2170",
+            "bocholt-action-bungy.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/action-bungy/_/ActionBungy.jpg?height=1600&width=2400",
+            "bocholt-barock-kinderkettenkarussell.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/barock-kinderkettenkarussell/_/Sobotta_Kinder%20Barock%20Kettenkarussell.jpg",
+            "bocholt-crazy-jungle.webp": "https://www.kirmesecke.de/Bilder/fotosets/1024/crazy-jungle-puetzchens-markt23-c-UMM-c-schoen-1.jpg",
+            "bocholt-kater-carlos.webp": "https://www.bocholt.de/nl/kirmes/attracties/ritjes-voor-kinderen/carlos-kat-reist-de-wereld-rond/_/Kinderkarussell_Kater%20Carlos%20Weltreise_Thomas%20Schneider.jpg",
+            "bocholt-kinderzauber.webp": "https://www.bocholt.de/freizeit-und-tourismus/veranstaltungen/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/kinderzauber/_/Kinderkarussell_Kinderzauber_Zajuntz.jpg?height=1600&width=2400",
+            "bocholt-mini-jet.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/mini-jet/_/MiniJet.jpg?height=1600&width=2400",
+            "bocholt-rainbow-truck.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/rainbow-truck/_/Kinderkarussell_Rainbow%20Truck_Kaiser-Benna.jpg",
+            "bocholt-sieben-himmelfahrten.webp": "https://www.bocholt.de/en/funfair/attractions/rides-for-children/seven-ascensions/_/Kinderkarussell_Sieben%20Himmelfahrten_Schmelzer.jpg?height=3379&width=4635",
+            "bocholt-rallye-master.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/the-rallye-master/_/Enders_The%20Rallye%20Master.jpg",
+            "bocholt-traumflug.webp": "https://www.bocholt.de/nl/kirmes/attracties/ritjes-voor-kinderen/droomvlucht/_/Traumflug.jpg",
+            "bocholt-ufo-jet.webp": "https://www.bocholt.de/en/funfair/attractions/rides-for-children/star-trek/_/Kinderkarussell_Star%20Trek_Krenz.jpg",
+            "bocholt-world-of-fantasy.webp": "https://www.bocholt.de/en/funfair/attractions/rides-for-children/world-of-fantasy/_/Kinderkraussell_World%20of%20Fantasy_Bruch.jpg",
+          }
+
+          headers = {
+            "User-Agent": "Mozilla/5.0 (compatible; NAEHEN asset builder)",
+            "Accept": "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
+          }
+
+          for filename, url in sources.items():
+              try:
+                  req = Request(url, headers=headers)
+                  with urlopen(req, timeout=30) as response:
+                      data = response.read()
+                  img = Image.open(BytesIO(data)).convert("RGB")
+                  # Cards need landscape artwork. Keep enough pixels for retina/desktop.
+                  img = ImageOps.fit(img, (1400, 900), method=Image.Resampling.LANCZOS)
+                  img = img.filter(ImageFilter.UnsharpMask(radius=0.8, percent=115, threshold=2))
+                  out = assets / filename
+                  img.save(out, "WEBP", quality=86, method=6)
+                  print("OK", filename, len(data), "->", out.stat().st_size)
+              except Exception as exc:
+                  print("SKIP", filename, repr(exc))
+          PY
+
+      - name: Commit generated Bocholt assets
+        run: |
+          if [ -z "$(git status --porcelain -- naehen/assets)" ]; then
+            echo "Bocholt assets unchanged."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add naehen/assets/bocholt-*.webp
+          git commit -m "chore(naehen): build local Bocholt 2026 visual assets [skip ci]"
+          git push
