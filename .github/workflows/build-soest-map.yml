@@ -65,7 +65,7 @@ jobs:
             "https://kermisplanner.nl/uploads/attractions/attraction-big-bamboo/1675635205_6b1d642c8c8eb619a7b7.jpg" \
             --output /tmp/big-bamboo.jpg
           curl --fail --location --retry 4 --retry-delay 2 \
-            "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-erwachsene/autoscooter-number-1/_/autoscooter-number-1.jpg" \
+            "https://www.ummet-eck.de/Bilder/poi/678/autoscooter-isken-number-1-2022.jpg" \
             --output /tmp/number-1.jpg
           curl --fail --location --retry 4 --retry-delay 2 \
             "https://www.so-ist-soest.de/de-wAssets/img/service/medienbereich/weblication/wThumbnails/19-kirmes-014-8424-7d5d9237-a52f432f%40ll.jpg" \
