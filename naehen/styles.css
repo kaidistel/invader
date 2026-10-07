@@ -1314,3 +1314,183 @@ body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanHotspot{
     max-width:none;
   }
 }
+
+
+/* v80 — Soest map links, manual fair prices and Kirmestag receipt */
+body[data-park="soest-allerheiligenkirmes-2026"] .parkAtmosphere{
+  background:
+    linear-gradient(180deg,rgba(13,7,10,.18) 0%,rgba(13,7,10,.67) 46%,#100c10 90%),
+    var(--park-hero-image) center 36%/cover no-repeat;
+}
+body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanHotspots{
+  display:block!important;
+  position:absolute;
+  inset:0;
+  z-index:7;
+  pointer-events:none;
+}
+body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink{
+  --map-x:50%;
+  --map-y:50%;
+  position:absolute;
+  left:var(--map-x);
+  top:var(--map-y);
+  transform:translate(-50%,-50%);
+  width:25px;
+  height:25px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  border:2px solid #fff;
+  border-radius:50%;
+  background:#c91f2c;
+  color:#fff;
+  box-shadow:0 2px 8px #0008,0 0 0 2px #f6cf47aa;
+  cursor:pointer;
+  pointer-events:auto;
+  z-index:1;
+}
+body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink>span{
+  font:950 12px/1 system-ui,sans-serif;
+}
+body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink>b{
+  position:absolute;
+  left:50%;
+  bottom:calc(100% + 7px);
+  transform:translateX(-50%) translateY(4px);
+  min-width:max-content;
+  max-width:160px;
+  padding:5px 7px;
+  border-radius:5px;
+  background:#111e;
+  color:#fff;
+  font:900 9px/1.15 'Barlow Condensed',system-ui,sans-serif;
+  letter-spacing:.35px;
+  text-transform:uppercase;
+  opacity:0;
+  visibility:hidden;
+  transition:.12s ease;
+  pointer-events:none;
+}
+body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink:hover,
+body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink:focus-visible{
+  transform:translate(-50%,-50%) scale(1.18);
+  z-index:20;
+  outline:2px solid #111;
+  outline-offset:2px;
+}
+body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink:hover>b,
+body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink:focus-visible>b{
+  opacity:1;
+  visibility:visible;
+  transform:translateX(-50%) translateY(0);
+}
+.fairPriceField{
+  margin-top:11px;
+  padding:12px;
+  border:1px solid #ffd15f55;
+  border-radius:8px;
+  background:#1d1810;
+}
+.fairPriceField input{
+  font-size:22px;
+  font-weight:900;
+  font-variant-numeric:tabular-nums;
+}
+.fairPriceHint{
+  margin-top:7px;
+  color:#d4c18d;
+  line-height:1.4;
+}
+.fairReceipt{
+  position:relative;
+  width:min(100%,430px);
+  margin:18px auto;
+  padding:25px 23px 28px;
+  background:#f4f0df;
+  color:#171511;
+  border-radius:2px;
+  box-shadow:0 13px 32px #0006;
+  font-family:ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',monospace;
+}
+.fairReceipt:before,
+.fairReceipt:after{
+  content:"";
+  position:absolute;
+  left:0;
+  width:100%;
+  height:9px;
+  background:linear-gradient(135deg,transparent 5px,#f4f0df 0) 0 0/10px 10px repeat-x;
+}
+.fairReceipt:before{top:-8px;transform:rotate(180deg)}
+.fairReceipt:after{bottom:-8px}
+.fairReceiptBrand{
+  text-align:center;
+  font-size:18px;
+  font-weight:950;
+  letter-spacing:1.5px;
+}
+.fairReceiptMeta{
+  margin-top:6px;
+  text-align:center;
+  font-size:9px;
+  line-height:1.5;
+  letter-spacing:.4px;
+}
+.fairReceiptRule{
+  margin:14px 0;
+  border-top:1px dashed #4b463b;
+}
+.fairReceiptRow{
+  display:grid;
+  grid-template-columns:25px minmax(0,1fr) auto;
+  gap:8px;
+  align-items:start;
+  padding:6px 0;
+  font-size:10px;
+}
+.fairReceiptRow b{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:10px;
+}
+.fairReceiptRow small{
+  display:block;
+  margin-top:2px;
+  color:#686154;
+  font-size:8px;
+}
+.fairReceiptRow strong{
+  white-space:nowrap;
+  font-size:10px;
+}
+.fairReceiptQty{color:#746c5f}
+.fairReceiptTotal{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:14px;
+  font-weight:950;
+}
+.fairReceiptTotal span{font-size:13px;letter-spacing:1px}
+.fairReceiptTotal b{font-size:24px}
+.fairReceiptFoot,
+.fairReceiptEmpty{
+  margin-top:14px;
+  text-align:center;
+  color:#645d51;
+  font-size:8px;
+  line-height:1.55;
+}
+@media(max-width:650px){
+  body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink{
+    width:22px;
+    height:22px;
+    border-width:1.5px;
+    box-shadow:0 2px 6px #0008,0 0 0 1.5px #f6cf47aa;
+  }
+  body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink>span{font-size:10px}
+  .fairReceipt{padding:22px 17px 25px}
+}
