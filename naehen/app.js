@@ -1518,14 +1518,21 @@
       return ride ? Object.assign({}, point, { ride }) : null;
     }).filter(Boolean);
 
-    const pointHtml = points.map((point) =>
-      "<button type=\"button\" class=\"soestPlanLink" + (point.alwaysLabel ? " mapAlwaysLabel" : "") + "\" data-map-ride=\"" + escapeHtml(point.ride.id) + "\"" +
-        " style=\"--map-x:" + Number(point.x) + "%;--map-y:" + Number(point.y) + "%\"" +
+    const pointHtml = points.map((point) => {
+      const hitbox = point.labelHitbox && Number(point.w) > 0 && Number(point.h) > 0;
+      const classes = "soestPlanLink" + (point.alwaysLabel ? " mapAlwaysLabel" : "") + (hitbox ? " mapLabelHitbox" : "");
+      const sizeStyle = hitbox ? ";--map-w:" + Number(point.w) + "%;--map-h:" + Number(point.h) + "%" : "";
+      const replacement = point.replacementLabel
+        ? "<em class=\"mapReplacementLabel\">" + escapeHtml(point.replacementLabel) + "</em>"
+        : "";
+      return "<button type=\"button\" class=\"" + classes + "\" data-map-ride=\"" + escapeHtml(point.ride.id) + "\"" +
+        " style=\"--map-x:" + Number(point.x) + "%;--map-y:" + Number(point.y) + "%" + sizeStyle + "\"" +
         " aria-label=\"" + escapeHtml(point.ride.name + " öffnen") + "\">" +
         "<span aria-hidden=\"true\">↗</span>" +
+        replacement +
         "<b>" + escapeHtml(point.ride.name) + "</b>" +
-      "</button>"
-    ).join("");
+      "</button>";
+    }).join("");
 
     const imageUrl = map.imageUrl || "";
     const imageAlt = map.imageAlt || ("Lageplan " + (activeParkConfig()?.name || "Kirmes"));
