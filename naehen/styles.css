@@ -1498,8 +1498,12 @@ body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-
 
 /* v81 — Bocholt 2026: attached city map + visible Invader correction */
 body[data-park="bocholt-kirmes-2026"] .soestOriginalPlanWrap{
-  width:min(100%,760px);
+  width:min(100%,447px);
+  max-width:447px;
   aspect-ratio:1 / 1;
+}
+body[data-park="bocholt-kirmes-2026"] .soestOriginalPlan{
+  image-rendering:auto;
 }
 body[data-park="bocholt-kirmes-2026"] .venueMapCanvas{
   background:#1f2b66;
