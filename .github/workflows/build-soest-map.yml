@@ -1,4 +1,4 @@
-name: Build Soest 2026 map asset
+name: Build Soest 2026 assets
 
 on:
   push:
@@ -59,14 +59,49 @@ jobs:
           print(out, out.stat().st_size)
           PY
 
-      - name: Commit generated PNG
+      - name: Download and optimize Soest artwork
         run: |
-          if [ -z "$(git status --porcelain -- naehen/assets/soest-allerheiligenkirmes-2026-lageplan.png)" ]; then
-            echo "Map asset unchanged."
+          curl --fail --location --retry 4 --retry-delay 2 \
+            "https://kermisplanner.nl/uploads/attractions/attraction-big-bamboo/1675635205_6b1d642c8c8eb619a7b7.jpg" \
+            --output /tmp/big-bamboo.jpg
+          curl --fail --location --retry 4 --retry-delay 2 \
+            "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-erwachsene/autoscooter-number-1/_/autoscooter-number-1.jpg" \
+            --output /tmp/number-1.jpg
+          curl --fail --location --retry 4 --retry-delay 2 \
+            "https://www.so-ist-soest.de/de-wAssets/img/service/medienbereich/weblication/wThumbnails/19-kirmes-014-8424-7d5d9237-a52f432f%40ll.jpg" \
+            --output /tmp/soest-background.jpg
+
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageOps
+
+          targets = [
+              ("/tmp/big-bamboo.jpg", "naehen/assets/soest-big-bamboo.webp", (1200, 800)),
+              ("/tmp/number-1.jpg", "naehen/assets/soest-number-1.webp", (1200, 800)),
+              ("/tmp/soest-background.jpg", "naehen/assets/soest-background.webp", (1600, 1000)),
+          ]
+
+          for src_path, out_path, size in targets:
+              src = Image.open(src_path).convert("RGB")
+              fitted = ImageOps.fit(src, size, method=Image.Resampling.LANCZOS)
+              out = Path(out_path)
+              out.parent.mkdir(parents=True, exist_ok=True)
+              fitted.save(out, "WEBP", quality=84, method=6)
+              print(out, out.stat().st_size)
+          PY
+
+      - name: Commit generated Soest assets
+        run: |
+          if [ -z "$(git status --porcelain -- naehen/assets/soest-allerheiligenkirmes-2026-lageplan.png naehen/assets/soest-big-bamboo.webp naehen/assets/soest-number-1.webp naehen/assets/soest-background.webp)" ]; then
+            echo "Soest assets unchanged."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add naehen/assets/soest-allerheiligenkirmes-2026-lageplan.png
-          git commit -m "chore(naehen): add official Soest 2026 map PNG"
+          git add \
+            naehen/assets/soest-allerheiligenkirmes-2026-lageplan.png \
+            naehen/assets/soest-big-bamboo.webp \
+            naehen/assets/soest-number-1.webp \
+            naehen/assets/soest-background.webp
+          git commit -m "chore(naehen): refresh Soest 2026 visual assets"
           git push
