@@ -75,6 +75,68 @@ jobs:
             "Accept": "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
           }
 
+          # For Stadt Bocholt pages use their own social/hero image metadata instead
+          # of guessing internal media filenames. This is substantially more robust.
+          page_sources = {
+            "bocholt-kirmes-2026-background.webp": "https://www.bocholt.de/veranstaltungskalender/kirmes-2026",
+            "bocholt-break-dance.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-erwachsene/break-dance",
+            "bocholt-roue-parisienne.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-erwachsene/roue-parisienne",
+            "bocholt-number-1.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-erwachsene/autoscooter-number-1",
+            "bocholt-die-krake.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-erwachsene/die-krake",
+            "bocholt-looping-the-loop.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-erwachsene/looping-the-loop",
+            "bocholt-action-house.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-erwachsene/action-house",
+            "bocholt-circus-circus.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-erwachsene/circus-circus",
+            "bocholt-1001-nacht.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/1001-nacht",
+            "bocholt-action-bungy.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/action-bungy",
+            "bocholt-barock-kinderkettenkarussell.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/barock-kinderkettenkarussell",
+            "bocholt-kater-carlos.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/kater-carlos-weltreise",
+            "bocholt-kindersport-karussell.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/kindersport-karussell",
+            "bocholt-kinderzauber.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/kinderzauber",
+            "bocholt-mini-jet.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/mini-jet",
+            "bocholt-rainbow-truck.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/rainbow-truck",
+            "bocholt-sieben-himmelfahrten.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/sieben-himmelfahrten",
+            "bocholt-rallye-master.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/rallye-master",
+            "bocholt-traumflug.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/traumflug",
+            "bocholt-ufo-jet.webp": "https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/ufo-jet",
+            "bocholt-world-of-fantasy.webp": "https://www.bocholt.de/freizeit-und-tourismus/veranstaltungen/kirmes/attraktionen/fahrgeschaefte-fuer-kinder/world-of-fantasy",
+          }
+
+          import re
+          from urllib.parse import urljoin
+
+          def image_from_page(page_url):
+              req = Request(page_url, headers={"User-Agent": headers["User-Agent"], "Accept": "text/html"})
+              with urlopen(req, timeout=30) as response:
+                  html = response.read().decode("utf-8", "ignore")
+              patterns = [
+                  r'<meta[^>]+property=["\\\']og:image["\\\'][^>]+content=["\\\']([^"\\\']+)',
+                  r'<meta[^>]+content=["\\\']([^"\\\']+)["\\\'][^>]+property=["\\\']og:image["\\\']',
+                  r'<meta[^>]+name=["\\\']twitter:image["\\\'][^>]+content=["\\\']([^"\\\']+)',
+              ]
+              for pattern in patterns:
+                  match = re.search(pattern, html, re.I)
+                  if match:
+                      return urljoin(page_url, match.group(1).replace("&amp;", "&"))
+              return None
+
+          for filename, page_url in page_sources.items():
+              try:
+                  image_url = image_from_page(page_url)
+                  if not image_url:
+                      print("NO OG IMAGE", filename, page_url)
+                      continue
+                  req = Request(image_url, headers=headers)
+                  with urlopen(req, timeout=30) as response:
+                      data = response.read()
+                  img = Image.open(BytesIO(data)).convert("RGB")
+                  img = ImageOps.fit(img, (1400, 900), method=Image.Resampling.LANCZOS)
+                  img = img.filter(ImageFilter.UnsharpMask(radius=0.8, percent=115, threshold=2))
+                  out = assets / filename
+                  img.save(out, "WEBP", quality=88, method=6)
+                  print("PAGE OK", filename, image_url, "->", out.stat().st_size)
+              except Exception as exc:
+                  print("PAGE SKIP", filename, repr(exc))
+
           for filename, url in sources.items():
               try:
                   req = Request(url, headers=headers)
