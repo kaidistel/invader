@@ -29,8 +29,14 @@ create table if not exists public.queue_sessions (
   ended_at timestamptz,
   wait_seconds integer,
   status text not null default 'waiting' check (status in ('waiting','ridden','aborted')),
+  price_euro numeric(8,2) check (price_euro is null or price_euro >= 0),
   created_at timestamptz not null default now()
 );
+
+-- Existing installations: keep fair prices exact and persistent for Kirmestag receipts.
+alter table public.queue_sessions
+  add column if not exists price_euro numeric(8,2)
+  check (price_euro is null or price_euro >= 0);
 
 create table if not exists public.favorites (
   user_id uuid not null references auth.users(id) on delete cascade,
