@@ -49,7 +49,7 @@ jobs:
           set -euxo pipefail
           mkdir -p /tmp/bocholt-sr
           cd /tmp/Real-ESRGAN
-          python inference_realesrgan.py             -n RealESRGAN_x4plus             -i /tmp/bocholt-plan-source.png             -o /tmp/bocholt-sr             --outscale 4             --tile 192             --suffix sr             --ext png
+          python inference_realesrgan.py             -n RealESRGAN_x4plus             -i /tmp/bocholt-plan-source.png             -o /tmp/bocholt-sr             --outscale 4             --tile 192             --fp32             --suffix sr             --ext png
           cd "$GITHUB_WORKSPACE"
           python - <<'PY'
           from pathlib import Path
