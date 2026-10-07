@@ -1504,6 +1504,8 @@ body[data-park="bocholt-kirmes-2026"] .soestOriginalPlanWrap{
 }
 body[data-park="bocholt-kirmes-2026"] .soestOriginalPlan{
   image-rendering:auto;
+  filter:contrast(1.08) saturate(1.03);
+  transform:translateZ(0);
 }
 body[data-park="bocholt-kirmes-2026"] .venueMapCanvas{
   background:#1f2b66;
@@ -1537,8 +1539,8 @@ body[data-park="bocholt-kirmes-2026"] .parkAtmosphere{
 }
 @media(max-width:650px){
   body[data-park="bocholt-kirmes-2026"] .soestOriginalPlanWrap{
-    width:100%;
-    max-width:none;
+    width:min(100%,447px);
+    max-width:447px;
   }
   body[data-park="bocholt-kirmes-2026"] .soestPlanLink.mapAlwaysLabel>b{
     font-size:8px;
