@@ -1625,16 +1625,19 @@
 
     // Remote fairground photo hosts can block hotlinking. Never leave a ride card visually empty:
     // retry once with the event artwork, while local ride assets remain the preferred source.
-    const rideArtFallback = activeParkConfig()?.cardImage || "";
+    const rideArtFallback = activeParkConfig()?.cardImage || "./assets/park-picker-bg.webp";
     container.querySelectorAll("img.rideArt").forEach((img) => {
-      img.addEventListener("error", () => {
+      const useFallback = () => {
         if (rideArtFallback && !img.dataset.fallbackTried) {
           img.dataset.fallbackTried = "1";
           img.src = rideArtFallback;
           return;
         }
         img.remove();
-      });
+      };
+      img.addEventListener("error", useFallback, { once:true });
+      // A cached failed image can finish before the listener above is attached.
+      if (img.complete && img.naturalWidth === 0) useFallback();
     });
 
     container.querySelectorAll(".ride[data-detail]").forEach((card) => {
@@ -2354,6 +2357,15 @@
     applyAttractionTypography(rideSheet, selectedDetailRide.id);
     if (worldArtImage) {
       if (artSrc) {
+        const detailFallback = activeParkConfig()?.cardImage || "./assets/park-picker-bg.webp";
+        worldArtImage.onerror = () => {
+          if (detailFallback && worldArtImage.src !== new URL(detailFallback, location.href).href) {
+            worldArtImage.onerror = null;
+            worldArtImage.src = detailFallback;
+          } else {
+            worldArtImage.hidden = true;
+          }
+        };
         worldArtImage.src = artSrc;
         worldArtImage.hidden = false;
       } else {
