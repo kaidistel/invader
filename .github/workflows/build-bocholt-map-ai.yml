@@ -41,7 +41,7 @@ jobs:
           cd /tmp/Real-ESRGAN
           python setup.py develop >/dev/null
           mkdir -p weights
-          curl --fail --location --retry 4             "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/RealESRGAN_x4plus.pth"             -o weights/RealESRGAN_x4plus.pth
+          curl --fail --location --retry 4             "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth"             -o weights/RealESRGAN_x4plus.pth
 
       - name: Super resolve map to 2K
         run: |
