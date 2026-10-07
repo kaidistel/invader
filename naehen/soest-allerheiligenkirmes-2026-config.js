@@ -47,8 +47,8 @@
       new2026:true, manufacturer:"Dietz (D)", type:"Laufgeschäft", year:2011,
       dimensions:"22,5 × 13 × 16 m", capacity:null, priceEuro:null,
       rideIndexUrl:"https://ride-index.de/2011/07/16/big-bamboo-hempen/",
-      imageUrl:"https://www.kirmes.photogalerien-bayern.eu/albums/userpics/10001/DSCN346800010029.JPG",
-      imageCredit:"Kirmes Photogalerien Bayern", imageSourceUrl:"https://www.kirmes.photogalerien-bayern.eu/"
+      imageUrl:"./assets/soest-big-bamboo.webp",
+      imageCredit:"Kermisplanner.nl", imageSourceUrl:"https://kermisplanner.nl/en/attraction/big-bamboo-sbOMEqfV"
     },
     {
       id:"sound-wave", name:"Sound Wave", operator:"Schwerin", operatorFull:"Danny Schwerin (Trappenkamp-Soest)",
@@ -71,8 +71,8 @@
       new2026:false, manufacturer:"Mack (D)", type:"2-Säulen-Skooter", year:1981,
       dimensions:"Fahrbahn 34,5 × 18,5 m", capacity:null, priceEuro:null,
       rideIndexUrl:"https://ride-index.de/2007/07/10/as-isken/",
-      imageUrl:"https://www.bocholt.de/kirmes/attraktionen/fahrgeschaefte-fuer-erwachsene/autoscooter-number-1/_/autoscooter-number-1.jpg",
-      imageCredit:"Stadt Bocholt", imageSourceUrl:"https://www.bocholt.de/"
+      imageUrl:"./assets/soest-number-1.webp",
+      imageCredit:"Ummet-Eck · Christian Schön", imageSourceUrl:"https://www.ummet-eck.de/regionen/103142-Autoscooter-Number-1-Isken-/"
     },
     {
       id:"hangover-the-tower", name:"Hangover The Tower", operator:"Schneider", operatorFull:"Schneider & Co. oHG (München)",
@@ -288,19 +288,45 @@
       sortMode:"configured",
       specialMap:{
         title:"Kirmesplan 2026",
-        subtitle:"Der offizielle Lageplan der Allerheiligenkirmes 2026.",
+        subtitle:"Die roten Linkpunkte sitzen direkt an den Fahrgeschäften des offiziellen Plans.",
         sourceLabel:"Originalplan als PDF öffnen",
         sourceUrl:"https://www.so-ist-soest.de/de-wAssets/docs/veranstaltungen/Allerheiligenkirmes/Allerheiligenkirmes-Soest-Programmplan-2026.pdf",
         imageUrl:"./assets/soest-allerheiligenkirmes-2026-lageplan.png",
-        note:"Aus dem offiziellen Programmplan übernommen und einmal im Uhrzeigersinn gedreht, damit die Karte direkt lesbar ist.",
-        aspectRatio:"1310 / 1841"
+        note:"Originaler Soester Lageplan 2026. Linkpunkt antippen → NÄHEN-Detailansicht.",
+        aspectRatio:"1310 / 1841",
+        points:[
+          {rideId:"soest26-eyecatcher",x:25.95,y:4.62},
+          {rideId:"soest26-mythos",x:23.28,y:6.68},
+          {rideId:"soest26-number-1",x:23.28,y:9.51},
+          {rideId:"soest26-sound-wave",x:19.47,y:17.00},
+          {rideId:"soest26-tiki-taki",x:18.70,y:20.32},
+          {rideId:"soest26-fahrt-zur-hoelle",x:27.86,y:47.37},
+          {rideId:"soest26-shock-wave",x:36.41,y:59.26},
+          {rideId:"soest26-jules-verne-tower",x:40.69,y:61.27},
+          {rideId:"soest26-musik-express",x:53.82,y:65.62},
+          {rideId:"soest26-hexentanz",x:47.33,y:69.64},
+          {rideId:"soest26-punk-flasher",x:53.74,y:70.45},
+          {rideId:"soest26-big-bamboo",x:62.82,y:45.95},
+          {rideId:"soest26-nessy",x:65.50,y:48.72},
+          {rideId:"soest26-the-beast",x:63.89,y:58.72},
+          {rideId:"soest26-big-monster",x:76.49,y:42.91},
+          {rideId:"soest26-intoxx",x:79.39,y:40.58},
+          {rideId:"soest26-highway-no-1",x:88.55,y:63.23},
+          {rideId:"soest26-hangover-the-tower",x:92.90,y:62.95},
+          {rideId:"soest26-heidi-the-coaster",x:90.46,y:66.00},
+          {rideId:"soest26-look-360",x:57.02,y:79.09},
+          {rideId:"soest26-avenger",x:61.83,y:78.11},
+          {rideId:"soest26-aqua-velis",x:72.37,y:78.98},
+          {rideId:"soest26-wellenflieger",x:76.34,y:76.48},
+          {rideId:"soest26-shake-and-roll",x:61.07,y:84.46}
+        ]
       },
-      cardImage:rideByRawId["eyecatcher"].imageUrl,
+      cardImage:"./assets/soest-background.webp",
       cardCopy:"24 Fahrgeschäfte · 8 Neuheiten · fünf Tage Kirmes mitten in der Soester Altstadt.",
       noLiveLabel:"KIRMES · KEINE LIVE-WARTEZEITEN",
       noLiveMessage:"Auf der Soester Allerheiligenkirmes gibt es keine öffentlichen Live-Wartezeiten. NÄHEN misst stattdessen deine persönliche Queue.",
       noLiveAlarmMessage:"Für Kirmessen ohne öffentliche Wartezeitdaten sind Wartezeit-Alarme deaktiviert.",
-      disclaimer:"Unabhängige Fan-Übersicht zur Allerheiligenkirmes 2026. Kein offizielles Angebot der Stadt Soest."
+      disclaimer:"Unabhängige Fan-Übersicht zur Allerheiligenkirmes 2026. Kein offizielles Angebot der Stadt Soest. Hintergrundfoto: Wirtschaft und Marketing Soest GmbH / Gero Sliwa."
     },
     rides,
     worlds,
