@@ -1,4 +1,4 @@
-const CACHE='naehen-v83';
+const CACHE='naehen-v84';
 const CORE=['./ride-3d.js','./ride-3d.css','./','./index.html','./styles.css','./portals.css','./app.js','./manifest.webmanifest','./icon.svg','./config.js','./movie-park-config.js','./walibi-holland-config.js','./walibi-belgium-config.js','./europa-park-config.js','./hansa-park-config.js','./soest-allerheiligenkirmes-2026-config.js','./bocholt-kirmes-2026-config.js','./europa-park-images.json','./assets/park-picker-bg.webp','./assets/fly-logo-user.webp','./assets/chiapas-logo-user.webp','./assets/soest-allerheiligenkirmes-2026-lageplan.png','./assets/soest-big-bamboo.webp','./assets/soest-number-1.webp','./assets/soest-background.webp','./assets/bocholt-kirmes-2026-plan.webp'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
