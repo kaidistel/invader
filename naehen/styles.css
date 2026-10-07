@@ -1545,3 +1545,71 @@ body[data-park="bocholt-kirmes-2026"] .parkAtmosphere{
     max-width:120px;
   }
 }
+
+
+/* v84 — Bocholt: precise clickable label hitboxes */
+body[data-park="bocholt-kirmes-2026"] .soestPlanLink.mapLabelHitbox{
+  width:var(--map-w);
+  height:var(--map-h);
+  min-width:0;
+  min-height:0;
+  padding:0;
+  border:1px solid transparent;
+  border-radius:4px;
+  background:transparent;
+  box-shadow:none;
+}
+body[data-park="bocholt-kirmes-2026"] .soestPlanLink.mapLabelHitbox>span{
+  position:absolute;
+  right:-4px;
+  top:-4px;
+  width:13px;
+  height:13px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#c91f2c;
+  color:#fff;
+  box-shadow:0 1px 4px #0008;
+  font:900 8px/1 system-ui,sans-serif;
+}
+body[data-park="bocholt-kirmes-2026"] .soestPlanLink.mapLabelHitbox:hover,
+body[data-park="bocholt-kirmes-2026"] .soestPlanLink.mapLabelHitbox:focus-visible{
+  transform:translate(-50%,-50%);
+  border-color:#ffd21f;
+  background:rgba(255,210,31,.10);
+  box-shadow:0 0 0 2px rgba(255,210,31,.45);
+  outline:none;
+  z-index:30;
+}
+body[data-park="bocholt-kirmes-2026"] .soestPlanLink.mapLabelHitbox>b{
+  bottom:calc(100% + 4px);
+}
+body[data-park="bocholt-kirmes-2026"] .mapReplacementLabel{
+  position:absolute;
+  left:50%;
+  bottom:calc(100% + 2px);
+  transform:translateX(-50%);
+  padding:2px 5px;
+  border:1px solid #1119;
+  border-radius:3px;
+  background:#ffd21f;
+  color:#111;
+  white-space:nowrap;
+  font:950 8px/1 'Barlow Condensed',system-ui,sans-serif;
+  font-style:normal;
+  letter-spacing:.35px;
+  box-shadow:0 2px 5px #0006;
+  pointer-events:none;
+}
+@media(max-width:650px){
+  body[data-park="bocholt-kirmes-2026"] .soestPlanLink.mapLabelHitbox{
+    width:var(--map-w);
+    height:var(--map-h);
+  }
+  body[data-park="bocholt-kirmes-2026"] .soestPlanLink.mapLabelHitbox>span{
+    width:11px;
+    height:11px;
+    font-size:7px;
+  }
+}
