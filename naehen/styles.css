@@ -916,38 +916,38 @@ body[data-park="europa-park"] .parkSwitch{
 .parkChoice[data-kind="fair"] .parkChoiceOpen{color:#ffe49a;border-top-color:#ffca5f45}
 .parkChoice[data-kind="fair"] h2{text-shadow:0 3px 0 #7e2438,0 6px 18px #000}
 
-body[data-park="soest-allerheiligenkirmes-2026"]{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]){
   --accent:#ffd15f;
   --accent2:#62e6ff;
   --line:#644a58;
 }
-body[data-park="soest-allerheiligenkirmes-2026"] .parkAtmosphere{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .parkAtmosphere{
   background:
     radial-gradient(circle at 14% 10%,rgba(255,53,132,.16),transparent 25%),
     radial-gradient(circle at 87% 7%,rgba(82,222,255,.13),transparent 24%),
     linear-gradient(180deg,rgba(14,8,13,.12),rgba(14,8,13,.74) 47%,#100c10 88%),
     repeating-linear-gradient(115deg,#2b1821 0 22px,#151317 22px 44px);
 }
-body[data-park="soest-allerheiligenkirmes-2026"] .hero{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .hero{
   border-color:#ffd15f55;
   background:
     radial-gradient(circle at 90% 5%,rgba(255,64,137,.15),transparent 28%),
     linear-gradient(135deg,#2a171fee,#111317f2);
 }
-body[data-park="soest-allerheiligenkirmes-2026"] .hero:before{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .hero:before{
   background:linear-gradient(#ffd15f 0 33%,#ff3f87 33% 66%,#62e6ff 66%);
 }
-body[data-park="soest-allerheiligenkirmes-2026"] .brand b,
-body[data-park="soest-allerheiligenkirmes-2026"] .brandDot{color:#ffd15f}
-body[data-park="soest-allerheiligenkirmes-2026"] .ride{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .brand b,
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .brandDot{color:#ffd15f}
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .ride{
   border-color:#ffcf7050;
   background:#21181d;
 }
-body[data-park="soest-allerheiligenkirmes-2026"] .ride:after{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .ride:after{
   background:linear-gradient(0deg,#120c10 4%,#120c10d6 43%,#120c1035 100%);
 }
-body[data-park="soest-allerheiligenkirmes-2026"] .ride .zone{color:#ffe0a3}
-body[data-park="soest-allerheiligenkirmes-2026"] .btn.primary{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .ride .zone{color:#ffe0a3}
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .btn.primary{
   background:linear-gradient(#ffe38d,#efb943);
   border-color:#ffedb2;
   color:#1c1206;
@@ -968,13 +968,13 @@ body[data-park="soest-allerheiligenkirmes-2026"] .btn.primary{
 
 
 /* v74 — fair price, operator and Ride-Index facts */
-body[data-park="soest-allerheiligenkirmes-2026"] .ride{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .ride{
   min-height:190px;
 }
-body[data-park="soest-allerheiligenkirmes-2026"] .rideArt{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .rideArt{
   filter:saturate(1.08) contrast(1.04) brightness(.78);
 }
-body[data-park="soest-allerheiligenkirmes-2026"] .ride .zone{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .ride .zone{
   font-weight:800;
   letter-spacing:.15px;
 }
@@ -1256,7 +1256,7 @@ body[data-park="soest-allerheiligenkirmes-2026"] .ride .zone{
   line-height:1.4;
 }
 .venueMapKey{display:none}
-body:not([data-park="soest-allerheiligenkirmes-2026"]) .venueSpecialMap{display:none!important}
+body:not([data-park="soest-allerheiligenkirmes-2026"]):not([data-park="bocholt-kirmes-2026"]) .venueSpecialMap{display:none!important}
 @media(max-width:650px){
   .venueMapHead{display:block;padding:14px}
   .venueMapSource{display:inline-block;margin-top:10px}
@@ -1280,12 +1280,12 @@ body:not([data-park="soest-allerheiligenkirmes-2026"]) .venueSpecialMap{display:
 
 
 /* v79 — Soest: stable official PNG, ride cards remain below */
-body[data-park="soest-allerheiligenkirmes-2026"] .venueMapCanvas{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .venueMapCanvas{
   padding:8px;
   overflow:visible;
   background:#d9d8d2;
 }
-body[data-park="soest-allerheiligenkirmes-2026"] .soestOriginalPlanWrap{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .soestOriginalPlanWrap{
   width:min(100%,680px);
   margin:0 auto;
   aspect-ratio:1310 / 1841;
@@ -1294,7 +1294,7 @@ body[data-park="soest-allerheiligenkirmes-2026"] .soestOriginalPlanWrap{
   background:#fff;
   box-shadow:0 5px 18px #0003;
 }
-body[data-park="soest-allerheiligenkirmes-2026"] .soestOriginalPlan{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .soestOriginalPlan{
   position:absolute;
   inset:0;
   display:block;
@@ -1303,13 +1303,13 @@ body[data-park="soest-allerheiligenkirmes-2026"] .soestOriginalPlan{
   object-fit:contain;
   background:#fff;
 }
-body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanHotspots,
-body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanHotspot{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .soestPlanHotspots,
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .soestPlanHotspot{
   display:none!important;
 }
 @media(max-width:650px){
-  body[data-park="soest-allerheiligenkirmes-2026"] .venueMapCanvas{padding:3px}
-  body[data-park="soest-allerheiligenkirmes-2026"] .soestOriginalPlanWrap{
+  body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .venueMapCanvas{padding:3px}
+  body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .soestOriginalPlanWrap{
     width:100%;
     max-width:none;
   }
@@ -1317,19 +1317,19 @@ body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanHotspot{
 
 
 /* v80 — Soest map links, manual fair prices and Kirmestag receipt */
-body[data-park="soest-allerheiligenkirmes-2026"] .parkAtmosphere{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .parkAtmosphere{
   background:
     linear-gradient(180deg,rgba(13,7,10,.18) 0%,rgba(13,7,10,.67) 46%,#100c10 90%),
     var(--park-hero-image) center 36%/cover no-repeat;
 }
-body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanHotspots{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .soestPlanHotspots{
   display:block!important;
   position:absolute;
   inset:0;
   z-index:7;
   pointer-events:none;
 }
-body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .soestPlanLink{
   --map-x:50%;
   --map-y:50%;
   position:absolute;
@@ -1350,10 +1350,10 @@ body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink{
   pointer-events:auto;
   z-index:1;
 }
-body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink>span{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .soestPlanLink>span{
   font:950 12px/1 system-ui,sans-serif;
 }
-body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink>b{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .soestPlanLink>b{
   position:absolute;
   left:50%;
   bottom:calc(100% + 7px);
@@ -1372,15 +1372,15 @@ body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink>b{
   transition:.12s ease;
   pointer-events:none;
 }
-body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink:hover,
-body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink:focus-visible{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .soestPlanLink:hover,
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .soestPlanLink:focus-visible{
   transform:translate(-50%,-50%) scale(1.18);
   z-index:20;
   outline:2px solid #111;
   outline-offset:2px;
 }
-body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink:hover>b,
-body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink:focus-visible>b{
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .soestPlanLink:hover>b,
+body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .soestPlanLink:focus-visible>b{
   opacity:1;
   visibility:visible;
   transform:translateX(-50%) translateY(0);
@@ -1485,12 +1485,59 @@ body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink:focus-visible>b{
   line-height:1.55;
 }
 @media(max-width:650px){
-  body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink{
+  body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .soestPlanLink{
     width:22px;
     height:22px;
     border-width:1.5px;
     box-shadow:0 2px 6px #0008,0 0 0 1.5px #f6cf47aa;
   }
-  body[data-park="soest-allerheiligenkirmes-2026"] .soestPlanLink>span{font-size:10px}
+  body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-2026"]) .soestPlanLink>span{font-size:10px}
   .fairReceipt{padding:22px 17px 25px}
+}
+
+
+/* v81 — Bocholt 2026: attached city map + visible Invader correction */
+body[data-park="bocholt-kirmes-2026"] .soestOriginalPlanWrap{
+  width:min(100%,760px);
+  aspect-ratio:1 / 1;
+}
+body[data-park="bocholt-kirmes-2026"] .venueMapCanvas{
+  background:#1f2b66;
+}
+body[data-park="bocholt-kirmes-2026"] .soestPlanLink.mapAlwaysLabel{
+  width:28px;
+  height:28px;
+  background:#ffd21f;
+  color:#111;
+  border-color:#fff;
+  box-shadow:0 2px 8px #0009,0 0 0 3px #d72836cc;
+  z-index:30;
+}
+body[data-park="bocholt-kirmes-2026"] .soestPlanLink.mapAlwaysLabel>b{
+  opacity:1;
+  visibility:visible;
+  transform:translateX(-50%) translateY(0);
+  background:#ffd21f;
+  color:#111;
+  border:1px solid #1118;
+  font-size:10px;
+  box-shadow:0 3px 8px #0006;
+}
+body[data-park="bocholt-kirmes-2026"] .soestPlanLink.mapAlwaysLabel>b:after{
+  content:" · ERSATZ FÜR DEVIL ROCK";
+}
+body[data-park="bocholt-kirmes-2026"] .parkAtmosphere{
+  background:
+    linear-gradient(180deg,rgba(10,15,51,.12) 0%,rgba(9,11,16,.72) 50%,#090b10 92%),
+    var(--park-hero-image) center/cover no-repeat;
+}
+@media(max-width:650px){
+  body[data-park="bocholt-kirmes-2026"] .soestOriginalPlanWrap{
+    width:100%;
+    max-width:none;
+  }
+  body[data-park="bocholt-kirmes-2026"] .soestPlanLink.mapAlwaysLabel>b{
+    font-size:8px;
+    max-width:120px;
+  }
 }
