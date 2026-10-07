@@ -40,6 +40,7 @@ jobs:
           python -m pip install --quiet -r /tmp/Real-ESRGAN/requirements.txt
           python -m pip uninstall -y opencv-python opencv-python-headless >/dev/null 2>&1 || true
           python -m pip install --quiet --force-reinstall "numpy==1.26.4" "opencv-python==4.8.1.78"
+          python -m pip install --quiet --no-deps -e /tmp/Real-ESRGAN
           cd /tmp/Real-ESRGAN
           mkdir -p weights
           curl --fail --location --retry 4             "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth"             -o weights/RealESRGAN_x4plus.pth
