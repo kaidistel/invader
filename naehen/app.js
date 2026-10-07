@@ -1623,6 +1623,20 @@
         ? "<a class=\"attribution\" href=\"https://queue-times.com/\" target=\"_blank\" rel=\"noopener\">Powered by <b style=\"color:var(--text)\">Queue-Times.com</b> · Liveproxy ca. alle 45 Sek. frisch · App prüft jede Minute</a>"
         : "");
 
+    // Remote fairground photo hosts can block hotlinking. Never leave a ride card visually empty:
+    // retry once with the event artwork, while local ride assets remain the preferred source.
+    const rideArtFallback = activeParkConfig()?.cardImage || "";
+    container.querySelectorAll("img.rideArt").forEach((img) => {
+      img.addEventListener("error", () => {
+        if (rideArtFallback && !img.dataset.fallbackTried) {
+          img.dataset.fallbackTried = "1";
+          img.src = rideArtFallback;
+          return;
+        }
+        img.remove();
+      });
+    });
+
     container.querySelectorAll(".ride[data-detail]").forEach((card) => {
       applyAttractionTypography(card, card.dataset.detail);
     });
