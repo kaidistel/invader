@@ -1,0 +1,38 @@
+name: Inspect Nightfly GLB
+on:
+  push:
+    paths:
+      - .github/workflows/nightfly-model-inspect.yml
+  workflow_dispatch:
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect GLB node hierarchy
+        run: |
+          python3 - <<'PY'
+          import json,struct,re,collections
+          b=open('nightfly/public/nightfly.glb','rb').read()
+          _,version,length=struct.unpack_from('<4sII',b)
+          jlen,jtype=struct.unpack_from('<II',b,12)
+          g=json.loads(b[20:20+jlen])
+          ns=g.get('nodes',[]);meshes=g.get('meshes',[])
+          print('GLB',version,length,'nodes',len(ns),'meshes',len(meshes))
+          parent={child:i for i,n in enumerate(ns) for child in n.get('children',[])}
+          def path(i):
+            parts=[];cur=i
+            while cur in range(len(ns)):
+              parts.append(ns[cur].get('name') or '#'+str(cur))
+              if cur not in parent:break
+              cur=parent[cur]
+            return '/'.join(parts[::-1])
+          keys=re.compile(r'night|fly|logo|sign|text|badge|disc|circle|medal|arm|swing|rotor|deco|hub|body',re.I)
+          for i,n in enumerate(ns):
+            name=n.get('name','')
+            if keys.search(name):
+              print('NODE',i,'mesh',n.get('mesh'), 'trans',n.get('translation'), 'scale',n.get('scale'),'rot',n.get('rotation'),'children',len(n.get('children',[])),'PATH',path(i))
+          print('MATERIALS')
+          for i,m in enumerate(g.get('materials',[])):
+            if keys.search(m.get('name','')): print('MAT',i,m.get('name'))
+          PY
