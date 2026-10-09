@@ -6,7 +6,7 @@ const c=w.window.NAEHEN_MUENSTER_HERBSTSEND_2026;
 assert(c&&c.park.kind==="fair");assert.equal(c.rides.length,6);
 assert.equal(c.park.startDate,"2026-10-24");assert.equal(c.park.endDate,"2026-11-01");
 assert.equal(c.park.specialMap,undefined);
-assert.deepEqual(Array.from(c.rides,x=>x.name),["Mayday","Airborne","Kanurah","Break Dance","Diablos Residenz","Disco Jet"]);
+assert.deepEqual(Array.from(c.rides,x=>x.name),["Mayday - The Ultimate Thrill","Airborne","Kanurah","Break Dance","Diablos Residenz","Disco Jet"]);
 assert.equal(new Set(c.rides.map(x=>x.id)).size,6);
 assert(c.rides.find(x=>x.id.endsWith("diablos-residenz")).operatorFull.includes("Hoefnagels"));
 assert(c.rides.every(x=>x.imageUrl&&x.imageCredit), "all six rides must have image URLs and credits");
