@@ -1664,7 +1664,9 @@ body[data-park="bocholt-kirmes-2026"] .soestOriginalPlan{
 
 /* Salzbergen 2026 — distinctive fair look and separate ride identities */
 body[data-park="salzbergen-herbstkirmes-2026"] .parkAtmosphere{
- background:radial-gradient(ellipse at 18% 12%,#e9a24222,transparent 52%),radial-gradient(ellipse at 87% 20%,#f1295a20,transparent 45%),linear-gradient(160deg,#20121c,#090c16 65%)!important;
+ background:
+   linear-gradient(180deg,rgba(10,10,20,.26),rgba(10,10,20,.76)),
+   var(--park-hero-image) center 40%/cover no-repeat!important;
 }
 body[data-park="salzbergen-herbstkirmes-2026"] .hero{border-color:#f5b45e66;background:linear-gradient(135deg,#482518,#171321 65%,#151c2c)}
 body[data-park="salzbergen-herbstkirmes-2026"] .ride{border-color:#f3b36045}
