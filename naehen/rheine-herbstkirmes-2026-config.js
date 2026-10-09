@@ -1,0 +1,310 @@
+(() => {
+  "use strict";
+  // Official Rheine Tourism 2026 leaflet, split by the TWO fairgrounds.
+  // The Innenstadt hosts stalls and catering, not a third ride-park section.
+  const source = "https://www.rheine-tourismus.de/media/www.rheine-tourismus.de/org/med_957/19376_kirmes_uebersicht.pdf";
+  const publishedLineupSource = "https://funfair-entertainment.de/news/rheiner-herbstkirmes-2026-nordic-tower-hangover-wilde-maus-beschickung";
+  const rawRides = [
+  {
+    "id": "wilde-maus",
+    "name": "Wilde Maus",
+    "operator": "Otto Barth GmbH",
+    "operatorFull": "Otto Barth GmbH",
+    "zone": "Elisabethplatz",
+    "manufacturer": "MACK Rides",
+    "type": "Wilde Maus / Achterbahn",
+    "year": 1995,
+    "imageUrl": "",
+    "new2026": false,
+    "imageCredit": "",
+    "imageSourceUrl": "",
+    "priceEuro": null
+  },
+  {
+    "id": "break-dance-no-2",
+    "name": "Break Dance No. 2",
+    "operator": "Bonner Schaustellergeschäfte GmbH",
+    "operatorFull": "Bonner Schaustellergeschäfte GmbH",
+    "zone": "Elisabethplatz",
+    "manufacturer": "HUSS",
+    "type": "Break Dance 2",
+    "year": 1993,
+    "imageUrl": "",
+    "new2026": false,
+    "imageCredit": "",
+    "imageSourceUrl": "",
+    "priceEuro": null
+  },
+  {
+    "id": "musik-express-krabbe",
+    "name": "Krabbe’s Musik Express",
+    "operator": "W. & U. Krabbe Vergnügungsbetriebe",
+    "operatorFull": "W. & U. Krabbe Vergnügungsbetriebe",
+    "zone": "Elisabethplatz",
+    "manufacturer": null,
+    "type": "Musik-Express",
+    "year": null,
+    "imageUrl": "",
+    "new2026": false,
+    "imageCredit": "",
+    "imageSourceUrl": "",
+    "priceEuro": null
+  },
+  {
+    "id": "hangover-the-ride",
+    "name": "Hangover The Ride",
+    "operator": "Richter",
+    "operatorFull": "Richter",
+    "zone": "Elisabethplatz",
+    "manufacturer": "AK Rides",
+    "type": "G-Force 16",
+    "year": 2026,
+    "imageUrl": "https://cdn.coaster.cloud/attractions/RD/W8/RDW8Jmig9qgsMeBQ6Jx9uP.jpg?class=large",
+    "new2026": true,
+    "imageCredit": "",
+    "imageSourceUrl": "",
+    "priceEuro": null
+  },
+  {
+    "id": "solar-wheel",
+    "name": "Solar Wheel",
+    "operator": "Harvey Wegener",
+    "operatorFull": "Harvey Wegener",
+    "zone": "Elisabethplatz",
+    "manufacturer": "Mondial",
+    "type": "Riesenrad",
+    "year": null,
+    "imageUrl": "",
+    "new2026": false,
+    "imageCredit": "",
+    "imageSourceUrl": "",
+    "priceEuro": null
+  },
+  {
+    "id": "nordic-tower",
+    "name": "Nordic Tower",
+    "operator": "Nülken",
+    "operatorFull": "Nülken",
+    "zone": "Elisabethplatz",
+    "manufacturer": "Funtime",
+    "type": "Starflyer",
+    "year": 2024,
+    "imageUrl": "",
+    "new2026": false,
+    "imageCredit": "",
+    "imageSourceUrl": "",
+    "priceEuro": null
+  },
+  {
+    "id": "devil-dance",
+    "name": "Devil Dance",
+    "operator": "Ricardo Welte",
+    "operatorFull": "Ricardo Welte",
+    "zone": "Elisabethplatz",
+    "manufacturer": "WOATT Rides",
+    "type": "Scheibenwischer",
+    "year": 2012,
+    "imageUrl": "",
+    "new2026": false,
+    "imageCredit": "",
+    "imageSourceUrl": "",
+    "priceEuro": null
+  },
+  {
+    "id": "intoxx",
+    "name": "Intoxx",
+    "operator": "Benning",
+    "operatorFull": "Benning",
+    "zone": "Elisabethplatz",
+    "manufacturer": "Fabbri",
+    "type": "Kamikaze III",
+    "year": 2003,
+    "imageUrl": "https://www.ahlen.de/fileadmin/Bilder/Stadtverwaltung_Themen___News/Freizeit___Tourismus/Kirmes/Fahrgeschaefte/Maikirmes_2025/INTOXX_Flight_Force.jpg",
+    "new2026": false,
+    "imageCredit": "",
+    "imageSourceUrl": "",
+    "priceEuro": null
+  },
+  {
+    "id": "rocket",
+    "name": "Rocket",
+    "operator": "M. Hartmann & Söhne",
+    "operatorFull": "M. Hartmann & Söhne",
+    "zone": "Elisabethplatz",
+    "manufacturer": "KMG",
+    "type": "Afterburner",
+    "year": 2006,
+    "imageUrl": "",
+    "new2026": false,
+    "imageCredit": "",
+    "imageSourceUrl": "",
+    "priceEuro": null
+  },
+  {
+    "id": "super-cars",
+    "name": "Super Cars & Stars",
+    "operator": "Bärbel Barber",
+    "operatorFull": "Bärbel Barber",
+    "zone": "Elisabethplatz",
+    "manufacturer": null,
+    "type": "Autoscooter",
+    "year": null,
+    "imageUrl": "",
+    "new2026": false,
+    "imageCredit": "",
+    "imageSourceUrl": "",
+    "priceEuro": null
+  },
+  {
+    "id": "karibik-coaster",
+    "name": "Karibik Coaster",
+    "operator": "Marco Welte",
+    "operatorFull": "Marco Welte",
+    "zone": "Emstorplatz",
+    "manufacturer": "SBF Visa",
+    "type": "Compact Spinning Coaster",
+    "year": 2018,
+    "imageUrl": "",
+    "new2026": false,
+    "imageCredit": "",
+    "imageSourceUrl": "",
+    "priceEuro": null
+  },
+  {
+    "id": "break-dance",
+    "name": "Break Dance",
+    "operator": "Fredi Welte",
+    "operatorFull": "Fredi Welte",
+    "zone": "Emstorplatz",
+    "manufacturer": "HUSS",
+    "type": "Break Dance 1",
+    "year": 1994,
+    "imageUrl": "https://www.osnabruecker-land.de/fileadmin/Mediendatenbank/Bilder/Blog/jahrmarkt_osnabrueck/Jahrmarkt-Break-Dance-osnabrueck-welte.jpg",
+    "new2026": false,
+    "imageCredit": "",
+    "imageSourceUrl": "",
+    "priceEuro": null
+  },
+  {
+    "id": "power-express",
+    "name": "Power Express",
+    "operator": "Timm Welte",
+    "operatorFull": "Timm Welte",
+    "zone": "Emstorplatz",
+    "manufacturer": "MACK",
+    "type": "Berg-und-Talbahn",
+    "year": 1974,
+    "imageUrl": "",
+    "new2026": false,
+    "imageCredit": "",
+    "imageSourceUrl": "",
+    "priceEuro": null
+  },
+  {
+    "id": "caribbean-star",
+    "name": "Caribbean Star",
+    "operator": "Schneider",
+    "operatorFull": "Schneider",
+    "zone": "Emstorplatz",
+    "manufacturer": "Reverchon",
+    "type": "Explorer",
+    "year": 1982,
+    "imageUrl": "",
+    "new2026": false,
+    "imageCredit": "",
+    "imageSourceUrl": "",
+    "priceEuro": null
+  },
+  {
+    "id": "kanurah",
+    "name": "Kanurah",
+    "operator": "Louis Vallentgoed",
+    "operatorFull": "Louis Vallentgoed",
+    "zone": "Emstorplatz",
+    "manufacturer": "Technical Park",
+    "type": "Jet Fighter",
+    "year": 2026,
+    "imageUrl": "",
+    "new2026": true,
+    "imageCredit": "",
+    "imageSourceUrl": "",
+    "priceEuro": null
+  },
+  {
+    "id": "verrueckte-farm",
+    "name": "Die verrückte Farm",
+    "operator": "Walter Adriano Hortz",
+    "operatorFull": "Walter Adriano Hortz",
+    "zone": "Emstorplatz",
+    "manufacturer": "WOATT Rides",
+    "type": "Laufgeschäft",
+    "year": 2013,
+    "imageUrl": "",
+    "new2026": false,
+    "imageCredit": "",
+    "imageSourceUrl": "",
+    "priceEuro": null
+  },
+  {
+    "id": "phantastische-reise",
+    "name": "Die phantastische Reise",
+    "operator": "Kutschenbauer",
+    "operatorFull": "Kutschenbauer",
+    "zone": "Emstorplatz",
+    "manufacturer": "Ferretti",
+    "type": "Simulator",
+    "year": 1998,
+    "imageUrl": "",
+    "new2026": false,
+    "imageCredit": "",
+    "imageSourceUrl": "",
+    "priceEuro": null
+  },
+  {
+    "id": "formel-eins",
+    "name": "Formel Eins",
+    "operator": "Heitmann",
+    "operatorFull": "Heitmann",
+    "zone": "Emstorplatz",
+    "manufacturer": null,
+    "type": "Autoscooter",
+    "year": null,
+    "imageUrl": "",
+    "new2026": false,
+    "imageCredit": "",
+    "imageSourceUrl": "",
+    "priceEuro": null
+  }
+];
+  const rides = rawRides.map(ride => ({...ride, id:"rheine26-"+ride.id, sourceUrl:source,
+    imageSourceUrl:ride.imageSourceUrl || publishedLineupSource,
+    description:ride.name+" · "+ride.operator+" · "+ride.type+"."
+  }));
+  const worlds = {}, fonts = {}, aliases = {}, rideConfig = {};
+  const faces=["'Bebas Neue',sans-serif","'Bungee',sans-serif","'Rye',serif","'Orbitron',sans-serif","'Staatliches',sans-serif","'Ewert',serif","'Audiowide',sans-serif","'Special Elite',serif","'Faster One',sans-serif","'Chango',sans-serif","'Black Ops One',sans-serif","'Graduate',serif","'Fascinate Inline',sans-serif","'Pirata One',serif","'Zen Tokyo Zoo',sans-serif","'Bangers',cursive","'Limelight',sans-serif","'Monoton',sans-serif"];
+  rides.forEach((ride,index)=>{
+    worlds[ride.id]={label:(ride.name+" · "+ride.operator).toUpperCase(),line:ride.description,artUrl:ride.imageUrl||"",imageCredit:ride.imageCredit||"",imageSourceUrl:ride.imageSourceUrl||source};
+    fonts[ride.id]={fontFamily:faces[index%faces.length],theme:"rheine-"+ride.zone.toLowerCase()+"-"+index};
+    aliases[ride.name.toLowerCase()]=ride.id;
+    rideConfig[ride.id]={singleRider:false};
+  });
+  window.NAEHEN_RHEINE_HERBSTKIRMES_2026={
+    park:{
+      slug:"rheine-herbstkirmes-2026",kind:"fair",
+      name:"Rheiner Herbstkirmes 2026",location:"Rheine · Elisabethplatz & Emstorplatz · 16.–19.10.2026",
+      startDate:"2026-10-16",endDate:"2026-10-19",
+      officialUrl:"https://www.rheine-tourismus.de/events/monatliche-stadtfeste/herbstkirmes",
+      dateSourceUrl:source, lineupSourceUrl:source,
+      liveDataUrl:null,liveWaits:false,supportsPostedWait:false,
+      sortMode:"configured",fairZones:["Elisabethplatz","Emstorplatz"],
+      receiptTitle:"RHEINER HERBSTKIRMES 2026",receiptLocation:"RHEINE",
+      cardImage:"./assets/rheine-herbstkirmes-2026.svg",
+      cardCopy:"16.–19. Oktober · Elisabethplatz & Emstorplatz · 18 Fahrgeschäfte · Innenstadt mit Buden.",
+      noLiveLabel:"KIRMES · KEINE LIVE-WARTEZEITEN",
+      noLiveMessage:"Keine öffentlichen Live-Wartezeiten. NÄHEN misst deine persönliche Queue.",
+      noLiveAlarmMessage:"Wartezeit-Alarme ohne echte Live-Daten sind deaktiviert.",
+      disclaimer:"Inoffizielle Fan-Übersicht. Zwei Fahrgeschäftsplätze plus Innenstadt mit Buden. Beschickung: offizielle Rheine-Tourismus-Übersicht 2026; Schausteller: ergänzende Fachquellen. Änderungen möglich. Kein Lageplan mit erfundenen Standorten."
+    },
+    rides,worlds,fonts,aliases,rideConfig,exclusions:{ids:[],namePatterns:[]}
+  };
+})();
