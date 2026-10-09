@@ -28,6 +28,8 @@ jobs:
 
       - name: Test Rheine fair onboarding
         run: node naehen/test-rheine-onboarding.cjs
+      - name: Test Münster Herbstsend onboarding
+        run: node naehen/test-muenster-herbstsend.cjs
 
       - name: Fetch NÄHEN live queue data
         run: |
