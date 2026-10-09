@@ -32,7 +32,7 @@
       liveDataUrl:null,liveWaits:false,supportsPostedWait:false,
       sortMode:"configured",
       receiptTitle:"HERBSTKIRMES SALZBERGEN 2026",receiptLocation:"SALZBERGEN",
-      cardImage:"./assets/salzbergen-photo-preview.svg",
+      cardImage:"./assets/salzbergen-photo-preview.jpg",
       cardImageCredit:"Vom Nutzer bereitgestelltes Luftbild der Salzbergener Herbstkirmes",
       cardCopy:"10.–12. Oktober · fünf Fahrgeschäfte, darunter die Neuheit Hangover The Ride.",
       noLiveLabel:"KIRMES · KEINE LIVE-WARTEZEITEN",
