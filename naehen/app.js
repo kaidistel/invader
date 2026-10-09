@@ -858,6 +858,14 @@
     if(category) hydrateParkPickerArt();
   }
 
+  document.querySelectorAll("[data-select-venue-kind]").forEach(button => {
+    button.addEventListener("click", () => setVenueKind(button.dataset.selectVenueKind));
+  });
+  $("#venueKindBack")?.addEventListener("click", () => {
+    selectedVenueKind = null;
+    renderParkPicker();
+  });
+
   function setVenueKind(kind) {
     if(kind!=="fair" && kind!=="park") return;
     selectedVenueKind=kind;
