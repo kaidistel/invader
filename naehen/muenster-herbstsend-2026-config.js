@@ -5,7 +5,7 @@
  const rawRides=[
   {
     "id": "mayday",
-    "name": "Mayday",
+    "name": "Mayday - The Ultimate Thrill",
     "operator": "Meyer / Horlbeck",
     "operatorFull": "Meyer / Horlbeck",
     "type": "Pegasus 16",
