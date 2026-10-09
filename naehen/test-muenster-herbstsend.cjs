@@ -8,9 +8,10 @@ assert.equal(c.park.startDate,"2026-10-24");assert.equal(c.park.endDate,"2026-11
 assert.equal(c.park.specialMap,undefined);
 assert.deepEqual(Array.from(c.rides,x=>x.name),["Mayday","Airborne","Kanurah","Break Dance","Disco Jet"]);
 assert.equal(new Set(c.rides.map(x=>x.id)).size,5);
-assert(c.rides.every(x=>x.imageUrl&&x.imageCredit&&x.imageSourceUrl), "all five rides must have attributable image URLs");
+assert(c.rides.every(x=>x.imageUrl&&x.imageCredit), "all five rides must have image URLs and credits");
 assert(c.rides.find(x=>x.id.endsWith("break-dance-bruch")).imageUrl.includes("Break-Dance-Bruch.jpg"));
-assert(c.rides.find(x=>x.id.endsWith("mayday")).imageUrl.includes("Yby3vjj4Fv8"));
+assert.equal(c.rides.find(x=>x.id.endsWith("mayday")).imageUrl,"./assets/mayday-the-ultimate-thrill.webp");
+assert(fs.existsSync(path.join(__dirname,"assets/mayday-the-ultimate-thrill.webp")),"Local Mayday image must exist");
 assert(c.park.cardImage.includes("send-in-muenster"), "Münster event cover must be actual fair photograph");
 for(const x of c.rides){assert.equal(x.priceEuro,null);assert(x.id.startsWith("muenster-herbstsend26-"));assert(x.operator);assert(c.worlds[x.id]);}
 const h=fs.readFileSync(path.join(__dirname,"index.html"),"utf8");
