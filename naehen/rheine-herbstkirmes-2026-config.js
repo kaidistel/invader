@@ -254,9 +254,9 @@
     "manufacturer": "Ferretti",
     "type": "Simulator",
     "year": 1998,
-    "imageUrl": "",
+    "imageUrl": "https://www.ummet-eck.de/Bilder/poi/678/4-newworld3000-ahlen23-c-UMM-schoen.jpg",
     "new2026": false,
-    "imageCredit": "",
+    "imageCredit": "Ummet-Eck · historische Ansicht als New World 3000",
     "imageSourceUrl": "",
     "priceEuro": null
   },
