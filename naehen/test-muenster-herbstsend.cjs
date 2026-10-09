@@ -3,12 +3,13 @@ const fs=require("node:fs"),vm=require("node:vm"),assert=require("node:assert/st
 for(const name of ["app.js","muenster-herbstsend-2026-config.js"]){cp.execFileSync(process.execPath,["--check",path.join(__dirname,name)]);}
 const w={window:{}};vm.runInNewContext(fs.readFileSync(path.join(__dirname,"muenster-herbstsend-2026-config.js"),"utf8"),w);
 const c=w.window.NAEHEN_MUENSTER_HERBSTSEND_2026;
-assert(c&&c.park.kind==="fair");assert.equal(c.rides.length,5);
+assert(c&&c.park.kind==="fair");assert.equal(c.rides.length,6);
 assert.equal(c.park.startDate,"2026-10-24");assert.equal(c.park.endDate,"2026-11-01");
 assert.equal(c.park.specialMap,undefined);
-assert.deepEqual(Array.from(c.rides,x=>x.name),["Mayday","Airborne","Kanurah","Break Dance","Disco Jet"]);
-assert.equal(new Set(c.rides.map(x=>x.id)).size,5);
-assert(c.rides.every(x=>x.imageUrl&&x.imageCredit), "all five rides must have image URLs and credits");
+assert.deepEqual(Array.from(c.rides,x=>x.name),["Mayday","Airborne","Kanurah","Break Dance","Diablos Residenz","Disco Jet"]);
+assert.equal(new Set(c.rides.map(x=>x.id)).size,6);
+assert(c.rides.find(x=>x.id.endsWith("diablos-residenz")).operatorFull.includes("Hoefnagels"));
+assert(c.rides.every(x=>x.imageUrl&&x.imageCredit), "all six rides must have image URLs and credits");
 assert(c.rides.find(x=>x.id.endsWith("break-dance-bruch")).imageUrl.includes("Break-Dance-Bruch.jpg"));
 assert.equal(c.rides.find(x=>x.id.endsWith("mayday")).imageUrl,"./assets/mayday-the-ultimate-thrill.webp");
 assert(fs.existsSync(path.join(__dirname,"assets/mayday-the-ultimate-thrill.webp")),"Local Mayday image must exist");
@@ -20,4 +21,4 @@ const sw=fs.readFileSync(path.join(__dirname,"sw.js"),"utf8");
 assert(h.includes("muenster-herbstsend-2026-config.js"));
 assert(a.includes("NAEHEN_MUENSTER_HERBSTSEND_2026"));
 assert(sw.includes("muenster-herbstsend-2026-config.js"));
-console.log("PASS: Münster Herbstsend 2026, no map, exactly five unique rides, prices blank, event and PWA integration");
+console.log("PASS: Münster Herbstsend 2026, no map, exactly six unique rides, prices blank, event and PWA integration");
