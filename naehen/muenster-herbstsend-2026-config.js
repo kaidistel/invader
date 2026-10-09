@@ -69,6 +69,22 @@
     "rideIndexUrl": "https://ride-index.de/2005/01/04/break-dance-bruch/"
   },
   {
+    "id": "diablos-residenz",
+    "name": "Diablos Residenz",
+    "operator": "Hoefnagels",
+    "operatorFull": "Joseph Hoefnagels jr. (Euskirchen)",
+    "type": "3-Etagen-Geisterbahn",
+    "manufacturer": "Bertazzon (I)",
+    "year": 2025,
+    "dimensions": "33 × 13 × 15 m",
+    "new2026": false,
+    "description": "Dreistöckige Geisterbahn im düster-mexikanischen Stil mit aufwändigen Horror-Szenen und Schreckeffekten. Premiere 2025 auf dem Hamburger Winterdom.",
+    "imageUrl": "",
+    "imageCredit": "",
+    "imageSourceUrl": "https://ride-index.de/2025/11/04/diablos-residenz/",
+    "rideIndexUrl": "https://ride-index.de/2025/11/04/diablos-residenz/"
+  },
+  {
     "id": "disco-jet",
     "name": "Disco Jet",
     "operator": "Heitmann",
@@ -86,7 +102,7 @@
 ];
  const rides=rawRides.map(ride=>({...ride,id:"muenster-herbstsend26-"+ride.id,zone:"Schlossplatz",priceEuro:null,sourceUrl:ride.imageSourceUrl||lineupSource}));
  const worlds={},fonts={},aliases={},rideConfig={};
- const typefaces=["'Bebas Neue',sans-serif","'Orbitron',sans-serif","'Bungee Shade','Bungee',sans-serif","'Bangers',cursive","'Monoton',sans-serif"];
+ const typefaces=["'Bebas Neue',sans-serif","'Orbitron',sans-serif","'Bungee Shade','Bungee',sans-serif","'Bangers',cursive","'Monoton',sans-serif","'Pirata One',serif"];
  rides.forEach((ride,i)=>{
   worlds[ride.id]={label:(ride.name+" · "+ride.operator).toUpperCase(),line:ride.description,artUrl:ride.imageUrl||"",imageCredit:ride.imageCredit||"",imageSourceUrl:ride.imageSourceUrl||lineupSource};
   fonts[ride.id]={fontFamily:typefaces[i],theme:"herbstsend26-"+ride.id};
@@ -102,11 +118,11 @@
   cardImage:"https://www.24rhein.de/assets/images/27/340/27340014-der-send-in-muenster-mit-besucherinnen-und-besuchern-und-den-fahrgeschaeften-3oe9.jpg",
   cardImageCredit:"24RHEIN · Archivfoto Send Münster (2021)",
   cardImageSourceUrl:"https://www.24rhein.de/rheinland-nrw/send-kirmes-muenster-2021-oeffnungszeiten-attraktionen-corona-regeln-familientag-studentenabend-91056542.html",
-  cardCopy:"24. Oktober – 1. November · Schlossplatz · 5 bisher bekannte Fahrgeschäfte",
+  cardCopy:"24. Oktober – 1. November · Schlossplatz · 6 bisher bekannte Fahrgeschäfte",
   noLiveLabel:"KIRMES · KEINE LIVE-WARTEZEITEN",
   noLiveMessage:"Keine öffentlichen Live-Wartezeiten. NÄHEN misst deine persönliche Queue.",
   noLiveAlarmMessage:"Wartezeit-Alarme sind hier deaktiviert.",
-  disclaimer:"Unabhängige Fan-Übersicht. Derzeit fünf benannte Fahrgeschäfte nach Nutzervorgabe, keine vollständige Schlussbeschickung. Weitere Geschäfte können folgen. Kein offizielles Angebot der Stadt Münster."},
+  disclaimer:"Unabhängige Fan-Übersicht. Derzeit sechs benannte Fahrgeschäfte nach Nutzervorgabe, keine vollständige Schlussbeschickung. Weitere Geschäfte können folgen. Kein offizielles Angebot der Stadt Münster."},
   rides,worlds,fonts,aliases,rideConfig,exclusions:{ids:[],namePatterns:[]}
  };
 })();
