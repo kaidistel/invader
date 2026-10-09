@@ -278,6 +278,8 @@
   window.NAEHEN_SOEST_ALLERHEILIGENKIRMES_2026 = {
     park:{
       slug:"soest-allerheiligenkirmes-2026",
+      startDate:"2026-11-04",
+      endDate:"2026-11-08",
       kind:"fair",
       name:"Soester Allerheiligenkirmes 2026",
       location:"Soest · 04.–08.11.2026",
