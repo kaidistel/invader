@@ -1,0 +1,101 @@
+(() => {
+ "use strict";
+ const dateSource="https://www.stadt-muenster.de/send";
+ const lineupSource="https://www.kirmesforum.de/threads/m%C3%BCnster-herbstsend-24-10-01-11-2026.78036/";
+ const rawRides=[
+  {
+    "id": "mayday",
+    "name": "Mayday",
+    "operator": "Meyer / Horlbeck",
+    "operatorFull": "Meyer / Horlbeck",
+    "type": "Flugkarussell",
+    "year": 2026,
+    "new2026": true,
+    "description": "Flugthemen-Neuheit mit beweglichen Gondeln und großflächiger Lichtshow.",
+    "imageUrl": "",
+    "imageCredit": "",
+    "imageSourceUrl": "https://funfair-entertainment.de/news/pollhans-2026-mayday-airwolf-movie-star-fahrgeschaefte"
+  },
+  {
+    "id": "airborne",
+    "name": "Airborne",
+    "operator": "Ordelman",
+    "operatorFull": "Ordelman (NL)",
+    "type": "Hochfahrgeschäft",
+    "new2026": false,
+    "description": "Airborne von Ordelman: Hochfahrgeschäft mit markanter LED-Inszenierung.",
+    "imageUrl": "",
+    "imageCredit": "",
+    "imageSourceUrl": "https://www.kirmesforum.de/threads/m%C3%BCnster-herbstsend-24-10-01-11-2026.78036/"
+  },
+  {
+    "id": "kanurah",
+    "name": "Kanurah",
+    "operator": "Vallentgoed",
+    "operatorFull": "Louis Vallentgoed (NL)",
+    "type": "Jet Fighter",
+    "manufacturer": "Technical Park",
+    "year": 2026,
+    "new2026": true,
+    "height": "26 m",
+    "capacity": "20 Personen",
+    "description": "Technical Park Jet Fighter mit zwei frei beweglichen Gondeln und bis zu 26 Metern Höhe.",
+    "imageUrl": "",
+    "imageCredit": "",
+    "imageSourceUrl": "https://funfair-entertainment.de/news/rheiner-herbstkirmes-2026-nordic-tower-hangover-wilde-maus-beschickung"
+  },
+  {
+    "id": "break-dance-bruch",
+    "name": "Break Dance",
+    "operator": "Bruch",
+    "operatorFull": "Bruch (Düsseldorf)",
+    "type": "Break Dance No. 1",
+    "manufacturer": "HUSS",
+    "year": 1990,
+    "capacity": "32 Personen / 16 Gondeln",
+    "new2026": false,
+    "description": "HUSS Break Dance No. 1 der Familie Bruch, Baujahr 1990 – vier Kreuze und frei rotierende Zweiergondeln.",
+    "imageUrl": "",
+    "imageCredit": "",
+    "imageSourceUrl": "https://kuestenkirmes.de/break-dance-bruch/"
+  },
+  {
+    "id": "disco-jet",
+    "name": "Disco Jet",
+    "operator": "Heitmann",
+    "operatorFull": "Arno Heitmann (Münster)",
+    "type": "Musik-Express / Berg- und Talbahn",
+    "manufacturer": "Bertazzon",
+    "year": 2021,
+    "dimensions": "19 × 17 × 10 m",
+    "new2026": false,
+    "description": "Der neue Disco Jet von Arno Heitmann (2021): Musik-Express mit computergesteuerten Disco-Lichtern, Nebel und moderner LED-Show.",
+    "imageUrl": "",
+    "imageCredit": "",
+    "imageSourceUrl": "https://disco-jet.de/"
+  }
+];
+ const rides=rawRides.map(ride=>({...ride,id:"muenster-herbstsend26-"+ride.id,zone:"Schlossplatz",priceEuro:null,sourceUrl:ride.imageSourceUrl||lineupSource}));
+ const worlds={},fonts={},aliases={},rideConfig={};
+ const typefaces=["'Bebas Neue',sans-serif","'Orbitron',sans-serif","'Bungee Shade','Bungee',sans-serif","'Bangers',cursive","'Monoton',sans-serif"];
+ rides.forEach((ride,i)=>{
+  worlds[ride.id]={label:(ride.name+" · "+ride.operator).toUpperCase(),line:ride.description,artUrl:ride.imageUrl||"",imageCredit:ride.imageCredit||"",imageSourceUrl:ride.imageSourceUrl||lineupSource};
+  fonts[ride.id]={fontFamily:typefaces[i],theme:"herbstsend26-"+ride.id};
+  aliases[ride.name.toLowerCase()]=ride.id;
+  rideConfig[ride.id]={singleRider:false};
+ });
+ window.NAEHEN_MUENSTER_HERBSTSEND_2026={
+  park:{slug:"muenster-herbstsend-2026",kind:"fair",name:"Münsteraner Herbstsend 2026",
+  location:"Münster · Schlossplatz · 24.10.–01.11.2026",
+  startDate:"2026-10-24",endDate:"2026-11-01",officialUrl:dateSource,dateSourceUrl:dateSource,lineupSourceUrl:lineupSource,
+  liveDataUrl:null,liveWaits:false,supportsPostedWait:false,sortMode:"configured",
+  receiptTitle:"HERBSTSEND MÜNSTER 2026",receiptLocation:"MÜNSTER",
+  cardImage:"./assets/muenster-herbstsend-2026.svg",
+  cardCopy:"24. Oktober – 1. November · Schlossplatz · 5 bisher bekannte Fahrgeschäfte",
+  noLiveLabel:"KIRMES · KEINE LIVE-WARTEZEITEN",
+  noLiveMessage:"Keine öffentlichen Live-Wartezeiten. NÄHEN misst deine persönliche Queue.",
+  noLiveAlarmMessage:"Wartezeit-Alarme sind hier deaktiviert.",
+  disclaimer:"Unabhängige Fan-Übersicht. Derzeit fünf benannte Fahrgeschäfte nach Nutzervorgabe, keine vollständige Schlussbeschickung. Weitere Geschäfte können folgen. Kein offizielles Angebot der Stadt Münster."},
+  rides,worlds,fonts,aliases,rideConfig,exclusions:{ids:[],namePatterns:[]}
+ };
+})();
