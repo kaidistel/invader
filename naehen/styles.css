@@ -1694,3 +1694,8 @@ body[data-park="rheine-herbstkirmes-2026"] .ride{border-color:#efbb7355}
 .fairZoneTab.active,.fairZoneTab[aria-pressed="true"]{border-color:#ffd989;background:#5b3e2d;color:#fff}
 .fairZoneTab:focus-visible{outline:2px solid #ffd989;outline-offset:3px}
 @media(max-width:560px){.fairZoneTab{min-height:44px;padding:10px 12px}}
+
+/* Münster Herbstsend 2026 — event-specific atmosphere */
+body[data-park="muenster-herbstsend-2026"] .parkAtmosphere{background:linear-gradient(180deg,rgba(7,16,35,.42),rgba(6,10,23,.88)),var(--park-hero-image) center 43%/cover no-repeat}
+body[data-park="muenster-herbstsend-2026"] .hero{background:linear-gradient(125deg,#3d2d52,#101929 72%);border-color:#ffd18c70}
+body[data-park="muenster-herbstsend-2026"] .ride{border-color:#d7a77470}
