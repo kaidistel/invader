@@ -1661,3 +1661,21 @@ body[data-park="bocholt-kirmes-2026"] .soestOriginalPlan{
 #venueListing{width:100%;min-width:0}
 #venueKindBack{display:block;margin:0 0 12px;min-height:44px}
 @media(min-width:650px){#venueKindChooser{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Salzbergen 2026 — distinctive fair look and separate ride identities */
+body[data-park="salzbergen-herbstkirmes-2026"] .parkAtmosphere{
+ background:radial-gradient(ellipse at 18% 12%,#e9a24222,transparent 52%),radial-gradient(ellipse at 87% 20%,#f1295a20,transparent 45%),linear-gradient(160deg,#20121c,#090c16 65%)!important;
+}
+body[data-park="salzbergen-herbstkirmes-2026"] .hero{border-color:#f5b45e66;background:linear-gradient(135deg,#482518,#171321 65%,#151c2c)}
+body[data-park="salzbergen-herbstkirmes-2026"] .ride{border-color:#f3b36045}
+#rideSheet[data-park="salzbergen-herbstkirmes-2026"] .sheetCard{border-top:4px solid #e6b35e}
+#rideSheet[data-world="salzbergen26-intoxx"] .sheetCard{background:linear-gradient(145deg,#202a41,#121422 70%)}
+#rideSheet[data-world="salzbergen26-intoxx"] #rideTitle{color:#83d8ff;text-transform:uppercase;letter-spacing:2px}
+#rideSheet[data-world="salzbergen26-hip-hop-dancer"] .sheetCard{background:linear-gradient(155deg,#44204e,#141725 68%)}
+#rideSheet[data-world="salzbergen26-hip-hop-dancer"] #rideTitle{color:#fd9cff;text-transform:uppercase;transform:skew(-3deg)}
+#rideSheet[data-world="salzbergen26-musik-express"] .sheetCard{background:linear-gradient(145deg,#713b20,#191c24 67%)}
+#rideSheet[data-world="salzbergen26-musik-express"] #rideTitle{color:#ffda79;letter-spacing:1px;text-shadow:3px 3px #723727}
+#rideSheet[data-world="salzbergen26-break-dance"] .sheetCard{background:linear-gradient(145deg,#203d62,#141927 70%)}
+#rideSheet[data-world="salzbergen26-break-dance"] #rideTitle{color:#aee4ff;text-transform:uppercase}
+#rideSheet[data-world="salzbergen26-hangover-the-ride"] .sheetCard{background:linear-gradient(150deg,#541b2a,#170f20 70%)}
+#rideSheet[data-world="salzbergen26-hangover-the-ride"] #rideTitle{color:#ff647e;text-transform:uppercase;letter-spacing:1px}
