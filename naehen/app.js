@@ -1625,7 +1625,7 @@
 
     // Remote fairground photo hosts can block hotlinking. Never leave a ride card visually empty:
     // retry once with the event artwork, while local ride assets remain the preferred source.
-    const rideArtFallback = activeParkConfig()?.cardImage || "./assets/park-picker-bg.webp";
+    const rideArtFallback = activeParkSlug === "bocholt-kirmes-2026" ? "" : (activeParkConfig()?.cardImage || "./assets/park-picker-bg.webp");
     container.querySelectorAll("img.rideArt").forEach((img) => {
       const useFallback = () => {
         if (rideArtFallback && !img.dataset.fallbackTried) {
@@ -2357,7 +2357,7 @@
     applyAttractionTypography(rideSheet, selectedDetailRide.id);
     if (worldArtImage) {
       if (artSrc) {
-        const detailFallback = activeParkConfig()?.cardImage || "./assets/park-picker-bg.webp";
+        const detailFallback = activeParkSlug === "bocholt-kirmes-2026" ? "" : (activeParkConfig()?.cardImage || "./assets/park-picker-bg.webp");
         worldArtImage.onerror = () => {
           if (detailFallback && worldArtImage.src !== new URL(detailFallback, location.href).href) {
             worldArtImage.onerror = null;
