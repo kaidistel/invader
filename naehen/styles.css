@@ -1681,3 +1681,16 @@ body[data-park="salzbergen-herbstkirmes-2026"] .ride{border-color:#f3b36045}
 #rideSheet[data-world="salzbergen26-break-dance"] #rideTitle{color:#aee4ff;text-transform:uppercase}
 #rideSheet[data-world="salzbergen26-hangover-the-ride"] .sheetCard{background:linear-gradient(150deg,#541b2a,#170f20 70%)}
 #rideSheet[data-world="salzbergen26-hangover-the-ride"] #rideTitle{color:#ff647e;text-transform:uppercase;letter-spacing:1px}
+
+/* Rheine 2026 — independent event art, plus accessible two-plaza tabs */
+body[data-park="rheine-herbstkirmes-2026"] .parkAtmosphere{
+  background:linear-gradient(180deg,#080b19aa,#080b19e6),var(--park-hero-image) center 40%/cover no-repeat;
+}
+body[data-park="rheine-herbstkirmes-2026"] .hero{border-color:#f3c07477;background:linear-gradient(145deg,#462643,#171c35)}
+body[data-park="rheine-herbstkirmes-2026"] .ride{border-color:#efbb7355}
+.fairZoneTabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:thin;margin:16px 0 12px;padding:3px 0 10px}
+.fairZoneTab{cursor:pointer;flex:0 0 auto;min-height:46px;padding:10px 15px;border:1px solid #bc9b726b;border-radius:999px;background:#172130;color:#eee4d7;font-weight:800}
+.fairZoneTab span{padding:3px 6px;border-radius:8px;background:#ffffff22;font-size:12px;margin-left:4px}
+.fairZoneTab.active,.fairZoneTab[aria-pressed="true"]{border-color:#ffd989;background:#5b3e2d;color:#fff}
+.fairZoneTab:focus-visible{outline:2px solid #ffd989;outline-offset:3px}
+@media(max-width:560px){.fairZoneTab{min-height:44px;padding:10px 12px}}
