@@ -323,7 +323,7 @@
           {rideId:"soest26-shake-and-roll",x:61.07,y:84.46}
         ]
       },
-      cardImage:"./assets/soest-background.webp",
+      cardImage:"./assets/soest-background.jpg",
       cardCopy:"24 Fahrgeschäfte · 8 Neuheiten · fünf Tage Kirmes mitten in der Soester Altstadt.",
       noLiveLabel:"KIRMES · KEINE LIVE-WARTEZEITEN",
       noLiveMessage:"Auf der Soester Allerheiligenkirmes gibt es keine öffentlichen Live-Wartezeiten. NÄHEN misst stattdessen deine persönliche Queue.",
