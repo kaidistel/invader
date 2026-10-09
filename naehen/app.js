@@ -22,7 +22,8 @@
     window.NAEHEN_EUROPA_PARK,
     window.NAEHEN_HANSA_PARK,
     window.NAEHEN_SOEST_ALLERHEILIGENKIRMES_2026,
-    window.NAEHEN_BOCHOLT_KIRMES_2026
+    window.NAEHEN_BOCHOLT_KIRMES_2026,
+    window.NAEHEN_SALZBERGEN_HERBSTKIRMES_2026
   ].filter((module) => module && module.park && module.park.slug);
 
   const PARK_MODULES = {};
@@ -807,11 +808,31 @@
     return !!(park && park.liveWaits !== false && park.liveDataUrl);
   }
 
+  let selectedVenueKind = null;
   function renderParkPicker() {
     const grid = $("#parkGrid");
     if (!grid) return;
 
-    const available = Object.values(PARKS);
+    const category = selectedVenueKind;
+    const today = new Date(); today.setHours(0,0,0,0);
+    const available = Object.values(PARKS).filter(p => category && (p.kind === "fair" ? "fair" : "park") === category)
+      .sort((a,b) => {
+        if (category !== "fair") return a.name.localeCompare(b.name,"de");
+        const rank = p => {
+          const start = new Date(p.startDate || "2100-01-01T00:00:00");
+          const end = new Date((p.endDate || p.startDate || "2100-01-01") + "T23:59:59");
+          return end >= today && start <= today ? 0 : start > today ? 1 : 2;
+        };
+        const ar=rank(a),br=rank(b);
+        if(ar!==br)return ar-br;
+        return ar===2 ? (b.startDate||"").localeCompare(a.startDate||"") : (a.startDate||"").localeCompare(b.startDate||"");
+      });
+    const chooser = $("#venueKindChooser");
+    const listing = $("#venueListing");
+    if(chooser) chooser.classList.toggle("hidden",!!category);
+    if(listing) listing.classList.toggle("hidden",!category);
+    const heading=$("#venueKindHeading");
+    if(heading) heading.textContent=category==="fair"?"Kirmessen":"Freizeitparks";
     grid.innerHTML = available.map((park) => {
       const fair = park.kind === "fair";
       return "<button class=\"parkChoice\" type=\"button\" data-park=\"" + escapeHtml(park.slug) + "\" data-kind=\"" + (fair ? "fair" : "park") + "\">" +
@@ -834,7 +855,13 @@
       button.addEventListener("click", () => openPark(button.dataset.park));
     });
 
-    hydrateParkPickerArt();
+    if(category) hydrateParkPickerArt();
+  }
+
+  function setVenueKind(kind) {
+    if(kind!=="fair" && kind!=="park") return;
+    selectedVenueKind=kind;
+    renderParkPicker();
   }
 
   function stopLiveRefresh() {
@@ -869,6 +896,7 @@
     $("#parkPicker")?.classList.remove("hidden");
     document.body.classList.remove("modalOpen");
     document.querySelectorAll(".sheet.show").forEach((sheet) => sheet.classList.remove("show"));
+    selectedVenueKind = null;
     renderParkPicker();
 
     if (options.replaceHistory) {
