@@ -12,9 +12,9 @@
     "year": 2026,
     "new2026": true,
     "description": "Flugthemen-Neuheit mit beweglichen Gondeln und großflächiger Lichtshow.",
-    "imageUrl": "https://i.ytimg.com/vi/Yby3vjj4Fv8/maxresdefault.jpg",
-    "imageCredit": "Offride-Video Mayday · Onride.de eingebettetes Video (2026)",
-    "imageSourceUrl": "https://www.youtube.com/watch?v=Yby3vjj4Fv8",
+    "imageUrl": "./assets/mayday-the-ultimate-thrill.webp",
+    "imageCredit": "Vom Nutzer bereitgestelltes Mayday-Artwork",
+    "imageSourceUrl": "",
     "manufacturer": "Technical Park",
     "capacity": "16 Personen",
     "rideIndexUrl": "https://ride-index.de/2026/07/05/mayday/"
