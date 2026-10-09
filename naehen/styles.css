@@ -1639,3 +1639,13 @@ body[data-park="bocholt-kirmes-2026"] .soestOriginalPlan{
 @media(max-width:650px){
   body[data-park="bocholt-kirmes-2026"] .venueMapCanvas{padding:4px}
 }
+
+/* v88: two-stage venue selection */
+.venueKindChooser{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:28px 0 32px}
+.venueKindCard{border:1px solid rgba(255,255,255,.19);border-radius:20px;padding:32px 26px;min-height:180px;background:linear-gradient(145deg,#202737,#11141c);color:#fff;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:16px;text-align:left;transition:transform .2s,border-color .2s}
+.venueKindCard strong{font:800 clamp(24px,4vw,38px)/1.1 'Barlow Condensed',sans-serif}
+.venueKindCard span{color:#c0c7d6;font-size:14px}
+.venueKindCard:hover,.venueKindCard:focus-visible{transform:translateY(-3px);border-color:#f5cf7d;outline:none}
+.venueKindBack{cursor:pointer;color:#ffdc8f;background:transparent;border:0;padding:12px 0;font-weight:800;text-align:left;margin-bottom:6px}
+#venueKindHeading{margin:6px 0 16px;font:800 clamp(25px,4vw,38px)/1.1 'Barlow Condensed',sans-serif}
+@media(max-width:650px){.venueKindChooser{grid-template-columns:1fr;gap:12px;margin:18px 0}.venueKindCard{min-height:132px;padding:22px}}
