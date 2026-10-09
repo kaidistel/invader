@@ -134,9 +134,9 @@
     "manufacturer": "KMG",
     "type": "Afterburner",
     "year": 2006,
-    "imageUrl": "",
+    "imageUrl": "https://www.ummet-eck.de/Bilder/poi/678/rocket-mg-rheydt-fruehkirmes23-c-UMM-schoen-6.jpg",
     "new2026": false,
-    "imageCredit": "",
+    "imageCredit": "Ummet-Eck · Christian Schön",
     "imageSourceUrl": "",
     "priceEuro": null
   },
