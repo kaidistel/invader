@@ -8,25 +8,33 @@
     "name": "Mayday",
     "operator": "Meyer / Horlbeck",
     "operatorFull": "Meyer / Horlbeck",
-    "type": "Flugkarussell",
+    "type": "Pegasus 16",
     "year": 2026,
     "new2026": true,
     "description": "Flugthemen-Neuheit mit beweglichen Gondeln und großflächiger Lichtshow.",
     "imageUrl": "",
     "imageCredit": "",
-    "imageSourceUrl": "https://funfair-entertainment.de/news/pollhans-2026-mayday-airwolf-movie-star-fahrgeschaefte"
+    "imageSourceUrl": "https://funfair-entertainment.de/news/pollhans-2026-mayday-airwolf-movie-star-fahrgeschaefte",
+    "manufacturer": "Technical Park",
+    "capacity": "16 Personen",
+    "rideIndexUrl": "https://ride-index.de/2026/07/05/mayday/"
   },
   {
     "id": "airborne",
     "name": "Airborne",
     "operator": "Ordelman",
-    "operatorFull": "Ordelman (NL)",
-    "type": "Hochfahrgeschäft",
+    "operatorFull": "Willy Ordelman (NL)",
+    "type": "Speed 32",
     "new2026": false,
     "description": "Airborne von Ordelman: Hochfahrgeschäft mit markanter LED-Inszenierung.",
-    "imageUrl": "",
-    "imageCredit": "",
-    "imageSourceUrl": "https://www.kirmesforum.de/threads/m%C3%BCnster-herbstsend-24-10-01-11-2026.78036/"
+    "imageUrl": "https://www.ummet-eck.de/Bilder/fotosets/1024/airborne-sommersend23-c-UMM-s-schoen-3.jpg",
+    "imageCredit": "Ummet-Eck · Silke Schön",
+    "imageSourceUrl": "https://www.kirmesforum.de/threads/m%C3%BCnster-herbstsend-24-10-01-11-2026.78036/",
+    "manufacturer": "KMG",
+    "year": 2020,
+    "height": "65 m",
+    "capacity": "32 Personen",
+    "rideIndexUrl": "https://ride-index.de/2021/11/03/airborne-nl/"
   },
   {
     "id": "kanurah",
@@ -40,8 +48,8 @@
     "height": "26 m",
     "capacity": "20 Personen",
     "description": "Technical Park Jet Fighter mit zwei frei beweglichen Gondeln und bis zu 26 Metern Höhe.",
-    "imageUrl": "",
-    "imageCredit": "",
+    "imageUrl": "https://funfactorevents.nl/.cm4all/mediadb/Banners/Attracties/Kanurah/Kermisattractie-Kanurah-huren-Fun-Factor-Events.png",
+    "imageCredit": "Fun Factor Events · 2026 Konzeptillustration (kein Foto)",
     "imageSourceUrl": "https://funfair-entertainment.de/news/rheiner-herbstkirmes-2026-nordic-tower-hangover-wilde-maus-beschickung"
   },
   {
@@ -55,9 +63,10 @@
     "capacity": "32 Personen / 16 Gondeln",
     "new2026": false,
     "description": "HUSS Break Dance No. 1 der Familie Bruch, Baujahr 1990 – vier Kreuze und frei rotierende Zweiergondeln.",
-    "imageUrl": "",
-    "imageCredit": "",
-    "imageSourceUrl": "https://kuestenkirmes.de/break-dance-bruch/"
+    "imageUrl": "https://onride.de/onride-upic10100%401120",
+    "imageCredit": "onride.de · Bruch-Aufnahme",
+    "imageSourceUrl": "https://kuestenkirmes.de/break-dance-bruch/",
+    "rideIndexUrl": "https://ride-index.de/2005/01/04/break-dance-bruch/"
   },
   {
     "id": "disco-jet",
@@ -70,9 +79,9 @@
     "dimensions": "19 × 17 × 10 m",
     "new2026": false,
     "description": "Der neue Disco Jet von Arno Heitmann (2021): Musik-Express mit computergesteuerten Disco-Lichtern, Nebel und moderner LED-Show.",
-    "imageUrl": "",
-    "imageCredit": "",
-    "imageSourceUrl": "https://disco-jet.de/"
+    "imageUrl": "https://www.radioherne.de/externalimages/?crop=0x138x1920x864&dt=202308030804460&resize=1920x864&source=jpg552%2Fpm-cranger-kirmes-2023---disco-jet--stadtmarketing-herne.jpg",
+    "imageCredit": "Stadtmarketing Herne / Radio Herne",
+    "imageSourceUrl": "https://www.radioherne.de/artikel/neuer-disco-jet-gewinnt-crange-preis-1725174"
   }
 ];
  const rides=rawRides.map(ride=>({...ride,id:"muenster-herbstsend26-"+ride.id,zone:"Schlossplatz",priceEuro:null,sourceUrl:ride.imageSourceUrl||lineupSource}));
