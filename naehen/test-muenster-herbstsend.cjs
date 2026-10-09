@@ -9,6 +9,9 @@ assert.equal(c.park.specialMap,undefined);
 assert.deepEqual(Array.from(c.rides,x=>x.name),["Mayday","Airborne","Kanurah","Break Dance","Disco Jet"]);
 assert.equal(new Set(c.rides.map(x=>x.id)).size,5);
 assert(c.rides.every(x=>x.imageUrl&&x.imageCredit&&x.imageSourceUrl), "all five rides must have attributable image URLs");
+assert(c.rides.find(x=>x.id.endsWith("break-dance-bruch")).imageUrl.includes("Break-Dance-Bruch.jpg"));
+assert(c.rides.find(x=>x.id.endsWith("mayday")).imageUrl.includes("Yby3vjj4Fv8"));
+assert(c.park.cardImage.includes("send-in-muenster"), "Münster event cover must be actual fair photograph");
 for(const x of c.rides){assert.equal(x.priceEuro,null);assert(x.id.startsWith("muenster-herbstsend26-"));assert(x.operator);assert(c.worlds[x.id]);}
 const h=fs.readFileSync(path.join(__dirname,"index.html"),"utf8");
 const a=fs.readFileSync(path.join(__dirname,"app.js"),"utf8");
