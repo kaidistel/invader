@@ -23,7 +23,8 @@
     window.NAEHEN_HANSA_PARK,
     window.NAEHEN_SOEST_ALLERHEILIGENKIRMES_2026,
     window.NAEHEN_BOCHOLT_KIRMES_2026,
-    window.NAEHEN_SALZBERGEN_HERBSTKIRMES_2026
+    window.NAEHEN_SALZBERGEN_HERBSTKIRMES_2026,
+    window.NAEHEN_RHEINE_HERBSTKIRMES_2026
   ].filter((module) => module && module.park && module.park.slug);
 
   const PARK_MODULES = {};
@@ -915,6 +916,7 @@
       document.body.style.removeProperty("--park-hero-image");
     }
     rides = fallbackRidesFor(parkSlug).map((ride) => Object.assign({}, ride));
+    activeFairZone = "all";
     selectedRide = null;
     selectedDetailRide = null;
     $("#parkPicker")?.classList.add("hidden");
@@ -1586,14 +1588,35 @@
     });
   }
 
+  let activeFairZone = "all";
+  function renderFairZoneTabs() {
+    const tabs = $("#fairZoneTabs");
+    if (!tabs) return;
+    const zones = activeParkConfig()?.fairZones;
+    if (!Array.isArray(zones) || !zones.length) {
+      tabs.classList.add("hidden");
+      tabs.replaceChildren();
+      activeFairZone = "all";
+      return;
+    }
+    tabs.classList.remove("hidden");
+    tabs.innerHTML = ['all', ...zones].map((zone) => {
+      const count = zone === "all" ? rides.length : rides.filter(ride => ride.zone === zone).length;
+      const label = zone === "all" ? "Alle Plätze" : zone;
+      return '<button type="button" class="fairZoneTab' + (activeFairZone===zone?' active':'') +
+        '" data-fair-zone="' + escapeHtml(zone) + '" aria-pressed="' + (activeFairZone===zone) +
+        '">' + escapeHtml(label) + ' <span>' + count + '</span></button>';
+    }).join('');
+  }
   function renderRides() {
     const container = $("#rides");
     if (!container) return;
 
     renderSpecialVenueMap();
+    renderFairZoneTabs();
     const hasPublicLive = parkHasPublicLiveWaits();
     const visibleRides = rides
-      .filter(ride => !isExcludedRide(ride.name, ride.id, activeParkSlug) && (!onlyFavorites || favorites.includes(ride.id)) && ride.name.toLowerCase().includes(rideSearch))
+      .filter(ride => !isExcludedRide(ride.name, ride.id, activeParkSlug) && (activeFairZone === "all" || ride.zone === activeFairZone) && (!onlyFavorites || favorites.includes(ride.id)) && ride.name.toLowerCase().includes(rideSearch))
       .sort((a, b) => {
         if (!hasPublicLive) {
           if (activeParkConfig()?.sortMode === "configured") return 0;
@@ -2727,6 +2750,12 @@
   });
 
   function bindStaticEvents() {
+    $("#fairZoneTabs")?.addEventListener("click", event => {
+      const button = event.target.closest("[data-fair-zone]");
+      if (!button) return;
+      activeFairZone = button.dataset.fairZone;
+      renderRides();
+    });
     // Delegate clicks through the persistent picker; the chooser is rendered by the app.
     $("#parkPicker")?.addEventListener("click", (event) => {
       const categoryButton = event.target.closest("[data-select-venue-kind]");
