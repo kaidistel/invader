@@ -8,6 +8,7 @@ assert.equal(c.park.startDate,"2026-10-24");assert.equal(c.park.endDate,"2026-11
 assert.equal(c.park.specialMap,undefined);
 assert.deepEqual(Array.from(c.rides,x=>x.name),["Mayday","Airborne","Kanurah","Break Dance","Disco Jet"]);
 assert.equal(new Set(c.rides.map(x=>x.id)).size,5);
+assert(c.rides.every(x=>x.imageUrl&&x.imageCredit&&x.imageSourceUrl), "all five rides must have attributable image URLs");
 for(const x of c.rides){assert.equal(x.priceEuro,null);assert(x.id.startsWith("muenster-herbstsend26-"));assert(x.operator);assert(c.worlds[x.id]);}
 const h=fs.readFileSync(path.join(__dirname,"index.html"),"utf8");
 const a=fs.readFileSync(path.join(__dirname,"app.js"),"utf8");
