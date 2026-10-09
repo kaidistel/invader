@@ -851,20 +851,10 @@
     const count = $("#parkCount");
     if (count) count.textContent = available.length + (available.length === 1 ? " Ziel verfügbar" : " Ziele verfügbar");
 
-    grid.querySelectorAll("[data-park]").forEach((button) => {
-      button.addEventListener("click", () => openPark(button.dataset.park));
-    });
+    // The picker handles card clicks centrally via event delegation.
 
     if(category) hydrateParkPickerArt();
   }
-
-  document.querySelectorAll("[data-select-venue-kind]").forEach(button => {
-    button.addEventListener("click", () => setVenueKind(button.dataset.selectVenueKind));
-  });
-  $("#venueKindBack")?.addEventListener("click", () => {
-    selectedVenueKind = null;
-    renderParkPicker();
-  });
 
   function setVenueKind(kind) {
     if(kind!=="fair" && kind!=="park") return;
@@ -2725,6 +2715,27 @@
   });
 
   function bindStaticEvents() {
+    // Delegate clicks through the persistent picker; the chooser is rendered by the app.
+    $("#parkPicker")?.addEventListener("click", (event) => {
+      const categoryButton = event.target.closest("[data-select-venue-kind]");
+      if (categoryButton) {
+        event.preventDefault();
+        setVenueKind(categoryButton.dataset.selectVenueKind);
+        return;
+      }
+      if (event.target.closest("#venueKindBack")) {
+        event.preventDefault();
+        selectedVenueKind = null;
+        renderParkPicker();
+        return;
+      }
+      const parkButton = event.target.closest(".parkChoice[data-park]");
+      if (parkButton) {
+        event.preventDefault();
+        openPark(parkButton.dataset.park);
+      }
+    });
+
     $("#rideSearch").addEventListener("input", e => { rideSearch = e.target.value.trim().toLowerCase(); renderRides(); });
     $("#favoriteFilter").addEventListener("click", e => { onlyFavorites = !onlyFavorites; e.currentTarget.setAttribute("aria-pressed", onlyFavorites); renderRides(); });
     $("#queueBar").addEventListener("keydown", e => { if(e.key === "Enter" || e.key === " ") { e.preventDefault(); openActive(); } });
