@@ -26,6 +26,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Test Rheine fair onboarding
+        run: node naehen/test-rheine-onboarding.cjs
+
       - name: Fetch NÄHEN live queue data
         run: |
           curl --fail --silent --show-error --location \
