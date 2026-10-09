@@ -1036,7 +1036,7 @@
             return;
           }
         } else {
-          const registration = await navigator.serviceWorker.register("./sw.js?v=91", {
+          const registration = await navigator.serviceWorker.register("./sw.js?v=92", {
             scope: "./",
             updateViaCache: "none"
           });
