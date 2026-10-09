@@ -1024,19 +1024,31 @@
 
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=80", {
-          scope: "./",
-          updateViaCache: "none"
-        });
-        registration.update().catch(() => {});
-
-        let reloadingForUpdate = false;
-        navigator.serviceWorker.addEventListener("controllerchange", () => {
-          if (reloadingForUpdate) return;
-          reloadingForUpdate = true;
-          window.location.reload();
-        });
-      } catch (_) {}
+        if (isDesktopDevMode()) {
+          // ?dev=1 must never be stuck behind an older offline app shell.
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(registrations.filter(registration =>
+            registration.scope.startsWith(new URL("./", location.href).href)
+          ).map(registration => registration.unregister()));
+          if (navigator.serviceWorker.controller && !sessionStorage.getItem("naehen:dev-sw-reset-v90")) {
+            sessionStorage.setItem("naehen:dev-sw-reset-v90", "1");
+            location.reload();
+            return;
+          }
+        } else {
+          const registration = await navigator.serviceWorker.register("./sw.js?v=90", {
+            scope: "./",
+            updateViaCache: "none"
+          });
+          registration.update().catch(() => {});
+          let reloadingForUpdate = false;
+          navigator.serviceWorker.addEventListener("controllerchange", () => {
+            if (reloadingForUpdate) return;
+            reloadingForUpdate = true;
+            location.reload();
+          });
+        }
+      } catch (error) { console.warn("Service Worker update failed", error); }
     }
 
     if (supabaseConfigured()) {
