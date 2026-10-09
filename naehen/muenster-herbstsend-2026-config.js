@@ -79,9 +79,9 @@
     "dimensions": "33 × 13 × 15 m",
     "new2026": false,
     "description": "Dreistöckige Geisterbahn im düster-mexikanischen Stil mit aufwändigen Horror-Szenen und Schreckeffekten. Premiere 2025 auf dem Hamburger Winterdom.",
-    "imageUrl": "",
-    "imageCredit": "",
-    "imageSourceUrl": "https://ride-index.de/2025/11/04/diablos-residenz/",
+    "imageUrl": "https://media.tag24.de/1200x800/s/q/sq1lsbnm585jtr52v2s2xyz3axyjqp2d.jpg",
+    "imageCredit": "TAG24 · Hamburger Winterdom / Diablos Residenz",
+    "imageSourceUrl": "https://www.tag24.de/anzeige/hamburger-winterdom-2025-kostenlose-fahrkarten-newsletter-freizeit-event-3438812",
     "rideIndexUrl": "https://ride-index.de/2025/11/04/diablos-residenz/"
   },
   {
