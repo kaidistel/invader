@@ -1649,3 +1649,15 @@ body[data-park="bocholt-kirmes-2026"] .soestOriginalPlan{
 .venueKindBack{cursor:pointer;color:#ffdc8f;background:transparent;border:0;padding:12px 0;font-weight:800;text-align:left;margin-bottom:6px}
 #venueKindHeading{margin:6px 0 16px;font:800 clamp(25px,4vw,38px)/1.1 'Barlow Condensed',sans-serif}
 @media(max-width:650px){.venueKindChooser{grid-template-columns:1fr;gap:12px;margin:18px 0}.venueKindCard{min-height:132px;padding:22px}}
+
+/* v89 — clear, tappable venue categories with separate list state */
+#venueKindChooser.hidden,#venueListing.hidden{display:none!important}
+#venueKindChooser{display:grid;grid-template-columns:1fr;gap:14px;margin:16px 0 26px}
+#venueKindChooser .venueKindCard{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:flex-start;justify-content:flex-end;min-height:170px;width:100%;padding:24px;border:1px solid #d5e7ca66;border-radius:18px;box-shadow:0 16px 38px #0008;color:#fff;background:linear-gradient(120deg,#103e3b,#102723);text-align:left;cursor:pointer;z-index:1}
+#venueKindChooser .venueKindCard[data-select-venue-kind="fair"]{background:linear-gradient(115deg,#53341b,#1d151a);border-color:#ffd58a80}
+#venueKindChooser .venueKindCard strong{font:900 clamp(28px,5vw,42px)/1 'Barlow Condensed',sans-serif;text-shadow:0 2px 10px #0008}
+#venueKindChooser .venueKindCard span{font-size:14px;color:#e5e9e4}
+#venueKindChooser .venueKindCard:hover,#venueKindChooser .venueKindCard:focus-visible{outline:2px solid #ffcf55;outline-offset:3px;transform:translateY(-2px)}
+#venueListing{width:100%;min-width:0}
+#venueKindBack{display:block;margin:0 0 12px;min-height:44px}
+@media(min-width:650px){#venueKindChooser{grid-template-columns:repeat(2,minmax(0,1fr))}}
