@@ -128,6 +128,8 @@
   window.NAEHEN_BOCHOLT_KIRMES_2026 = {
     park:{
       slug:"bocholt-kirmes-2026",
+      startDate:"2026-10-16",
+      endDate:"2026-10-19",
       kind:"fair",
       name:"Bocholter Kirmes 2026",
       location:"Bocholt · 16.–19.10.2026",
