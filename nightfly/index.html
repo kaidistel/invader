@@ -39,7 +39,7 @@
   <div class="audio-card">
    <div class="audio-head"><strong>Rekommandier-Loop</strong><span id="loop-status">PUFFER LEER</span></div>
    <div class="button-row"><button id="loop-hold" type="button" style="touch-action:none;user-select:none">↻ Reko-Loop halten (G)</button></div>
-   <p class="hint">Der Simulator puffert laufend ungefähr die letzten <b>3 Sekunden</b> deines Mikrofons. <b>G gedrückt halten:</b> letzten Sprachfetzen loopen. Loslassen: sofort stoppen.</p>
+   <p class="hint">Der Simulator merkt sich bis zu <b>3 Sekunden</b> Mikrofonton. <b>G gedrückt halten:</b> Der zuletzt gesprochene Abschnitt wird sofort eingefroren und ohne lange Pausen wiederholt – auch wenn er nur eine halbe Sekunde dauert. <b>Loslassen:</b> sofort stoppen.</p>
   </div>
  </section>
  <button id="estop" class="emergency">■ NOT-HALT <kbd>Leertaste</kbd></button>
@@ -47,5 +47,5 @@
  </fieldset>
  <p class="footnote">Interaktive Fahrgeschäft-Simulation · vereinfachte Dynamik</p>
 </aside></main>
-<dialog id="help-dialog"><h2>Deine Nightfly-Steuerung</h2><ol><li><b>Bügel öffnen / schließen</b> mit O / L (C umschalten). Alle Bügel schließen, dann hebt <b>Fahrstellung</b> das Gestell an.</li><li>Gondelkreuz über den Regler in beide Richtungen bis 12 U/min drehen.</li><li><b>Pendeln</b> oder <b>Überschlag</b> wählen; ←/→ steuern den Arm direkt. A/S drehen das Gondelkreuz.</li><li><b>Frei schwingen</b> löst die Gondeln. <b>Festbremsen</b> hält ihre aktuellen Winkel.</li><li><b>Ladestellung</b> parkt die Antriebe und senkt die Anlage ab.</li><li><b>Audio:</b> T halten = Push-to-Talk. G halten = die letzten ca. 3 Sekunden deiner Rekommandation loopen. YouTube-Musik läuft unabhängig davon.</li></ol><p>P: Pause · R/B: Gondeln frei/fest · Leertaste: Not-Halt</p><p>Die Gondeln reagieren auf Schwerkraft und bewegte Aufhängungen. Vollständige Körperkollisionen werden nicht simuliert.</p><button id="help-close" class="accent">Los geht’s</button></dialog>
+<dialog id="help-dialog"><h2>Deine Nightfly-Steuerung</h2><ol><li><b>Bügel öffnen / schließen</b> mit O / L (C umschalten). Alle Bügel schließen, dann hebt <b>Fahrstellung</b> das Gestell an.</li><li>Gondelkreuz über den Regler in beide Richtungen bis 12 U/min drehen.</li><li><b>Pendeln</b> oder <b>Überschlag</b> wählen; ←/→ steuern den Arm direkt. A/S drehen das Gondelkreuz.</li><li><b>Frei schwingen</b> löst die Gondeln. <b>Festbremsen</b> hält ihre aktuellen Winkel.</li><li><b>Ladestellung</b> parkt die Antriebe und senkt die Anlage ab.</li><li><b>Audio:</b> T halten = Push-to-Talk. G halten = den letzten Sprachfetzen sofort und lückenlos wiederholen. YouTube-Musik läuft unabhängig davon.</li></ol><p>P: Pause · R/B: Gondeln frei/fest · Leertaste: Not-Halt</p><p>Die Gondeln reagieren auf Schwerkraft und bewegte Aufhängungen. Vollständige Körperkollisionen werden nicht simuliert.</p><button id="help-close" class="accent">Los geht’s</button></dialog>
 <script type="module" src="./src/main.js"></script></body></html>
