@@ -203,7 +203,7 @@ document.querySelectorAll('[data-camera]').forEach(b=>b.onclick=()=>chooseCamera
 $('night').onclick=()=>{night=!night;scene.background.set(night?'#17283f':'#607f89');scene.fog.color.copy(scene.background);sun.intensity=night?.2:3.2;hemi.intensity=night?.55:2.2;renderer.toneMappingExposure=night?1.25:1.0;$('night').classList.toggle('selected',night);};
 
 let micStream=null,micContext=null,micSource=null,micGain=null,micArmed=false,talkHeld=false;
-let loopHeld=false,loopSource=null,loopCapture=null,loopSilentGain=null;
+let loopHeld=false,loopSource=null,loopCapture=null,loopSilentGain=null,loopKeyDown=false;
 let loopSamples=null,loopWrite=0,loopAvailable=0;
 const LOOP_SECONDS=3;
 function loopStatus(){
@@ -303,7 +303,7 @@ function stopLiveLoop(){
 function playLiveLoop(){
  if(!micArmed||!micContext){message('Bitte zuerst das Mikrofon freigeben.');return false;}
  if(!loopSamples||loopAvailable<Math.floor(micContext.sampleRate*.2)){
-  message('Noch kein Sprachpuffer vorhanden. Sprich kurz ins Mikro und versuche es erneut.');return false;
+  message('Noch kein Sprachpuffer: erst kurz sprechen, dann G gedrückt halten.');return false;
  }
  stopLiveLoop();
  const length=loopAvailable,buffer=micContext.createBuffer(1,length,micContext.sampleRate);
@@ -350,19 +350,29 @@ document.addEventListener('keydown',async e=>{
   if(!micArmed){const ok=await armMicrophone();if(!ok)return;}
   talkHeld=true;refreshMicGain();return;
  }
- if(binding.action==='push-loop'){if(!loopHeld&&!e.repeat)playLiveLoop();return;}
+ if(binding.action==='push-loop'){
+  if(e.repeat)return;
+  loopKeyDown=true;
+  if(!micArmed){
+   message('Mikrofon wird für den Reko-Loop freigegeben …');
+   const ok=await armMicrophone();
+   if(!ok||!loopKeyDown)return;
+  }
+  if(loopKeyDown&&!loopHeld)playLiveLoop();
+  return;
+ }
  runShortcut(binding.action);
 });
 document.addEventListener('keyup',e=>{
  const key=e.key.toLowerCase();
  if(key==='t'){talkHeld=false;refreshMicGain();}
- if(key==='g'&&loopHeld)stopLiveLoop();
+ if(key==='g'){loopKeyDown=false;if(loopHeld)stopLiveLoop();}
  if(['arrowleft','arrowright'].includes(key)){
   heldArrows.delete(key);
   state.manual=(heldArrows.has('arrowright')?1:0)-(heldArrows.has('arrowleft')?1:0);
  }
 });
-window.addEventListener('blur',()=>{heldArrows.clear();state.manual=0;talkHeld=false;refreshMicGain();if(loopHeld)stopLiveLoop();});
+window.addEventListener('blur',()=>{loopKeyDown=false;heldArrows.clear();state.manual=0;talkHeld=false;refreshMicGain();if(loopHeld)stopLiveLoop();});
 window.addEventListener('beforeunload',()=>{if(loopSource)try{loopSource.stop();}catch{}if(micStream)for(const track of micStream.getTracks())track.stop();});
 for(const binding of HOTKEYS){
  const button=binding.action.startsWith('camera-')?document.querySelector('[data-camera="'+binding.action.slice(7)+'"]'):$(binding.action);
