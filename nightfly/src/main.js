@@ -6,6 +6,7 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { RideState, PHYSICS, clamp, wrap, integrateGondola } from './dynamics.js';
 
 import { HOTKEYS, shortcutFor } from './hotkeys.js';
+import { extractSpeechLoop } from './reko-loop.js';
 
 const $=id=>document.getElementById(id);
 const state=new RideState(), X=new THREE.Vector3(1,0,0), Y=new THREE.Vector3(0,1,0), Z=new THREE.Vector3(0,0,1);
@@ -203,11 +204,11 @@ document.querySelectorAll('[data-camera]').forEach(b=>b.onclick=()=>chooseCamera
 $('night').onclick=()=>{night=!night;scene.background.set(night?'#17283f':'#607f89');scene.fog.color.copy(scene.background);sun.intensity=night?.2:3.2;hemi.intensity=night?.55:2.2;renderer.toneMappingExposure=night?1.25:1.0;$('night').classList.toggle('selected',night);};
 
 let micStream=null,micContext=null,micSource=null,micGain=null,micArmed=false,talkHeld=false;
-let loopHeld=false,loopSource=null,loopCapture=null,loopSilentGain=null,loopKeyDown=false;
+let loopHeld=false,loopSource=null,loopCapture=null,loopSilentGain=null,loopOutputGain=null,loopKeyDown=false,loopDuration=0;
 let loopSamples=null,loopWrite=0,loopAvailable=0;
 const LOOP_SECONDS=3;
 function loopStatus(){
- $('loop-status').textContent=loopHeld?'LOOP LIVE':loopAvailable?'PUFFER BEREIT':'PUFFER LEER';
+ $('loop-status').textContent=loopHeld?'LOOP LIVE · '+loopDuration.toFixed(2).replace('.',',')+' s':loopAvailable?'PUFFER BEREIT':'PUFFER LEER';
  $('loop-status').classList.toggle('live',loopHeld);
 }
 function captureLoopAudio(event){
@@ -266,7 +267,7 @@ async function disarmMicrophone(){
  $('mic-toggle').textContent='🎙 Mikrofon freigeben';refreshMicGain();
 }
 $('mic-toggle').onclick=async()=>{if(micArmed){await disarmMicrophone();message('Mikrofon ausgeschaltet.');}else await armMicrophone();};
-$('mic-volume').oninput=e=>{$('mic-volume-value').textContent=Number(e.target.value)+' %';refreshMicGain();};
+$('mic-volume').oninput=e=>{$('mic-volume-value').textContent=Number(e.target.value)+' %';if(loopOutputGain)loopOutputGain.gain.value=Number(e.target.value)/100;refreshMicGain();};
 
 function youtubeId(value){
  try{
@@ -296,26 +297,41 @@ $('youtube-stop').onclick=()=>{stopYouTube();message('YouTube-Musik gestoppt.');
 $('youtube-url').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();loadYouTube();}});
 
 function stopLiveLoop(){
- loopHeld=false;
+ loopHeld=false;loopDuration=0;
  if(loopSource){try{loopSource.stop();}catch{}try{loopSource.disconnect();}catch{}loopSource=null;}
+ if(loopOutputGain){try{loopOutputGain.disconnect();}catch{}loopOutputGain=null;}
  loopStatus();
 }
 function playLiveLoop(){
  if(!micArmed||!micContext){message('Bitte zuerst das Mikrofon freigeben.');return false;}
  if(!loopSamples||loopAvailable<Math.floor(micContext.sampleRate*.2)){
-  message('Noch kein Sprachpuffer: erst kurz sprechen, dann G gedrückt halten.');return false;
+  message('Erst kurz ins Mikrofon sprechen, dann G gedrückt halten.');return false;
  }
+ // Snapshot at the exact key/button press. Recording after this point never changes playback.
+ const history=new Float32Array(loopAvailable);
+ const historyStart=(loopWrite-loopAvailable+loopSamples.length)%loopSamples.length;
+ for(let i=0;i<loopAvailable;i++)history[i]=loopSamples[(historyStart+i)%loopSamples.length];
+ const phrase=extractSpeechLoop(history,micContext.sampleRate);
+ if(!phrase){message('Kein Sprachfetzen erkannt – sprich kurz, dann G halten.');return false;}
  stopLiveLoop();
- const length=loopAvailable,buffer=micContext.createBuffer(1,length,micContext.sampleRate);
- const output=buffer.getChannelData(0);
- const start=(loopWrite-length+loopSamples.length)%loopSamples.length;
- for(let i=0;i<length;i++)output[i]=loopSamples[(start+i)%loopSamples.length];
+ const buffer=micContext.createBuffer(1,phrase.length,micContext.sampleRate);
+ buffer.copyToChannel(phrase,0);
  loopSource=micContext.createBufferSource();
- loopSource.buffer=buffer;loopSource.loop=true;loopSource.connect(micContext.destination);
- try{void micContext.resume();loopSource.start();}catch(error){
-  console.error(error);stopLiveLoop();message('Rekommandier-Loop konnte nicht abgespielt werden.');return false;
+ loopSource.buffer=buffer;
+ loopSource.loop=true;
+ loopOutputGain=micContext.createGain();
+ loopOutputGain.gain.value=Number($('mic-volume').value)/100;
+ loopSource.connect(loopOutputGain).connect(micContext.destination);
+ try{
+  if(micContext.state!=='running')void micContext.resume();
+  loopSource.start(0); // starts on the current audio frame; loops at the actual phrase length
+ }catch(error){
+  console.error(error);stopLiveLoop();message('Rekommandier-Loop konnte nicht gestartet werden.');return false;
  }
- loopHeld=true;loopStatus();return true;
+ loopHeld=true;
+ loopDuration=phrase.length/micContext.sampleRate;
+ loopStatus();
+ return true;
 }
 const loopButton=$('loop-hold');
 loopButton.addEventListener('pointerdown',e=>{
@@ -352,13 +368,14 @@ document.addEventListener('keydown',async e=>{
  }
  if(binding.action==='push-loop'){
   if(e.repeat)return;
-  loopKeyDown=true;
+  // The first permission prompt can't contain audio from before the keypress.
   if(!micArmed){
-   message('Mikrofon wird für den Reko-Loop freigegeben …');
    const ok=await armMicrophone();
-   if(!ok||!loopKeyDown)return;
+   if(ok)message('Mikrofon bereit: erst kurz sprechen, dann G halten.');
+   return;
   }
-  if(loopKeyDown&&!loopHeld)playLiveLoop();
+  loopKeyDown=true;
+  if(!loopHeld)playLiveLoop();
   return;
  }
  runShortcut(binding.action);
