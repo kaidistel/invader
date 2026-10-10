@@ -212,7 +212,8 @@ function loopStatus(){
  $('loop-status').classList.toggle('live',loopHeld);
 }
 function captureLoopAudio(event){
- if(!loopSamples)return;
+ // Never record the speaker's own loop back into the next snippet.
+ if(!loopSamples||loopHeld)return;
  const input=event.inputBuffer.getChannelData(0);
  for(let i=0;i<input.length;i++){
   loopSamples[loopWrite]=input[i];
