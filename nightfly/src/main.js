@@ -203,8 +203,23 @@ document.querySelectorAll('[data-camera]').forEach(b=>b.onclick=()=>chooseCamera
 $('night').onclick=()=>{night=!night;scene.background.set(night?'#17283f':'#607f89');scene.fog.color.copy(scene.background);sun.intensity=night?.2:3.2;hemi.intensity=night?.55:2.2;renderer.toneMappingExposure=night?1.25:1.0;$('night').classList.toggle('selected',night);};
 
 let micStream=null,micContext=null,micSource=null,micGain=null,micArmed=false,talkHeld=false;
-let micRecorder=null,micChunks=[],loopObjectUrl=null,loopHeld=false;
-const LOOP_BUFFER_MS=3000,RECORDER_SLICE_MS=500;
+let loopHeld=false,loopSource=null,loopCapture=null,loopSilentGain=null;
+let loopSamples=null,loopWrite=0,loopAvailable=0;
+const LOOP_SECONDS=3;
+function loopStatus(){
+ $('loop-status').textContent=loopHeld?'LOOP LIVE':loopAvailable?'PUFFER BEREIT':'PUFFER LEER';
+ $('loop-status').classList.toggle('live',loopHeld);
+}
+function captureLoopAudio(event){
+ if(!loopSamples)return;
+ const input=event.inputBuffer.getChannelData(0);
+ for(let i=0;i<input.length;i++){
+  loopSamples[loopWrite]=input[i];
+  loopWrite=(loopWrite+1)%loopSamples.length;
+ }
+ loopAvailable=Math.min(loopSamples.length,loopAvailable+input.length);
+ if(!loopHeld)loopStatus();
+}
 function refreshMicGain(){
  if(micGain)micGain.gain.value=talkHeld&&micArmed?Number($('mic-volume').value)/100:0;
  $('mic-status').textContent=talkHeld&&micArmed?'LIVE':micArmed?'BEREIT':'AUS';
@@ -221,20 +236,15 @@ async function armMicrophone(){
   micSource=micContext.createMediaStreamSource(micStream);
   micGain=micContext.createGain();micGain.gain.value=0;
   micSource.connect(micGain).connect(micContext.destination);
-  if(window.MediaRecorder){
-   micChunks=[];
-   micRecorder=new MediaRecorder(micStream);
-   micRecorder.ondataavailable=e=>{
-    if(!e.data?.size)return;
-    micChunks.push({blob:e.data,time:performance.now()});
-    const cutoff=performance.now()-LOOP_BUFFER_MS-RECORDER_SLICE_MS;
-    while(micChunks.length&&micChunks[0].time<cutoff)micChunks.shift();
-    $('loop-status').textContent=micChunks.length?'PUFFER BEREIT':'PUFFER LEER';
-   };
-   micRecorder.start(RECORDER_SLICE_MS);
-  }else{
-   $('loop-status').textContent='NICHT VERFÜGBAR';
-  }
+  // Raw PCM ring buffer avoids invalid audio containers from partial MediaRecorder blobs.
+  loopSamples=new Float32Array(Math.ceil(micContext.sampleRate*LOOP_SECONDS));
+  loopWrite=0;loopAvailable=0;
+  loopCapture=micContext.createScriptProcessor(2048,1,1);
+  loopCapture.onaudioprocess=captureLoopAudio;
+  loopSilentGain=micContext.createGain();loopSilentGain.gain.value=0;
+  micSource.connect(loopCapture);
+  loopCapture.connect(loopSilentGain).connect(micContext.destination);
+  loopStatus();
   micArmed=true;$('mic-toggle').textContent='🎙 Mikrofon freigegeben';
   refreshMicGain();message('Mikrofon freigegeben. T gedrückt halten zum Rekommandieren.');
   return true;
@@ -244,9 +254,11 @@ async function armMicrophone(){
 }
 async function disarmMicrophone(){
  talkHeld=false;micArmed=false;
- if(micRecorder){try{if(micRecorder.state!=='inactive')micRecorder.stop();}catch{}micRecorder=null;}
- micChunks=[];
  stopLiveLoop();
+ if(loopCapture){loopCapture.onaudioprocess=null;try{loopCapture.disconnect();}catch{}loopCapture=null;}
+ if(loopSilentGain){try{loopSilentGain.disconnect();}catch{}loopSilentGain=null;}
+ loopSamples=null;loopWrite=0;loopAvailable=0;
+ loopStatus();
  if(micSource){try{micSource.disconnect();}catch{}micSource=null;}
  if(micGain){try{micGain.disconnect();}catch{}micGain=null;}
  if(micStream){for(const track of micStream.getTracks())track.stop();micStream=null;}
@@ -284,26 +296,35 @@ $('youtube-stop').onclick=()=>{stopYouTube();message('YouTube-Musik gestoppt.');
 $('youtube-url').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();loadYouTube();}});
 
 function stopLiveLoop(){
- const a=$('loop-audio');a.pause();try{a.currentTime=0;}catch{}
  loopHeld=false;
- if(loopObjectUrl){URL.revokeObjectURL(loopObjectUrl);loopObjectUrl=null;}
- a.removeAttribute('src');a.load();
- $('loop-status').textContent=micChunks.length?'PUFFER BEREIT':'PUFFER LEER';
- $('loop-status').classList.remove('live');
+ if(loopSource){try{loopSource.stop();}catch{}try{loopSource.disconnect();}catch{}loopSource=null;}
+ loopStatus();
 }
 function playLiveLoop(){
- if(!micArmed){message('Bitte zuerst das Mikrofon freigeben.');return false;}
- if(!window.MediaRecorder){message('Der Browser unterstützt den Rekommandier-Loop leider nicht.');return false;}
- if(!micChunks.length){message('Noch kein Sprachpuffer vorhanden. Sprich kurz ins Mikro und versuche es erneut.');return false;}
- const type=micChunks.find(c=>c.blob.type)?.blob.type||'audio/webm';
- const blob=new Blob(micChunks.map(c=>c.blob),{type});
- if(loopObjectUrl)URL.revokeObjectURL(loopObjectUrl);
- loopObjectUrl=URL.createObjectURL(blob);
- const a=$('loop-audio');a.src=loopObjectUrl;a.loop=true;loopHeld=true;
- const p=a.play();if(p?.catch)p.catch(()=>message('Rekommandier-Loop konnte nicht abgespielt werden.'));
- $('loop-status').textContent='LOOP LIVE';$('loop-status').classList.add('live');
- return true;
+ if(!micArmed||!micContext){message('Bitte zuerst das Mikrofon freigeben.');return false;}
+ if(!loopSamples||loopAvailable<Math.floor(micContext.sampleRate*.2)){
+  message('Noch kein Sprachpuffer vorhanden. Sprich kurz ins Mikro und versuche es erneut.');return false;
+ }
+ stopLiveLoop();
+ const length=loopAvailable,buffer=micContext.createBuffer(1,length,micContext.sampleRate);
+ const output=buffer.getChannelData(0);
+ const start=(loopWrite-length+loopSamples.length)%loopSamples.length;
+ for(let i=0;i<length;i++)output[i]=loopSamples[(start+i)%loopSamples.length];
+ loopSource=micContext.createBufferSource();
+ loopSource.buffer=buffer;loopSource.loop=true;loopSource.connect(micContext.destination);
+ try{void micContext.resume();loopSource.start();}catch(error){
+  console.error(error);stopLiveLoop();message('Rekommandier-Loop konnte nicht abgespielt werden.');return false;
+ }
+ loopHeld=true;loopStatus();return true;
 }
+const loopButton=$('loop-hold');
+loopButton.addEventListener('pointerdown',e=>{
+ if(e.button!==0)return;
+ e.preventDefault();loopButton.setPointerCapture(e.pointerId);
+ if(!loopHeld)playLiveLoop();
+});
+for(const event of ['pointerup','pointercancel','lostpointercapture'])
+ loopButton.addEventListener(event,()=>{if(loopHeld)stopLiveLoop();});
 const heldArrows=new Set();
 function applyManualKeys(){
  if(state.ready&&!state.paused){state.mode='free';state.manual=(heldArrows.has('arrowright')?1:0)-(heldArrows.has('arrowleft')?1:0);}
@@ -342,7 +363,7 @@ document.addEventListener('keyup',e=>{
  }
 });
 window.addEventListener('blur',()=>{heldArrows.clear();state.manual=0;talkHeld=false;refreshMicGain();if(loopHeld)stopLiveLoop();});
-window.addEventListener('beforeunload',()=>{if(loopObjectUrl)URL.revokeObjectURL(loopObjectUrl);if(micStream)for(const track of micStream.getTracks())track.stop();});
+window.addEventListener('beforeunload',()=>{if(loopSource)try{loopSource.stop();}catch{}if(micStream)for(const track of micStream.getTracks())track.stop();});
 for(const binding of HOTKEYS){
  const button=binding.action.startsWith('camera-')?document.querySelector('[data-camera="'+binding.action.slice(7)+'"]'):$(binding.action);
  if(button){button.dataset.key=binding.label;button.title=binding.description+' ('+binding.label+')';button.setAttribute('aria-keyshortcuts',binding.key===' '?'Space':binding.label);}
