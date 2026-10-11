@@ -7,7 +7,13 @@ assert.ok(a,"Module missing");assert.equal(a.park.slug,"hamburg-winterdom-2026")
 assert.equal(a.park.kind,"fair");assert.equal(a.park.startDate,"2026-11-06");assert.equal(a.park.endDate,"2026-12-06");
 assert.equal(a.park.specialMap,undefined,"Explicit no-map mode must be respected");
 assert.equal(a.park.liveWaits,false);assert.equal(a.park.supportsPostedWait,false);
-assert.equal(a.rides.length,36);assert.equal(new Set(Array.from(a.rides,x=>x.id)).size,36);
+assert.equal(a.rides.length,36);
+assert.equal(a.rides.filter(r=>!r.imageUrl||!r.imageCredit||!r.imageSourceUrl).length,0,
+  "Every ride must have an attributed image");
+assert.ok(a.rides.find(x=>x.id==="winterdom26-break-dancer-no-2").imageUrl.includes("breakdancer-das-original.de"),
+  "Never use Bonner's photo for the Dreher-Vespermann Break Dancer");
+assert.ok(a.rides.find(x=>x.id==="winterdom26-spass-allee").imageUrl.includes("2025"),
+  "Use the redesigned 2025 Spaßallee, not old Crazy Town");assert.equal(new Set(Array.from(a.rides,x=>x.id)).size,36);
 assert.equal(a.rides.filter(x=>x.new2026).length,4);
 assert.equal(new Set(Object.values(a.fonts).map(x=>x.fontFamily)).size,36);
 for(const r of a.rides){
@@ -18,7 +24,7 @@ for(const r of a.rides){
 assert.equal(a.rides.find(x=>x.id==="winterdom26-break-dancer-no-2").operator,"Dreher-Vespermann");
 assert.ok(a.rides.find(x=>x.id==="winterdom26-infinity-2").imageSourceUrl.includes("infinity-2"));
 assert.ok(a.rides.find(x=>x.id==="winterdom26-mayday").imageUrl.includes("mayday-the-ultimate-thrill.webp"));
-assert.ok(fs.readFileSync(path.join(root,"index.html"),"utf8").includes("hamburg-winterdom-2026-config.js?v=104"));
+assert.ok(fs.readFileSync(path.join(root,"index.html"),"utf8").includes("hamburg-winterdom-2026-config.js?v=105"));
 assert.ok(fs.readFileSync(path.join(root,"app.js"),"utf8").includes("window.NAEHEN_HAMBURG_WINTERDOM_2026"));
-assert.ok(fs.readFileSync(path.join(root,"sw.js"),"utf8").includes("naehen-v104"));
+assert.ok(fs.readFileSync(path.join(root,"sw.js"),"utf8").includes("naehen-v105"));
 console.log("PASS Winterdom 2026: 36 rides, 5 categories, 4 debut markers, no map, manual prices, themed styles and PWA cache.");
