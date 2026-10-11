@@ -1720,3 +1720,25 @@ body[data-park="gallimarkt-leer-2026"] .rideArt{filter:saturate(1.10) contrast(1
 body[data-park="gallimarkt-leer-2026"] .btn.primary{background:linear-gradient(150deg,#f2d395,#d69d58);color:#1d1a18;border-color:#f6daa6}
 body[data-park="gallimarkt-leer-2026"] .brand b{color:#f0bd74}
 @media(max-width:560px){body[data-park="gallimarkt-leer-2026"] .hero h1{font-size:clamp(27px,7vw,40px)}}
+
+/* Hamburger Winterdom 2026 — kalte Hafenluft, warme Lichterketten, keine Standard-Kirmes-Optik. */
+body[data-park="hamburg-winterdom-2026"]{--accent:#f4c881;--accent2:#b2edf1;--line:#58687a}
+body[data-park="hamburg-winterdom-2026"] .parkAtmosphere{
+ background:linear-gradient(180deg,#07162488 0%,#0b1527dc 45%,#080e1bf5 88%),var(--park-hero-image) 50% 40%/cover no-repeat;
+}
+body[data-park="hamburg-winterdom-2026"] .hero{
+ background:radial-gradient(circle at 92% 9%,#ffcb7752,transparent 37%),linear-gradient(120deg,#243e54,#172437 45%,#382337 100%);
+ border:1px solid #f1ce8c85;box-shadow:inset 0 1px #f7d89b7d,0 12px 36px #0005;
+}
+body[data-park="hamburg-winterdom-2026"] .hero:before{background:linear-gradient(180deg,#fde8aa 0 32%,#b3ecfa 32% 67%,#c75b80 67%)}
+body[data-park="hamburg-winterdom-2026"] .hero h1{font-family:'Rye',Georgia,serif;letter-spacing:.015em;text-shadow:0 2px 10px #0009}
+body[data-park="hamburg-winterdom-2026"] .sectionHead h2{font-family:'DM Serif Display',Georgia,serif}
+body[data-park="hamburg-winterdom-2026"] .ride{background:#192536;border:1px solid #d2b88988;box-shadow:inset 0 1px #ffefc71f}
+body[data-park="hamburg-winterdom-2026"] .ride:after{background:linear-gradient(0deg,#0a1727 3%,#112338d9 45%,#101d2c20 100%)}
+body[data-park="hamburg-winterdom-2026"] .rideArt{filter:saturate(1.08) contrast(1.07) brightness(.84)}
+body[data-park="hamburg-winterdom-2026"] .ride .zone{color:#f3d7a2}
+body[data-park="hamburg-winterdom-2026"] .ridePricePill{border-color:#eec68f88}
+body[data-park="hamburg-winterdom-2026"] .btn.primary{background:linear-gradient(160deg,#ffe6b0,#dfa755);color:#172338;border-color:#ffdfa4}
+body[data-park="hamburg-winterdom-2026"] .brand b{color:#f5c77e}
+body[data-park="hamburg-winterdom-2026"] .fairZoneTab.active{background:#354f65;color:#fff3d4;border-color:#f0cb89}
+@media(max-width:560px){body[data-park="hamburg-winterdom-2026"] .hero h1{font-size:clamp(27px,6.8vw,39px)}}

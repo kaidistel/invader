@@ -3401,3 +3401,76 @@
  #rideSheet[data-park="gallimarkt-leer-2026"] .worldArt{height:300px!important}
  #rideSheet[data-park="gallimarkt-leer-2026"] #rideTitle{font-size:clamp(25px,6.8vw,37px)!important}
 }
+
+/* Hamburger Winterdom 2026 — eigene Ride-Portale mit individuellen Nachtlicht-Paletten. */
+#rideSheet[data-park="hamburg-winterdom-2026"]{--wd-lamp:#f9d59d;--wd-glow:#af74d3;--wd-ink:#152a41}
+#rideSheet[data-park="hamburg-winterdom-2026"] .sheetCard{
+ padding-top:296px;border-top:4px solid var(--wd-lamp)!important;color:#fff5e9!important;
+ background:radial-gradient(circle at 92% 9%,color-mix(in srgb,var(--wd-glow) 22%,transparent),transparent 40%),linear-gradient(157deg,var(--wd-ink),#0b1221 74%)!important;
+}
+#rideSheet[data-park="hamburg-winterdom-2026"] .worldArt{
+ display:block!important;position:absolute!important;inset:0 0 auto!important;
+ width:100%!important;height:350px!important;border:0!important;border-radius:0!important;
+ overflow:hidden!important;clip-path:polygon(0 0,100% 0,100% 93%,88% 99%,75% 95%,59% 100%,37% 95%,16% 100%,0 94%)!important;
+ background:repeating-linear-gradient(90deg,#f6db9b33 0 2px,transparent 2px 39px),linear-gradient(135deg,var(--wd-ink),#09111c)!important;
+}
+#rideSheet[data-park="hamburg-winterdom-2026"] .worldArt img{
+ width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 45%;
+ filter:saturate(1.06) contrast(1.05) brightness(.9)!important;
+}
+#rideSheet[data-park="hamburg-winterdom-2026"] .worldArt:after{
+ content:"";position:absolute;inset:0!important;
+ background:linear-gradient(180deg,#090f1b00 8%,#090f1b18 45%,#0b1428b3 78%,#0b1428 100%)!important;
+}
+#rideSheet[data-park="hamburg-winterdom-2026"] #rideZone{
+ color:var(--wd-lamp)!important;letter-spacing:.13em;font-size:11px!important;
+}
+#rideSheet[data-park="hamburg-winterdom-2026"] #rideTitle{
+ position:relative;z-index:2;margin-top:10px!important;padding:12px 14px!important;
+ color:#fff6da!important;font-family:var(--attraction-font,'Rye',serif)!important;
+ border-left:6px solid var(--wd-lamp)!important;
+ background:linear-gradient(90deg,color-mix(in srgb,var(--wd-ink) 96%,black),transparent)!important;
+ text-shadow:0 3px 9px #030914,0 0 18px var(--wd-glow)!important;line-height:1.03!important;
+}
+#rideSheet[data-park="hamburg-winterdom-2026"] .rideFactCard.operator{border-color:var(--wd-lamp)!important}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-alpencoaster"]{--wd-lamp:#aee6ff;--wd-glow:#c047e4;--wd-ink:#203448}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-wilde-maus"]{--wd-lamp:#ffe29f;--wd-glow:#f25e78;--wd-ink:#203448}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-kuddel-der-hai"]{--wd-lamp:#7ef6ef;--wd-glow:#2facc4;--wd-ink:#203448}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-predator"]{--wd-lamp:#d2ff73;--wd-glow:#f46870;--wd-ink:#172539}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-mondlift"]{--wd-lamp:#a9f8f9;--wd-glow:#618eff;--wd-ink:#172539}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-shaker"]{--wd-lamp:#f9b6ea;--wd-glow:#a454e6;--wd-ink:#172539}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-break-dancer-no-2"]{--wd-lamp:#fbce8e;--wd-glow:#ff468c;--wd-ink:#172539}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-dom-dancer"]{--wd-lamp:#fbd36e;--wd-glow:#ed549f;--wd-ink:#172539}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-bayrisches-riesenrad"]{--wd-lamp:#fae4a0;--wd-glow:#c26d3b;--wd-ink:#172539}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-ballonfahrt"]{--wd-lamp:#fbbdb9;--wd-glow:#5a9ee8;--wd-ink:#172539}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-nordic-tower"]{--wd-lamp:#96f5ea;--wd-glow:#428caf;--wd-ink:#172539}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-evolution"]{--wd-lamp:#d0a4ff;--wd-glow:#e675b1;--wd-ink:#172539}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-mayday"]{--wd-lamp:#fff1a2;--wd-glow:#9cdeff;--wd-ink:#172539}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-infinity-2"]{--wd-lamp:#ffe5a5;--wd-glow:#9b44ec;--wd-ink:#172539}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-air-power"]{--wd-lamp:#a6edff;--wd-glow:#d44988;--wd-ink:#172539}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-take-off"]{--wd-lamp:#fbc970;--wd-glow:#cd473a;--wd-ink:#172539}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-hip-hop-jumper"]{--wd-lamp:#fe9bd0;--wd-glow:#8d80ff;--wd-ink:#172539}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-wellenflug"]{--wd-lamp:#f3df8c;--wd-glow:#47a9df;--wd-ink:#172539}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-viva-mexico"]{--wd-lamp:#edc7a5;--wd-glow:#c34a75;--wd-ink:#172539}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-love-dream"]{--wd-lamp:#fdbbb6;--wd-glow:#bf74fa;--wd-ink:#172539}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-action"]{--wd-lamp:#afffff;--wd-glow:#4498ff;--wd-ink:#172539}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-stardust-2"]{--wd-lamp:#f6c0ec;--wd-glow:#825bcf;--wd-ink:#213049}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-star-club"]{--wd-lamp:#ffdf88;--wd-glow:#d75073;--wd-ink:#213049}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-bumper-1"]{--wd-lamp:#ffd08a;--wd-glow:#5fd1c8;--wd-ink:#213049}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-phaenomenon"]{--wd-lamp:#aef5ed;--wd-glow:#9e5ee9;--wd-ink:#233244}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-glasirrgarten"]{--wd-lamp:#c8efff;--wd-glow:#8579fd;--wd-ink:#233244}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-der-grosse-irrgarten"]{--wd-lamp:#ffdf9b;--wd-glow:#9fbeff;--wd-ink:#233244}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-spass-allee"]{--wd-lamp:#ffb2eb;--wd-glow:#ef487c;--wd-ink:#233244}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-fuzzys-lachsaloon"]{--wd-lamp:#edda96;--wd-glow:#6ecdc2;--wd-ink:#233244}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-happy-family"]{--wd-lamp:#d1f8a5;--wd-glow:#7da7e8;--wd-ink:#233244}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-die-verrueckte-farm"]{--wd-lamp:#ffd49b;--wd-glow:#68bf86;--wd-ink:#233244}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-car-wash"]{--wd-lamp:#beecff;--wd-glow:#74a0d5;--wd-ink:#233244}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-rotor"]{--wd-lamp:#f2deb5;--wd-glow:#d65d82;--wd-ink:#233244}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-doom-dark-ride"]{--wd-lamp:#f0ecff;--wd-glow:#aa45b8;--wd-ink:#24182e}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-spuk"]{--wd-lamp:#abbcff;--wd-glow:#4a3387;--wd-ink:#24182e}
+#rideSheet[data-park="hamburg-winterdom-2026"][data-theme="winterdom26-halloween"]{--wd-lamp:#ffc981;--wd-glow:#df4a3d;--wd-ink:#24182e}
+@media(max-width:560px){
+ #rideSheet[data-park="hamburg-winterdom-2026"] .sheetCard{padding-top:249px!important}
+ #rideSheet[data-park="hamburg-winterdom-2026"] .worldArt{height:300px!important}
+ #rideSheet[data-park="hamburg-winterdom-2026"] #rideTitle{font-size:clamp(25px,6.5vw,37px)!important}
+}
