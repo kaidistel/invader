@@ -25,7 +25,8 @@
     window.NAEHEN_BOCHOLT_KIRMES_2026,
     window.NAEHEN_SALZBERGEN_HERBSTKIRMES_2026,
     window.NAEHEN_RHEINE_HERBSTKIRMES_2026,
-    window.NAEHEN_MUENSTER_HERBSTSEND_2026
+    window.NAEHEN_MUENSTER_HERBSTSEND_2026,
+    window.NAEHEN_GALLIMARKT_LEER_2026
   ].filter((module) => module && module.park && module.park.slug);
 
   const PARK_MODULES = {};
