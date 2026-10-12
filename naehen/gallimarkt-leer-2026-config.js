@@ -1,7 +1,7 @@
 (() => {
   "use strict";
   // Quellen: Stadt Leer (Datum), Gallimarkt.net (Beschickung & exakt zugeordnete Bilder).
-  // Kein specialMap bis zur ausdrücklichen Nutzerentscheidung MIT oder OHNE KARTE.
+  // MIT LAGEPLAN: nachträglich vom Nutzer übermittelter offizieller Plan 2026.
   const dateSource = "https://leer.de/Stadt-Leben/Stadt-Leer-Ostfriesland-/Gallimarkt/";
   const lineupSource = "https://gallimarkt.net/2026/09/29/die-fahrgeschaefte-2026/";
   const rawRides = [
@@ -409,6 +409,40 @@
       liveWaits: false,
       supportsPostedWait: false,
       sortMode: "configured",
+      specialMap: {
+        eyebrow: "GALLIMARKT · OFFIZIELLER LAGEPLAN",
+        title: "Gallimarkt-Plan 2026",
+        subtitle: "21 nummerierte Fahrgeschäfte · jede Zahl öffnet die passende Detailansicht.",
+        sourceLabel: "Offiziellen Lageplan öffnen ↗",
+        sourceUrl: "https://gallimarkt.net/lageplan/",
+        imageUrl: "https://gallimarkt.net/wp-content/uploads/2026/09/Gallimarkt-Flyer-Web_02.jpg",
+        imageAlt: "Gallimarkt Leer 2026 – originaler Lageplan mit 21 nummerierten Fahrgeschäften",
+        aspectRatio: "1656 / 889",
+        note: "Auf dem Smartphone die Karte seitlich wischen und die nummerierten Kreise antippen. Originalplan der Stadt Leer, wie vom Nutzer bereitgestellt und auf gallimarkt.net veröffentlicht.",
+        points: [
+          {rideId:"leer-gallimarkt26-playball",x:5.857,y:19.573,mapNumber:1},
+          {rideId:"leer-gallimarkt26-heroes",x:3.804,y:29.809,mapNumber:2},
+          {rideId:"leer-gallimarkt26-family-coaster",x:6.341,y:35.096,mapNumber:3},
+          {rideId:"leer-gallimarkt26-break-dancer",x:9.239,y:37.908,mapNumber:4},
+          {rideId:"leer-gallimarkt26-magic-house",x:10.205,y:29.921,mapNumber:5},
+          {rideId:"leer-gallimarkt26-looping-the-loop",x:12.983,y:21.26,mapNumber:6},
+          {rideId:"leer-gallimarkt26-action-cinema",x:15.58,y:25.534,mapNumber:7},
+          {rideId:"leer-gallimarkt26-take-off",x:34.42,y:42.52,mapNumber:8},
+          {rideId:"leer-gallimarkt26-die-grosse-geisterbahn",x:34.118,y:50.281,mapNumber:9},
+          {rideId:"leer-gallimarkt26-mach-1",x:34.783,y:61.642,mapNumber:10},
+          {rideId:"leer-gallimarkt26-crystals-city",x:36.534,y:67.267,mapNumber:11},
+          {rideId:"leer-gallimarkt26-the-beast",x:39.251,y:33.071,mapNumber:12},
+          {rideId:"leer-gallimarkt26-nitro-the-race",x:43.901,y:34.421,mapNumber:13},
+          {rideId:"leer-gallimarkt26-around-the-world",x:53.321,y:33.858,mapNumber:14},
+          {rideId:"leer-gallimarkt26-musik-express",x:53.502,y:24.522,mapNumber:15},
+          {rideId:"leer-gallimarkt26-x-flight",x:48.551,y:31.159,mapNumber:16},
+          {rideId:"leer-gallimarkt26-big-splash",x:44.686,y:28.459,mapNumber:17},
+          {rideId:"leer-gallimarkt26-infinity-2",x:46.437,y:20.81,mapNumber:18},
+          {rideId:"leer-gallimarkt26-galli-dance",x:40.036,y:22.722,mapNumber:19},
+          {rideId:"leer-gallimarkt26-chaosfabrik",x:41.425,y:17.548,mapNumber:20},
+          {rideId:"leer-gallimarkt26-beat-jumper",x:41.486,y:11.249,mapNumber:21}
+        ]
+      },
       receiptTitle: "518. GALLIMARKT LEER 2026",
       receiptLocation: "LEER · OSTFRIESLAND",
       cardImage: "https://www.kirmesmagazin.de/images/2024/10/gallimarkt_leer_km.jpg",
