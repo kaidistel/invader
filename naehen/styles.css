@@ -1850,3 +1850,22 @@ body[data-park="nordhorn-herbstkirmes-2026"] .rideArt{filter:saturate(1.09) cont
 body[data-park="nordhorn-herbstkirmes-2026"] .ride .zone{color:#eed59d}
 body[data-park="nordhorn-herbstkirmes-2026"] .btn.primary{background:linear-gradient(150deg,#ffe2a5,#dbb077);color:#112c39;border-color:#f8dda2}
 body[data-park="nordhorn-herbstkirmes-2026"] .brand b{color:#ecd296}
+
+/* Hochheimer Markt – Weinregion bei Nacht, Bernsteinlampen, Tannengrün und Weinrot */
+body[data-park="hochheimer-markt-2026"]{--accent:#ecd5a0;--accent2:#9eceb1;--line:#a37e78}
+body[data-park="hochheimer-markt-2026"] .parkAtmosphere{
+ background:linear-gradient(180deg,#251c2a75 0%,#251a25d5 50%,#130f1be9 97%),var(--park-hero-image) center 45%/cover no-repeat;
+}
+body[data-park="hochheimer-markt-2026"] .hero{
+ background:radial-gradient(circle at 91% 0%,#f4dba632,transparent 39%),linear-gradient(130deg,#48283c 0%,#243d38 59%,#2f2538);
+ border:1px solid #e7c28c92;box-shadow:inset 0 1px #ffe4b845,0 14px 36px #0c0b15ad;
+}
+body[data-park="hochheimer-markt-2026"] .hero:before{background:linear-gradient(#ebd0a1 0 29%,#c35f84 29% 62%,#b7cb94 62%)}
+body[data-park="hochheimer-markt-2026"] .hero h1{font-family:'Cinzel Decorative',Georgia,serif;letter-spacing:.01em;color:#fff1cf;text-shadow:0 4px 12px #0009}
+body[data-park="hochheimer-markt-2026"] .sectionHead h2{font-family:'IM Fell English SC',Georgia,serif}
+body[data-park="hochheimer-markt-2026"] .ride{background:linear-gradient(150deg,#302c35,#1f302e);border:1px solid #d3ac8b88}
+body[data-park="hochheimer-markt-2026"] .ride:after{background:linear-gradient(0deg,#1b2630 0%,#222936d4 43%,transparent 100%)}
+body[data-park="hochheimer-markt-2026"] .rideArt{filter:saturate(1.11) contrast(1.05) brightness(.87)}
+body[data-park="hochheimer-markt-2026"] .ride .zone{color:#f4d7ad}
+body[data-park="hochheimer-markt-2026"] .btn.primary{background:linear-gradient(145deg,#fce7b7,#ddb37a);color:#241f29;border-color:#f8d89e}
+body[data-park="hochheimer-markt-2026"] .brand b{color:#efcd99}
