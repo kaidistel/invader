@@ -32,6 +32,13 @@ assert.equal(event.rides.find(r=>r.name==="Troika – Musikexpress").operator,"S
 assert.ok(event.rides.find(r=>r.name==="Wilde Maus – Das Original").imageUrl.includes("wilde-maus-aschaff"));
 const sourceMap=event.park.specialMap;
 assert.ok(sourceMap.imageUrl.endsWith(".png"));
+const pngPath=path.join(root,"assets/bremer-freimarkt-2026-map.png");
+assert.ok(fs.existsSync(pngPath),"Original 2026 map PNG must be committed, not just referenced");
+const pngBytes=fs.readFileSync(pngPath);
+assert.ok(pngBytes.length>400000,"Map PNG must not be replaced by a tiny preview");
+assert.equal(pngBytes.subarray(0,8).toString("hex"),"89504e470d0a1a0a");
+assert.equal(pngBytes.readUInt32BE(16),2048);
+assert.equal(pngBytes.readUInt32BE(20),1448);
 assert.equal(sourceMap.aspectRatio,"2048 / 1448");
 assert.equal(sourceMap.points.length,29);
 const app=fs.readFileSync(path.join(root,"app.js"),"utf8");

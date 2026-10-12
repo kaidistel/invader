@@ -30,6 +30,8 @@ jobs:
         run: node naehen/test-rheine-onboarding.cjs
       - name: Test Münster Herbstsend onboarding
         run: node naehen/test-muenster-herbstsend.cjs
+      - name: Test Bremer Freimarkt 2026 map and attractions
+        run: node naehen/test-bremer-freimarkt-2026.cjs
 
       - name: Fetch NÄHEN live queue data
         run: |
