@@ -1784,3 +1784,15 @@ body[data-park="gallimarkt-leer-2026"] .venueMapNote{color:#33566c;background:#e
 .allDaysCard .eyebrow{font-size:11px;line-height:1.4;color:#f1d29c}
 .allDaysCard .archiveDayStats span{background:#12202b}
 @media(max-width:390px){.nav{width:calc(100% - 12px);padding:5px}.nav button{font-size:9px;padding:9px 2px}#allDaysSummary .recapStat{padding:9px 6px}.allDaysFilters{gap:4px}}
+
+/* v110 — Schausteller auch in der aktiven Nähliste und in historischen Belegen */
+.logOperator,.archiveOperator{
+  display:block;margin:4px 0 3px;color:#f1d293!important;
+  font-size:11px;line-height:1.4;overflow-wrap:anywhere;
+}
+.fairReceiptRow .fairReceiptOperator{
+  display:block;margin:3px 0 2px;color:#685534;
+  font-size:9px;line-height:1.25;font-weight:750;overflow-wrap:anywhere;
+}
+.fairReceiptRow b{white-space:normal;overflow-wrap:anywhere}
+.fairReceiptRow{grid-template-columns:24px minmax(0,1fr) auto}

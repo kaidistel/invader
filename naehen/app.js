@@ -1132,6 +1132,9 @@
 
     user = appUser || null;
     localMode = !!useLocalMode;
+    ++globalArchiveRequest;
+    globalArchiveEntries = [];
+    globalArchiveFilter = "all";
     if (isDesktopDevMode()) document.documentElement.dataset.devMode = "browser";
     else delete document.documentElement.dataset.devMode;
     ["#installGate", "#setupGate", "#authGate"].forEach(hideGate);
@@ -1512,39 +1515,50 @@
     return value === null ? "manuell eintragen" : formatEuro(value);
   }
 
+  // Retrieve the operator using the archived venue, never the currently open venue.
+  function operatorForSession(session, parkSlug = session?.parkSlug || activeParkSlug || "phantasialand") {
+    if (!session || !venueIsFair(parkSlug)) return "";
+    const ride = canonicalRideForPark(session.rideId, parkSlug) ||
+      fallbackRidesFor(parkSlug).find(entry =>
+        entry.name.toLocaleLowerCase("de-DE") === String(session.rideName || "").toLocaleLowerCase("de-DE"));
+    return String(session.operator || ride?.operatorFull || ride?.operator || "").trim();
+  }
+
   function fairReceiptHtml(sourceSessions, sourceDay) {
     const sessionsForReceipt = (sourceSessions || [])
-      .filter((session) => session.status === "ridden")
+      .filter(session => session.status === "ridden")
       .slice()
-      .sort((a, b) => Number(a.startedAt || 0) - Number(b.startedAt || 0));
-
+      .sort((a,b) => Number(a.startedAt || 0) - Number(b.startedAt || 0));
+    const slug = sourceDay?.park_slug || sourceDay?.parkSlug || sessionsForReceipt[0]?.parkSlug || activeParkSlug || "phantasialand";
+    const receiptPark = PARKS[slug] || {};
     const rows = sessionsForReceipt.map((session, index) => {
+      const operator = operatorForSession(session, slug);
       const price = Number(session.priceEuro);
-      const hasPrice = Number.isFinite(price) && price >= 0;
+      const hasPrice = session.priceEuro !== null && session.priceEuro !== undefined &&
+        session.priceEuro !== "" && Number.isFinite(price) && price >= 0;
       return "<div class=\"fairReceiptRow\">" +
         "<span class=\"fairReceiptQty\">" + String(index + 1).padStart(2, "0") + "</span>" +
-        "<div><b>" + escapeHtml(session.rideName || "Fahrt") + "</b><small>" + escapeHtml(rideTimeLabel(session)) + "</small></div>" +
+        "<div><b>" + escapeHtml(session.rideName || "Fahrt") + "</b>" +
+          (operator ? "<small class=\"fairReceiptOperator\">Schausteller: " + escapeHtml(operator) + "</small>" : "") +
+          "<small>" + escapeHtml(rideTimeLabel(session)) + "</small></div>" +
         "<strong>" + escapeHtml(hasPrice ? formatEuro(price) : "PREIS FEHLT") + "</strong>" +
       "</div>";
     }).join("");
-
     const priced = sessionsForReceipt
-      .map((session) => Number(session.priceEuro))
-      .filter((price) => Number.isFinite(price) && price >= 0);
+      .filter(session => session.priceEuro !== null && session.priceEuro !== undefined && session.priceEuro !== "")
+      .map(session => Number(session.priceEuro))
+      .filter(price => Number.isFinite(price) && price >= 0);
     const total = priced.reduce((sum, price) => sum + price, 0);
     const missing = sessionsForReceipt.length - priced.length;
     const average = priced.length ? total / priced.length : 0;
-    const dayDate = sourceDay?.started_at || sourceDay?.startedAt || Date.now();
-    const receiptParkSlug = sourceDay?.park_slug || sourceDay?.parkSlug || sessionsForReceipt[0]?.parkSlug || activeParkSlug || "phantasialand";
-    const receiptPark = PARKS[receiptParkSlug] || {};
-    const receiptTitle = String(receiptPark.receiptTitle || receiptPark.name || "Kirmes").toUpperCase();
-    const receiptLocation = receiptPark.receiptLocation ? "<br>" + escapeHtml(String(receiptPark.receiptLocation).toUpperCase()) : "";
-
+    const date = sourceDay?.started_at || sourceDay?.startedAt || Date.now();
+    const title = String(receiptPark.receiptTitle || receiptPark.name || "Kirmes").toUpperCase();
+    const location = receiptPark.receiptLocation
+      ? "<br>" + escapeHtml(String(receiptPark.receiptLocation).toUpperCase()) : "";
     return "<div class=\"fairReceipt\">" +
       "<div class=\"fairReceiptBrand\">NÄHEN.</div>" +
-      "<div class=\"fairReceiptMeta\">" + escapeHtml(receiptTitle) + receiptLocation + "<br>" +
-        escapeHtml(new Date(dayDate).toLocaleDateString("de-DE")) +
-      "</div>" +
+      "<div class=\"fairReceiptMeta\">" + escapeHtml(title) + location + "<br>" +
+        escapeHtml(new Date(date).toLocaleDateString("de-DE")) + "</div>" +
       "<div class=\"fairReceiptRule\"></div>" +
       (rows || "<div class=\"fairReceiptEmpty\">Noch keine Fahrt auf diesem Kirmestag.</div>") +
       "<div class=\"fairReceiptRule\"></div>" +
@@ -1553,10 +1567,9 @@
         sessionsForReceipt.length + " Fahrt" + (sessionsForReceipt.length === 1 ? "" : "en") +
         (priced.length ? " · Ø " + escapeHtml(formatEuro(average)) + " / Fahrt" : "") +
         (missing ? "<br>" + missing + " Preis" + (missing === 1 ? "" : "e") + " fehlt/fehlen" : "") +
-        "<br>Alle Fahrpreise wurden pro Fahrt manuell von dir eingetragen." +
+        "<br>Fahrpreise wurden pro Fahrt manuell eingetragen." +
         "<br><b>Danke fürs Nähen.</b>" +
-      "</div>" +
-    "</div>";
+      "</div></div>";
   }
 
 
@@ -2133,16 +2146,19 @@
         : Math.abs(fact.savedMinutes) + " Min. länger als ausgeschildert gewartet")
       : "Keine ausreichenden Soll-/Ist-Wartezeitdaten";
 
-    const chronological = entry.sessions.slice().sort((a, b) => Number(a.startedAt || 0) - Number(b.startedAt || 0));
+    const chronological = entry.sessions.slice().sort((a,b) => Number(a.startedAt || 0) - Number(b.startedAt || 0));
     const timeline = chronological.length
-      ? chronological.map((session) => {
+      ? chronological.map(session => {
           const duration = Number.isFinite(Number(session.duration)) ? minutesRounded(session.duration) + " min" : "–";
           const state = session.status === "ridden" ? "genäht" : session.status === "aborted" ? "vernäht" : "offen";
-          return "<div class=\"archiveRideRow\"><div><b>" + escapeHtml(session.rideName) + "</b><small>" +
-            escapeHtml(rideTimeLabel(session)) + " · " + (session.type === "single" ? "Single Rider" : "Regular") +
-            "</small></div><div><b>" + escapeHtml(duration) + "</b><small>" + escapeHtml(state) + "</small></div></div>";
+          const operator = operatorForSession(session, parkSlug);
+          return "<div class=\"archiveRideRow\"><div><b>" + escapeHtml(session.rideName) + "</b>" +
+            "<small>" + escapeHtml(rideTimeLabel(session)) + " · " +
+            (session.type === "single" ? "Single Rider" : "Regular") + "</small>" +
+            (operator ? "<small class=\"archiveOperator\">Schausteller: " + escapeHtml(operator) + "</small>" : "") +
+            "</div><div><b>" + escapeHtml(duration) + "</b><small>" + escapeHtml(state) + "</small></div></div>";
         }).join("")
-      : "<div class=\"empty\">Keine Fahrten für diesen Parktag gespeichert.</div>";
+      : "<div class=\"empty\">Keine Fahrten für diesen Tag gespeichert.</div>";
 
     detail.innerHTML =
       "<div class=\"archiveHeroFacts\">" +
@@ -2273,14 +2289,16 @@
       container.innerHTML = "<div class=\"empty\">Noch nichts genäht. Das ändern wir.</div>";
       return;
     }
-
-    container.innerHTML = sessions.slice().sort((a, b) => b.startedAt - a.startedAt).map((session) => {
+    container.innerHTML = sessions.slice().sort((a,b) => b.startedAt - a.startedAt).map(session => {
       const duration = session.duration === null || session.duration === undefined ? "läuft" : minutesRounded(session.duration) + " min";
       const state = session.status === "ridden" ? "🧵 genäht" : session.status === "aborted" ? "💀 vernäht" : "⏱ läuft";
-      return "<div class=\"logItem\"><div><b>" + escapeHtml(session.rideName) + "</b><br><small>" +
-        (session.type === "single" ? "👤 Single Rider" : "Regular") + " · " +
-        new Date(session.startedAt).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }) +
-        "</small></div><div style=\"text-align:right\"><b>" + duration + "</b><br><small>" + state + "</small></div></div>";
+      const operator = operatorForSession(session, session.parkSlug || activeParkSlug);
+      return "<div class=\"logItem\"><div><b>" + escapeHtml(session.rideName) + "</b>" +
+        (operator ? "<small class=\"logOperator\">Schausteller: " + escapeHtml(operator) + "</small>" : "") +
+        "<small>" + (session.type === "single" ? "👤 Single Rider" : "Regular") + " · " +
+        new Date(session.startedAt).toLocaleTimeString("de-DE", {hour:"2-digit",minute:"2-digit"}) +
+        "</small></div><div style=\"text-align:right\"><b>" + escapeHtml(duration) + "</b><br><small>" +
+        escapeHtml(state) + "</small></div></div>";
     }).join("");
   }
 
@@ -2397,6 +2415,7 @@
       id: id,
       rideId: selectedRide.id,
       rideName: selectedRide.name,
+      operator: venueIsFair() ? (selectedRide.operatorFull || selectedRide.operator || "") : "",
       parkSlug: activeParkSlug || "phantasialand",
       speedKmh: selectedRide.speedKmh || rideSpeedKmh(selectedRide.id),
       type: queueType,
