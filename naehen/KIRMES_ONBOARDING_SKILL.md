@@ -578,6 +578,7 @@ The receipt should contain:
 - Kirmestag date
 - chronological list of ridden attractions
 - ride time
+- **Schausteller / operator for each ride** (event-scoped; use the original fair, not the currently selected venue)
 - manually entered price for each ride
 - total number of rides
 - total spend
@@ -679,3 +680,12 @@ A Kirmes onboarding is complete only when:
 - [ ] PWA cache/version is bumped
 - [ ] mobile QA passes
 - [ ] deploy is checked
+
+## Cross-event archive and operator continuity
+
+- Completed Kirmestage must remain available both in the event-specific archive and in NÄHEN's **Alle Tage** / Gesamtarchiv, alongside Parktage.
+- The global archive reads all event-scoped local caches (and, when signed in, all completed `park_days` and their `queue_sessions` from Supabase) without deleting or moving historic records.
+- Historic receipts and ride logs resolve the Schausteller using the session's original `park_slug` and scoped ride ID, never the active venue.
+- Always display `Schausteller: …` in the current Nähliste, archived Tagesprotokoll, and receipt for fair rides whenever a known operator exists.
+- Preserve any operator snapshot on new local sessions; existing cloud sessions can resolve it from the event-specific ride configuration.
+- Old fair prices of `null` must remain **unknown**, not become `0,00 €`; explicit `0,00 €` remains valid.

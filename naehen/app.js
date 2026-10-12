@@ -1175,10 +1175,7 @@
   }
 
   async function loadCloudParkArchive(parkSlug = activeParkSlug || "phantasialand") {
-    if (!supa || !currentUserId()) {
-      parkArchive = [];
-      return;
-    }
+    if (!supa || !currentUserId()) return;
 
     const daysResult = await supa
       .from("park_days")
@@ -1190,13 +1187,13 @@
 
     if (daysResult.error) {
       console.warn("Parktag-Archiv konnte nicht geladen werden", daysResult.error);
-      parkArchive = [];
+      if (activeParkSlug === parkSlug) parkArchive = [];
       return;
     }
 
     const days = daysResult.data || [];
     if (!days.length) {
-      parkArchive = [];
+      if (activeParkSlug === parkSlug) parkArchive = [];
       return;
     }
 
@@ -1210,7 +1207,7 @@
 
     if (sessionResult.error) {
       console.warn("Archiv-Fahrten konnten nicht geladen werden", sessionResult.error);
-      parkArchive = days.map((day) => ({ day: day, sessions: [] }));
+      if (activeParkSlug === parkSlug) parkArchive = days.map((day) => ({ day: day, sessions: [] }));
       return;
     }
 
@@ -1220,6 +1217,7 @@
       grouped.get(row.park_day_id).push(dbSessionToClient(row, parkSlug));
     });
 
+    if (activeParkSlug !== parkSlug) return;
     parkArchive = days.map((day) => ({
       day: day,
       sessions: grouped.get(day.id) || []
@@ -1938,6 +1936,27 @@
         });
       });
     });
+    const phantasialandArchive = store.get(parkStoreKey("naehen:parkArchive", "phantasialand"), []);
+    if (!Array.isArray(phantasialandArchive) || !phantasialandArchive.length) {
+      const legacyDay = store.get("naehen:parkDay", null);
+      const legacySessions = store.get("naehen:sessions", [])
+        .filter(session => session && session.status !== "waiting" && session.endedAt);
+      if (!legacyDay && legacySessions.length) {
+        const starts = legacySessions.map(session => Number(session.startedAt)).filter(Number.isFinite);
+        const ends = legacySessions.map(session => Number(session.endedAt)).filter(Number.isFinite);
+        if (starts.length && ends.length) {
+          entries.push({
+            day: {
+              id: "legacy-phantasialand-" + Math.min(...starts),
+              park_slug: "phantasialand",
+              started_at: new Date(Math.min(...starts)).toISOString(),
+              ended_at: new Date(Math.max(...ends)).toISOString()
+            },
+            sessions: legacySessions.map(session => localizeStoredSession(session, "phantasialand"))
+          });
+        }
+      }
+    }
     if (activeParkSlug) parkArchive.forEach(entry => {
       const normalized = normalizeArchiveEntry(entry, activeParkSlug);
       if (normalized) entries.push({
@@ -2132,6 +2151,8 @@
     const parkSlug = day?.park_slug || activeParkSlug || "phantasialand";
     const parkName = PARKS[parkSlug]?.name || "Park";
     const dayWord = visitDayWord(parkSlug);
+    const archiveEyebrow = $("#archiveDetailEyebrow");
+    if (archiveEyebrow) archiveEyebrow.textContent = "Gespeicherter " + dayWord;
     const supportsPostedWait = PARKS[parkSlug]?.supportsPostedWait !== false;
     const fact = buildDayFacts(day, entry.sessions, parkSlug);
     const detail = $("#archiveDetailContent");
