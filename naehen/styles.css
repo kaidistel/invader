@@ -1869,3 +1869,28 @@ body[data-park="hochheimer-markt-2026"] .rideArt{filter:saturate(1.11) contrast(
 body[data-park="hochheimer-markt-2026"] .ride .zone{color:#f4d7ad}
 body[data-park="hochheimer-markt-2026"] .btn.primary{background:linear-gradient(145deg,#fce7b7,#ddb37a);color:#241f29;border-color:#f8d89e}
 body[data-park="hochheimer-markt-2026"] .brand b{color:#efcd99}
+
+/* Cranger Weihnachtszauber 2026 – dunkle Tannennacht, Kupferlaternen, winterliches Eisblau.
+   Kein Weihnachtsbaum im CSS: die bisherige Riesenbaum-Ausschankanlage entfällt 2026. */
+body[data-park="cranger-weihnachtszauber-2026"]{--accent:#edd49c;--accent2:#a6dddf;--line:#6e877d}
+body[data-park="cranger-weihnachtszauber-2026"] .parkAtmosphere{
+  background:linear-gradient(180deg,#07192494 0%,#0d2127c8 36%,#08141be7 88%),
+  var(--park-hero-image) center 44%/cover no-repeat;
+}
+body[data-park="cranger-weihnachtszauber-2026"] .hero{
+  background:radial-gradient(circle at 8% 3%,#e7ce9444,transparent 35%),
+  radial-gradient(circle at 100% 9%,#9bd9cb27,transparent 42%),
+  linear-gradient(131deg,#132e37,#23403a 52%,#382c3e);
+  border:1px solid #d6c59880;box-shadow:inset 0 1px #f5edb53b,0 17px 35px #02090b78;
+}
+body[data-park="cranger-weihnachtszauber-2026"] .hero:before{background:linear-gradient(#f5d9a5 0 36%,#c75a64 36% 70%,#8fc5ce 70%)}
+body[data-park="cranger-weihnachtszauber-2026"] .hero h1{
+ font-family:'UnifrakturCook',Georgia,serif;letter-spacing:.025em;color:#fff0da;text-shadow:0 3px 11px #070e15;
+}
+body[data-park="cranger-weihnachtszauber-2026"] .sectionHead h2{font-family:'Cinzel Decorative',serif}
+body[data-park="cranger-weihnachtszauber-2026"] .ride{background:#192f35;border:1px solid #dbb98580}
+body[data-park="cranger-weihnachtszauber-2026"] .ride:after{background:linear-gradient(0deg,#112b2a 0%,#152d33da 42%,transparent 100%)}
+body[data-park="cranger-weihnachtszauber-2026"] .rideArt{filter:saturate(1.1) contrast(1.03) brightness(.88)}
+body[data-park="cranger-weihnachtszauber-2026"] .ride .zone{color:#f0d9a2}
+body[data-park="cranger-weihnachtszauber-2026"] .btn.primary{background:linear-gradient(140deg,#ffe7bc,#ddb37b);color:#1b3534;border-color:#f4ddb5}
+body[data-park="cranger-weihnachtszauber-2026"] .brand b{color:#f6ddae}

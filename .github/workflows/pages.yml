@@ -36,6 +36,8 @@ jobs:
         run: node naehen/test-nordhorn-herbstkirmes-2026.cjs
       - name: Test Hochheimer Markt 2026 without map
         run: node naehen/test-hochheimer-markt-2026.cjs
+      - name: Test Cranger Weihnachtszauber 2026 without map
+        run: node naehen/test-cranger-weihnachtszauber-2026.cjs
 
       - name: Fetch NÄHEN live queue data
         run: |

@@ -30,7 +30,8 @@
     window.NAEHEN_HAMBURG_WINTERDOM_2026,
     window.NAEHEN_BREMER_FREIMARKT_2026,
     window.NAEHEN_NORDHORN_HERBSTKIRMES_2026,
-    window.NAEHEN_HOCHHEIMER_MARKT_2026
+    window.NAEHEN_HOCHHEIMER_MARKT_2026,
+    window.NAEHEN_CRANGER_WEIHNACHTSZAUBER_2026
   ].filter((module) => module && module.park && module.park.slug);
 
   const PARK_MODULES = {};
@@ -1077,7 +1078,7 @@
             return;
           }
         } else {
-          const registration = await navigator.serviceWorker.register("./sw.js?v=116", {
+          const registration = await navigator.serviceWorker.register("./sw.js?v=117", {
             scope: "./",
             updateViaCache: "none"
           });
