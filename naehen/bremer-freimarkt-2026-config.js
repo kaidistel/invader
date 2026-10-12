@@ -18,12 +18,12 @@
     "rideIndexUrl": "https://ride-index.de/2005/01/08/happy-traveller/",
     "priceEuro": null,
     "new2026": false,
-    "imageUrl": "https://www.neumarkt.de/media/11062/happy-traveller.jpg",
-    "imageCredit": "Stadt Neumarkt i.d.OPf. · Happy Traveller auf dem Frühlingsfest",
+    "imageUrl": "./assets/bremer-freimarkt-2026-happy-traveller.webp",
+    "imageCredit": "Dr. Franz Janka / Stadt Neumarkt · Happy Traveller (Frühlingsfest 2025)",
     "imageSourceUrl": "https://www.neumarkt.de/rathaus-buergerservice/aktuelles/aktuelles-aus-neumarkt/47-fruehlingsfest-familiennachmittag-am-freitag-0525/",
     "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf",
     "imageFallbackUrls": [
-      "https://ride-index.de/wp-content/uploads/2005/01/Winter-HappyTraveller-2019.jpg"
+      "https://www.neumarkt.de/media/11062/happy-traveller.jpg"
     ]
   },
   {
