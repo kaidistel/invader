@@ -21,10 +21,19 @@ for(const r of a.rides){
  assert.ok(a.worlds[r.id]);assert.ok(a.fonts[r.id]);assert.ok(a.rideConfig[r.id]);
  if(r.imageUrl){assert.ok(r.imageSourceUrl,"Photo source missing: "+r.name);assert.ok(r.imageCredit,"Photo credit missing: "+r.name)}
 }
+const air=a.rides.find(x=>x.id==="winterdom26-air-power");
+const bumper=a.rides.find(x=>x.id==="winterdom26-bumper-1");
+assert.ok(air.imageUrl.includes("air_power_bremerhaven.jpg"),"Use actual photograph of Heine Air Power");
+assert.ok(bumper.imageUrl.includes("media.tag24.de"),"Use directly loadable Bumper One DOM Scooter photo");
+for (const r of [air,bumper]) {
+  assert.ok(r.imageFallbackUrls.length>=1,"Require vetted backup images");
+  assert.ok(!r.imageUrl.includes("onride.de"),"Avoid broken onride image endpoints");
+  assert.ok(r.imageCredit&&r.imageSourceUrl&&r.rideIndexUrl);
+}
 assert.equal(a.rides.find(x=>x.id==="winterdom26-break-dancer-no-2").operator,"Dreher-Vespermann");
 assert.ok(a.rides.find(x=>x.id==="winterdom26-infinity-2").imageSourceUrl.includes("infinity-2"));
 assert.ok(a.rides.find(x=>x.id==="winterdom26-mayday").imageUrl.includes("mayday-the-ultimate-thrill.webp"));
-assert.ok(fs.readFileSync(path.join(root,"index.html"),"utf8").includes("hamburg-winterdom-2026-config.js?v=107"));
+assert.ok(fs.readFileSync(path.join(root,"index.html"),"utf8").includes("hamburg-winterdom-2026-config.js?v=108"));
 assert.ok(fs.readFileSync(path.join(root,"app.js"),"utf8").includes("window.NAEHEN_HAMBURG_WINTERDOM_2026"));
-assert.ok(fs.readFileSync(path.join(root,"sw.js"),"utf8").includes("naehen-v107"));
+assert.ok(fs.readFileSync(path.join(root,"sw.js"),"utf8").includes("naehen-v108"));
 console.log("PASS Winterdom 2026: 36 rides, 5 categories, 4 debut markers, no map, manual prices, themed styles and PWA cache.");

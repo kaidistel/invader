@@ -241,14 +241,18 @@
     "type": "Freak Out",
     "description": "Über dem Heiligengeistfeld wird es rasant: kräftige Beschleunigungen und Drehbewegungen für echte Thrillfans.",
     "new2026": false,
-    "imageUrl": "https://onride.de/onride-upic571961%401120",
-    "imageCredit": "onride.de · Air Power von Tom Heine",
-    "imageSourceUrl": "https://onride.de/viewtopic.php?t=88893",
+    "imageUrl": "https://www.kirmesmagazin.de/images/2025/04/air_power_bremerhaven.jpg",
+    "imageCredit": "Arbeitsgemeinschaft Bremerhavener Märkte · Air Power von Tom Heine (2025)",
+    "imageSourceUrl": "https://www.kirmesmagazin.de/volksfeste-kirmes/bremerhavener-fruehjahrsmarkt-2025",
     "manufacturer": "KMG",
     "year": 2023,
     "dimensions": "18 × 15 × max. 23 m",
     "capacity": "16 Personen",
-    "rideIndexUrl": "https://ride-index.de/"
+    "rideIndexUrl": "https://ride-index.de/2023/08/07/airpower/",
+    "imageFallbackUrls": [
+      "https://kuestenkirmes.de/wp-content/uploads/Air-Power-Heine.jpg",
+      "https://www.cnv-medien.de/fileadmin/_processed_/e/6/csm_27232598_a024be18b0.jpeg"
+    ]
   },
   {
     "id": "take-off",
@@ -367,13 +371,14 @@
     "type": "2-Säulen-Autoscooter",
     "description": "Bumper One bringt klassische Zweierskooter, Musik und LED-Atmosphäre auf den Winterdom.",
     "new2026": false,
-    "imageUrl": "https://onride.de/onride-upic461124%401120",
-    "imageCredit": "onride.de · Bumper One / Dom Scooter Harder-Mantau",
-    "imageSourceUrl": "https://onride.de/viewtopic.php?t=50955",
+    "imageUrl": "https://media.tag24.de/951x634/9/y/9yclysahkocmx7543ehkm55fp6rzmnku.jpg",
+    "imageCredit": "TAG24 · Bumper One / DOM Scooter von Harder-Mantau (Sommerdom 2022)",
+    "imageSourceUrl": "https://www.tag24.de/anzeige/hamburg-sommerdom-tipp-fahrgeschaefte-jahrmarkt-attraktionen-neuheiten-2552351",
     "manufacturer": "Adesco",
     "imageFallbackUrls": [
-      "https://onride.de/onride-upic490812%401120"
-    ]
+      "https://www.hamburg-dom-aktuell.de/wp-content/uploads/2018/04/Bumper-1-Autoscooter.jpg"
+    ],
+    "rideIndexUrl": "https://ride-index.de/2005/04/05/as-harder/"
   },
   {
     "id": "phaenomenon",
