@@ -18,9 +18,9 @@
     "rideIndexUrl": "https://ride-index.de/2005/01/08/happy-traveller/",
     "priceEuro": null,
     "new2026": false,
-    "imageUrl": "https://www.polypweb.eu/uploads/monthly_2016_07/happy_traveller_gack.jpg",
-    "imageCredit": "polypweb.eu · Happy Traveller Wolter",
-    "imageSourceUrl": "https://www.polypweb.eu/viewtopic.php?t=1674",
+    "imageUrl": "https://kirmesparkworld.de/media/897-gack-happytraveller-2004-jpg/",
+    "imageCredit": "KirmesParkWorld · Happy Traveller (gleiche Gack/Wolter-Reiseanlage, Archivfoto)",
+    "imageSourceUrl": "https://kirmesparkworld.de/article/808-happy-traveller-wechselt-den-betreiber/",
     "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf"
   },
   {
@@ -189,9 +189,9 @@
     "rideIndexUrl": "https://ride-index.de/2005/01/14/troika/",
     "priceEuro": null,
     "new2026": false,
-    "imageUrl": "",
-    "imageCredit": "",
-    "imageSourceUrl": "https://onride.de/viewtopic.php?t=20377",
+    "imageUrl": "https://kuestenkirmes.de/wp-content/uploads/Troika-Ahrend.jpg",
+    "imageCredit": "Küstenkirmes · Troika (dieselbe Reiseanlage, Foto vor Betreiberwechsel zu Steinmann)",
+    "imageSourceUrl": "https://kuestenkirmes.de/troika-ahrend/",
     "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf"
   },
   {
@@ -208,9 +208,9 @@
     "rideIndexUrl": null,
     "priceEuro": null,
     "new2026": false,
-    "imageUrl": "https://onride.de/onride-upic303559%401120",
-    "imageCredit": "onride · Euro Rutsche Kutschenbauer/Bergmann",
-    "imageSourceUrl": "https://onride.de/viewtopic.php?p=231360",
+    "imageUrl": "https://www.ummet-eck.de/Bilder/poi/1024/euro-rutsche-kutschenbauer.jpg",
+    "imageCredit": "Ummet-Eck · Euro Rutsche Kutschenbauer-Bergmann",
+    "imageSourceUrl": "https://www.ummet-eck.de/regionen/103520-Euro-Rutsche-Kutschenbauer-/",
     "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf"
   },
   {
@@ -398,9 +398,9 @@
     "rideIndexUrl": "https://ride-index.de/2005/01/11/octopussy/",
     "priceEuro": null,
     "new2026": false,
-    "imageUrl": "",
-    "imageCredit": "",
-    "imageSourceUrl": "https://ride-index.de/2005/01/11/octopussy/",
+    "imageUrl": "https://www.kirmesecke.de/Bilder/fotosets/1024/octopussy-puetzchens23-c-UMM-c-schoen-2.jpg",
+    "imageCredit": "Kirmesecke / Ummet-Eck · Octopussy von Hubert Markmann",
+    "imageSourceUrl": "https://www.kirmesecke.de/bildgalerien/282-Octopussy-Markmann-Fahrgeschaeft-auf-der-Kirmes-bild-8158/",
     "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf"
   },
   {
