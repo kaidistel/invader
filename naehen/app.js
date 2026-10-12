@@ -1074,7 +1074,7 @@
             return;
           }
         } else {
-          const registration = await navigator.serviceWorker.register("./sw.js?v=102", {
+          const registration = await navigator.serviceWorker.register("./sw.js?v=111", {
             scope: "./",
             updateViaCache: "none"
           });
@@ -2045,7 +2045,7 @@
       recapStat(ridden + "×", "Fahrten im Filter") +
       "</div><div class=\"allDaysQueueTotal\">🧵 " +
       escapeHtml(formatDurationHuman(queueMs)) + " echte Queue in dieser Auswahl</div>";
-    $("#allDaysView [data-archive-filter]").forEach(btn => {
+    $$("#allDaysView [data-archive-filter]").forEach(btn => {
       const selected = btn.dataset.archiveFilter === globalArchiveFilter;
       btn.classList.toggle("active", selected);
       btn.setAttribute("aria-pressed", String(selected));
@@ -2969,7 +2969,7 @@
     });
     if (viewId === "archiveView") renderParkArchive();
     if (viewId === "allDaysView") refreshGlobalArchive();
-    $("[data-view]").forEach((button) => button.classList.toggle("active", button.dataset.view === viewId));
+    $$("[data-view]").forEach((button) => button.classList.toggle("active", button.dataset.view === viewId));
   }
 
   window.addEventListener("popstate", (event) => {
