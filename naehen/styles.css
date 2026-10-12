@@ -1825,3 +1825,9 @@ body[data-park="bremer-freimarkt-2026"] .soestPlanLink b{position:absolute;left:
 body[data-park="bremer-freimarkt-2026"] .soestPlanLink:hover b,body[data-park="bremer-freimarkt-2026"] .soestPlanLink:focus-visible b{display:block!important;visibility:visible}
 body[data-park="bremer-freimarkt-2026"] .venueMapNote{color:#33506d;background:#e1ebf2}
 @media(max-width:760px){body[data-park="bremer-freimarkt-2026"] .soestOriginalPlanWrap{margin:0!important}body[data-park="bremer-freimarkt-2026"] .venueMapCanvas{padding:4px}}
+
+/* Bremen: original PNG under transparent, keyboard-accessible clickable hit areas. */
+body[data-park="bremer-freimarkt-2026"] .soestOriginalPlanWrap{aspect-ratio:2048 / 1448!important}
+body[data-park="bremer-freimarkt-2026"] .soestPlanLink{background:transparent!important;border-color:transparent!important}
+body[data-park="bremer-freimarkt-2026"] .soestPlanLink:hover,
+body[data-park="bremer-freimarkt-2026"] .soestPlanLink:focus-visible{background:#f0b74955!important;border-color:#f56b53!important}

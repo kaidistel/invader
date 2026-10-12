@@ -1,0 +1,57 @@
+name: Build original Bremer Freimarkt 2026 map PNG
+
+on:
+  push:
+    paths:
+      - ".github/workflows/build-bremen-freimarkt-map.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  original-map:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install PDF rendering tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y poppler-utils
+          python3 -m pip install --quiet pillow
+      - name: Fetch the official Freimarkt 2026 map
+        run: |
+          curl --fail --location --show-error --retry 4 --retry-delay 2 --max-time 90             "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf"             -o /tmp/freimarkt-2026.pdf
+          file /tmp/freimarkt-2026.pdf
+          pdfinfo /tmp/freimarkt-2026.pdf | head -18
+      - name: Render unchanged official graphic as high-resolution PNG
+        run: |
+          pdftoppm -f 1 -l 1 -singlefile -png -r 145             /tmp/freimarkt-2026.pdf /tmp/freimarkt-2026-render
+          python3 - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          im=Image.open("/tmp/freimarkt-2026-render.png").convert("RGB")
+          # Match the dimensions/proportions of the official PNG supplied by the user.
+          # Only resample: NO vector redraw, overlays, new labels or altered layout.
+          if im.size!=(2048,1448):
+              im=im.resize((2048,1448), Image.Resampling.LANCZOS)
+          out=Path("naehen/assets/bremer-freimarkt-2026-map.png")
+          out.parent.mkdir(parents=True, exist_ok=True)
+          im.save(out,format="PNG",optimize=True,compress_level=9)
+          assert Image.open(out).size == (2048,1448)
+          print("Official PNG:",out,out.stat().st_size,"bytes")
+          PY
+      - name: Commit the official PNG to main
+        run: |
+          test -s naehen/assets/bremer-freimarkt-2026-map.png
+          if git status --porcelain -- naehen/assets/bremer-freimarkt-2026-map.png | grep -q .; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add naehen/assets/bremer-freimarkt-2026-map.png
+            git commit -m "assets(naehen): replace Freimarkt drawing with official 2026 PNG"
+            git push
+          else
+            echo "Official PNG unchanged"
+          fi

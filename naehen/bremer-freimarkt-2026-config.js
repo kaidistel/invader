@@ -18,10 +18,13 @@
     "rideIndexUrl": "https://ride-index.de/2005/01/08/happy-traveller/",
     "priceEuro": null,
     "new2026": false,
-    "imageUrl": "https://kirmesparkworld.de/media/897-gack-happytraveller-2004-jpg/",
-    "imageCredit": "KirmesParkWorld · Happy Traveller (gleiche Gack/Wolter-Reiseanlage, Archivfoto)",
-    "imageSourceUrl": "https://kirmesparkworld.de/article/808-happy-traveller-wechselt-den-betreiber/",
-    "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf"
+    "imageUrl": "https://onride.de/onride-upic113605%401120",
+    "imageCredit": "onride · Happy Traveller von Gack/Wolter, historisches Betreiberfoto",
+    "imageSourceUrl": "https://onride.de/viewtopic.php?t=16316",
+    "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf",
+    "imageFallbackUrls": [
+      "https://www.freimarkt.de/wp-content/uploads/2018/10/happy-traveller.jpg"
+    ]
   },
   {
     "id": "bremen-freimarkt26-big-bamboo",
@@ -94,9 +97,9 @@
     "rideIndexUrl": null,
     "priceEuro": null,
     "new2026": false,
-    "imageUrl": "https://www.kirmesecke.de/Bilder/fotosets/1024/2-bayern-tower-rheinkirmes22-c-UMM-chr-schoen.jpg",
-    "imageCredit": "Ummet-Eck · Bayern Tower Kaiser",
-    "imageSourceUrl": "https://www.kirmesecke.de/",
+    "imageUrl": "https://kermisplanner.nl/uploads/attractions/attraction-bayern-tower/1675551735_3d66b226a7ffe5ffc848.jpg",
+    "imageCredit": "Kermisplanner · Bayern Tower von Kaiser",
+    "imageSourceUrl": "https://kermisplanner.nl/nl/attractie/bayern-tower-FLqBf7Gk",
     "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf"
   },
   {
@@ -113,9 +116,9 @@
     "rideIndexUrl": null,
     "priceEuro": null,
     "new2026": false,
-    "imageUrl": "https://der-topin.de/images/topin2019.jpg",
-    "imageCredit": "Betreiberseite · Top In",
-    "imageSourceUrl": "https://der-topin.de/topin.html",
+    "imageUrl": "https://ride-index.de/content/images/ROBRAHN2017-2.JPG",
+    "imageCredit": "Ride-Index · Top In Robrahn-Böker (2017)",
+    "imageSourceUrl": "https://ride-index.de/2005/04/05/as-robrahn/",
     "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf"
   },
   {
@@ -151,9 +154,9 @@
     "rideIndexUrl": null,
     "priceEuro": null,
     "new2026": false,
-    "imageUrl": "https://image.jimcdn.com/app/cms/image/transf/dimension%3D2048x2048%3Aformat%3Djpg/path/s9cf412826dcbbab5/image/i5b9c3907e96ea947/version/1660584330/image.jpg",
-    "imageCredit": "PARKWELT.INFO · Mein Rad Greier",
-    "imageSourceUrl": "https://www.parkwelt.info/",
+    "imageUrl": "https://www.freimarkt.de/photostrecke/2017/Rundgang_Miss_Freimarkt/IMG_4415.jpg",
+    "imageCredit": "Freimarkt Bremen · Riesenrad in der historischen Freimarkt-Kulisse (Archivansicht)",
+    "imageSourceUrl": "https://www.freimarkt.de/fotostrecken/2017-2/rundgang-miss-freimarkt/",
     "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf"
   },
   {
@@ -190,7 +193,7 @@
     "priceEuro": null,
     "new2026": false,
     "imageUrl": "https://kuestenkirmes.de/wp-content/uploads/Troika-Ahrend.jpg",
-    "imageCredit": "Küstenkirmes · Troika (dieselbe Reiseanlage, Foto vor Betreiberwechsel zu Steinmann)",
+    "imageCredit": "Küstenkirmes · Troika, dieselbe Anlage vor dem Wechsel zu Steinmann",
     "imageSourceUrl": "https://kuestenkirmes.de/troika-ahrend/",
     "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf"
   },
@@ -208,10 +211,13 @@
     "rideIndexUrl": null,
     "priceEuro": null,
     "new2026": false,
-    "imageUrl": "https://www.ummet-eck.de/Bilder/poi/1024/euro-rutsche-kutschenbauer.jpg",
-    "imageCredit": "Ummet-Eck · Euro Rutsche Kutschenbauer-Bergmann",
-    "imageSourceUrl": "https://www.ummet-eck.de/regionen/103520-Euro-Rutsche-Kutschenbauer-/",
-    "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf"
+    "imageUrl": "https://onride.de/onride-upic303559%401120",
+    "imageCredit": "onride · Euro Rutsche Kutschenbauer-Bergmann",
+    "imageSourceUrl": "https://onride.de/viewtopic.php?p=231360",
+    "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf",
+    "imageFallbackUrls": [
+      "https://www.frankenpost.de/media.media.75331f0a-0231-4570-a1c4-389219d1a906.original1024.jpg"
+    ]
   },
   {
     "id": "bremen-freimarkt26-mondlift",
@@ -246,10 +252,13 @@
     "rideIndexUrl": "https://ride-index.de/2005/01/08/happy-sailor/",
     "priceEuro": null,
     "new2026": false,
-    "imageUrl": "https://kermisplanner.nl/uploads/attractions/attraction-happy-sailor/1676237231_ce7300d69fad85b3d66c.jpg",
-    "imageCredit": "Kermisplanner · Happy Sailor, dieselbe Reiseanlage",
-    "imageSourceUrl": "https://ride-index.de/2005/01/08/happy-sailor/",
-    "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf"
+    "imageUrl": "https://image.jimcdn.com/app/cms/image/transf/dimension%3D2048x2048%3Aformat%3Djpg/path/s9cf412826dcbbab5/image/i150c851c388e5ebf/version/1658344975/image.jpg",
+    "imageCredit": "PARKWELT.INFO · Happy Sailor Krug/Högerle",
+    "imageSourceUrl": "https://www.parkwelt.info/fahrgesch%C3%A4fte-volksfest/happy-sailor-howey/",
+    "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf",
+    "imageFallbackUrls": [
+      "https://www.medienwerkstatt-online.de/lws_wissen/bilder/13218-1.jpg"
+    ]
   },
   {
     "id": "bremen-freimarkt26-mythos",
@@ -379,9 +388,9 @@
     "rideIndexUrl": "https://ride-index.de/2021/11/03/fortresstower/",
     "priceEuro": null,
     "new2026": false,
-    "imageUrl": "https://kermisplanner.nl/uploads/attractions/attraction-fortress-tower/1679952012_59aa9784c1055e03ad49.jpg",
-    "imageCredit": "Kermisplanner · Fortress Tower Götzke",
-    "imageSourceUrl": "https://ride-index.de/2021/11/03/fortresstower/",
+    "imageUrl": "https://www.kirmesecke.de/Bilder/fotosets/1024/fortress-tower-puetzchens23-c-UMM-c-schoen-3.jpg",
+    "imageCredit": "Ummet-Eck · Fortress Tower von Götzke",
+    "imageSourceUrl": "https://www.kirmesecke.de/bildgalerien/371-Fortress-Tower-Goetzke-Freifallturm-Kirmes-bild-8150/",
     "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf"
   },
   {
@@ -399,7 +408,7 @@
     "priceEuro": null,
     "new2026": false,
     "imageUrl": "https://www.kirmesecke.de/Bilder/fotosets/1024/octopussy-puetzchens23-c-UMM-c-schoen-2.jpg",
-    "imageCredit": "Kirmesecke / Ummet-Eck · Octopussy von Hubert Markmann",
+    "imageCredit": "Ummet-Eck · Octopussy Markmann 2023",
     "imageSourceUrl": "https://www.kirmesecke.de/bildgalerien/282-Octopussy-Markmann-Fahrgeschaeft-auf-der-Kirmes-bild-8158/",
     "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf"
   },
@@ -417,7 +426,7 @@
     "rideIndexUrl": null,
     "priceEuro": null,
     "new2026": false,
-    "imageUrl": "https://www.ummet-eck.de/Bilder/poi/1024/super-rutsche-von-olnhausen-nuernberg-2023.jpg",
+    "imageUrl": "https://www.ummet-eck.de/Bilder/poi/678/super-rutsche-von-olnhausen-nuernberg-2023.jpg",
     "imageCredit": "Ummet-Eck · Super Rutsche von Olnhausen",
     "imageSourceUrl": "https://www.ummet-eck.de/regionen/103214-Super-Rutsche-von-Olnhausen-/",
     "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf"
@@ -474,9 +483,9 @@
     "rideIndexUrl": "https://ride-index.de/2005/01/05/rock-roller-coaster-vorlop/",
     "priceEuro": null,
     "new2026": false,
-    "imageUrl": "https://kuestenkirmes.de/wp-content/uploads/Rock-Roller-Coaster-Vorlop.jpg",
-    "imageCredit": "Küstenkirmes · Rock & Roller Coaster Vorlop",
-    "imageSourceUrl": "https://ride-index.de/2005/01/05/rock-roller-coaster-vorlop/",
+    "imageUrl": "https://www.ummet-eck.de/Bilder/fotosets/1024/rock-roller-coaster-regensburg23-c-KIE-c-schoen-4.jpg",
+    "imageCredit": "Ummet-Eck · Rock & Roller Coaster von Vorlop (2023)",
+    "imageSourceUrl": "https://www.ummet-eck.de/bildgalerien/581-Rock-Roller-Coaster-Vorlop-Achterbahn-Bilder-bild-8267/",
     "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf"
   },
   {
@@ -493,9 +502,9 @@
     "rideIndexUrl": null,
     "priceEuro": null,
     "new2026": false,
-    "imageUrl": "https://image.jimcdn.com/app/cms/image/transf/dimension%3D2048x2048%3Aformat%3Djpg/path/s9cf412826dcbbab5/image/ia2a748cda74c8014/version/1663149800/image.jpg",
-    "imageCredit": "PARKWELT.INFO · Piratenfluss Heitmann-Schneider",
-    "imageSourceUrl": "https://nordkirmes.net/article/3119-die-wildwasserbahn-piratenfluss-auf-dem-bremer-freimarkt-2024/",
+    "imageUrl": "https://www.ummet-eck.de/Bilder/fotosets/1024/4-piratenfluss-herbstsend22-c-ummeteck-chr-schoen.jpg",
+    "imageCredit": "Ummet-Eck · Piraten-Fluss Heitmann-Schneider",
+    "imageSourceUrl": "https://www.ummet-eck.de/bildgalerien/181-Wasserbahn-Piraten-Fluss-Heitmann-Schneider--bild-3490/",
     "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf"
   },
   {
@@ -625,10 +634,10 @@
         subtitle:"29 Geschäfte auf dem offiziellen Platzplan · jede Nummer öffnet die passende Detailansicht.",
         sourceLabel:"Originalen Freimarktplan 2026 öffnen ↗",
         sourceUrl:"https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf",
-        imageUrl:"./assets/bremer-freimarkt-2026-map.svg",
-        imageAlt:"Interaktive Nachzeichnung des Freimarktplans 2026, mit 24 gelben und fünf grünen nummerierten Fahrgeschäften",
-        aspectRatio:"1448 / 1024",
-        note:"Nachzeichnung auf Grundlage des von dir gesendeten Freimarktplans. Gelbe Felder: Fahr- und Laufgeschäfte · grüne Felder: Geister-, Achter- und Schienenbahnen. Zum Bewegen auf dem Handy seitlich scrollen, Nummer antippen. Originalplan über den Quellenlink.",
+        imageUrl:"./assets/bremer-freimarkt-2026-map.png",
+        imageAlt:"Offizieller Freimarkt-Lageplan 2026 als originale PNG-Grafik mit 24 gelben und 5 grünen nummerierten Fahrgeschäft-Feldern",
+        aspectRatio:"2048 / 1448",
+        note:"Offizieller Freimarkt-Lageplan 2026 als originalgetreues PNG, transparent anklickbare Felder darüber. Gelbe Felder: Fahr- und Laufgeschäfte · grüne Felder: Geister-, Achter- und Schienenbahnen. Zum Bewegen auf dem Handy seitlich scrollen, Nummer antippen. Originalplan über den Quellenlink.",
         points:[
   {
     "rideId": "bremen-freimarkt26-happy-traveller",
@@ -844,7 +853,7 @@
       noLiveLabel:"FREIMARKT · KEINE LIVE-WARTEZEITEN",
       noLiveMessage:"Für den Freimarkt gibt es keine öffentliche Live-Wartezeitliste. NÄHEN misst deine persönliche Queue.",
       noLiveAlarmMessage:"Ohne öffentlichen Wartezeitfeed sind Live-Alarme deaktiviert.",
-      disclaimer:"Inoffizielle NÄHEN-Fan-Übersicht. Kein Angebot des Veranstalters. 29 Großattraktionen gemäß offiziellem Plan (Stand 14.09.2026), der Kleine Freimarkt, Kinderfahrgeschäfte, Zelte und Buden sind nicht in der Liste. Der angezeigte klickbare Plan ist eine interaktive Nachzeichnung des Benutzerplans; der Originalplan ist verlinkt. Bekannte Schausteller sind betriebsbezogen eingetragen, die Fahrpreise werden pro Fahrt manuell erfasst. Bildnachweise in den Details."
+      disclaimer:"Inoffizielle NÄHEN-Fan-Übersicht. Kein Angebot des Veranstalters. 29 Großattraktionen gemäß offiziellem Plan (Stand 14.09.2026), der Kleine Freimarkt, Kinderfahrgeschäfte, Zelte und Buden sind nicht in der Liste. Die unveränderte Plan-Grafik stammt aus dem offiziellen Freimarkt-PDF und wird als PNG mit transparenten Klickflächen angezeigt; der Originalplan ist verlinkt. Bekannte Schausteller sind betriebsbezogen eingetragen, die Fahrpreise werden pro Fahrt manuell erfasst. Bildnachweise in den Details."
     },
     rides,worlds,fonts,aliases,rideConfig,
     exclusions:{ids:[],namePatterns:[]}
