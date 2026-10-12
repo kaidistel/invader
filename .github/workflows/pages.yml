@@ -32,6 +32,8 @@ jobs:
         run: node naehen/test-muenster-herbstsend.cjs
       - name: Test Bremer Freimarkt 2026 map and attractions
         run: node naehen/test-bremer-freimarkt-2026.cjs
+      - name: Test Nordhorn Herbstkirmes 2026 without map
+        run: node naehen/test-nordhorn-herbstkirmes-2026.cjs
 
       - name: Fetch NÄHEN live queue data
         run: |

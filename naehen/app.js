@@ -28,7 +28,8 @@
     window.NAEHEN_MUENSTER_HERBSTSEND_2026,
     window.NAEHEN_GALLIMARKT_LEER_2026,
     window.NAEHEN_HAMBURG_WINTERDOM_2026,
-    window.NAEHEN_BREMER_FREIMARKT_2026
+    window.NAEHEN_BREMER_FREIMARKT_2026,
+    window.NAEHEN_NORDHORN_HERBSTKIRMES_2026
   ].filter((module) => module && module.park && module.park.slug);
 
   const PARK_MODULES = {};

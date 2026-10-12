@@ -1831,3 +1831,22 @@ body[data-park="bremer-freimarkt-2026"] .soestOriginalPlanWrap{aspect-ratio:2048
 body[data-park="bremer-freimarkt-2026"] .soestPlanLink{background:transparent!important;border-color:transparent!important}
 body[data-park="bremer-freimarkt-2026"] .soestPlanLink:hover,
 body[data-park="bremer-freimarkt-2026"] .soestPlanLink:focus-visible{background:#f0b74955!important;border-color:#f56b53!important}
+
+/* Nordhorn Herbstkirmes 2026 – Vechtestadt-Lichter, herbstliches Petrol und warmes Messing */
+body[data-park="nordhorn-herbstkirmes-2026"]{--accent:#efcf94;--accent2:#a6e1db;--line:#6f8475}
+body[data-park="nordhorn-herbstkirmes-2026"] .parkAtmosphere{
+  background:linear-gradient(180deg,#102e37aa 0%,#1a2936ca 37%,#0e1d27f0 88%),var(--park-hero-image) center 43%/cover no-repeat;
+}
+body[data-park="nordhorn-herbstkirmes-2026"] .hero{
+  background:radial-gradient(ellipse at 100% -5%,#d9f7db2d,transparent 40%),linear-gradient(132deg,#133a46,#243446 54%,#3c2734);
+  border:1px solid #efc8818c;box-shadow:inset 0 1px #f5dd9c48,0 18px 36px #030c178a;
+}
+body[data-park="nordhorn-herbstkirmes-2026"] .hero:before{background:linear-gradient(180deg,#f4d18b 0 29%,#6dbdc0 29% 69%,#d17d82 69% 100%)}
+body[data-park="nordhorn-herbstkirmes-2026"] .hero h1{font-family:'Rye',Georgia,serif;letter-spacing:.015em;text-shadow:0 4px 11px #0a1724}
+body[data-park="nordhorn-herbstkirmes-2026"] .sectionHead h2{font-family:'DM Serif Display',serif}
+body[data-park="nordhorn-herbstkirmes-2026"] .ride{background:linear-gradient(143deg,#183843,#182b3a);border:1px solid #b19d7591}
+body[data-park="nordhorn-herbstkirmes-2026"] .ride:after{background:linear-gradient(0deg,#10262c 0%,#0f2837dd 45%,#092c3708 100%)}
+body[data-park="nordhorn-herbstkirmes-2026"] .rideArt{filter:saturate(1.09) contrast(1.05) brightness(.85)}
+body[data-park="nordhorn-herbstkirmes-2026"] .ride .zone{color:#eed59d}
+body[data-park="nordhorn-herbstkirmes-2026"] .btn.primary{background:linear-gradient(150deg,#ffe2a5,#dbb077);color:#112c39;border-color:#f8dda2}
+body[data-park="nordhorn-herbstkirmes-2026"] .brand b{color:#ecd296}
