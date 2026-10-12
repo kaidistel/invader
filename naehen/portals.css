@@ -3474,3 +3474,42 @@
  #rideSheet[data-park="hamburg-winterdom-2026"] .worldArt{height:300px!important}
  #rideSheet[data-park="hamburg-winterdom-2026"] #rideTitle{font-size:clamp(25px,6.5vw,37px)!important}
 }
+
+/* 29 individuell markierte Fahrgeschäftsportale zum 991. Bremer Freimarkt. */
+#rideSheet[data-park="bremer-freimarkt-2026"]{--freimarkt-ink:#24172e;--freimarkt-light:#ffcd95;--freimarkt-glow:#d7438b}
+#rideSheet[data-park="bremer-freimarkt-2026"] .sheetCard{padding-top:297px;border-top:4px solid var(--freimarkt-light)!important;background:radial-gradient(circle at 87% 2%,color-mix(in srgb,var(--freimarkt-glow) 29%,transparent),transparent 42%),linear-gradient(150deg,var(--freimarkt-ink),#101422)!important;color:#fff4e3!important}
+#rideSheet[data-park="bremer-freimarkt-2026"] .worldArt{display:block!important;position:absolute!important;inset:0 0 auto!important;width:100%!important;height:349px!important;border:0!important;border-radius:0!important;overflow:hidden!important;background:linear-gradient(125deg,var(--freimarkt-ink),#100e24)!important;clip-path:polygon(0 0,100% 0,100% 95%,88% 100%,55% 95%,27% 100%,0 95%)!important}
+#rideSheet[data-park="bremer-freimarkt-2026"] .worldArt img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 48%;filter:saturate(1.10) contrast(1.06)!important}
+#rideSheet[data-park="bremer-freimarkt-2026"] .worldArt:after{content:"";position:absolute;inset:0!important;background:linear-gradient(180deg,transparent 24%,#0a101434 55%,#090e1dd9 89%,#111523 100%)!important}
+#rideSheet[data-park="bremer-freimarkt-2026"] #rideZone{color:var(--freimarkt-light)!important;letter-spacing:.12em}
+#rideSheet[data-park="bremer-freimarkt-2026"] #rideTitle{position:relative;z-index:2;margin-top:9px!important;padding:12px 13px!important;border-left:6px solid var(--freimarkt-light)!important;background:linear-gradient(90deg,var(--freimarkt-ink),transparent)!important;color:#ffebd0!important;font-family:var(--attraction-font,'Rye',serif)!important;line-height:1.08!important;text-shadow:0 4px 12px #000,0 0 19px var(--freimarkt-glow)!important}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-happy-traveller"]{--freimarkt-light:#ffd85a;--freimarkt-glow:#ed4a6f;--freimarkt-ink:#292238}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-big-bamboo"]{--freimarkt-light:#72dfbc;--freimarkt-glow:#40bdd3;--freimarkt-ink:#1e2c3b}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-commander"]{--freimarkt-light:#d3a3ff;--freimarkt-glow:#b561d4;--freimarkt-ink:#292238}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-der-wellenflug"]{--freimarkt-light:#d0edff;--freimarkt-glow:#ed4a6f;--freimarkt-ink:#1e2c3b}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-bayern-tower"]{--freimarkt-light:#fce8ac;--freimarkt-glow:#40bdd3;--freimarkt-ink:#292238}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-top-in"]{--freimarkt-light:#83dbe9;--freimarkt-glow:#b561d4;--freimarkt-ink:#1e2c3b}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-air-power"]{--freimarkt-light:#ffb45c;--freimarkt-glow:#ed4a6f;--freimarkt-ink:#292238}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-riesenrad"]{--freimarkt-light:#fff0af;--freimarkt-glow:#40bdd3;--freimarkt-ink:#1e2c3b}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-break-dancer-no-2"]{--freimarkt-light:#ff73c8;--freimarkt-glow:#b561d4;--freimarkt-ink:#292238}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-troika-musikexpress"]{--freimarkt-light:#f5ca6b;--freimarkt-glow:#ed4a6f;--freimarkt-ink:#1e2c3b}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-euro-rutsche"]{--freimarkt-light:#86f5ed;--freimarkt-glow:#40bdd3;--freimarkt-ink:#292238}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-mondlift"]{--freimarkt-light:#d3ecff;--freimarkt-glow:#b561d4;--freimarkt-ink:#1e2c3b}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-happy-sailor"]{--freimarkt-light:#95e9dd;--freimarkt-glow:#ed4a6f;--freimarkt-ink:#292238}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-mythos"]{--freimarkt-light:#edb2f7;--freimarkt-glow:#40bdd3;--freimarkt-ink:#1e2c3b}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-tiki-taki"]{--freimarkt-light:#f7df91;--freimarkt-glow:#b561d4;--freimarkt-ink:#292238}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-bee-bop-drive"]{--freimarkt-light:#fcbaaa;--freimarkt-glow:#ed4a6f;--freimarkt-ink:#1e2c3b}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-happy-family"]{--freimarkt-light:#fae4a7;--freimarkt-glow:#40bdd3;--freimarkt-ink:#292238}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-rotor"]{--freimarkt-light:#d3a9ff;--freimarkt-glow:#b561d4;--freimarkt-ink:#1e2c3b}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-ballonfahrt"]{--freimarkt-light:#e9d2b2;--freimarkt-glow:#ed4a6f;--freimarkt-ink:#292238}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-fortress-tower"]{--freimarkt-light:#abc6f7;--freimarkt-glow:#40bdd3;--freimarkt-ink:#1e2c3b}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-octopussy"]{--freimarkt-light:#b5e97e;--freimarkt-glow:#b561d4;--freimarkt-ink:#292238}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-super-rutsche"]{--freimarkt-light:#98cdeb;--freimarkt-glow:#ed4a6f;--freimarkt-ink:#1e2c3b}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-stardust"]{--freimarkt-light:#eca8e1;--freimarkt-glow:#40bdd3;--freimarkt-ink:#292238}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-voodoo-jumper"]{--freimarkt-light:#f19d7a;--freimarkt-glow:#b561d4;--freimarkt-ink:#1e2c3b}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-rock-roller-coaster"]{--freimarkt-light:#ffba80;--freimarkt-glow:#ed4a6f;--freimarkt-ink:#291b32}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-piraten-fluss"]{--freimarkt-light:#73dbf8;--freimarkt-glow:#40bdd3;--freimarkt-ink:#291b32}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-crazy-mine"]{--freimarkt-light:#f4dd82;--freimarkt-glow:#b561d4;--freimarkt-ink:#291b32}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-halloween"]{--freimarkt-light:#ee99a5;--freimarkt-glow:#ed4a6f;--freimarkt-ink:#291b32}
+#rideSheet[data-park="bremer-freimarkt-2026"][data-theme="freimarkt26-wilde-maus"]{--freimarkt-light:#faf5b6;--freimarkt-glow:#40bdd3;--freimarkt-ink:#291b32}
+@media(max-width:560px){#rideSheet[data-park="bremer-freimarkt-2026"] .sheetCard{padding-top:244px!important}#rideSheet[data-park="bremer-freimarkt-2026"] .worldArt{height:302px!important}}

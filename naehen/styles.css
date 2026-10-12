@@ -1796,3 +1796,32 @@ body[data-park="gallimarkt-leer-2026"] .venueMapNote{color:#33566c;background:#e
 }
 .fairReceiptRow b{white-space:normal;overflow-wrap:anywhere}
 .fairReceiptRow{grid-template-columns:24px minmax(0,1fr) auto}
+
+/* Bremer Freimarkt 2026: hansestädtisches Rot, Messing und das Licht der Bürgerweide */
+body[data-park="bremer-freimarkt-2026"]{--accent:#ffe48d;--accent2:#f36c77;--line:#87576b}
+body[data-park="bremer-freimarkt-2026"] .parkAtmosphere{background:linear-gradient(180deg,#12192999 0%,#16101bd8 55%,#0d0b18f0 95%),var(--park-hero-image) center 45%/cover no-repeat}
+body[data-park="bremer-freimarkt-2026"] .hero{background:radial-gradient(circle at 80% -10%,#fbe3a344,transparent 45%),linear-gradient(130deg,#3f101d,#231f38 50%,#122535);border:1px solid #ffc28e77;box-shadow:inset 0 2px #fcdd9933,0 20px 42px #07070c95}
+body[data-park="bremer-freimarkt-2026"] .hero:before{background:linear-gradient(180deg,#f21f45 0 48%,#ffe4a0 48% 74%,#65b0e3 74%)}
+body[data-park="bremer-freimarkt-2026"] .hero h1{font-family:'Rye',Georgia,serif;letter-spacing:.02em;color:#fff0d1}
+body[data-park="bremer-freimarkt-2026"] .sectionHead h2{font-family:'Cinzel Decorative',serif}
+body[data-park="bremer-freimarkt-2026"] .ride{background:#211b2a;border:1px solid #b46d5eaa}
+body[data-park="bremer-freimarkt-2026"] .ride:after{background:linear-gradient(0deg,#1e1323 3%,#1d1528cc 49%,transparent 100%)}
+body[data-park="bremer-freimarkt-2026"] .rideArt{filter:saturate(1.06) contrast(1.08) brightness(.86)}
+body[data-park="bremer-freimarkt-2026"] .ride .zone{color:#ffcb98}
+body[data-park="bremer-freimarkt-2026"] .btn.primary{background:linear-gradient(110deg,#ffe6ac,#ed9976);color:#24172b;border-color:#fada92}
+body[data-park="bremer-freimarkt-2026"] #venueSpecialMap{display:block!important;background:#e9eef2;border:1px solid #e9cf9b;border-radius:10px;box-shadow:0 12px 33px #030c159c;overflow:hidden}
+body[data-park="bremer-freimarkt-2026"] .venueMapHead{background:linear-gradient(125deg,#b7002c,#671b33 56%,#172d48);border-bottom:3px solid #f1bb86}
+body[data-park="bremer-freimarkt-2026"] .venueMapHead h2,body[data-park="bremer-freimarkt-2026"] .venueMapHead .eyebrow{color:#fff0cf}
+body[data-park="bremer-freimarkt-2026"] .venueMapHead p{color:#ffeadb}
+body[data-park="bremer-freimarkt-2026"] .venueMapSource{background:#fff6e0;color:#651527;border-color:#f1d49d}
+body[data-park="bremer-freimarkt-2026"] .venueMapCanvas{overflow-x:auto!important;overflow-y:hidden;padding:7px;background:#dce7f0;-webkit-overflow-scrolling:touch;scrollbar-color:#b8394b #dce7f0}
+body[data-park="bremer-freimarkt-2026"] .soestOriginalPlanWrap{width:1080px!important;min-width:1080px!important;max-width:none!important;margin:0 auto!important;aspect-ratio:1448 / 1024!important;box-shadow:0 4px 14px #111c3577;border-radius:3px}
+body[data-park="bremer-freimarkt-2026"] .soestOriginalPlan{height:100%!important;width:100%!important;object-fit:contain!important}
+body[data-park="bremer-freimarkt-2026"] .soestPlanHotspots{display:block!important;position:absolute;inset:0;z-index:7;pointer-events:none}
+body[data-park="bremer-freimarkt-2026"] .soestPlanLink{position:absolute;left:var(--map-x);top:var(--map-y);width:35px;height:33px;padding:0;transform:translate(-50%,-50%);background:transparent;border:2px solid transparent;color:transparent;box-shadow:none;border-radius:7px;pointer-events:auto;cursor:pointer;z-index:2}
+body[data-park="bremer-freimarkt-2026"] .soestPlanLink>span{display:none!important}
+body[data-park="bremer-freimarkt-2026"] .soestPlanLink:hover,body[data-park="bremer-freimarkt-2026"] .soestPlanLink:focus-visible{outline:2px solid #fff3cb;outline-offset:2px;border-color:#f56b53;background:#f0b74955;box-shadow:0 0 0 3px #83223f66;z-index:25}
+body[data-park="bremer-freimarkt-2026"] .soestPlanLink b{position:absolute;left:50%;bottom:calc(100% + 8px);transform:translateX(-50%);width:max-content;max-width:180px;padding:6px 9px;display:none!important;visibility:hidden;color:white;font:900 12px/1.2 'Barlow Condensed',sans-serif;background:#580c29;border:1px solid #ffcc76;box-shadow:0 5px 12px #14202ac9}
+body[data-park="bremer-freimarkt-2026"] .soestPlanLink:hover b,body[data-park="bremer-freimarkt-2026"] .soestPlanLink:focus-visible b{display:block!important;visibility:visible}
+body[data-park="bremer-freimarkt-2026"] .venueMapNote{color:#33506d;background:#e1ebf2}
+@media(max-width:760px){body[data-park="bremer-freimarkt-2026"] .soestOriginalPlanWrap{margin:0!important}body[data-park="bremer-freimarkt-2026"] .venueMapCanvas{padding:4px}}
