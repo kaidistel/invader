@@ -430,13 +430,24 @@ If the input is **MIT KARTE / LAGEPLAN**, request or resolve the best available 
 3. user-provided image/PDF
 4. another source explicitly approved by the user
 
+**Verbindliche Kartenregel (NÄHEN-Standard): Die Karte selbst ist ausschließlich eine originale PNG-Datei mit transparenten, darüberliegenden Links.**
+
+- Liegt der Plan bereits als PNG vor, **genau diese Original-PNG unverändert** als Kartenbild einbinden; keine neue Zeichnung daraus erzeugen.
+- Bei PDF/JPG/anderen Quellen den **originalen Lageplan als PNG exportieren/rasterisieren**, ohne das Kartenmotiv nachzuzeichnen, neu zu layouten, umzubenennen, zu übermalen oder zu vereinfachen. Keine SVG-Nachzeichnung, kein HTML- oder CSS-Rekonstrukt.
+- Die vorhandenen **gedruckten Standnummern/Felder** dürfen nur von **transparenten Klickflächen** überlagert werden. **Keine zusätzlichen sichtbaren Pins, Pfeile, Nummern oder Labels** dauerhaft auf der Karte platzieren.
+- Klick-/Tapflächen werden mit Prozentkoordinaten **direkt über dem passenden Originalfeld** positioniert und öffnen die vorhandene NÄHEN-Attraktionsdetailseite. Eine dezente Hervorhebung sowie ein Tooltip erst bei Hover/Fokus sind zulässig.
+- Den Plan als stabile lokale `.png`-Datei in `naehen/assets/` vorhalten, sofern Quelle/Nutzungsbedingungen es erlauben. Bei einer hochgeladenen PNG möglichst das Original direkt übernehmen.
+- Originales Seitenverhältnis und Lesbarkeit beibehalten; auf Mobilgeräten hochauflösendes Zoomen/Scrollen und ausreichend große Tapflächen sicherstellen.
+- Original-Quell-URL und Bildnachweis getrennt hinterlegen; alle Hotspots sorgfältig auf Deckung mit den gedruckten Feldern prüfen.
+- **Keine Änderungen an anderen Veranstaltungskarten** allein durch ein neues Onboarding.
+
 Preferred implementation:
 
-- keep a stable local image asset for the displayed plan where licensing/source terms permit
+- the unchanged original `map.png` is the only visible map surface
 - store the original source URL separately
-- preserve the original aspect ratio
-- define clickable attraction points using event-scoped ride IDs
-- clicking a marker opens the normal NÄHEN ride detail
+- preserve its original aspect ratio
+- define transparent clickable attraction hitboxes using event-scoped ride IDs
+- clicking an existing printed field opens the normal NÄHEN ride detail
 - the map is an additional navigation layer, never the only way to reach rides
 - mobile zoom/scroll/tap behavior must remain usable
 - include source attribution
@@ -544,11 +555,11 @@ Create a year-scoped event config containing:
 
 Only when map mode is **MIT KARTE**:
 
-1. acquire the supplied/official plan
-2. create a stable local image if appropriate
-3. add `specialMap`
-4. map every known ride to a percentage coordinate
-5. test every map point opens the correct attraction
+1. acquire the supplied/official original plan
+2. save the **unchanged original PNG** locally; for PDFs/other formats rasterize the real plan as PNG (never redraw)
+3. add `specialMap` with the original PNG path and correct aspect ratio
+4. position **transparent** clickable areas directly above the existing printed ride numbers/fields; no extra visible map markers
+5. test every clickable area against the real PNG to verify precise alignment and the correct attraction
 
 When map mode is **OHNE KARTE**, skip this entire phase.
 
@@ -639,7 +650,8 @@ Test at minimum:
 - total and average are mathematically correct
 - archive receipt survives reload
 - synced receipt survives account reload/device change
-- if map mode is on: all markers point to correct rides
+- if map mode is on: the displayed plan is the original PNG (not a redrawn SVG/HTML approximation), with no extra permanent labels or pins
+- if map mode is on: all transparent hotspots align with existing printed fields and open the correct rides
 - if map mode is off: no empty/broken map UI exists
 - mobile layout remains usable
 - PWA cache/version is bumped when cached assets/config changed

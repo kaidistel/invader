@@ -18,12 +18,12 @@
     "rideIndexUrl": "https://ride-index.de/2005/01/08/happy-traveller/",
     "priceEuro": null,
     "new2026": false,
-    "imageUrl": "https://onride.de/onride-upic113605%401120",
-    "imageCredit": "onride · Happy Traveller von Gack/Wolter, historisches Betreiberfoto",
-    "imageSourceUrl": "https://onride.de/viewtopic.php?t=16316",
+    "imageUrl": "https://www.neumarkt.de/media/11062/happy-traveller.jpg",
+    "imageCredit": "Stadt Neumarkt i.d.OPf. · Happy Traveller auf dem Frühlingsfest",
+    "imageSourceUrl": "https://www.neumarkt.de/rathaus-buergerservice/aktuelles/aktuelles-aus-neumarkt/47-fruehlingsfest-familiennachmittag-am-freitag-0525/",
     "sourceUrl": "https://www.freimarkt.de/wp-content/uploads/2026/09/Freimarkt_Lageplan_2026.pdf",
     "imageFallbackUrls": [
-      "https://www.freimarkt.de/wp-content/uploads/2018/10/happy-traveller.jpg"
+      "https://ride-index.de/wp-content/uploads/2005/01/Winter-HappyTraveller-2019.jpg"
     ]
   },
   {
