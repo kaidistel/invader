@@ -1,0 +1,55 @@
+name: Store Happy Traveller photo locally
+
+on:
+  push:
+    paths:
+      - ".github/workflows/build-happy-traveller-photo.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  download-photo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install image validator
+        run: python3 -m pip install --quiet pillow
+      - name: Download the exact Happy Traveller photo (Neumarkt 2025)
+        run: |
+          set -euo pipefail
+          curl --fail --location --show-error --retry 3 --retry-delay 2 --max-time 60 \
+            -A 'Mozilla/5.0 (compatible; NAEHEN-Assets/1.0)' \
+            'https://www.neumarkt.de/media/11062/happy-traveller.jpg' \
+            --output /tmp/happy-traveller.jpg
+          python3 - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          p=Path("/tmp/happy-traveller.jpg")
+          im=Image.open(p)
+          im.verify()
+          im=Image.open(p).convert("RGB")
+          w,h=im.size
+          assert w>=900 and h>=600, f"Wrong/small source {w}x{h}"
+          out=Path("naehen/assets/bremer-freimarkt-2026-happy-traveller.webp")
+          out.parent.mkdir(parents=True,exist_ok=True)
+          im.save(out,"WEBP",quality=90,method=6)
+          chk=Image.open(out)
+          assert chk.size==(w,h)
+          assert out.stat().st_size>45000
+          print("Verified local photo:",w,h,out.stat().st_size)
+          PY
+      - name: Commit only the local attraction photo
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add naehen/assets/bremer-freimarkt-2026-happy-traveller.webp
+          if git diff --cached --quiet; then
+            echo "Image unchanged"
+          else
+            git commit -m "assets(naehen): locally host verified Happy Traveller photo"
+            git push
+          fi
