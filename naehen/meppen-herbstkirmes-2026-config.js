@@ -22,13 +22,19 @@
   {
     "id": "musik-express",
     "name": "Musik Express",
-    "operator": "Noack",
+    "operator": "Ahrend-Noack",
+    "operatorFull": "Noack-Ahrend (Lemgo)",
     "zone": "Kirmesklassiker",
-    "type": "Musik-Express / Berg- und Talbahn",
-    "imageUrl": "",
-    "imageCredit": "",
-    "imageSourceUrl": "",
-    "description": "Der Musik Express von Noack bringt Musik, Berg-und-Tal-Fahrt und Kirmesstimmung in die Meppener Innenstadt. Die konkrete Noack-Anlage ist noch nicht eindeutig identifiziert."
+    "type": "Mack Berg- und Talbahn",
+    "manufacturer": "Mack",
+    "year": 1976,
+    "dimensions": "18 × 17 m",
+    "capacity": "60 Personen · 20 Gondeln",
+    "rideIndexUrl": "https://ride-index.de/2005/08/07/musik-express-noack-ahrend/",
+    "imageUrl": "https://www.ummet-eck.de/Bilder/fotosets/1024/9-musikexpress-noack-mhagen22-c-UMM-chr-schoen.jpg",
+    "imageCredit": "Ummet-Eck · Christian Schön · Musikexpress Noack-Ahrend (Meinerzhagen 2022)",
+    "imageSourceUrl": "https://www.ummet-eck.de/bildgalerien/73-Musikexpress-Ahrend-Noack-Fahrgeschaeft-auf-der-Kirmes-bild-4486/",
+    "description": "Mack-Musikexpress von Noack-Ahrend aus Lemgo, seit 1976 unterwegs. 20 Gondeln für 60 Fahrgäste, mit bunt beleuchteter Berg-und-Tal-Fahrt."
   },
   {
     "id": "extrem",
@@ -105,7 +111,7 @@
     rideConfig[r.id]={singleRider:false};
   });
   window.NAEHEN_MEPPEN_HERBSTKIRMES_2026={
-    park:{slug:"meppen-herbstkirmes-2026",kind:"fair",name:"Meppener Rathauskirmes 2026",location:"Meppen · Innenstadt · 16.–19.10.2026",startDate:"2026-10-16",endDate:"2026-10-19",officialUrl:dateSource,dateSourceUrl:dateSource,lineupSourceUrl:lineupSource,liveDataUrl:null,liveWaits:false,supportsPostedWait:false,sortMode:"configured",fairZones:["Autoscooter","Kirmesklassiker","Thrill","Familienfahrgeschäft"],receiptTitle:"RATHAUSKIRMES MEPPEN 2026",receiptLocation:"MEPPEN · INNENSTADT",cardImage:"https://ivzrelaunch.blob.core.windows.net/prod-images/e708d0cb-2687-4a1f-b6a2-df12120f0abc_540h.jpg",cardImageCredit:"IVZ · Crazy Machine (Ahrend), Symbolbild einer Attraktion",cardImageSourceUrl:"https://www.ivz-aktuell.de/articles/428136/neue-fahrattraktionen-und-viele-leckereien",cardCopy:"16.–19. Oktober · 6 Fahrgeschäfte · Feuerwerk Freitag · Familientag Montag",noLiveLabel:"RATHAUSKIRMES · KEINE LIVE-WARTEZEITEN",noLiveMessage:"Keine öffentlichen Live-Wartezeiten. NÄHEN misst deine persönliche Queue.",noLiveAlarmMessage:"Keine öffentlichen Wartezeit-Alarme verfügbar.",disclaimer:"Unabhängiger Fan-Begleiter, keine offizielle Anwendung der Stadt Meppen. Die sechs Fahrgeschäfte stammen aus Nutzerangaben; Termine und Rahmenprogramm von WiM Meppen. Kein Lageplan. Fahrpreise werden ausschließlich pro Fahrt manuell erfasst. Beim Musik Express ist die Noack-Anlage noch nicht eindeutig identifiziert, deshalb bewusst kein möglicherweise falsches Bild."},
+    park:{slug:"meppen-herbstkirmes-2026",kind:"fair",name:"Meppener Rathauskirmes 2026",location:"Meppen · Innenstadt · 16.–19.10.2026",startDate:"2026-10-16",endDate:"2026-10-19",officialUrl:dateSource,dateSourceUrl:dateSource,lineupSourceUrl:lineupSource,liveDataUrl:null,liveWaits:false,supportsPostedWait:false,sortMode:"configured",fairZones:["Autoscooter","Kirmesklassiker","Thrill","Familienfahrgeschäft"],receiptTitle:"RATHAUSKIRMES MEPPEN 2026",receiptLocation:"MEPPEN · INNENSTADT",cardImage:"https://ivzrelaunch.blob.core.windows.net/prod-images/e708d0cb-2687-4a1f-b6a2-df12120f0abc_540h.jpg",cardImageCredit:"IVZ · Crazy Machine (Ahrend), Symbolbild einer Attraktion",cardImageSourceUrl:"https://www.ivz-aktuell.de/articles/428136/neue-fahrattraktionen-und-viele-leckereien",cardCopy:"16.–19. Oktober · 6 Fahrgeschäfte · Feuerwerk Freitag · Familientag Montag",noLiveLabel:"RATHAUSKIRMES · KEINE LIVE-WARTEZEITEN",noLiveMessage:"Keine öffentlichen Live-Wartezeiten. NÄHEN misst deine persönliche Queue.",noLiveAlarmMessage:"Keine öffentlichen Wartezeit-Alarme verfügbar.",disclaimer:"Unabhängiger Fan-Begleiter, keine offizielle Anwendung der Stadt Meppen. Die sechs Fahrgeschäfte stammen aus Nutzerangaben; Termine und Rahmenprogramm von WiM Meppen. Kein Lageplan. Fahrpreise werden ausschließlich pro Fahrt manuell erfasst. Der Musikexpress ist die Mack-Anlage von Noack-Ahrend (Lemgo), verifiziert über Ride-Index."},
     rides,worlds,fonts,aliases,rideConfig,exclusions:{ids:[],namePatterns:[]}
   };
 })();
