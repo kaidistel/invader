@@ -14,9 +14,12 @@
     "type": "Familienachterbahn",
     "description": "Alpen-Feeling in St. Pauli: Auf der mobilen Familienachterbahn geht es durch schnelle Kurven und kleine Höhenwechsel.",
     "new2026": false,
-    "imageUrl": "https://kermisplanner.nl/uploads/attractions/attraction-alpen-coaster/1675545349_6662591557a9c8dc3b34.jpg",
-    "imageCredit": "Kermisplanner · Alpencoaster Vorlop",
-    "imageSourceUrl": "https://kermisplanner.nl/nl/attractie/alpen-coaster-hy2NTPWR"
+    "imageUrl": "https://volksfest-berlin.de/wp-content/uploads/2019/06/alpen-coaster-vorlop03-min.jpg",
+    "imageCredit": "Volksfest Berlin · Alpen Coaster Vorlop",
+    "imageSourceUrl": "https://volksfest-berlin.de/attraktionen/alpen-coaster-vorlop/",
+    "imageFallbackUrls": [
+      "https://kermisplanner.nl/uploads/attractions/attraction-alpen-coaster/1675545349_6662591557a9c8dc3b34.jpg"
+    ]
   },
   {
     "id": "wilde-maus",
@@ -105,12 +108,15 @@
     "description": "Die große HUSS-Break-Dance-Variante von Dreher-Vespermann: schnell drehende Gondelkreuze und die legendäre DOM-Stimmung.",
     "new2026": false,
     "manufacturer": "HUSS",
-    "imageUrl": "https://breakdancer-das-original.de/wp-content/uploads/2025/09/breaker-winter-1.jpg",
-    "imageCredit": "Dreher-Vespermann · Betreiberfoto: Break Dancer No. 2 auf dem Hamburger Winterdom",
-    "imageSourceUrl": "https://breakdancer-das-original.de/",
+    "imageUrl": "https://www.kirmesecke.de/Bilder/fotosets/1024/3-breakdancer-no2-steinert22-c-UMM-chr-schoen.jpg",
+    "imageCredit": "Ummet-Eck · Christian Schön · Break Dancer No. 2 von Dreher-Vespermann",
+    "imageSourceUrl": "https://www.kirmesecke.de/bildgalerien/254-Breakdancer-No-2-Dreher-Vespermann-Fahrgeschaeft-auf-der-Kirmes-bild-4366/",
     "year": 1987,
     "capacity": "48 Personen · 24 Gondeln",
-    "dimensions": "25,5 × 25 × 12,9 m"
+    "dimensions": "25,5 × 25 × 12,9 m",
+    "imageFallbackUrls": [
+      "https://breakdancer-das-original.de/wp-content/uploads/2025/09/breaker-winter-1.jpg"
+    ]
   },
   {
     "id": "dom-dancer",
@@ -163,9 +169,12 @@
     "new2026": false,
     "manufacturer": "Funtime",
     "rideIndexUrl": "https://ride-index.de/2024/05/07/nordic-tower/",
-    "imageUrl": "https://www.nordic-tower.de/images/1920/10812302/IMG-20240805-WA0024.jpg",
-    "imageCredit": "Nordic Tower · Betreiberfoto",
-    "imageSourceUrl": "https://www.nordic-tower.de/"
+    "imageUrl": "https://cdn.coaster.cloud/attractions/A1/AE/A1AES4ck2dMYNhDNoLxfZt.jpg?class=large",
+    "imageCredit": "coaster.cloud · Nordic Tower Nülken",
+    "imageSourceUrl": "https://www.ummet-eck.de/regionen/101872-Nordic-Tower-Nuelken-/",
+    "imageFallbackUrls": [
+      "https://www.nordic-tower.de/images/992/10683255/bedc7855d539134ce14da8db2c27d5a814c36d05.jpg"
+    ]
   },
   {
     "id": "evolution",
@@ -181,9 +190,12 @@
     "dimensions": "bis 65 m Höhe",
     "capacity": "32 Personen",
     "rideIndexUrl": "https://ride-index.de/2024/03/06/evolution-fackler/",
-    "imageUrl": "https://www.hamburg-dom-fieber.de/images/hamburg-dom-fieberde/evolution-1.jpg",
-    "imageCredit": "Hamburg DOM Fieber · Evolution Fackler",
-    "imageSourceUrl": "https://www.hamburg-dom-fieber.de/evolution"
+    "imageUrl": "https://le-cdn.website-editor.net/bb5c9f2b6feb489e9d5d5b63b93ca5bf/dms3rep/multi/opt/2024-03-22-Hamburg-Premiere-auf-dem-DOM-offenblende-MME-0140-1920w.jpg",
+    "imageCredit": "Evolution Fackler · Betreiberfoto vom Hamburger DOM",
+    "imageSourceUrl": "https://www.evolution-flight.com/",
+    "imageFallbackUrls": [
+      "https://i.postimg.cc/kgMFKzgK/HHDOM-24-167.jpg"
+    ]
   },
   {
     "id": "mayday",
@@ -339,23 +351,29 @@
     "type": "Autoscooter",
     "description": "Die beleuchtete Star-Club-Bahn macht aus jeder Runde ein kleines Duell mit Freunden.",
     "new2026": false,
-    "imageUrl": "https://www.hamburg-dom-fieber.de/images/hamburg-dom-fieberde/super-scooter-og.jpg.webp",
-    "imageCredit": "Hamburg DOM Fieber · Super Skooter Star Club",
-    "imageSourceUrl": "https://www.hamburg-dom-fieber.de/super-scooter-autoscooter"
+    "imageUrl": "https://kermisplanner.nl/uploads/attractions/attraction-autoscooter-ldquo-super-skooter-rdquo/1681854556_8be63e6d7f156f01548d.jpg",
+    "imageCredit": "Kermisplanner · Super Skooter Rasch",
+    "imageSourceUrl": "https://kermisplanner.nl/de/attraktion/autoscooter-ldquo-super-skooter-rdquo-9H0wkWa5",
+    "imageFallbackUrls": [
+      "https://onride.de/onride-upic238293%40640"
+    ]
   },
   {
     "id": "bumper-1",
     "name": "AS Bumper 1",
     "operator": "Harder-Mantau",
-    "operatorFull": "Harder / Mantau (Hamburg)",
+    "operatorFull": "Michael Harder / Matthias Mantau (Hamburg)",
     "zone": "Autoscooter",
     "type": "2-Säulen-Autoscooter",
     "description": "Bumper One bringt klassische Zweierskooter, Musik und LED-Atmosphäre auf den Winterdom.",
     "new2026": false,
-    "imageUrl": "https://www.hamburg-dom-fieber.de/images/hamburg-dom-fieberde/dom-scooter_q-og.jpg.webp",
-    "imageCredit": "Hamburg DOM Fieber · Dom-Scooter Bumper 1",
-    "imageSourceUrl": "https://www.hamburg-dom-fieber.de/dom-scooter",
-    "manufacturer": "Adesco"
+    "imageUrl": "https://onride.de/onride-upic461124%401120",
+    "imageCredit": "onride.de · Bumper One / Dom Scooter Harder-Mantau",
+    "imageSourceUrl": "https://onride.de/viewtopic.php?t=50955",
+    "manufacturer": "Adesco",
+    "imageFallbackUrls": [
+      "https://onride.de/onride-upic490812%401120"
+    ]
   },
   {
     "id": "phaenomenon",
@@ -399,9 +417,10 @@
     "type": "Irrgarten",
     "description": "Im beleuchteten Irrgarten führen Verzweigungen und optische Ablenkungen durch ein echtes DOM-Labyrinth.",
     "new2026": false,
-    "imageUrl": "https://www.hamburg-dom-fieber.de/images/hamburg-dom-fieberde/der-grosse-irrgarten-1.jpg",
-    "imageCredit": "Hamburg DOM Fieber · Der große Irrgarten Rasch",
-    "imageSourceUrl": "https://www.hamburg-dom-fieber.de/der-grosse-irrgarten"
+    "imageUrl": "https://www.kirmesecke.de/Bilder/poi/678/der-grosse-irrgarten-oktoberfest-2023.jpg",
+    "imageCredit": "Kirmesecke / Ummet-Eck · Der große Irrgarten Rasch",
+    "imageSourceUrl": "https://www.kirmesecke.de/regionen/101517-Der-grosse-Irrgarten-Rasch-/",
+    "imageFallbackUrls": []
   },
   {
     "id": "spass-allee",
@@ -479,9 +498,10 @@
     "type": "Laufgeschäft",
     "description": "Ab durch die Waschanlage! Schaum, schräge Effekte und überraschende Hindernisse warten auf dem Parcours.",
     "new2026": false,
-    "imageUrl": "https://www.hamburg-dom-fieber.de/images/hamburg-dom-fieberde/carwash-og.jpg.webp",
-    "imageCredit": "Hamburg DOM Fieber · Car Wash Horlbeck",
-    "imageSourceUrl": "https://www.hamburg-dom-fieber.de/carwash"
+    "imageUrl": "https://www.hamburg.de/resource/image/336274/landscape_ratio16x9/1240/697/911b329c8d79f1d5bc744fd110d21b58/7F11E95BCDE3FD2878A99392E4E28CA8/car-wash.webp",
+    "imageCredit": "Hamburger DOM · Car Wash Horlbeck",
+    "imageSourceUrl": "https://www.hamburg.de/freizeit/dom/attraktionen/",
+    "imageFallbackUrls": []
   },
   {
     "id": "rotor",
@@ -600,9 +620,10 @@
       liveDataUrl:null,liveWaits:false,supportsPostedWait:false,
       sortMode:"configured",fairZones:["Achterbahnen","Fahrgeschäfte","Autoscooter","Laufgeschäfte","Geisterbahnen"],
       receiptTitle:"HAMBURGER WINTERDOM 2026",receiptLocation:"HAMBURG · HEILIGENGEISTFELD",
-      cardImage:"https://cdn.mopo.de/uploads/sites/4/2025/11/alpen-coaster-scaled.jpg?resize=1024%2C600",
-      cardImageCredit:"MOPO · Hamburger Winterdom 2025 (Archivfoto)",
-      cardImageSourceUrl:"https://www.mopo.de/hamburg/hamburg-leuchtet-wieder-der-winterdom-2025-bringt-die-stadt-zum-strahlen/",
+      cardImage:"https://img.sparknews.funkemedien.de/239970704/239970704_1699449189_v16_9_1200.jpeg",
+      cardImageFallback:"https://cdn.mopo.de/uploads/sites/4/2022/07/57564004-scaled.jpg",
+      cardImageCredit:"Hamburger Abendblatt / Funke · Winterdom-Luftbild (Archivfoto)",
+      cardImageSourceUrl:"https://www.abendblatt.de/article239970696/Familienzauber-und-Fahrspass-Der-Winterdom-feiert-130-Jahre.html",
       cardCopy:"6. November – 6. Dezember · 36 vorläufig gemeldete Attraktionen · Winterzauber auf St. Pauli",
       noLiveLabel:"WINTERDOM · KEINE LIVE-WARTEZEITEN",
       noLiveMessage:"Auf dem Hamburger Winterdom gibt es keine öffentlichen Live-Wartezeiten. NÄHEN misst deine persönliche Queue.",

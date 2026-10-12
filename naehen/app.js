@@ -855,6 +855,19 @@
     const count = $("#parkCount");
     if (count) count.textContent = available.length + (available.length === 1 ? " Ziel verfügbar" : " Ziele verfügbar");
 
+    grid.querySelectorAll(".parkChoiceArt").forEach(img => {
+      const venue = PARKS[img.closest("[data-park]")?.dataset.park];
+      if (!venue) return;
+      let triedFallback = false;
+      img.onerror = () => {
+        if (!triedFallback && venue.cardImageFallback) {
+          triedFallback = true;
+          img.src = venue.cardImageFallback;
+        } else img.hidden = true;
+      };
+      if (img.complete && img.naturalWidth === 0) img.onerror();
+    });
+
     // The picker handles card clicks centrally via event delegation.
 
     if(category) hydrateParkPickerArt();
@@ -914,7 +927,24 @@
     await loadParkArtManifest(parkSlug);
     document.body.dataset.park = parkSlug;
     if (park.cardImage) {
-      document.body.style.setProperty("--park-hero-image", 'url("' + park.cardImage.replace(/"/g, '\"') + '")');
+      const backgrounds = [park.cardImage, park.cardImageFallback].filter(Boolean);
+      const loadBackground = (index) => {
+        if (activeParkSlug !== parkSlug) return;
+        if (index >= backgrounds.length) {
+          document.body.style.removeProperty("--park-hero-image");
+          return;
+        }
+        const bg = new Image();
+        bg.onload = () => {
+          if (activeParkSlug === parkSlug) {
+            document.body.style.setProperty("--park-hero-image", "url(" + JSON.stringify(backgrounds[index]) + ")");
+          }
+        };
+        bg.onerror = () => loadBackground(index + 1);
+        bg.src = backgrounds[index];
+      };
+      document.body.style.removeProperty("--park-hero-image");
+      loadBackground(0);
     } else {
       document.body.style.removeProperty("--park-hero-image");
     }
@@ -1691,17 +1721,16 @@
     // retry once with the event artwork, while local ride assets remain the preferred source.
     const rideArtFallback = venueIsFair() ? "" : (activeParkConfig()?.cardImage || "./assets/park-picker-bg.webp");
     container.querySelectorAll("img.rideArt").forEach((img) => {
-      const useFallback = () => {
-        if (rideArtFallback && !img.dataset.fallbackTried) {
-          img.dataset.fallbackTried = "1";
-          img.src = rideArtFallback;
-          return;
-        }
-        img.remove();
+      const rideId = img.closest("[data-detail]")?.dataset.detail;
+      const currentRide = visibleRides.find(ride => ride.id === rideId);
+      const candidates = [...(currentRide?.imageFallbackUrls || []), ...(rideArtFallback ? [rideArtFallback] : [])];
+      let index = 0;
+      const tryNext = () => {
+        if (index < candidates.length) img.src = candidates[index++];
+        else img.remove();
       };
-      img.addEventListener("error", useFallback, { once:true });
-      // A cached failed image can finish before the listener above is attached.
-      if (img.complete && img.naturalWidth === 0) useFallback();
+      img.addEventListener("error", tryNext);
+      if (img.complete && img.naturalWidth === 0) tryNext();
     });
 
     container.querySelectorAll(".ride[data-detail]").forEach((card) => {
@@ -2422,11 +2451,12 @@
     if (worldArtImage) {
       if (artSrc) {
         const detailFallback = venueIsFair() ? "" : (activeParkConfig()?.cardImage || "./assets/park-picker-bg.webp");
+        const candidates = [...(selectedDetailRide.imageFallbackUrls || []), ...(detailFallback ? [detailFallback] : [])];
+        let index = 0;
         worldArtImage.onerror = () => {
-          if (detailFallback && worldArtImage.src !== new URL(detailFallback, location.href).href) {
+          if (index < candidates.length) worldArtImage.src = candidates[index++];
+          else {
             worldArtImage.onerror = null;
-            worldArtImage.src = detailFallback;
-          } else {
             worldArtImage.hidden = true;
           }
         };
