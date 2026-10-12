@@ -449,6 +449,9 @@
   let totalRideCount = store.get("naehen:totalRideCount", sessions.filter((s) => s.status === "ridden").length);
   let srReportsLocal = store.get("naehen:srReports", []);
   let parkArchive = [];
+  let globalArchiveEntries = [];
+  let globalArchiveFilter = "all";
+  let globalArchiveRequest = 0;
   let achievements = {};
   let fairPrices = {};
 
@@ -1134,6 +1137,9 @@
     ["#installGate", "#setupGate", "#authGate"].forEach(hideGate);
     $("#app").classList.add("hidden");
     $("#nav").classList.add("hidden");
+    ++globalArchiveRequest;
+    globalArchiveEntries = [];
+    globalArchiveFilter = "all";
 
     if (localMode) {
       $("#accountMode").textContent = isDesktopDevMode() ? "DEV-BROWSER · Lokaler Testmodus" : "Lokaler Testmodus";
@@ -1887,6 +1893,170 @@
     return new Date(session.startedAt).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
   }
 
+
+  // Read across every venue without changing the existing single-venue archive.
+  function mergeGlobalArchiveEntries(...sources) {
+    const merged = new Map();
+    sources.forEach(entries => (entries || []).forEach(entry => {
+      const day = entry?.day;
+      if (!day || !(day.ended_at || day.endedAt)) return;
+      const slug = day.park_slug || day.parkSlug || entry.parkSlug || "phantasialand";
+      const key = String(day.id || slug + ":" + (day.started_at || day.startedAt));
+      if (!merged.has(key)) merged.set(key, normalizeArchiveEntry({
+        day: { ...day, park_slug: slug },
+        sessions: entry.sessions || []
+      }, slug));
+    }));
+    return Array.from(merged.values())
+      .sort((left, right) => parkDayStartMs(right.day) - parkDayStartMs(left.day));
+  }
+
+  function localGlobalArchive() {
+    const entries = [];
+    Object.keys(PARKS).forEach(slug => {
+      const cached = store.get(parkStoreKey("naehen:parkArchive", slug), []);
+      if (!Array.isArray(cached)) return;
+      cached.forEach(entry => {
+        const normalized = normalizeArchiveEntry(entry, slug);
+        if (!normalized) return;
+        entries.push({
+          day: { ...normalized.day, park_slug: normalized.day?.park_slug || normalized.day?.parkSlug || slug },
+          sessions: normalized.sessions
+        });
+      });
+    });
+    if (activeParkSlug) parkArchive.forEach(entry => {
+      const normalized = normalizeArchiveEntry(entry, activeParkSlug);
+      if (normalized) entries.push({
+        day: { ...normalized.day, park_slug: normalized.day?.park_slug || activeParkSlug },
+        sessions: normalized.sessions
+      });
+    });
+    return mergeGlobalArchiveEntries(entries);
+  }
+
+  async function fetchAllArchivePages(queryFactory, limit = 500) {
+    const all = [];
+    for (let offset = 0; ; offset += limit) {
+      const result = await queryFactory().range(offset, offset + limit - 1);
+      if (result.error) throw result.error;
+      const rows = result.data || [];
+      all.push(...rows);
+      if (rows.length < limit) return all;
+    }
+  }
+
+  async function loadGlobalCloudArchive(requestId, userId) {
+    if (!supa || !userId || localMode) return;
+    try {
+      const days = await fetchAllArchivePages(() => supa.from("park_days")
+        .select("*").eq("user_id", userId).not("ended_at", "is", null)
+        .order("started_at", { ascending: false }));
+      const grouped = new Map();
+      for (let i = 0; i < days.length; i += 70) {
+        const ids = days.slice(i, i + 70).map(day => day.id);
+        // Pagination prevents Supabase's default 1000-row truncation.
+        const rows = await fetchAllArchivePages(() => supa.from("queue_sessions")
+          .select("*").eq("user_id", userId).in("park_day_id", ids)
+          .order("started_at", { ascending: true }));
+        rows.forEach(row => {
+          if (!grouped.has(row.park_day_id)) grouped.set(row.park_day_id, []);
+          grouped.get(row.park_day_id).push(row);
+        });
+      }
+      if (requestId !== globalArchiveRequest || currentUserId() !== userId) return;
+      const cloud = days.map(day => ({
+        day,
+        sessions: (grouped.get(day.id) || []).map(row =>
+          dbSessionToClient(row, day.park_slug || "phantasialand"))
+      }));
+      globalArchiveEntries = mergeGlobalArchiveEntries(cloud, localGlobalArchive());
+      const status = $("#allDaysStatus");
+      if (status) status.textContent = "Alle gespeicherten Besuche wurden synchronisiert.";
+      renderGlobalArchive();
+    } catch (error) {
+      if (requestId !== globalArchiveRequest) return;
+      console.warn("Gesamtarchiv konnte nicht synchronisiert werden", error);
+      const status = $("#allDaysStatus");
+      if (status) status.textContent = "Cloud momentan nicht erreichbar · lokale Archive werden angezeigt.";
+      renderGlobalArchive();
+    }
+  }
+
+  function refreshGlobalArchive() {
+    const requestId = ++globalArchiveRequest;
+    globalArchiveEntries = mergeGlobalArchiveEntries(localGlobalArchive(), globalArchiveEntries);
+    const status = $("#allDaysStatus");
+    if (status) status.textContent = !localMode && supa && currentUserId()
+      ? "Lokale Daten geladen · synchronisiere weitere Besuche …"
+      : "Alle gespeicherten Besuche auf diesem Gerät.";
+    renderGlobalArchive();
+    if (!localMode && supa && currentUserId()) loadGlobalCloudArchive(requestId, currentUserId());
+  }
+
+  function renderGlobalArchive() {
+    const summary = $("#allDaysSummary"), list = $("#allDaysList");
+    if (!summary || !list) return;
+    const all = globalArchiveEntries;
+    const countParks = all.filter(entry => !venueIsFair(entry.day.park_slug)).length;
+    const countFairs = all.filter(entry => venueIsFair(entry.day.park_slug)).length;
+    const visible = all.filter(entry => globalArchiveFilter === "all" ||
+      (globalArchiveFilter === "fair" ? venueIsFair(entry.day.park_slug) : !venueIsFair(entry.day.park_slug)));
+    const ridden = visible.reduce((sum, entry) =>
+      sum + entry.sessions.filter(session => session.status === "ridden").length, 0);
+    const queueMs = visible.reduce((sum, entry) =>
+      sum + buildDayFacts(entry.day, entry.sessions, entry.day.park_slug).queueMs, 0);
+    summary.innerHTML = "<div class=\"archiveSummaryGrid\">" +
+      recapStat(visible.length, "Besuche im Filter") +
+      recapStat(countParks, "Parktage insgesamt") +
+      recapStat(countFairs, "Kirmestage insgesamt") +
+      recapStat(ridden + "×", "Fahrten im Filter") +
+      "</div><div class=\"allDaysQueueTotal\">🧵 " +
+      escapeHtml(formatDurationHuman(queueMs)) + " echte Queue in dieser Auswahl</div>";
+    $("#allDaysView [data-archive-filter]").forEach(btn => {
+      const selected = btn.dataset.archiveFilter === globalArchiveFilter;
+      btn.classList.toggle("active", selected);
+      btn.setAttribute("aria-pressed", String(selected));
+    });
+    if (!visible.length) {
+      list.innerHTML = "<div class=\"empty\">Noch keine abgeschlossenen " +
+        (globalArchiveFilter === "fair" ? "Kirmestage" : globalArchiveFilter === "park" ? "Parktage" : "Park- oder Kirmestage") +
+        " gespeichert. Nach dem Beenden erscheinen sie automatisch hier.</div>";
+      return;
+    }
+    list.innerHTML = visible.map(entry => {
+      const day = entry.day, slug = day.park_slug || "phantasialand";
+      const parkName = PARKS[slug]?.name || slug;
+      const fact = buildDayFacts(day, entry.sessions, slug);
+      const fair = venueIsFair(slug);
+      return "<button type=\"button\" class=\"archiveDayCard allDaysCard\" data-all-days-id=\"" + escapeHtml(day.id) + "\">" +
+        "<div class=\"archiveDayTop\"><div><span class=\"eyebrow\">" +
+        (fair ? "🎡 KIRMESTAG" : "🎢 PARKTAG") + " · " + escapeHtml(parkName) +
+        "</span><h3>" + escapeHtml(parkDayDateLabel(day)) + "</h3></div><span class=\"archiveChevron\">›</span></div>" +
+        "<div class=\"archiveDayStats\"><span><b>" + fact.rides + "×</b> Fahrten</span>" +
+        "<span><b>" + escapeHtml(formatDurationHuman(fact.queueMs)) + "</b> Queue</span>" +
+        "<span><b>" + escapeHtml(formatDurationHuman(fact.parkMs)) + "</b> Besuchszeit</span></div>" +
+        "<div class=\"archiveDayFoot\">" +
+        escapeHtml(fact.topRide ? "Meistgenäht: " + fact.topRide.name +
+          (fact.topRide.count > 1 ? " ×" + fact.topRide.count : "") : "Noch keine Fahrt") +
+        "</div></button>";
+    }).join("");
+  }
+
+  function openGlobalArchiveFromPicker(options = {}) {
+    stopLiveRefresh();
+    activeParkSlug = null;
+    document.body.removeAttribute("data-park");
+    document.body.style.removeProperty("--park-hero-image");
+    $("#parkPicker")?.classList.add("hidden");
+    $("#app")?.classList.remove("hidden");
+    $("#nav")?.classList.remove("hidden");
+    switchView("allDaysView");
+    if (options.pushHistory !== false) {
+      history.pushState({ naehenGlobalArchive: true }, "", location.href);
+    }
+  }
+
   function renderParkArchive() {
     const summary = $("#archiveSummary");
     const list = $("#parkArchiveList");
@@ -1941,8 +2111,8 @@
     });
   }
 
-  function openArchiveDay(dayId) {
-    const entry = parkArchive.find((item) => String(item.day?.id) === String(dayId));
+  function openArchiveDay(dayId, globalEntry = null) {
+    const entry = globalEntry || parkArchive.find((item) => String(item.day?.id) === String(dayId));
     if (!entry) return;
 
     const day = entry.day;
@@ -2750,11 +2920,16 @@
   }
 
   function switchView(viewId) {
-    ["homeView", "logView", "archiveView", "profileView"].forEach((id) => {
+    if (!activeParkSlug && viewId !== "allDaysView") {
+      showParkPicker();
+      return;
+    }
+    ["homeView", "logView", "archiveView", "allDaysView", "profileView"].forEach((id) => {
       $("#" + id)?.classList.toggle("hidden", id !== viewId);
     });
     if (viewId === "archiveView") renderParkArchive();
-    $$("[data-view]").forEach((button) => button.classList.toggle("active", button.dataset.view === viewId));
+    if (viewId === "allDaysView") refreshGlobalArchive();
+    $("[data-view]").forEach((button) => button.classList.toggle("active", button.dataset.view === viewId));
   }
 
   window.addEventListener("popstate", (event) => {
@@ -2770,6 +2945,10 @@
       return;
     }
 
+    if (event.state?.naehenGlobalArchive) {
+      openGlobalArchiveFromPicker({ pushHistory: false });
+      return;
+    }
     if (event.state?.naehenPark) {
       if (activeParkSlug !== event.state.naehenPark) {
         openPark(event.state.naehenPark, { pushHistory: false });
@@ -2783,6 +2962,19 @@
   });
 
   function bindStaticEvents() {
+    $("#allDaysView")?.addEventListener("click", event => {
+      const filter = event.target.closest("[data-archive-filter]");
+      if (filter) {
+        globalArchiveFilter = filter.dataset.archiveFilter;
+        renderGlobalArchive();
+        return;
+      }
+      const button = event.target.closest("[data-all-days-id]");
+      if (button) {
+        const entry = globalArchiveEntries.find(item => String(item.day?.id) === button.dataset.allDaysId);
+        if (entry) openArchiveDay(button.dataset.allDaysId, entry);
+      }
+    });
     $("#fairZoneTabs")?.addEventListener("click", event => {
       const button = event.target.closest("[data-fair-zone]");
       if (!button) return;
@@ -2795,6 +2987,11 @@
       if (categoryButton) {
         event.preventDefault();
         setVenueKind(categoryButton.dataset.selectVenueKind);
+        return;
+      }
+      if (event.target.closest("#pickerAllDaysBtn")) {
+        event.preventDefault();
+        openGlobalArchiveFromPicker();
         return;
       }
       if (event.target.closest("#venueKindBack")) {

@@ -1763,3 +1763,24 @@ body[data-park="gallimarkt-leer-2026"] .soestPlanLink:hover>b,
 body[data-park="gallimarkt-leer-2026"] .soestPlanLink:focus-visible>b{opacity:1;visibility:visible}
 body[data-park="gallimarkt-leer-2026"] .venueMapNote{color:#33566c;background:#eaf3f8;font-size:11px}
 @media(max-width:700px){body[data-park="gallimarkt-leer-2026"] .venueMapCanvas{padding:5px}body[data-park="gallimarkt-leer-2026"] .soestOriginalPlanWrap{margin:0!important}}
+
+/* v109: veranstaltungsübergreifendes Tagesarchiv */
+.nav{grid-template-columns:repeat(5,minmax(0,1fr));width:min(calc(100% - 16px),590px);gap:2px;padding:7px}
+.nav button{min-width:0;padding:10px 4px;font-size:clamp(9px,2.4vw,12px);line-height:1.22}
+.pickerAllDays{grid-column:1/-1;min-height:112px!important;background:linear-gradient(120deg,#233c45,#0d1c26)!important}
+.pickerAllDays strong{color:#ffe0a3}
+.allDaysIntro{background:radial-gradient(circle at 92% 0%,#f6c98624,transparent 40%),linear-gradient(135deg,#233844,#131b2a)}
+.allDaysFilters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:18px 0 8px}
+.allDaysFilters button{min-width:0;min-height:44px;border:1px solid #6c8298;border-radius:9px;background:#192635;color:#c8d7e0;font:800 clamp(11px,2.8vw,14px)/1.2 'Barlow Condensed',sans-serif;cursor:pointer}
+.allDaysFilters button.active{background:#f1d29c;border-color:#ffe5bc;color:#182432}
+.allDaysStatus{font-size:12px;line-height:1.4;color:var(--muted);margin:9px 0 15px}
+#allDaysSummary{margin-bottom:14px}
+#allDaysSummary .recapStat{min-width:0;border:1px solid var(--line);padding:12px 8px;border-radius:8px;background:#182530}
+#allDaysSummary .recapStat b{display:block;font-size:clamp(17px,4vw,27px);font-weight:900}
+#allDaysSummary .recapStat span{display:block;margin-top:5px}
+.allDaysQueueTotal{margin-top:9px;padding:10px 14px;border:1px solid #d8c2934d;border-radius:9px;color:#eed39e;background:#1d2930;font-size:12px}
+.allDaysList{display:grid;gap:11px;padding-bottom:8px}
+.allDaysCard{background:linear-gradient(120deg,#223545,#101e28);border-color:#637b85}
+.allDaysCard .eyebrow{font-size:11px;line-height:1.4;color:#f1d29c}
+.allDaysCard .archiveDayStats span{background:#12202b}
+@media(max-width:390px){.nav{width:calc(100% - 12px);padding:5px}.nav button{font-size:9px;padding:9px 2px}#allDaysSummary .recapStat{padding:9px 6px}.allDaysFilters{gap:4px}}
