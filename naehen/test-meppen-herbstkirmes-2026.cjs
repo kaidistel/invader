@@ -13,7 +13,7 @@ assert.equal(event.park.specialMap,undefined,"no map requested");
 assert.equal(event.park.liveWaits,false);
 assert.equal(event.rides.length,6);
 assert.equal(new Set(Array.from(event.rides,r=>r.id)).size,6);
-const expected=[["AS Speed Drive XXL","Braun"],["Musik Express","Ahrend-Noack"],["Extrem","Karabeg"],["Projekt 1","Freiwald"],["Super Dance","Braun"],["Crazy Machine","Ahrend"]];
+const expected=[["AS Speed Drive XXL","Braun"],["Musik Express","Ahrend/Noack"],["Extrem","Karabeg"],["Projekt 1","Freiwald"],["Super Dance","Braun"],["Crazy Machine","Ahrend"]];
 event.rides.forEach((r,i)=>{assert.equal(r.name,expected[i][0]);assert.equal(r.operator,expected[i][1]);assert.equal(r.priceEuro,null);assert.ok(event.worlds[r.id]);assert.ok(event.fonts[r.id]);});
 assert.ok(event.rides[1].imageUrl.includes("musikexpress-noack"));
 const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
