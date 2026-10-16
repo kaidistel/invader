@@ -48,9 +48,9 @@
     "height": "36 m",
     "capacity": "8 Personen",
     "rideIndexUrl": "https://ride-index.de/2007/01/22/extrem-agtsch/",
-    "imageUrl": "https://www.ummet-eck.de/Bilder/fotosets/1024/2-extrem-remscheid23-c-UMM-c-schoen.jpg",
-    "imageCredit": "Ummet-Eck · Christian Schön · Extrem (Karabeg), Remscheid 2023",
-    "imageSourceUrl": "https://www.ummet-eck.de/bildgalerien/236-Extrem-Deinert-Karabeg-Fahrgeschaeft-Kirmes-bild-6217/",
+    "imageUrl": "https://kermisplanner.nl/uploads/attractions/attraction-extrem/1679951012_a66df239670bd420ed3b.jpg",
+    "imageCredit": "Kermisplanner · Extrem (Karabeg), Front und Beschilderung",
+    "imageSourceUrl": "https://kermisplanner.nl/nl/attractie/extrem-l2qVJZGS",
     "dimensions": "16 × 6 × max. 36 m",
     "description": "Zwei Vierer-Gondeln kreisen am großen Propellerarm und fahren kopfüber über den Kirmesplatz."
   },
