@@ -1894,3 +1894,13 @@ body[data-park="cranger-weihnachtszauber-2026"] .rideArt{filter:saturate(1.1) co
 body[data-park="cranger-weihnachtszauber-2026"] .ride .zone{color:#f0d9a2}
 body[data-park="cranger-weihnachtszauber-2026"] .btn.primary{background:linear-gradient(140deg,#ffe7bc,#ddb37b);color:#1b3534;border-color:#f4ddb5}
 body[data-park="cranger-weihnachtszauber-2026"] .brand b{color:#f6ddae}
+
+/* Meppener Rathauskirmes: use the selected event artwork instead of the global PHL fallback. */
+body[data-park="meppen-herbstkirmes-2026"] .parkAtmosphere {
+  background: linear-gradient(180deg,rgba(10,9,22,.26) 0%,rgba(10,9,22,.72) 52%,#090b10 95%),
+    var(--park-hero-image) center 40%/cover no-repeat;
+}
+body[data-park="meppen-herbstkirmes-2026"] .hero {
+  border-color:#c991ef70;
+  background:linear-gradient(130deg,#382143,#171523 65%,#111925);
+}
