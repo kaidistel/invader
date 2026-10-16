@@ -22,19 +22,19 @@
   {
     "id": "musik-express",
     "name": "Musik Express",
-    "operator": "Ahrend-Noack",
-    "operatorFull": "Noack-Ahrend (Lemgo)",
+    "operator": "Ahrend/Noack",
+    "operatorFull": "Mike Erwin Ahrend / Elisabeth Noack",
     "zone": "Kirmesklassiker",
-    "type": "Mack Berg- und Talbahn",
+    "type": "Musik-Express / Berg- und Talbahn",
     "manufacturer": "Mack",
     "year": 1976,
     "dimensions": "18 × 17 m",
     "capacity": "60 Personen · 20 Gondeln",
     "rideIndexUrl": "https://ride-index.de/2005/08/07/musik-express-noack-ahrend/",
-    "imageUrl": "https://www.ummet-eck.de/Bilder/fotosets/1024/9-musikexpress-noack-mhagen22-c-UMM-chr-schoen.jpg",
-    "imageCredit": "Ummet-Eck · Christian Schön · Musikexpress Noack-Ahrend (Meinerzhagen 2022)",
-    "imageSourceUrl": "https://www.ummet-eck.de/bildgalerien/73-Musikexpress-Ahrend-Noack-Fahrgeschaeft-auf-der-Kirmes-bild-4486/",
-    "description": "Mack-Musikexpress von Noack-Ahrend aus Lemgo, seit 1976 unterwegs. 20 Gondeln für 60 Fahrgäste, mit bunt beleuchteter Berg-und-Tal-Fahrt."
+    "imageUrl": "https://www.ummet-eck.de/Bilder/fotosets/1024/8-musikexpress-noack-mhagen22-c-UMM-chr-schoen.jpg",
+    "imageCredit": "Ummet-Eck · Christian Schön",
+    "imageSourceUrl": "https://www.ummet-eck.de/bildgalerien/73-Musikexpress-Ahrend-Noack-Fahrgeschaeft-auf-der-Kirmes-bild-4485/",
+    "description": "Musik Express von Mike Erwin Ahrend und Elisabeth Noack: klassische Berg-und-Tal-Fahrt mit Musik, Lichtshow und Rekommandieren."
   },
   {
     "id": "extrem",
@@ -48,7 +48,10 @@
     "height": "36 m",
     "capacity": "8 Personen",
     "rideIndexUrl": "https://ride-index.de/2007/01/22/extrem-agtsch/",
-    "imageUrl": "",
+    "imageUrl": "https://www.ummet-eck.de/Bilder/fotosets/1024/2-extrem-remscheid23-c-UMM-c-schoen.jpg",
+    "imageCredit": "Ummet-Eck · Christian Schön · Extrem (Karabeg), Remscheid 2023",
+    "imageSourceUrl": "https://www.ummet-eck.de/bildgalerien/236-Extrem-Deinert-Karabeg-Fahrgeschaeft-Kirmes-bild-6217/",
+    "dimensions": "16 × 6 × max. 36 m",
     "description": "Zwei Vierer-Gondeln kreisen am großen Propellerarm und fahren kopfüber über den Kirmesplatz."
   },
   {
@@ -111,7 +114,7 @@
     rideConfig[r.id]={singleRider:false};
   });
   window.NAEHEN_MEPPEN_HERBSTKIRMES_2026={
-    park:{slug:"meppen-herbstkirmes-2026",kind:"fair",name:"Meppener Rathauskirmes 2026",location:"Meppen · Innenstadt · 16.–19.10.2026",startDate:"2026-10-16",endDate:"2026-10-19",officialUrl:dateSource,dateSourceUrl:dateSource,lineupSourceUrl:lineupSource,liveDataUrl:null,liveWaits:false,supportsPostedWait:false,sortMode:"configured",fairZones:["Autoscooter","Kirmesklassiker","Thrill","Familienfahrgeschäft"],receiptTitle:"RATHAUSKIRMES MEPPEN 2026",receiptLocation:"MEPPEN · INNENSTADT",cardImage:"https://ivzrelaunch.blob.core.windows.net/prod-images/e708d0cb-2687-4a1f-b6a2-df12120f0abc_540h.jpg",cardImageCredit:"IVZ · Crazy Machine (Ahrend), Symbolbild einer Attraktion",cardImageSourceUrl:"https://www.ivz-aktuell.de/articles/428136/neue-fahrattraktionen-und-viele-leckereien",cardCopy:"16.–19. Oktober · 6 Fahrgeschäfte · Feuerwerk Freitag · Familientag Montag",noLiveLabel:"RATHAUSKIRMES · KEINE LIVE-WARTEZEITEN",noLiveMessage:"Keine öffentlichen Live-Wartezeiten. NÄHEN misst deine persönliche Queue.",noLiveAlarmMessage:"Keine öffentlichen Wartezeit-Alarme verfügbar.",disclaimer:"Unabhängiger Fan-Begleiter, keine offizielle Anwendung der Stadt Meppen. Die sechs Fahrgeschäfte stammen aus Nutzerangaben; Termine und Rahmenprogramm von WiM Meppen. Kein Lageplan. Fahrpreise werden ausschließlich pro Fahrt manuell erfasst. Der Musikexpress ist die Mack-Anlage von Noack-Ahrend (Lemgo), verifiziert über Ride-Index."},
+    park:{slug:"meppen-herbstkirmes-2026",kind:"fair",name:"Meppener Rathauskirmes 2026",location:"Meppen · Innenstadt · 16.–19.10.2026",startDate:"2026-10-16",endDate:"2026-10-19",officialUrl:dateSource,dateSourceUrl:dateSource,lineupSourceUrl:lineupSource,liveDataUrl:null,liveWaits:false,supportsPostedWait:false,sortMode:"configured",fairZones:["Autoscooter","Kirmesklassiker","Thrill","Familienfahrgeschäft"],receiptTitle:"RATHAUSKIRMES MEPPEN 2026",receiptLocation:"MEPPEN · INNENSTADT",cardImage:"https://www.der-meppener.de/files/cache/images/5/d/df2bcce2b64d1c2cc2348d515d8f67.jpg",cardImageCredit:"Der Meppener · Kirmesabend in Meppens Innenstadt (Archivmotiv)",cardImageSourceUrl:"https://www.der-meppener.de/unsere-stadt",cardCopy:"16.–19. Oktober · 6 Fahrgeschäfte · Feuerwerk Freitag · Familientag Montag",noLiveLabel:"RATHAUSKIRMES · KEINE LIVE-WARTEZEITEN",noLiveMessage:"Keine öffentlichen Live-Wartezeiten. NÄHEN misst deine persönliche Queue.",noLiveAlarmMessage:"Keine öffentlichen Wartezeit-Alarme verfügbar.",disclaimer:"Unabhängiger Fan-Begleiter, keine offizielle Anwendung der Stadt Meppen. Die sechs Fahrgeschäfte stammen aus Nutzerangaben; Termine und Rahmenprogramm von WiM Meppen. Kein Lageplan. Fahrpreise werden ausschließlich pro Fahrt manuell erfasst. Der Musikexpress ist die Mack-Anlage von Noack-Ahrend (Lemgo), verifiziert über Ride-Index."},
     rides,worlds,fonts,aliases,rideConfig,exclusions:{ids:[],namePatterns:[]}
   };
 })();
