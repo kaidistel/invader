@@ -11,7 +11,7 @@ assert.ok(html.includes('id="pickerAllDaysBtn"'));
 assert.ok(html.includes('id="allDaysList"'));
 assert.ok(html.includes('data-archive-filter="fair"'));
 assert.ok(html.includes('data-archive-filter="park"'));
-assert.ok(sw.includes("naehen-v119"));
+assert.ok(sw.includes("naehen-v120"));
 assert.ok(code.includes('async function loadGlobalCloudArchive('));
 assert.ok(code.includes('.eq("user_id", userId).not("ended_at", "is", null)'));
 assert.ok(code.includes('dbSessionToClient(row, day.park_slug || "phantasialand")'));
