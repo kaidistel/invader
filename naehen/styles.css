@@ -1904,3 +1904,8 @@ body[data-park="meppen-herbstkirmes-2026"] .hero {
   border-color:#c991ef70;
   background:linear-gradient(130deg,#382143,#171523 65%,#111925);
 }
+
+/* Running-day log: deliberate, touch-friendly removal action */
+.logDeleteBtn{margin-top:8px;padding:7px 10px;border-radius:9px;border:1px solid #f28c8c66;background:#4d1d2566;color:#ffbbbb;font:600 12px inherit;cursor:pointer}
+.logDeleteBtn:disabled{opacity:.4;cursor:wait}
+.logDeleteBtn:focus-visible{outline:2px solid #ffbbbb;outline-offset:2px}
