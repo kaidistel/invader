@@ -30,6 +30,6 @@ const app=fs.readFileSync(path.join(root,"app.js"),"utf8");
 const index=fs.readFileSync(path.join(root,"index.html"),"utf8");
 const sw=fs.readFileSync(path.join(root,"sw.js"),"utf8");
 assert.ok(app.includes("window.NAEHEN_NORDHORN_HERBSTKIRMES_2026"));
-assert.ok(index.includes("nordhorn-herbstkirmes-2026-config.js?v=123"));
-assert.ok(sw.includes("naehen-v123")&&sw.includes("./nordhorn-herbstkirmes-2026-config.js"));
+assert.ok(index.includes("nordhorn-herbstkirmes-2026-config.js?v=124"));
+assert.ok(sw.includes("naehen-v124")&&sw.includes("./nordhorn-herbstkirmes-2026-config.js"));
 console.log("PASS Nordhorn: nine operator-specific rides, nine photos, no map, manual prices and original dates");
