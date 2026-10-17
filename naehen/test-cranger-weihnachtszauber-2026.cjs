@@ -31,6 +31,6 @@ const app=fs.readFileSync(path.join(root,"app.js"),"utf8");
 const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
 const sw=fs.readFileSync(path.join(root,"sw.js"),"utf8");
 assert.ok(app.includes("window.NAEHEN_CRANGER_WEIHNACHTSZAUBER_2026"));
-assert.ok(html.includes('cranger-weihnachtszauber-2026-config.js?v=121'));
-assert.ok(sw.includes("naehen-v121")&&sw.includes("./cranger-weihnachtszauber-2026-config.js"));
+assert.ok(html.includes('cranger-weihnachtszauber-2026-config.js?v=122'));
+assert.ok(sw.includes("naehen-v122")&&sw.includes("./cranger-weihnachtszauber-2026-config.js"));
 console.log("PASS Crange: 16 tentative attractions, themed photos, known operators, no map, dates/closures and cached module");
