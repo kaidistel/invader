@@ -2319,12 +2319,14 @@
       const duration = session.duration === null || session.duration === undefined ? "läuft" : minutesRounded(session.duration) + " min";
       const state = session.status === "ridden" ? "🧵 genäht" : session.status === "aborted" ? "💀 vernäht" : "⏱ läuft";
       const operator = operatorForSession(session, session.parkSlug || activeParkSlug);
-      return "<div class=\"logItem\"><div><b>" + escapeHtml(session.rideName) + "</b>" +
+      const deletable = !!parkDay && ["ridden","aborted"].includes(session.status) && (!active || String(active.id) !== String(session.id));
+      return "<div class=\"logItem\"><div class=\"logEntryInfo\"><b>" + escapeHtml(session.rideName) + "</b>" +
         (operator ? "<small class=\"logOperator\">Schausteller: " + escapeHtml(operator) + "</small>" : "") +
         "<small>" + (session.type === "single" ? "👤 Single Rider" : "Regular") + " · " +
         new Date(session.startedAt).toLocaleTimeString("de-DE", {hour:"2-digit",minute:"2-digit"}) +
-        "</small></div><div style=\"text-align:right\"><b>" + escapeHtml(duration) + "</b><br><small>" +
-        escapeHtml(state) + "</small>" + (parkDay && session.status !== "queued" && session.status !== "waiting" && (!active || String(active.id) !== String(session.id)) ? "<br><button type=\"button\" class=\"logDeleteBtn\" data-delete-log-id=\"" + escapeHtml(String(session.id)) + "\" aria-label=\"Eintrag " + escapeHtml(session.rideName) + " löschen\">🗑 Eintrag löschen</button>" : "") + "</div></div>";
+        "</small></div><div class=\"logEntryActions\"><b>" + escapeHtml(duration) + "</b><small>" +
+        escapeHtml(state) + "</small>" + (deletable ? "<button type=\"button\" class=\"logDeleteBtn\" data-delete-log-id=\"" + escapeHtml(String(session.id)) + "\" aria-label=\"Eintrag " + escapeHtml(session.rideName) + " löschen\">🗑 Löschen</button>" : "") +
+        "</div></div>";
     }).join("");
   }
 
