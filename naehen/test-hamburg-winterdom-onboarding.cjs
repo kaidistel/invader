@@ -33,7 +33,7 @@ for (const r of [air,bumper]) {
 assert.equal(a.rides.find(x=>x.id==="winterdom26-break-dancer-no-2").operator,"Dreher-Vespermann");
 assert.ok(a.rides.find(x=>x.id==="winterdom26-infinity-2").imageSourceUrl.includes("infinity-2"));
 assert.ok(a.rides.find(x=>x.id==="winterdom26-mayday").imageUrl.includes("mayday-the-ultimate-thrill.webp"));
-assert.ok(fs.readFileSync(path.join(root,"index.html"),"utf8").includes("hamburg-winterdom-2026-config.js?v=123"));
+assert.ok(fs.readFileSync(path.join(root,"index.html"),"utf8").includes("hamburg-winterdom-2026-config.js?v=124"));
 assert.ok(fs.readFileSync(path.join(root,"app.js"),"utf8").includes("window.NAEHEN_HAMBURG_WINTERDOM_2026"));
-assert.ok(fs.readFileSync(path.join(root,"sw.js"),"utf8").includes("naehen-v123"));
+assert.ok(fs.readFileSync(path.join(root,"sw.js"),"utf8").includes("naehen-v124"));
 console.log("PASS Winterdom 2026: 36 rides, 5 categories, 4 debut markers, no map, manual prices, themed styles and PWA cache.");
