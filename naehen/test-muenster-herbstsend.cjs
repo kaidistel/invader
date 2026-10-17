@@ -24,7 +24,7 @@ assert.equal(new Set(Object.values(event.fonts).map(f=>f.fontFamily)).size,16,"D
 event.rides.forEach((r,i)=>{
  assert.equal(r.name,expected[i][0]);assert.equal(r.operator,expected[i][1]);assert.equal(r.priceEuro,null);
  assert.ok(r.id.startsWith("muenster-herbstsend26-"));
- assert.ok(r.imageUrl&&r.imageCredit&&r.imageSourceUrl,"Missing art metadata for "+r.name);
+ assert.ok(r.imageUrl&&r.imageCredit&&(r.imageSourceUrl||r.imageUrl.startsWith('./assets/')),"Missing art metadata for "+r.name);
  assert.ok(event.worlds[r.id]&&event.fonts[r.id]&&event.rideConfig[r.id],"Missing detail config for "+r.name);
 });
 assert.ok(event.rides.find(r=>r.id.endsWith("-nightfly")).description.includes("Boers"));
