@@ -2324,8 +2324,31 @@
         "<small>" + (session.type === "single" ? "👤 Single Rider" : "Regular") + " · " +
         new Date(session.startedAt).toLocaleTimeString("de-DE", {hour:"2-digit",minute:"2-digit"}) +
         "</small></div><div style=\"text-align:right\"><b>" + escapeHtml(duration) + "</b><br><small>" +
-        escapeHtml(state) + "</small></div></div>";
+        escapeHtml(state) + "</small>" + (parkDay && session.status !== "queued" && session.status !== "waiting" && (!active || String(active.id) !== String(session.id)) ? "<br><button type=\"button\" class=\"logDeleteBtn\" data-delete-log-id=\"" + escapeHtml(String(session.id)) + "\" aria-label=\"Eintrag " + escapeHtml(session.rideName) + " löschen\">🗑 Eintrag löschen</button>" : "") + "</div></div>";
     }).join("");
+  }
+
+  async function deleteCurrentDayEntry(sessionId) {
+    if (!parkDay) return;
+    const session = sessions.find(item => String(item.id) === String(sessionId));
+    if (!session || (active && String(active.id) === String(session.id))) return;
+    if (!window.confirm('Eintrag „' + session.rideName + '“ wirklich löschen? Diese Fahrt wird aus dem laufenden Tag entfernt.')) return;
+    const button = Array.from(document.querySelectorAll("[data-delete-log-id]")).find(el => el.dataset.deleteLogId === String(sessionId));
+    if (button) button.disabled = true;
+    if (supa && currentUserId() && !String(session.id).startsWith("local-")) {
+      const result = await supa.from("queue_sessions").delete().eq("id", session.id).eq("user_id", currentUserId()).eq("park_day_id", parkDay.id);
+      if (result.error) {
+        console.warn("Eintrag konnte nicht gelöscht werden", result.error);
+        if (button) button.disabled = false;
+        toast("Löschen fehlgeschlagen. Bitte erneut versuchen.");
+        return;
+      }
+    }
+    sessions = sessions.filter(item => String(item.id) !== String(sessionId));
+    if (session.status === "ridden") totalRideCount = Math.max(0, totalRideCount - 1);
+    persistLocalState();
+    renderAll();
+    toast("🗑 Eintrag gelöscht.");
   }
 
   function renderProfile() {
@@ -3007,6 +3030,11 @@
   });
 
   function bindStaticEvents() {
+    $("#log")?.addEventListener("click", event => {
+      const button = event.target.closest("[data-delete-log-id]");
+      if (button) void deleteCurrentDayEntry(button.dataset.deleteLogId);
+    });
+
     $("#allDaysView")?.addEventListener("click", event => {
       const filter = event.target.closest("[data-archive-filter]");
       if (filter) {
