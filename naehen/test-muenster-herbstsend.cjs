@@ -1,24 +1,43 @@
 "use strict";
 const fs=require("node:fs"),vm=require("node:vm"),assert=require("node:assert/strict"),path=require("node:path"),cp=require("node:child_process");
-for(const name of ["app.js","muenster-herbstsend-2026-config.js"]){cp.execFileSync(process.execPath,["--check",path.join(__dirname,name)]);}
-const w={window:{}};vm.runInNewContext(fs.readFileSync(path.join(__dirname,"muenster-herbstsend-2026-config.js"),"utf8"),w);
-const c=w.window.NAEHEN_MUENSTER_HERBSTSEND_2026;
-assert(c&&c.park.kind==="fair");assert.equal(c.rides.length,6);
-assert.equal(c.park.startDate,"2026-10-24");assert.equal(c.park.endDate,"2026-11-01");
-assert.equal(c.park.specialMap,undefined);
-assert.deepEqual(Array.from(c.rides,x=>x.name),["Mayday - The Ultimate Thrill","Airborne","Kanurah","Break Dance","Diablos Residenz","Disco Jet"]);
-assert.equal(new Set(c.rides.map(x=>x.id)).size,6);
-assert(c.rides.find(x=>x.id.endsWith("diablos-residenz")).operatorFull.includes("Hoefnagels"));
-assert(c.rides.every(x=>x.imageUrl&&x.imageCredit), "all six rides must have image URLs and credits");
-assert(c.rides.find(x=>x.id.endsWith("break-dance-bruch")).imageUrl.includes("Break-Dance-Bruch.jpg"));
-assert.equal(c.rides.find(x=>x.id.endsWith("mayday")).imageUrl,"./assets/mayday-the-ultimate-thrill.webp");
-assert(fs.existsSync(path.join(__dirname,"assets/mayday-the-ultimate-thrill.webp")),"Local Mayday image must exist");
-assert(c.park.cardImage.includes("send-in-muenster"), "Münster event cover must be actual fair photograph");
-for(const x of c.rides){assert.equal(x.priceEuro,null);assert(x.id.startsWith("muenster-herbstsend26-"));assert(x.operator);assert(c.worlds[x.id]);}
-const h=fs.readFileSync(path.join(__dirname,"index.html"),"utf8");
-const a=fs.readFileSync(path.join(__dirname,"app.js"),"utf8");
-const sw=fs.readFileSync(path.join(__dirname,"sw.js"),"utf8");
-assert(h.includes("muenster-herbstsend-2026-config.js"));
-assert(a.includes("NAEHEN_MUENSTER_HERBSTSEND_2026"));
-assert(sw.includes("muenster-herbstsend-2026-config.js"));
-console.log("PASS: Münster Herbstsend 2026, no map, exactly six unique rides, prices blank, event and PWA integration");
+const root=__dirname;
+for(const name of ["app.js","muenster-herbstsend-2026-config.js"]){cp.execFileSync(process.execPath,["--check",path.join(root,name)]);}
+const sandbox={window:{}};
+vm.runInNewContext(fs.readFileSync(path.join(root,"muenster-herbstsend-2026-config.js"),"utf8"),sandbox);
+const event=sandbox.window.NAEHEN_MUENSTER_HERBSTSEND_2026;
+assert.ok(event&&event.park.kind==="fair");
+assert.equal(event.park.startDate,"2026-10-24");
+assert.equal(event.park.endDate,"2026-11-01");
+assert.equal(event.park.specialMap,undefined,"No map in this module");
+assert.equal(event.park.liveWaits,false);
+assert.equal(event.park.supportsPostedWait,false);
+assert.equal(event.park.lineupStatus,"provisional","Lineup may grow later");
+const expected=[
+ ["Highway No. 1","Schneider"],["Formel 1","Heitmann"],["Disco Jet","Heitmann"],["Break Dance","Bruch"],
+ ["Airborne","Ordelman"],["Hangover The Ride","Richter"],["Kanurah","Vallentgoed"],["MayDay – The Ultimate Thrill","Horlbeck/Meyer"],
+ ["Nightfly","Boers"],["Wellenflug","Fahrenschon"],["Wonderwheel","Klemm"],["Magic House","Hinrichs"],
+ ["Crystals City","Oberschelp"],["Diablos Residenz","Hoefnagels"],["Spinning Mouse","Boos"],["Bugs & Bees","Kaiser"]
+];
+assert.equal(event.rides.length,16);
+assert.equal(new Set(Array.from(event.rides,r=>r.id)).size,16);
+assert.equal(new Set(Object.values(event.fonts).map(f=>f.fontFamily)).size,16,"Distinct fonts for all rides");
+event.rides.forEach((r,i)=>{
+ assert.equal(r.name,expected[i][0]);assert.equal(r.operator,expected[i][1]);assert.equal(r.priceEuro,null);
+ assert.ok(r.id.startsWith("muenster-herbstsend26-"));
+ assert.ok(r.imageUrl&&r.imageCredit&&r.imageSourceUrl,"Missing art metadata for "+r.name);
+ assert.ok(event.worlds[r.id]&&event.fonts[r.id]&&event.rideConfig[r.id],"Missing detail config for "+r.name);
+});
+assert.ok(event.rides.find(r=>r.id.endsWith("-nightfly")).description.includes("Boers"));
+assert.ok(event.rides.find(r=>r.id.endsWith("-hangover-the-ride")).description.includes("Richters"));
+assert.equal(event.rides.find(r=>r.id.endsWith("-mayday")).imageUrl,"./assets/mayday-the-ultimate-thrill.webp");
+assert.ok(fs.existsSync(path.join(root,"assets/mayday-the-ultimate-thrill.webp")));
+assert.ok(event.park.cardImage.includes("send-in-muenster"));
+assert.ok(event.park.cardCopy.includes("16 bislang"));
+assert.ok(event.park.disclaimer.includes("vorläufig"));
+const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
+const app=fs.readFileSync(path.join(root,"app.js"),"utf8");
+const sw=fs.readFileSync(path.join(root,"sw.js"),"utf8");
+assert.ok(html.includes("muenster-herbstsend-2026-config.js?v=122"));
+assert.ok(app.includes("NAEHEN_MUENSTER_HERBSTSEND_2026"));
+assert.ok(sw.includes("naehen-v122")&&sw.includes("./muenster-herbstsend-2026-config.js"));
+console.log("PASS Münster Herbstsend: 16 named rides, operators, distinct art, no map, provisional lineup and PWA integration");
