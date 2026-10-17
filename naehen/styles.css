@@ -1909,3 +1909,9 @@ body[data-park="meppen-herbstkirmes-2026"] .hero {
 .logDeleteBtn{margin-top:8px;padding:7px 10px;border-radius:9px;border:1px solid #f28c8c66;background:#4d1d2566;color:#ffbbbb;font:600 12px inherit;cursor:pointer}
 .logDeleteBtn:disabled{opacity:.4;cursor:wait}
 .logDeleteBtn:focus-visible{outline:2px solid #ffbbbb;outline-offset:2px}
+
+/* Running-day protocol entry deletion: ensure button remains visible on small phones. */
+.logItem .logEntryInfo{min-width:0;flex:1}
+.logItem .logEntryActions{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex:0 0 auto;min-width:96px;text-align:right}
+.logItem .logEntryActions small{display:block}
+.logItem .logDeleteBtn{display:inline-flex;align-items:center;justify-content:center;min-height:38px;margin-top:9px;padding:9px 11px;border:1px solid #ff9393aa;border-radius:10px;background:#522125e0;color:#ffcece;font-size:12px;font-weight:700;line-height:1.2;white-space:nowrap;touch-action:manipulation}
