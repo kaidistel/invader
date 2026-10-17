@@ -4,20 +4,63 @@
  const lineupSource="https://www.kirmesforum.de/threads/m%C3%BCnster-herbstsend-24-10-01-11-2026.78036/";
  const rawRides=[
   {
-    "id": "mayday",
-    "name": "Mayday - The Ultimate Thrill",
-    "operator": "Meyer / Horlbeck",
-    "operatorFull": "Meyer / Horlbeck",
-    "type": "Pegasus 16",
-    "year": 2026,
-    "new2026": true,
-    "description": "Flugthemen-Neuheit mit beweglichen Gondeln und großflächiger Lichtshow.",
-    "imageUrl": "./assets/mayday-the-ultimate-thrill.webp",
-    "imageCredit": "Vom Nutzer bereitgestelltes Mayday-Artwork",
-    "imageSourceUrl": "",
-    "manufacturer": "Technical Park",
-    "capacity": "16 Personen",
-    "rideIndexUrl": "https://ride-index.de/2026/07/05/mayday/"
+    "id": "highway-no-1",
+    "name": "Highway No. 1",
+    "operator": "Schneider",
+    "operatorFull": "Johann Schneider & Sohn (Münster)",
+    "type": "2-Säulen-Autoscooter",
+    "dimensions": "Fahrbahn 30 × 16 m",
+    "rideIndexUrl": "https://ride-index.de/2007/07/11/as-schneider-johann-1/",
+    "description": "Großer Autoscooter von Schneider mit klassischem Rummel-Feeling und 30 Meter langer Fahrfläche.",
+    "imageUrl": "https://www.presse-service.de/data.aspx/medien/302701P.jpg",
+    "imageCredit": "Presse-Service · Highway No. 1 von Schneider",
+    "imageSourceUrl": "https://www.presse-service.de/",
+    "new2026": false
+  },
+  {
+    "id": "formel-1",
+    "name": "Formel 1",
+    "operator": "Heitmann",
+    "operatorFull": "Heitmann (Münster)",
+    "type": "Autoscooter",
+    "dimensions": "Fahrbahn 30 × 16 m",
+    "rideIndexUrl": "https://ride-index.de/2007/07/10/as-heitmann/",
+    "description": "Formel-1-Autoscooter von Heitmann mit Rennsport-Fassade und farbenfrohen LED-Lichtern.",
+    "imageUrl": "https://www.ummet-eck.de/Bilder/fotosets/1024/as-formel1-heitmann-sommersend23-c-UMM-s-schoen-1.jpg",
+    "imageCredit": "Ummet-Eck · Silke Schön, Münster 2023",
+    "imageSourceUrl": "https://www.ummet-eck.de/bildgalerien/523-Autoscooter-Formel-1-Heitmann-Kirmes--bild-7640/",
+    "new2026": false
+  },
+  {
+    "id": "disco-jet",
+    "name": "Disco Jet",
+    "operator": "Heitmann",
+    "operatorFull": "Arno Heitmann (Münster)",
+    "type": "Musik-Express / Berg- und Talbahn",
+    "manufacturer": "Bertazzon",
+    "year": 2021,
+    "dimensions": "19 × 17 × 10 m",
+    "new2026": false,
+    "description": "Der neue Disco Jet von Arno Heitmann (2021): Musik-Express mit computergesteuerten Disco-Lichtern, Nebel und moderner LED-Show.",
+    "imageUrl": "https://www.radioherne.de/externalimages/?crop=0x138x1920x864&dt=202308030804460&resize=1920x864&source=jpg552%2Fpm-cranger-kirmes-2023---disco-jet--stadtmarketing-herne.jpg",
+    "imageCredit": "Stadtmarketing Herne / Radio Herne",
+    "imageSourceUrl": "https://www.radioherne.de/artikel/neuer-disco-jet-gewinnt-crange-preis-1725174"
+  },
+  {
+    "id": "break-dance-bruch",
+    "name": "Break Dance",
+    "operator": "Bruch",
+    "operatorFull": "Bruch (Düsseldorf)",
+    "type": "Break Dance No. 1",
+    "manufacturer": "HUSS",
+    "year": 1990,
+    "capacity": "32 Personen / 16 Gondeln",
+    "new2026": false,
+    "description": "HUSS Break Dance No. 1 der Familie Bruch, Baujahr 1990 – vier Kreuze und frei rotierende Zweiergondeln.",
+    "imageUrl": "https://kuestenkirmes.de/wp-content/uploads/Break-Dance-Bruch.jpg",
+    "imageCredit": "Küstenkirmes · Stefan Rathmann (Bruch, Originalaufnahme)",
+    "imageSourceUrl": "https://kuestenkirmes.de/break-dance-bruch/",
+    "rideIndexUrl": "https://ride-index.de/2005/01/04/break-dance-bruch/"
   },
   {
     "id": "airborne",
@@ -37,6 +80,22 @@
     "rideIndexUrl": "https://ride-index.de/2021/11/03/airborne-nl/"
   },
   {
+    "id": "hangover-the-ride",
+    "name": "Hangover The Ride",
+    "operator": "Richter",
+    "operatorFull": "Kevin Richter (Torgau)",
+    "type": "G-Force 16",
+    "manufacturer": "AK Rides",
+    "year": 2026,
+    "capacity": "16 Personen",
+    "new2026": true,
+    "rideIndexUrl": "https://ride-index.de/2026/07/27/hangover-richter/",
+    "description": "Richters G-Force 16: ein rotierendes Sitzrad, das während der Fahrt steil aufgerichtet wird. Nicht Hangover The Tower!",
+    "imageUrl": "https://cdn.coaster.cloud/attractions/RD/W8/RDW8Jmig9qgsMeBQ6Jx9uP.jpg?class=large",
+    "imageCredit": "coaster.cloud · Hangover The Ride (Richter)",
+    "imageSourceUrl": "https://data.coaster.cloud/en/attractions/afed8f99-hangover-the-ride-richter"
+  },
+  {
     "id": "kanurah",
     "name": "Kanurah",
     "operator": "Vallentgoed",
@@ -53,20 +112,87 @@
     "imageSourceUrl": "https://funfair-entertainment.de/news/rheiner-herbstkirmes-2026-nordic-tower-hangover-wilde-maus-beschickung"
   },
   {
-    "id": "break-dance-bruch",
-    "name": "Break Dance",
-    "operator": "Bruch",
-    "operatorFull": "Bruch (Düsseldorf)",
-    "type": "Break Dance No. 1",
-    "manufacturer": "HUSS",
-    "year": 1990,
-    "capacity": "32 Personen / 16 Gondeln",
-    "new2026": false,
-    "description": "HUSS Break Dance No. 1 der Familie Bruch, Baujahr 1990 – vier Kreuze und frei rotierende Zweiergondeln.",
-    "imageUrl": "https://kuestenkirmes.de/wp-content/uploads/Break-Dance-Bruch.jpg",
-    "imageCredit": "Küstenkirmes · Stefan Rathmann (Bruch, Originalaufnahme)",
-    "imageSourceUrl": "https://kuestenkirmes.de/break-dance-bruch/",
-    "rideIndexUrl": "https://ride-index.de/2005/01/04/break-dance-bruch/"
+    "id": "mayday",
+    "name": "MayDay – The Ultimate Thrill",
+    "operator": "Horlbeck/Meyer",
+    "operatorFull": "Horlbeck/Meyer GbR (Neumünster)",
+    "type": "Pegasus 16",
+    "year": 2026,
+    "new2026": true,
+    "description": "Flugthemen-Neuheit mit beweglichen Gondeln und großflächiger Lichtshow.",
+    "imageUrl": "./assets/mayday-the-ultimate-thrill.webp",
+    "imageCredit": "Vom Nutzer bereitgestelltes Mayday-Artwork",
+    "imageSourceUrl": "",
+    "manufacturer": "Technical Park",
+    "capacity": "16 Personen",
+    "rideIndexUrl": "https://ride-index.de/2026/07/05/mayday/"
+  },
+  {
+    "id": "nightfly",
+    "name": "Nightfly",
+    "operator": "Boers",
+    "operatorFull": "Boy Boers (Niederlande)",
+    "type": "KMG Tripride / Scheibenwischer",
+    "manufacturer": "KMG",
+    "capacity": "18 Personen",
+    "description": "Der KMG-Scheibenwischer Nightfly von Boy Boers mit Night-Bar-Fassade, Lichteffekten und 18 Plätzen. Nicht Kammerhofers Pegasus.",
+    "imageUrl": "https://storage.pubble.nl/17629789/content/2025/8/af280403-c439-44af-b9c4-af16c946d7da_thumb1920.jpg",
+    "imageCredit": "Weekblad voor Deurne · Nightfly (Boers), 2025",
+    "imageSourceUrl": "https://www.weekbladvoordeurne.nl/nieuws/algemeen/55057/liesselse-kermis-pakt-uit-met-vijf-dagen-feest",
+    "new2026": false
+  },
+  {
+    "id": "wellenflug",
+    "name": "Wellenflug",
+    "operator": "Fahrenschon",
+    "operatorFull": "Fahrenschon (Rosenheim)",
+    "type": "Wellenflug / Kettenflieger",
+    "manufacturer": "Zierer",
+    "year": 1994,
+    "capacity": "48 Personen",
+    "dimensions": "Ø 18 m",
+    "rideIndexUrl": "https://ride-index.de/2005/01/14/wellenflug-fahrenschon/",
+    "description": "Fahrenschons Wellenflug: elegantes Kettenkarussell mit klassisch bemaltem Dach und weit schwingenden Sitzen.",
+    "imageUrl": "https://www.kirmesecke.de/Bilder/poi/678/wellenflug-fahrenschon-rosenheim23-c-KIE-c-schoen-2.jpg",
+    "imageCredit": "Kirmesecke · Wellenflug Fahrenschon (Foto Schön)",
+    "imageSourceUrl": "https://www.kirmesecke.de/regionen/101801-Wellenflug-Fahrenschon-/",
+    "new2026": false
+  },
+  {
+    "id": "wonderwheel",
+    "name": "Wonderwheel",
+    "operator": "Klemm",
+    "operatorFull": "M. Klemm",
+    "type": "Riesenrad",
+    "description": "Klemms Wonderwheel – The Magic Ride: Panoramablick vom Riesenrad über den Schlossplatz.",
+    "imageUrl": "https://forum.kermisclub.nl/assets/files/2025-05-12/1747060594-996781-screenshot-20250512-153355-facebook.jpg",
+    "imageCredit": "Kermisclub.nl · Werbemotiv Wonderwheel M. Klemm (kein Foto)",
+    "imageSourceUrl": "https://forum.kermisclub.nl/d/4146-nieuw-op-de-kermis-2026",
+    "new2026": false
+  },
+  {
+    "id": "magic-house",
+    "name": "Magic House",
+    "operator": "Hinrichs",
+    "operatorFull": "Hinrichs",
+    "type": "Laufgeschäft",
+    "description": "Magic House: begehbares Spaßhaus von Hinrichs mit Hindernissen und Überraschungen.",
+    "imageUrl": "https://gallimarkt.net/wp-content/uploads/2026/09/WhatsApp-Image-2026-09-15-at-18.44.2622-Kopie.jpeg",
+    "imageCredit": "Gallimarkt.net · Magic House Hinrichs",
+    "imageSourceUrl": "https://gallimarkt.net/fahrgeschafte/",
+    "new2026": false
+  },
+  {
+    "id": "crystals-city",
+    "name": "Crystals City",
+    "operator": "Oberschelp",
+    "operatorFull": "Oberschelp",
+    "type": "Glas- und Spiegellabyrinth",
+    "description": "Crystals City von Oberschelp: zwischen Spiegeln, Glas und kniffligen Gängen den Ausgang finden.",
+    "imageUrl": "https://gallimarkt.net/wp-content/uploads/2026/09/20200805_132914-Kopie.jpg",
+    "imageCredit": "Gallimarkt.net · Crystals City Oberschelp",
+    "imageSourceUrl": "https://gallimarkt.net/fahrgeschafte/",
+    "new2026": false
   },
   {
     "id": "diablos-residenz",
@@ -85,24 +211,39 @@
     "rideIndexUrl": "https://ride-index.de/2025/11/04/diablos-residenz/"
   },
   {
-    "id": "disco-jet",
-    "name": "Disco Jet",
-    "operator": "Heitmann",
-    "operatorFull": "Arno Heitmann (Münster)",
-    "type": "Musik-Express / Berg- und Talbahn",
-    "manufacturer": "Bertazzon",
-    "year": 2021,
-    "dimensions": "19 × 17 × 10 m",
-    "new2026": false,
-    "description": "Der neue Disco Jet von Arno Heitmann (2021): Musik-Express mit computergesteuerten Disco-Lichtern, Nebel und moderner LED-Show.",
-    "imageUrl": "https://www.radioherne.de/externalimages/?crop=0x138x1920x864&dt=202308030804460&resize=1920x864&source=jpg552%2Fpm-cranger-kirmes-2023---disco-jet--stadtmarketing-herne.jpg",
-    "imageCredit": "Stadtmarketing Herne / Radio Herne",
-    "imageSourceUrl": "https://www.radioherne.de/artikel/neuer-disco-jet-gewinnt-crange-preis-1725174"
+    "id": "spinning-mouse",
+    "name": "Spinning Mouse",
+    "operator": "Boos",
+    "operatorFull": "Gebrüder Boos (Magdeburg)",
+    "type": "Fabbri Power Mouse",
+    "manufacturer": "Fabbri",
+    "year": 2023,
+    "dimensions": "42 × 21 m · 420 m Schienen",
+    "capacity": "24 Personen · 6 Gondeln",
+    "rideIndexUrl": "https://ride-index.de/2023/04/09/spinning-mouse/",
+    "description": "Spinning Mouse von Boos: 420 Meter Familienachterbahn mit pink-grünen Schienen und frei drehenden Wagen.",
+    "imageUrl": "https://boos.events/assets/img/spinning-mouse_1.jpg",
+    "imageCredit": "Gebrüder Boos · Originalfoto Spinning Mouse",
+    "imageSourceUrl": "https://boos.events/spinning-mouse.html",
+    "new2026": false
+  },
+  {
+    "id": "bugs-and-bees",
+    "name": "Bugs & Bees",
+    "operator": "Kaiser",
+    "operatorFull": "Edmund Kaiser (Herford)",
+    "type": "Familienachterbahn / Wacky Worm",
+    "capacity": "24 Personen",
+    "description": "Die bunte Familienachterbahn Bugs & Bees von Kaiser fährt mit einem Insektenzug über kleine Hügel und Kurven.",
+    "imageUrl": "https://www.ummet-eck.de/Bilder/fotosets/1024/2-bugs-bees-bie-happy23-c-UMM-silke-schoen.jpg",
+    "imageCredit": "Ummet-Eck · Silke Schön · Bugs & Bees Kaiser",
+    "imageSourceUrl": "https://www.ummet-eck.de/bildgalerien/642-Bugs-Bees-Kaiser-Achterbahn-Bilder-bild-8765/",
+    "new2026": false
   }
 ];
- const rides=rawRides.map(ride=>({...ride,id:"muenster-herbstsend26-"+ride.id,zone:"Schlossplatz",priceEuro:null,sourceUrl:ride.imageSourceUrl||lineupSource}));
+ const rides=rawRides.map(ride=>({...ride,id:"muenster-herbstsend26-"+ride.id,zone:"Schlossplatz",priceEuro:null,sourceUrl:ride.rideIndexUrl||ride.imageSourceUrl||lineupSource}));
  const worlds={},fonts={},aliases={},rideConfig={};
- const typefaces=["'Bebas Neue',sans-serif","'Orbitron',sans-serif","'Bungee Shade','Bungee',sans-serif","'Bangers',cursive","'Monoton',sans-serif","'Pirata One',serif"];
+ const typefaces=["'Audiowide',sans-serif","'Black Ops One',sans-serif","'Monoton',sans-serif","'Bangers',cursive","'Orbitron',sans-serif","'Rubik Glitch',sans-serif","'Bungee Shade',sans-serif","'Bebas Neue',sans-serif","'Fascinate Inline',serif","'Stardos Stencil',serif","'Cinzel Decorative',serif","'Special Elite',serif","'Chango',sans-serif","'Pirata One',serif","'Faster One',sans-serif","'Rye',serif"];
  rides.forEach((ride,i)=>{
   worlds[ride.id]={label:(ride.name+" · "+ride.operator).toUpperCase(),line:ride.description,artUrl:ride.imageUrl||"",imageCredit:ride.imageCredit||"",imageSourceUrl:ride.imageSourceUrl||lineupSource};
   fonts[ride.id]={fontFamily:typefaces[i],theme:"herbstsend26-"+ride.id};
@@ -113,16 +254,16 @@
   park:{slug:"muenster-herbstsend-2026",kind:"fair",name:"Münsteraner Herbstsend 2026",
   location:"Münster · Schlossplatz · 24.10.–01.11.2026",
   startDate:"2026-10-24",endDate:"2026-11-01",officialUrl:dateSource,dateSourceUrl:dateSource,lineupSourceUrl:lineupSource,
-  liveDataUrl:null,liveWaits:false,supportsPostedWait:false,sortMode:"configured",
+  liveDataUrl:null,liveWaits:false,supportsPostedWait:false,sortMode:"configured",lineupStatus:"provisional",
   receiptTitle:"HERBSTSEND MÜNSTER 2026",receiptLocation:"MÜNSTER",
   cardImage:"https://www.24rhein.de/assets/images/27/340/27340014-der-send-in-muenster-mit-besucherinnen-und-besuchern-und-den-fahrgeschaeften-3oe9.jpg",
   cardImageCredit:"24RHEIN · Archivfoto Send Münster (2021)",
   cardImageSourceUrl:"https://www.24rhein.de/rheinland-nrw/send-kirmes-muenster-2021-oeffnungszeiten-attraktionen-corona-regeln-familientag-studentenabend-91056542.html",
-  cardCopy:"24. Oktober – 1. November · Schlossplatz · 6 bisher bekannte Fahrgeschäfte",
+  cardCopy:"24. Oktober – 1. November · Schlossplatz · 16 bislang bekannte Fahrgeschäfte · vorläufig",
   noLiveLabel:"KIRMES · KEINE LIVE-WARTEZEITEN",
   noLiveMessage:"Keine öffentlichen Live-Wartezeiten. NÄHEN misst deine persönliche Queue.",
   noLiveAlarmMessage:"Wartezeit-Alarme sind hier deaktiviert.",
-  disclaimer:"Unabhängige Fan-Übersicht. Derzeit sechs benannte Fahrgeschäfte nach Nutzervorgabe, keine vollständige Schlussbeschickung. Weitere Geschäfte können folgen. Kein offizielles Angebot der Stadt Münster."},
+  disclaimer:"Unabhängige Fan-Übersicht. 16 Fahrgeschäfte nach dem im Kirmesforum veröffentlichten Herbstsend-Lageplan (Stand 17.10.2026). Die Liste ist vorläufig; ein weiteres Geschäft kann hinzukommen. Kein offizielles Angebot der Stadt Münster. Kein interaktiver Lageplan. Fahrpreise werden ausschließlich pro Fahrt manuell erfasst."},
   rides,worlds,fonts,aliases,rideConfig,exclusions:{ids:[],namePatterns:[]}
  };
 })();
