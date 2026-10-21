@@ -867,12 +867,16 @@
     grid.querySelectorAll(".parkChoiceArt").forEach(img => {
       const venue = PARKS[img.closest("[data-park]")?.dataset.park];
       if (!venue) return;
-      let triedFallback = false;
+      // Run through venue-specific alternatives; a blocked image must not blank the fair's card.
+      const candidates = [venue.cardImageFallback, ...(venue.cardImageFallbackUrls || [])].filter(Boolean);
+      let fallbackIndex = 0;
       img.onerror = () => {
-        if (!triedFallback && venue.cardImageFallback) {
-          triedFallback = true;
-          img.src = venue.cardImageFallback;
-        } else img.hidden = true;
+        if (fallbackIndex < candidates.length) {
+          img.src = candidates[fallbackIndex++];
+        } else {
+          img.onerror = null;
+          img.hidden = true;
+        }
       };
       if (img.complete && img.naturalWidth === 0) img.onerror();
     });
@@ -936,7 +940,7 @@
     await loadParkArtManifest(parkSlug);
     document.body.dataset.park = parkSlug;
     if (park.cardImage) {
-      const backgrounds = [park.cardImage, park.cardImageFallback].filter(Boolean);
+      const backgrounds = [park.cardImage, park.cardImageFallback, ...(park.cardImageFallbackUrls || [])].filter(Boolean);
       const loadBackground = (index) => {
         if (activeParkSlug !== parkSlug) return;
         if (index >= backgrounds.length) {
