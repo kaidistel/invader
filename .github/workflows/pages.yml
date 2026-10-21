@@ -78,10 +78,12 @@ jobs:
 
       - name: Build Europa-Park official art manifest
         run: |
-          node "$GITHUB_WORKSPACE/naehen/build-official-art-manifest.cjs" \
+          # Externe Webseiten dürfen das gesamte Pages-Deployment nicht blockieren.
+          # Bei Timeout bleibt das bereits versionierte Art-Manifest aus dem Repository erhalten.
+          timeout 50s node "$GITHUB_WORKSPACE/naehen/build-official-art-manifest.cjs" \
             "$GITHUB_WORKSPACE/naehen/europa-park-config.js" \
             "NAEHEN_EUROPA_PARK" \
-            "$GITHUB_WORKSPACE/naehen/europa-park-images.json"
+            "$GITHUB_WORKSPACE/naehen/europa-park-images.json" || echo "Art-Refresh nicht erreichbar – bestehendes Europa-Park-Manifest wird verwendet."
           test -s "$GITHUB_WORKSPACE/naehen/europa-park-images.json"
 
       - name: Evaluate NÄHEN push alerts
