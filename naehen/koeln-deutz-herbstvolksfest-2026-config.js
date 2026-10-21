@@ -146,9 +146,9 @@ const rides=[
     "zone": "Deutzer Werft",
     "type": "Laufgeschäft",
     "rideIndexUrl": null,
-    "imageUrl": "",
-    "imageCredit": "",
-    "imageSourceUrl": "",
+    "imageUrl": "https://gallimarkt.net/wp-content/uploads/2026/09/WhatsApp-Image-2026-09-15-at-18.50.55-Kopie.jpeg",
+    "imageCredit": "Gallimarkt.net · Chaosfabrik Meyer",
+    "imageSourceUrl": "https://gallimarkt.net/fahrgeschafte/",
     "description": "Chaosfabrik von Meyer auf dem Kölner Herbstvolksfest 2026.",
     "priceEuro": null,
     "new2026": false
