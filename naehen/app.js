@@ -1085,7 +1085,12 @@
             return;
           }
         } else {
-          const registration = await navigator.serviceWorker.register("./sw.js?v=117", {
+          // Der Worker muss immer dieselbe Build-Version wie die geladenen App-Skripte verwenden.
+          // Keine veraltete fest codierte Worker-Version mehr: sonst bleibt die installierte PWA zurück.
+          const appScriptUrl = document.querySelector('script[src*="app.js?v="]')?.getAttribute("src") || "";
+          const appBuildVersion = /[?&]v=(\d+)/.exec(appScriptUrl)?.[1];
+          const workerUrl = "./sw.js" + (appBuildVersion ? "?v=" + appBuildVersion : "");
+          const registration = await navigator.serviceWorker.register(workerUrl, {
             scope: "./",
             updateViaCache: "none"
           });
