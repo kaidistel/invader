@@ -120,3 +120,19 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Smoke test veröffentlichte Köln-Deutz-Bilder
+        run: |
+          set -eu
+          base="https://kaidistel.github.io/invader/naehen"
+          for image in koeln-deutz-herbst-2026-background.webp koeln-deutz-herbst-2026-mr-gravity.webp; do
+            url="$base/assets/$image"
+            out="/tmp/$image"
+            echo "Check live image: $url"
+            curl --fail --silent --show-error --location \
+              --retry 8 --retry-delay 4 --retry-all-errors --max-time 15 \
+              --output "$out" "$url"
+            test "$(wc -c < "$out")" -gt 20000
+            test "$(file --mime-type --brief "$out")" = "image/webp"
+            echo "PASS $(wc -c < "$out") bytes / image/webp"
+          done
