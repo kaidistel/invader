@@ -101,19 +101,21 @@ const rides=[
     "id": "koeln-deutz-herbst26-mr-gravity",
     "name": "Mr. Gravity",
     "operator": "Oberschelp",
-    "operatorFull": "Frank Oberschelp (Bielefeld)",
+    "operatorFull": "Frank Oberschelp",
     "zone": "Deutzer Werft",
     "type": "Heavy Rotation",
     "rideIndexUrl": null,
-    "imageUrl": "https://kuestenkirmes.de/wp-content/uploads/Mr-Gravitiy-Oberschelp.jpg",
-    "imageCredit": "Küstenkirmes · Mr. Gravity (Oberschelp)",
-    "imageSourceUrl": "https://kuestenkirmes.de/mr-gravity-oberschelp/",
+    "imageUrl": "./assets/koeln-deutz-herbst-2026-mr-gravity.webp",
+    "imageCredit": "Andreas Axel Kirch / Wikimedia Commons · CC BY-SA 4.0 · bearbeitet (WebP)",
+    "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:2018-09-07-bonn-puetzchens-markt-2018-40.jpg",
     "description": "Mr. Gravity von Oberschelp auf dem Kölner Herbstvolksfest 2026.",
     "priceEuro": null,
     "new2026": false,
     "manufacturer": "Technical Park",
     "capacity": "20 Personen · 10 Gondeln",
-    "dimensions": "19 × 18 × max. 18 m"
+    "dimensions": "19 × 18 × max. 18 m",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageFallbackUrls": []
   },
   {
     "id": "koeln-deutz-herbst26-musik-express",
@@ -278,5 +280,5 @@ const rides=[
 const worlds={},fonts={},aliases={},rideConfig={};
 const typefaces=["'Bangers',cursive","'Black Ops One',sans-serif","'Orbitron',sans-serif","'Bebas Neue',sans-serif","'Cinzel Decorative',serif","'Monoton',sans-serif","'Fascinate Inline',serif","'Faster One',sans-serif","'Bungee Shade',sans-serif","'Rubik Glitch',sans-serif","'Creepster',cursive","'Special Elite',serif","'Nosifer',cursive","'Audiowide',sans-serif","'Rye',serif"];
 rides.forEach((r,i)=>{worlds[r.id]={label:(r.name+" · "+r.operator).toUpperCase(),line:r.description,artUrl:r.imageUrl||"",imageCredit:r.imageCredit||"",imageSourceUrl:r.imageSourceUrl||source};fonts[r.id]={fontFamily:typefaces[i],theme:"deutz26-"+i};aliases[r.name.toLowerCase()]=r.id;rideConfig[r.id]={singleRider:false};});
-window.NAEHEN_KOELN_DEUTZ_HERBST_2026={park:{slug:"koeln-deutz-herbstvolksfest-2026",kind:"fair",name:"Kölner Herbstvolksfest 2026",location:"Köln-Deutz · Deutzer Werft · 24.10.–01.11.2026",startDate:"2026-10-24",endDate:"2026-11-01",officialUrl:"https://www.deutzerkirmes.de/",dateSourceUrl:"https://www.deutzerkirmes.de/",lineupSourceUrl:source,sortMode:"configured",lineupStatus:"provisional",liveDataUrl:null,liveWaits:false,supportsPostedWait:false,receiptTitle:"KÖLNER HERBSTVOLKSFEST 2026",receiptLocation:"KÖLN · DEUTZER WERFT",cardImage:"https://www.24rhein.de/assets/images/26/626/26626053-die-lichter-des-koelner-herbstvolksfestes-leuchten-am-01-11-2014-in-der-blauen-stunde-in-koeln-2qDUIX0uDzec.jpg",cardImageFallbackUrls:["https://media04.rheinische-anzeigenblaetter.de/article/2022/10/27/2/933212_XXL.jpg","https://images.squarespace-cdn.com/content/v1/55ddcba5e4b09a5c0647737b/1541343171959-GE6VV2NF3BNMRQ0Y4TQX/Herbstkirmes%2Bvon%2BDeutzer%2BBr%C3%BCcke%2Bmit%2BFeuerwerk%2Bmontage%2B2018.jpg"],cardImageCredit:"24rhein.de · Deutzer Kirmes an der blauen Stunde (Archivaufnahme)",cardImageSourceUrl:"https://www.24rhein.de/koeln/innenstadt/koeln-deutz-happy-colonia-kirmes-gericht-freizeitpark-deutzer-werft-anwohner-90891490.html",cardCopy:"24. Oktober – 1. November · 15 bislang genannte Fahr- und Laufgeschäfte · vorläufig",noLiveLabel:"KIRMES · KEINE LIVE-WARTEZEITEN",noLiveMessage:"Keine öffentlichen Live-Wartezeiten. NÄHEN misst deine persönliche Queue.",noLiveAlarmMessage:"Keine öffentlichen Wartezeit-Alarme verfügbar.",disclaimer:"Unabhängiger Fan-Begleiter, keine offizielle App. Beschickung vom Kirmesforum und aktuellen Aufbauhinweisen (21.10.2026), Änderungen möglich. Fahrpreise werden bei jeder Fahrt manuell eingegeben."},rides,worlds,fonts,aliases,rideConfig,exclusions:{ids:[],namePatterns:[]}};
+window.NAEHEN_KOELN_DEUTZ_HERBST_2026={park:{slug:"koeln-deutz-herbstvolksfest-2026",kind:"fair",name:"Kölner Herbstvolksfest 2026",location:"Köln-Deutz · Deutzer Werft · 24.10.–01.11.2026",startDate:"2026-10-24",endDate:"2026-11-01",officialUrl:"https://www.deutzerkirmes.de/",dateSourceUrl:"https://www.deutzerkirmes.de/",lineupSourceUrl:source,sortMode:"configured",lineupStatus:"provisional",liveDataUrl:null,liveWaits:false,supportsPostedWait:false,receiptTitle:"KÖLNER HERBSTVOLKSFEST 2026",receiptLocation:"KÖLN · DEUTZER WERFT",cardImage:"./assets/koeln-deutz-herbst-2026-background.webp",cardImageFallbackUrls:["https://media04.rheinische-anzeigenblaetter.de/article/2022/10/27/2/933212_XXL.jpg","https://images.squarespace-cdn.com/content/v1/55ddcba5e4b09a5c0647737b/1541343171959-GE6VV2NF3BNMRQ0Y4TQX/Herbstkirmes%2Bvon%2BDeutzer%2BBr%C3%BCcke%2Bmit%2BFeuerwerk%2Bmontage%2B2018.jpg"],cardImageCredit:"Eric Austermühl / Wikimedia Commons · CC BY 3.0 · bearbeitet (WebP)",cardImageSourceUrl:"https://commons.wikimedia.org/wiki/File:Europa_Rad_(208058101).jpeg",cardCopy:"24. Oktober – 1. November · 15 bislang genannte Fahr- und Laufgeschäfte · vorläufig",noLiveLabel:"KIRMES · KEINE LIVE-WARTEZEITEN",noLiveMessage:"Keine öffentlichen Live-Wartezeiten. NÄHEN misst deine persönliche Queue.",noLiveAlarmMessage:"Keine öffentlichen Wartezeit-Alarme verfügbar.",disclaimer:"Unabhängiger Fan-Begleiter, keine offizielle App. Beschickung vom Kirmesforum und aktuellen Aufbauhinweisen (21.10.2026), Änderungen möglich. Fahrpreise werden bei jeder Fahrt manuell eingegeben."},rides,worlds,fonts,aliases,rideConfig,exclusions:{ids:[],namePatterns:[]}};
 })();
