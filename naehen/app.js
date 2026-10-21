@@ -2667,6 +2667,9 @@
       const sourceUrl = world?.imageSourceUrl || ride.imageSourceUrl;
       const credit = world?.imageCredit || ride.imageCredit || "Bildquelle";
       links.push("<a href=\"" + escapeHtml(sourceUrl) + "\" target=\"_blank\" rel=\"noopener\">Bild: " + escapeHtml(credit) + " ↗</a>");
+      if (ride.imageLicenseUrl) {
+        links.push("<a href=\"" + escapeHtml(ride.imageLicenseUrl) + "\" target=\"_blank\" rel=\"noopener\">Bildlizenz ↗</a>");
+      }
     }
 
     box.innerHTML =
