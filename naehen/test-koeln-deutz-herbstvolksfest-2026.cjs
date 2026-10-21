@@ -7,12 +7,13 @@ assert.equal(mod.park.kind,"fair");assert.equal(mod.park.slug,"koeln-deutz-herbs
 assert.equal(mod.park.startDate,"2026-10-24");assert.equal(mod.park.endDate,"2026-11-01");
 assert.equal(mod.park.liveWaits,false);assert.equal(mod.park.specialMap,undefined);
 assert.equal(mod.rides.length,15);assert.equal(new Set(Array.from(mod.rides,r=>r.id)).size,15);
-assert.equal(mod.park.lineupStatus,"provisional");
-for(const r of mod.rides){assert.ok(r.operator);assert.equal(r.priceEuro,null);assert.ok(mod.worlds[r.id]&&mod.fonts[r.id]);}
+assert.equal(mod.park.lineupStatus,"provisional");assert.ok(mod.park.cardImage.includes("kirmes-volksfest-deutz20191025-hl-1594.jpg"));
+for(const r of mod.rides){assert.ok(r.operator);assert.equal(r.priceEuro,null);assert.ok(r.imageUrl&&r.imageCredit&&r.imageSourceUrl,"Missing image or credit: "+r.name);assert.ok(mod.worlds[r.id]&&mod.fonts[r.id]);}
 const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
 const app=fs.readFileSync(path.join(root,"app.js"),"utf8");
 const sw=fs.readFileSync(path.join(root,"sw.js"),"utf8");
 assert.ok(html.includes("koeln-deutz-herbstvolksfest-2026-config.js?v=125"));
 assert.ok(app.includes("window.NAEHEN_KOELN_DEUTZ_HERBST_2026"));
 assert.ok(sw.includes("naehen-v125")&&sw.includes("./koeln-deutz-herbstvolksfest-2026-config.js"));
-console.log("PASS Köln Deutz autumn fair: 15 provisional attractions and PWA inclusion");
+const css=fs.readFileSync(path.join(root,"styles.css"),"utf8");assert.ok(css.includes("body[data-park=\"koeln-deutz-herbstvolksfest-2026\"] .parkAtmosphere"));
+console.log("PASS Köln Deutz: 15 named rides with photos, credit, source, own background, no map, PWA inclusion");
