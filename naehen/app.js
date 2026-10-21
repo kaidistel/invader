@@ -850,7 +850,7 @@
       const fair = park.kind === "fair";
       return "<button class=\"parkChoice\" type=\"button\" data-park=\"" + escapeHtml(park.slug) + "\" data-kind=\"" + (fair ? "fair" : "park") + "\">" +
         (park.cardImage
-          ? "<img class=\"parkChoiceArt\" src=\"" + escapeHtml(park.cardImage) + "\" alt=\"\" loading=\"eager\">"
+          ? "<img referrerpolicy=\"no-referrer\" class=\"parkChoiceArt\" src=\"" + escapeHtml(park.cardImage) + "\" alt=\"\" loading=\"eager\">"
           : "<img class=\"parkChoiceArt\" alt=\"\" loading=\"eager\" hidden>") +
         "<span class=\"parkChoiceCopy\">" +
           "<span class=\"parkChoiceMeta\">" + (fair ? "KIRMES · " : "") + escapeHtml(park.location) + "</span>" +
@@ -948,6 +948,7 @@
           return;
         }
         const bg = new Image();
+        bg.referrerPolicy = "no-referrer";
         bg.onload = () => {
           if (activeParkSlug === parkSlug) {
             document.body.style.setProperty("--park-hero-image", "url(" + JSON.stringify(backgrounds[index]) + ")");
@@ -1723,7 +1724,7 @@
       const queueDisabled = closed ? " disabled" : "";
 
       return "<article class=\"ride\" data-park=\"" + escapeHtml(activeParkSlug || "phantasialand") + "\" data-world=\"" + escapeHtml(ride.id) + "\" data-detail=\"" + escapeHtml(ride.id) + "\">" +
-        (artSrc ? "<img class=\"rideArt\" src=\"" + escapeHtml(artSrc) + "\" alt=\"\" loading=\"lazy\" decoding=\"async\">" : "") +
+        (artSrc ? "<img referrerpolicy=\"no-referrer\" class=\"rideArt\" src=\"" + escapeHtml(artSrc) + "\" alt=\"\" loading=\"lazy\" decoding=\"async\">" : "") +
         "<div class=\"rideMain\">" +
           "<div class=\"rideTop\">" +
             "<button class=\"fav " + (fav ? "on" : "") + "\" data-fav=\"" + ride.id + "\" aria-label=\"Favorit für " + escapeHtml(ride.name) + "\" aria-pressed=\"" + fav + "\">★</button>" +
@@ -2694,6 +2695,7 @@
     rideSheet.dataset.world = world ? selectedDetailRide.id : "default";
     applyAttractionTypography(rideSheet, selectedDetailRide.id);
     if (worldArtImage) {
+      worldArtImage.referrerPolicy = "no-referrer";
       if (artSrc) {
         const detailFallback = venueIsFair() ? "" : (activeParkConfig()?.cardImage || "./assets/park-picker-bg.webp");
         const candidates = [...(selectedDetailRide.imageFallbackUrls || []), ...(detailFallback ? [detailFallback] : [])];
