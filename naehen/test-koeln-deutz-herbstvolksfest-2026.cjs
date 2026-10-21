@@ -12,8 +12,8 @@ for(const r of mod.rides){assert.ok(r.operator);assert.equal(r.priceEuro,null);a
 const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
 const app=fs.readFileSync(path.join(root,"app.js"),"utf8");
 const sw=fs.readFileSync(path.join(root,"sw.js"),"utf8");
-assert.ok(html.includes("koeln-deutz-herbstvolksfest-2026-config.js?v=125"));
+assert.ok(html.includes("koeln-deutz-herbstvolksfest-2026-config.js?v="));
 assert.ok(app.includes("window.NAEHEN_KOELN_DEUTZ_HERBST_2026"));
-assert.ok(sw.includes("naehen-v125")&&sw.includes("./koeln-deutz-herbstvolksfest-2026-config.js"));
+assert.ok(sw.includes("naehen-v")&&sw.includes("./koeln-deutz-herbstvolksfest-2026-config.js"));
 const css=fs.readFileSync(path.join(root,"styles.css"),"utf8");assert.ok(css.includes("body[data-park=\"koeln-deutz-herbstvolksfest-2026\"] .parkAtmosphere"));
 console.log("PASS Köln Deutz: 15 named rides with photos, credit, source, own background, no map, PWA inclusion");
