@@ -1917,5 +1917,5 @@ body[data-park="meppen-herbstkirmes-2026"] .hero {
 .logItem .logDeleteBtn{display:inline-flex;align-items:center;justify-content:center;min-height:38px;margin-top:9px;padding:9px 11px;border:1px solid #ff9393aa;border-radius:10px;background:#522125e0;color:#ffcece;font-size:12px;font-weight:700;line-height:1.2;white-space:nowrap;touch-action:manipulation}
 
 /* Köln-Deutz Herbstvolksfest: independent fair ambience, not Phantasialand default. */
-body[data-park="koeln-deutz-herbstvolksfest-2026"] .parkAtmosphere{background:linear-gradient(180deg,rgba(6,14,28,.28),rgba(9,13,25,.77) 56%,#090b10 94%),var(--park-hero-image) center 42%/cover no-repeat}
+body[data-park="koeln-deutz-herbstvolksfest-2026"] .parkAtmosphere{background:linear-gradient(180deg,rgba(6,14,28,.15),rgba(9,13,25,.55) 56%,#090b10 97%),var(--park-hero-image, url("https://media04.rheinische-anzeigenblaetter.de/article/2022/10/27/2/933212_XXL.jpg")) center 36%/cover no-repeat,linear-gradient(130deg,#18223a,#361e38 48%,#071921)}
 body[data-park="koeln-deutz-herbstvolksfest-2026"] .hero{border-color:#efd18c70;background:linear-gradient(125deg,#3b2639,#171927 66%,#102433)}
