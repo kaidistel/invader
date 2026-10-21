@@ -7,7 +7,12 @@ assert.equal(mod.park.kind,"fair");assert.equal(mod.park.slug,"koeln-deutz-herbs
 assert.equal(mod.park.startDate,"2026-10-24");assert.equal(mod.park.endDate,"2026-11-01");
 assert.equal(mod.park.liveWaits,false);assert.equal(mod.park.specialMap,undefined);
 assert.equal(mod.rides.length,15);assert.equal(new Set(Array.from(mod.rides,r=>r.id)).size,15);
-assert.equal(mod.park.lineupStatus,"provisional");assert.ok(mod.park.cardImage.includes("kirmes-volksfest-deutz20191025-hl-1594.jpg"));
+assert.equal(mod.park.lineupStatus,"provisional");
+assert.equal(mod.park.cardImage,"./assets/koeln-deutz-herbst-2026-background.webp");
+assert.ok(fs.existsSync(path.join(root,"assets/koeln-deutz-herbst-2026-background.webp")),"Köln-Deutz background must be committed locally");
+const gravity=mod.rides.find(r=>r.id==="koeln-deutz-herbst26-mr-gravity");
+assert.equal(gravity.imageUrl,"./assets/koeln-deutz-herbst-2026-mr-gravity.webp");
+assert.ok(fs.existsSync(path.join(root,"assets/koeln-deutz-herbst-2026-mr-gravity.webp")),"Mr Gravity photo must be committed locally");
 for(const r of mod.rides){assert.ok(r.operator);assert.equal(r.priceEuro,null);assert.ok(r.imageUrl&&r.imageCredit&&r.imageSourceUrl,"Missing image or credit: "+r.name);assert.ok(mod.worlds[r.id]&&mod.fonts[r.id]);}
 const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
 const app=fs.readFileSync(path.join(root,"app.js"),"utf8");
