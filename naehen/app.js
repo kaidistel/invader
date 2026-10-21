@@ -32,7 +32,8 @@
     window.NAEHEN_NORDHORN_HERBSTKIRMES_2026,
     window.NAEHEN_HOCHHEIMER_MARKT_2026,
     window.NAEHEN_CRANGER_WEIHNACHTSZAUBER_2026,
-    window.NAEHEN_MEPPEN_HERBSTKIRMES_2026
+    window.NAEHEN_MEPPEN_HERBSTKIRMES_2026,
+    window.NAEHEN_KOELN_DEUTZ_HERBST_2026
   ].filter((module) => module && module.park && module.park.slug);
 
   const PARK_MODULES = {};
