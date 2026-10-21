@@ -25,16 +25,24 @@ const rides=[
     "id": "koeln-deutz-herbst26-extrem",
     "name": "Extrem",
     "operator": "Karabeg",
-    "operatorFull": "Karabeg",
+    "operatorFull": "Melvin Karabeg (Kamp-Lintfort)",
     "zone": "Deutzer Werft",
     "type": "KMG Speed",
     "rideIndexUrl": "https://ride-index.de/2007/01/22/extrem-agtsch/",
-    "imageUrl": "https://kermisplanner.nl/uploads/attractions/attraction-extrem/1679951012_a66df239670bd420ed3b.jpg",
-    "imageCredit": "Kermisplanner · Extrem (Karabeg)",
-    "imageSourceUrl": "https://kermisplanner.nl/",
+    "imageUrl": "https://www.ummet-eck.de/Bilder/fotosets/1024/2-extrem-remscheid23-c-UMM-c-schoen.jpg",
+    "imageCredit": "Ummet-Eck · Christian Schön · Extrem (Karabeg), Remscheid 2023",
+    "imageSourceUrl": "https://www.ummet-eck.de/bildgalerien/236-Extrem-Deinert-Karabeg-Fahrgeschaeft-Kirmes-bild-6217/",
     "description": "Extrem von Karabeg auf dem Kölner Herbstvolksfest 2026.",
     "priceEuro": null,
-    "new2026": false
+    "new2026": false,
+    "imageFallbackUrls": [
+      "https://kermisplanner.nl/uploads/attractions/attraction-extrem/1679951012_a66df239670bd420ed3b.jpg",
+      "https://www.ummet-eck.de/Bilder/poi/678/1-extrem-remscheid23-c-UMM-c-schoen.jpg"
+    ],
+    "manufacturer": "KMG",
+    "year": 2005,
+    "dimensions": "16 × 6 × max. 36 m",
+    "capacity": "8 Personen · 2 Gondeln"
   },
   {
     "id": "koeln-deutz-herbst26-fast-and-furious",
@@ -269,5 +277,5 @@ const rides=[
 const worlds={},fonts={},aliases={},rideConfig={};
 const typefaces=["'Bangers',cursive","'Black Ops One',sans-serif","'Orbitron',sans-serif","'Bebas Neue',sans-serif","'Cinzel Decorative',serif","'Monoton',sans-serif","'Fascinate Inline',serif","'Faster One',sans-serif","'Bungee Shade',sans-serif","'Rubik Glitch',sans-serif","'Creepster',cursive","'Special Elite',serif","'Nosifer',cursive","'Audiowide',sans-serif","'Rye',serif"];
 rides.forEach((r,i)=>{worlds[r.id]={label:(r.name+" · "+r.operator).toUpperCase(),line:r.description,artUrl:r.imageUrl||"",imageCredit:r.imageCredit||"",imageSourceUrl:r.imageSourceUrl||source};fonts[r.id]={fontFamily:typefaces[i],theme:"deutz26-"+i};aliases[r.name.toLowerCase()]=r.id;rideConfig[r.id]={singleRider:false};});
-window.NAEHEN_KOELN_DEUTZ_HERBST_2026={park:{slug:"koeln-deutz-herbstvolksfest-2026",kind:"fair",name:"Kölner Herbstvolksfest 2026",location:"Köln-Deutz · Deutzer Werft · 24.10.–01.11.2026",startDate:"2026-10-24",endDate:"2026-11-01",officialUrl:"https://www.deutzerkirmes.de/",dateSourceUrl:"https://www.deutzerkirmes.de/",lineupSourceUrl:source,sortMode:"configured",lineupStatus:"provisional",liveDataUrl:null,liveWaits:false,supportsPostedWait:false,receiptTitle:"KÖLNER HERBSTVOLKSFEST 2026",receiptLocation:"KÖLN · DEUTZER WERFT",cardImage:"https://www.koeln.de/wp-content/uploads/2023/03/kirmes-volksfest-deutz20191025-hl-1594.jpg",cardImageCredit:"koeln.de · Helmut Löwe · Kirmes Köln-Deutz, Archivbild",cardImageSourceUrl:"https://www.koeln.de/veranstaltungen/kirmes-in-deutz-herbstvolksfest/",cardCopy:"24. Oktober – 1. November · 15 bislang genannte Fahr- und Laufgeschäfte · vorläufig",noLiveLabel:"KIRMES · KEINE LIVE-WARTEZEITEN",noLiveMessage:"Keine öffentlichen Live-Wartezeiten. NÄHEN misst deine persönliche Queue.",noLiveAlarmMessage:"Keine öffentlichen Wartezeit-Alarme verfügbar.",disclaimer:"Unabhängiger Fan-Begleiter, keine offizielle App. Beschickung vom Kirmesforum und aktuellen Aufbauhinweisen (21.10.2026), Änderungen möglich. Fahrpreise werden bei jeder Fahrt manuell eingegeben."},rides,worlds,fonts,aliases,rideConfig,exclusions:{ids:[],namePatterns:[]}};
+window.NAEHEN_KOELN_DEUTZ_HERBST_2026={park:{slug:"koeln-deutz-herbstvolksfest-2026",kind:"fair",name:"Kölner Herbstvolksfest 2026",location:"Köln-Deutz · Deutzer Werft · 24.10.–01.11.2026",startDate:"2026-10-24",endDate:"2026-11-01",officialUrl:"https://www.deutzerkirmes.de/",dateSourceUrl:"https://www.deutzerkirmes.de/",lineupSourceUrl:source,sortMode:"configured",lineupStatus:"provisional",liveDataUrl:null,liveWaits:false,supportsPostedWait:false,receiptTitle:"KÖLNER HERBSTVOLKSFEST 2026",receiptLocation:"KÖLN · DEUTZER WERFT",cardImage:"https://media04.rheinische-anzeigenblaetter.de/article/2022/10/27/2/933212_XXL.jpg",cardImageFallbackUrls:["https://www.koeln.de/wp-content/uploads/2023/03/kirmes-volksfest-deutz20191025-hl-1594.jpg","https://images.locationscout.net/2015/10/funfair-cologne-germany.webp?h=1400&q=80"],cardImageCredit:"Rheinische Anzeigenblätter · Alexander Roll · Herbstkirmes Köln-Deutz 2022",cardImageSourceUrl:"https://www.rheinische-anzeigenblaetter.de/koeln/c-nachrichten/was-dreht-in-deutz_a261749",cardCopy:"24. Oktober – 1. November · 15 bislang genannte Fahr- und Laufgeschäfte · vorläufig",noLiveLabel:"KIRMES · KEINE LIVE-WARTEZEITEN",noLiveMessage:"Keine öffentlichen Live-Wartezeiten. NÄHEN misst deine persönliche Queue.",noLiveAlarmMessage:"Keine öffentlichen Wartezeit-Alarme verfügbar.",disclaimer:"Unabhängiger Fan-Begleiter, keine offizielle App. Beschickung vom Kirmesforum und aktuellen Aufbauhinweisen (21.10.2026), Änderungen möglich. Fahrpreise werden bei jeder Fahrt manuell eingegeben."},rides,worlds,fonts,aliases,rideConfig,exclusions:{ids:[],namePatterns:[]}};
 })();
