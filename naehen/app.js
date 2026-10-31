@@ -941,7 +941,7 @@
     await loadParkArtManifest(parkSlug);
     document.body.dataset.park = parkSlug;
     if (park.cardImage) {
-      const backgrounds = [park.cardImage, park.cardImageFallback, ...(park.cardImageFallbackUrls || [])].filter(Boolean);
+      const backgrounds = [park.heroImage, ...(park.heroImageFallbackUrls || []), park.cardImage, park.cardImageFallback, ...(park.cardImageFallbackUrls || [])].filter(Boolean);
       const loadBackground = (index) => {
         if (activeParkSlug !== parkSlug) return;
         if (index >= backgrounds.length) {
