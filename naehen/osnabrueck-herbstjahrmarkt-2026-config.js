@@ -17,10 +17,14 @@
     "manufacturer": "Adesko / Landwermann",
     "imageUrl": "https://klassik.onride.de/onride-upic348715@640",
     "imageFallbackUrls": [
-      "https://ride-index.de/wp-content/uploads/2005/04/TOVAR_2005.jpg"
+      "https://images.weserv.nl/?url=klassik.onride.de%2Fonride-upic348715%40640&w=1400&fit=inside&output=webp",
+      "https://ride-index.de/wp-content/uploads/2005/04/TOVAR_2005.jpg",
+      "https://images.weserv.nl/?url=ride-index.de%2Fwp-content%2Fuploads%2F2005%2F04%2FTOVAR_2005.jpg&w=1400&fit=inside&output=webp",
+      "./assets/osnabrueck26-racing-cars-fallback.svg"
     ],
     "imageCredit": "onride.de · Dewey · Racing Cars von Bernhard Tovar (historische Aufnahme)",
-    "imageSourceUrl": "https://klassik.onride.de/viewtopic.php?t=50038"
+    "imageSourceUrl": "https://klassik.onride.de/viewtopic.php?t=50038",
+    "fallbackArtworkCredit": "NÄHEN · originale stilisierte Illustration, kein Foto"
   },
   {
     "id": "super-cars",
@@ -33,7 +37,12 @@
     "imageUrl": "https://primary.jwwb.nl/public/l/q/u/temp-iffnycaazqhfiudsmtnb/img_0675-high.jpg?enable=upscale&enable-io=true&fit=bounds&width=1200",
     "imageCredit": "Kermisreporter · Super Cars von Barber",
     "imageSourceUrl": "https://kermisreporter.nl/",
-    "description": "Der Autoscooter Super Cars von Bärbel Barber."
+    "description": "Der Autoscooter Super Cars von Bärbel Barber.",
+    "imageFallbackUrls": [
+      "https://images.weserv.nl/?url=primary.jwwb.nl%2Fpublic%2Fl%2Fq%2Fu%2Ftemp-iffnycaazqhfiudsmtnb%2Fimg_0675-high.jpg%3Fenable%3Dupscale%26enable-io%3Dtrue%26fit%3Dbounds%26width%3D1200&w=1400&fit=inside&output=webp",
+      "./assets/osnabrueck26-super-cars-fallback.svg"
+    ],
+    "fallbackArtworkCredit": "NÄHEN · originale stilisierte Illustration, kein Foto"
   },
   {
     "id": "musik-express",
@@ -49,7 +58,14 @@
     "imageUrl": "https://onride.de/onride-upic520799@1120",
     "imageCredit": "onride.de · Dewey · Musik Express Welte-Noack",
     "imageSourceUrl": "https://onride.de/viewtopic.php?t=44392",
-    "description": "Musik-Express von Welte-Noack – bergauf, bergab und jede Menge Musik."
+    "description": "Musik-Express von Welte-Noack – bergauf, bergab und jede Menge Musik.",
+    "imageFallbackUrls": [
+      "https://images.weserv.nl/?url=onride.de%2Fonride-upic520799%401120&w=1400&fit=inside&output=webp",
+      "https://onride.de/onride-upic520799%401120",
+      "https://images.weserv.nl/?url=onride.de%2Fonride-upic520799%25401120&w=1400&fit=inside&output=webp",
+      "./assets/osnabrueck26-musik-express-fallback.svg"
+    ],
+    "fallbackArtworkCredit": "NÄHEN · originale stilisierte Illustration, kein Foto"
   },
   {
     "id": "power-express",
@@ -65,10 +81,16 @@
     "description": "Weltes Power Express ist ein Mack-Musikexpress aus dem Jahr 1974.",
     "imageUrl": "https://www.der-powerexpress.de/images/IMG_0006.jpg",
     "imageFallbackUrls": [
-      "https://ride-index.de/wp-content/uploads/2005/01/Welte-PowerExpress-2022-L.jpg"
+      "https://images.weserv.nl/?url=www.der-powerexpress.de%2Fimages%2FIMG_0006.jpg&w=1400&fit=inside&output=webp",
+      "https://ride-index.de/wp-content/uploads/2005/01/Welte-PowerExpress-2022-L.jpg",
+      "https://images.weserv.nl/?url=ride-index.de%2Fwp-content%2Fuploads%2F2005%2F01%2FWelte-PowerExpress-2022-L.jpg&w=1400&fit=inside&output=webp",
+      "https://www.der-powerexpress.de/images/indjjex.jpg",
+      "https://images.weserv.nl/?url=www.der-powerexpress.de%2Fimages%2Findjjex.jpg&w=1400&fit=inside&output=webp",
+      "./assets/osnabrueck26-power-express-fallback.svg"
     ],
     "imageCredit": "Schaustellerbetrieb Timm Welte · Betreiberfoto",
-    "imageSourceUrl": "https://www.der-powerexpress.de/ueber-uns.html"
+    "imageSourceUrl": "https://www.der-powerexpress.de/ueber-uns.html",
+    "fallbackArtworkCredit": "NÄHEN · originale stilisierte Illustration, kein Foto"
   },
   {
     "id": "lounge-360",
@@ -85,10 +107,16 @@
     "description": "Hansteins 33 Meter hohes Riesenrad bietet den Blick über die Halle Gartlage.",
     "imageUrl": "https://www.igmetall-wob.de/fileadmin/users/News/2021/Bilder/Q3/2021-07-19_Riesenrad_75_Jahre.JPG",
     "imageFallbackUrls": [
-      "https://ride-index.de/wp-content/uploads/2017/06/LOUNGE360_Hanstein2018N.jpg"
+      "https://images.weserv.nl/?url=www.igmetall-wob.de%2Ffileadmin%2Fusers%2FNews%2F2021%2FBilder%2FQ3%2F2021-07-19_Riesenrad_75_Jahre.JPG&w=1400&fit=inside&output=webp",
+      "https://ride-index.de/wp-content/uploads/2017/06/LOUNGE360_Hanstein2018N.jpg",
+      "https://images.weserv.nl/?url=ride-index.de%2Fwp-content%2Fuploads%2F2017%2F06%2FLOUNGE360_Hanstein2018N.jpg&w=1400&fit=inside&output=webp",
+      "https://cdn.coaster.cloud/attractions/Mn/Kr/MnKrQPygWSjmWHHzroS6rv.jpg?class=large",
+      "https://images.weserv.nl/?url=cdn.coaster.cloud%2Fattractions%2FMn%2FKr%2FMnKrQPygWSjmWHHzroS6rv.jpg%3Fclass%3Dlarge&w=1400&fit=inside&output=webp",
+      "./assets/osnabrueck26-lounge-360-fallback.svg"
     ],
     "imageCredit": "IG Metall Wolfsburg · Lounge 360° von Hanstein bei Nacht (2021)",
-    "imageSourceUrl": "https://www.igmetall-wob.de/meldung/75000-eis-in-75-stunden"
+    "imageSourceUrl": "https://www.igmetall-wob.de/meldung/75000-eis-in-75-stunden",
+    "fallbackArtworkCredit": "NÄHEN · originale stilisierte Illustration, kein Foto"
   },
   {
     "id": "break-dance",
@@ -104,7 +132,12 @@
     "imageUrl": "https://www.ummet-eck.de/Bilder/fotosets/1024/1-breakdance-no1-welte-menden22-c-UMM-chr-schoen.jpg",
     "imageCredit": "Ummet-Eck · Christian Schön · Weltes Break Dance",
     "imageSourceUrl": "https://www.ummet-eck.de/bildgalerien/251-Break-Dance-No-1-Welte-Fahrgeschaeft-auf-der-Kirmes-bild-4351/",
-    "description": "HUSS Break Dance von Fredi Welte: drehende Gondeln und Reko."
+    "description": "HUSS Break Dance von Fredi Welte: drehende Gondeln und Reko.",
+    "imageFallbackUrls": [
+      "https://images.weserv.nl/?url=www.ummet-eck.de%2FBilder%2Ffotosets%2F1024%2F1-breakdance-no1-welte-menden22-c-UMM-chr-schoen.jpg&w=1400&fit=inside&output=webp",
+      "./assets/osnabrueck26-break-dance-fallback.svg"
+    ],
+    "fallbackArtworkCredit": "NÄHEN · originale stilisierte Illustration, kein Foto"
   },
   {
     "id": "willy-der-wurm",
@@ -120,7 +153,12 @@
     "description": "Familienachterbahn von Spindler – der Wurm ist seit 2026 als Willy der Wurm unterwegs.",
     "imageUrl": "https://coasterfriends.de/joomla/images/pcp_coasters/e_europa/CH_switzerland/17091_der_wurm/gyh7pii0frkg3u.jpg",
     "imageCredit": "Coasterfriends · dieselbe MX48-Anlage als „Der Wurm“ unter Vorbesitzer Corbière (Archivaufnahme)",
-    "imageSourceUrl": "https://coasterfriends.de/joomla/parkcheckpoint/achterbahn/Corbire_Harry/Der_Wurm"
+    "imageSourceUrl": "https://coasterfriends.de/joomla/parkcheckpoint/achterbahn/Corbire_Harry/Der_Wurm",
+    "imageFallbackUrls": [
+      "https://images.weserv.nl/?url=coasterfriends.de%2Fjoomla%2Fimages%2Fpcp_coasters%2Fe_europa%2FCH_switzerland%2F17091_der_wurm%2Fgyh7pii0frkg3u.jpg&w=1400&fit=inside&output=webp",
+      "./assets/osnabrueck26-willy-der-wurm-fallback.svg"
+    ],
+    "fallbackArtworkCredit": "NÄHEN · originale stilisierte Illustration, kein Foto"
   },
   {
     "id": "phantom",
@@ -135,10 +173,17 @@
     "capacity": "20 Personen",
     "dimensions": "18 × 14 × max. 45 m",
     "rideIndexUrl": "https://ride-index.de/2025/05/26/phantom-nl/",
-    "imageUrl": "https://klassik.onride.de/onride-upic582045@640",
-    "imageCredit": "onride.de · Phantom von Ordelman (2025)",
-    "imageSourceUrl": "https://onride.de/viewtopic.php?t=92083",
-    "description": "Das Phantom von Ordelman: die 2025 eröffnete KMG XXL-Schaukel mit aufwendiger Theaterfassade."
+    "imageUrl": "https://www.kirmesmagazin.de/images/2026/02/phantom_26022026.jpg",
+    "imageCredit": "KirmesMagazin / FKF · Phantom von Willy Ordelman, 2026",
+    "imageSourceUrl": "https://www.kirmesmagazin.de/volksfeste-kirmes/nachrichten/fkf-award-2025-innovationen-im-fokus-drei-attraktionen-ausgezeichnet",
+    "description": "Das Phantom von Ordelman: die 2025 eröffnete KMG XXL-Schaukel mit aufwendiger Theaterfassade.",
+    "imageFallbackUrls": [
+      "https://images.weserv.nl/?url=www.kirmesmagazin.de%2Fimages%2F2026%2F02%2Fphantom_26022026.jpg&w=1400&fit=inside&output=webp",
+      "https://klassik.onride.de/onride-upic582045%40640",
+      "https://images.weserv.nl/?url=klassik.onride.de%2Fonride-upic582045%2540640&w=1400&fit=inside&output=webp",
+      "./assets/osnabrueck26-phantom-fallback.svg"
+    ],
+    "fallbackArtworkCredit": "NÄHEN · originale stilisierte Illustration, kein Foto"
   },
   {
     "id": "symphonica-tower",
@@ -155,7 +200,12 @@
     "imageUrl": "https://www.looopings.nl/img/foto/26/0504symsym2.jpg",
     "imageCredit": "Looopings · Symphonica Tower, Detailaufnahme",
     "imageSourceUrl": "https://www.looopings.nl/weblog/32000/Nieuwe-zweefmolen-op-de-kermis-staat-in-het-teken-van-klassieke-muziek.html",
-    "description": "Orchester-Thema hoch über der Kirmes: 60 Meter hoher Kettenflieger von Lamberink."
+    "description": "Orchester-Thema hoch über der Kirmes: 60 Meter hoher Kettenflieger von Lamberink.",
+    "imageFallbackUrls": [
+      "https://images.weserv.nl/?url=www.looopings.nl%2Fimg%2Ffoto%2F26%2F0504symsym2.jpg&w=1400&fit=inside&output=webp",
+      "./assets/osnabrueck26-symphonica-tower-fallback.svg"
+    ],
+    "fallbackArtworkCredit": "NÄHEN · originale stilisierte Illustration, kein Foto"
   },
   {
     "id": "caribbean-star",
@@ -171,7 +221,12 @@
     "description": "Tropisch gestalteter Reverchon Explorer, seit 2026 unter Schneider unterwegs.",
     "imageUrl": "https://www.kirmesmagazin.de/images/2024/10/kerwe_schwetzingen.jpg",
     "imageCredit": "KirmesMagazin · Caribbean Star von Schneider (Archivaufnahme 2024, vor der Umgestaltung 2026)",
-    "imageSourceUrl": "https://www.kirmesmagazin.de/volksfeste-kirmes/schwetzinger-kerwe-laedt-zu-spass-und-unterhaltung-ein"
+    "imageSourceUrl": "https://www.kirmesmagazin.de/volksfeste-kirmes/schwetzinger-kerwe-laedt-zu-spass-und-unterhaltung-ein",
+    "imageFallbackUrls": [
+      "https://images.weserv.nl/?url=www.kirmesmagazin.de%2Fimages%2F2024%2F10%2Fkerwe_schwetzingen.jpg&w=1400&fit=inside&output=webp",
+      "./assets/osnabrueck26-caribbean-star-fallback.svg"
+    ],
+    "fallbackArtworkCredit": "NÄHEN · originale stilisierte Illustration, kein Foto"
   },
   {
     "id": "phantastische-reise",
@@ -187,7 +242,12 @@
     "description": "Simulator von Kutschenbauer, früher bekannt als New World 3000.",
     "imageUrl": "https://www.kirmesecke.de/Bilder/poi/678/4-newworld3000-ahlen23-c-UMM-schoen.jpg",
     "imageCredit": "Kirmesecke / Christian Schön · dieselbe Simulatoranlage als „New World 3000“ (Archivfoto Ahlen 2023)",
-    "imageSourceUrl": "https://ride-index.de/2005/01/11/new-world-3000/"
+    "imageSourceUrl": "https://ride-index.de/2005/01/11/new-world-3000/",
+    "imageFallbackUrls": [
+      "https://images.weserv.nl/?url=www.kirmesecke.de%2FBilder%2Fpoi%2F678%2F4-newworld3000-ahlen23-c-UMM-schoen.jpg&w=1400&fit=inside&output=webp",
+      "./assets/osnabrueck26-phantastische-reise-fallback.svg"
+    ],
+    "fallbackArtworkCredit": "NÄHEN · originale stilisierte Illustration, kein Foto"
   },
   {
     "id": "looping-star",
@@ -203,7 +263,12 @@
     "imageUrl": "https://cdn.coaster.cloud/attractions/Qq/Yb/QqYbWhAmJvwQHjDdrGqPds.jpg?class=large",
     "imageCredit": "coaster.cloud · Looping Star (Kortekamp)",
     "imageSourceUrl": "https://coaster.cloud/pt/attractions/dd3d0b6c-looping-star-kortekamp",
-    "description": "Kortekamps klassische Überschlagschaukel von Höpler."
+    "description": "Kortekamps klassische Überschlagschaukel von Höpler.",
+    "imageFallbackUrls": [
+      "https://images.weserv.nl/?url=cdn.coaster.cloud%2Fattractions%2FQq%2FYb%2FQqYbWhAmJvwQHjDdrGqPds.jpg%3Fclass%3Dlarge&w=1400&fit=inside&output=webp",
+      "./assets/osnabrueck26-looping-star-fallback.svg"
+    ],
+    "fallbackArtworkCredit": "NÄHEN · originale stilisierte Illustration, kein Foto"
   },
   {
     "id": "ghost-villa",
@@ -218,10 +283,14 @@
     "rideIndexUrl": "https://ride-index.de/2021/06/08/ghost-villa-nl/",
     "imageUrl": "https://www.funfactorevents.nl/.cm4all/mediadb/Banners/Attracties/Spookhuis/Spookhuis-Ghost-Villa-Huren-Fun-Factor-Events.jpg",
     "imageFallbackUrls": [
-      "https://i.postimg.cc/8kXFdmPM/Hasseltwinterland-19-38.jpg"
+      "https://images.weserv.nl/?url=www.funfactorevents.nl%2F.cm4all%2Fmediadb%2FBanners%2FAttracties%2FSpookhuis%2FSpookhuis-Ghost-Villa-Huren-Fun-Factor-Events.jpg&w=1400&fit=inside&output=webp",
+      "https://i.postimg.cc/8kXFdmPM/Hasseltwinterland-19-38.jpg",
+      "https://images.weserv.nl/?url=i.postimg.cc%2F8kXFdmPM%2FHasseltwinterland-19-38.jpg&w=1400&fit=inside&output=webp",
+      "./assets/osnabrueck26-ghost-villa-fallback.svg"
     ],
     "imageCredit": "Fun Factor Events · Ghost Villa von Brouwer-van Reken",
-    "imageSourceUrl": "https://www.funfactorevents.nl/Spookhuis-huren/"
+    "imageSourceUrl": "https://www.funfactorevents.nl/Spookhuis-huren/",
+    "fallbackArtworkCredit": "NÄHEN · originale stilisierte Illustration, kein Foto"
   },
   {
     "id": "heroes-city-xxl",
@@ -236,7 +305,12 @@
     "imageUrl": "https://www.ummet-eck.de/Bilder/poi/678/heroes-city-xxl-zuidema-puetzchens-markt-2023.jpg",
     "imageCredit": "Ummet-Eck · Christian Schön · Heroes City XXL (2023)",
     "imageSourceUrl": "https://www.ummet-eck.de/regionen/101564-Heroes-City-XXL-Zuidema-/",
-    "description": "Mehrstöckiges Superhelden-Laufgeschäft mit Hindernissen und Spiegeln."
+    "description": "Mehrstöckiges Superhelden-Laufgeschäft mit Hindernissen und Spiegeln.",
+    "imageFallbackUrls": [
+      "https://images.weserv.nl/?url=www.ummet-eck.de%2FBilder%2Fpoi%2F678%2Fheroes-city-xxl-zuidema-puetzchens-markt-2023.jpg&w=1400&fit=inside&output=webp",
+      "./assets/osnabrueck26-heroes-city-xxl-fallback.svg"
+    ],
+    "fallbackArtworkCredit": "NÄHEN · originale stilisierte Illustration, kein Foto"
   },
   {
     "id": "kristallpalast",
@@ -251,7 +325,12 @@
     "imageUrl": "https://www.kirmesecke.de/Bilder/poi/678/5-kristall-palast-waeldchestag23-ffm-c-UMM-c-schoen.jpg",
     "imageCredit": "Kirmesecke / Christian Schön · Kristallpalast Sturm",
     "imageSourceUrl": "https://www.kirmesecke.de/regionen/103208-Kristall-Palast-Sturm-/",
-    "description": "Traditionsreicher Glasirrgarten mit eisblauer Kristallfassade."
+    "description": "Traditionsreicher Glasirrgarten mit eisblauer Kristallfassade.",
+    "imageFallbackUrls": [
+      "https://images.weserv.nl/?url=www.kirmesecke.de%2FBilder%2Fpoi%2F678%2F5-kristall-palast-waeldchestag23-ffm-c-UMM-c-schoen.jpg&w=1400&fit=inside&output=webp",
+      "./assets/osnabrueck26-kristallpalast-fallback.svg"
+    ],
+    "fallbackArtworkCredit": "NÄHEN · originale stilisierte Illustration, kein Foto"
   }
 ];
   const typefaces = ["'Faster One',sans-serif","'Bungee Shade',sans-serif","'Monoton',sans-serif","'Bangers',cursive","'Limelight',serif","'Black Ops One',sans-serif","'Chango',sans-serif","'Cinzel Decorative',serif","'Audiowide',sans-serif","'Trade Winds',cursive","'Zen Tokyo Zoo',sans-serif","'Graduate',serif","'Creepster',cursive","'Bungee',sans-serif","'Fascinate Inline',serif"];
