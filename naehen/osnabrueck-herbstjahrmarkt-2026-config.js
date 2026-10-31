@@ -12,7 +12,15 @@
     "operatorFull": "Bernhard Tovar",
     "zone": "Autoscooter",
     "type": "Autoscooter",
-    "description": "Racing Cars von Tovar – der klassische Autoscooter auf dem Herbstjahrmarkt."
+    "description": "Racing Cars von Tovar – der klassische Autoscooter auf dem Herbstjahrmarkt.",
+    "rideIndexUrl": "https://ride-index.de/2005/04/05/as-tovar/",
+    "manufacturer": "Adesko / Landwermann",
+    "imageUrl": "https://klassik.onride.de/onride-upic348715@640",
+    "imageFallbackUrls": [
+      "https://ride-index.de/wp-content/uploads/2005/04/TOVAR_2005.jpg"
+    ],
+    "imageCredit": "onride.de · Dewey · Racing Cars von Bernhard Tovar (historische Aufnahme)",
+    "imageSourceUrl": "https://klassik.onride.de/viewtopic.php?t=50038"
   },
   {
     "id": "super-cars",
@@ -54,7 +62,13 @@
     "year": 1974,
     "capacity": "40–60 Personen · 20 Chaisen",
     "rideIndexUrl": "https://ride-index.de/2005/01/13/power-express/",
-    "description": "Weltes Power Express ist ein Mack-Musikexpress aus dem Jahr 1974."
+    "description": "Weltes Power Express ist ein Mack-Musikexpress aus dem Jahr 1974.",
+    "imageUrl": "https://www.der-powerexpress.de/images/IMG_0006.jpg",
+    "imageFallbackUrls": [
+      "https://ride-index.de/wp-content/uploads/2005/01/Welte-PowerExpress-2022-L.jpg"
+    ],
+    "imageCredit": "Schaustellerbetrieb Timm Welte · Betreiberfoto",
+    "imageSourceUrl": "https://www.der-powerexpress.de/ueber-uns.html"
   },
   {
     "id": "lounge-360",
@@ -68,7 +82,13 @@
     "height": "ca. 33 m",
     "capacity": "144 Personen · 24 Gondeln",
     "rideIndexUrl": "https://ride-index.de/2017/06/24/lounge-360-grad/",
-    "description": "Hansteins 33 Meter hohes Riesenrad bietet den Blick über die Halle Gartlage."
+    "description": "Hansteins 33 Meter hohes Riesenrad bietet den Blick über die Halle Gartlage.",
+    "imageUrl": "https://www.igmetall-wob.de/fileadmin/users/News/2021/Bilder/Q3/2021-07-19_Riesenrad_75_Jahre.JPG",
+    "imageFallbackUrls": [
+      "https://ride-index.de/wp-content/uploads/2017/06/LOUNGE360_Hanstein2018N.jpg"
+    ],
+    "imageCredit": "IG Metall Wolfsburg · Lounge 360° von Hanstein bei Nacht (2021)",
+    "imageSourceUrl": "https://www.igmetall-wob.de/meldung/75000-eis-in-75-stunden"
   },
   {
     "id": "break-dance",
@@ -97,7 +117,10 @@
     "year": 2019,
     "capacity": "24 Personen",
     "rideIndexUrl": "https://ride-index.de/2026/03/08/willy-der-wurm-spindler/",
-    "description": "Familienachterbahn von Spindler – der Wurm ist seit 2026 als Willy der Wurm unterwegs."
+    "description": "Familienachterbahn von Spindler – der Wurm ist seit 2026 als Willy der Wurm unterwegs.",
+    "imageUrl": "https://coasterfriends.de/joomla/images/pcp_coasters/e_europa/CH_switzerland/17091_der_wurm/gyh7pii0frkg3u.jpg",
+    "imageCredit": "Coasterfriends · dieselbe MX48-Anlage als „Der Wurm“ unter Vorbesitzer Corbière (Archivaufnahme)",
+    "imageSourceUrl": "https://coasterfriends.de/joomla/parkcheckpoint/achterbahn/Corbire_Harry/Der_Wurm"
   },
   {
     "id": "phantom",
@@ -145,7 +168,10 @@
     "year": 1982,
     "capacity": "40 Personen · 20 Gondeln",
     "rideIndexUrl": "https://ride-index.de/2005/01/04/caribbean-star/",
-    "description": "Tropisch gestalteter Reverchon Explorer, seit 2026 unter Schneider unterwegs."
+    "description": "Tropisch gestalteter Reverchon Explorer, seit 2026 unter Schneider unterwegs.",
+    "imageUrl": "https://www.kirmesmagazin.de/images/2024/10/kerwe_schwetzingen.jpg",
+    "imageCredit": "KirmesMagazin · Caribbean Star von Schneider (Archivaufnahme 2024, vor der Umgestaltung 2026)",
+    "imageSourceUrl": "https://www.kirmesmagazin.de/volksfeste-kirmes/schwetzinger-kerwe-laedt-zu-spass-und-unterhaltung-ein"
   },
   {
     "id": "phantastische-reise",
@@ -158,7 +184,10 @@
     "year": 1998,
     "capacity": "27 Personen",
     "rideIndexUrl": "https://ride-index.de/2005/01/11/new-world-3000/",
-    "description": "Simulator von Kutschenbauer, früher bekannt als New World 3000."
+    "description": "Simulator von Kutschenbauer, früher bekannt als New World 3000.",
+    "imageUrl": "https://ride-index.de/wp-content/uploads/2005/01/NEWWORLD3000_Boeker2023R.jpg",
+    "imageCredit": "Ride-Index · dieselbe Simulatoranlage als „New World 3000“ (Archivfoto 2023, vor Betreiber- und Namenswechsel)",
+    "imageSourceUrl": "https://ride-index.de/2005/01/11/new-world-3000/"
   },
   {
     "id": "looping-star",
@@ -180,10 +209,19 @@
     "id": "ghost-villa",
     "name": "Ghost Villa",
     "operator": "van Reken",
-    "operatorFull": "van Reken (NL)",
+    "operatorFull": "Brouwer-van Reken (NL)",
     "zone": "Lauf- und Erlebnisgeschäfte",
     "type": "Geisterbahn",
-    "description": "Geisterbahn als Ersatz für das abgesagte No Limit. Betreiber laut Kirmesforum: van Reken."
+    "description": "Geisterbahn als Ersatz für das abgesagte No Limit. Betreiber laut Kirmesforum: van Reken.",
+    "manufacturer": "Barbisan / Umbau Mondial",
+    "year": 1993,
+    "rideIndexUrl": "https://ride-index.de/2021/06/08/ghost-villa-nl/",
+    "imageUrl": "https://www.funfactorevents.nl/.cm4all/mediadb/Banners/Attracties/Spookhuis/Spookhuis-Ghost-Villa-Huren-Fun-Factor-Events.jpg",
+    "imageFallbackUrls": [
+      "https://i.postimg.cc/8kXFdmPM/Hasseltwinterland-19-38.jpg"
+    ],
+    "imageCredit": "Fun Factor Events · Ghost Villa von Brouwer-van Reken",
+    "imageSourceUrl": "https://www.funfactorevents.nl/Spookhuis-huren/"
   },
   {
     "id": "heroes-city-xxl",
@@ -236,7 +274,12 @@
       fairZones: ["Autoscooter", "Kirmesklassiker", "Familienfahrgeschäfte", "Hochfahrgeschäfte", "Lauf- und Erlebnisgeschäfte"],
       liveDataUrl: null, liveWaits: false, supportsPostedWait: false,
       receiptTitle: "HERBSTJAHRMARKT OSNABRÜCK 2026", receiptLocation: "OSNABRÜCK · HALLE GARTLAGE",
+      heroImage: "https://erleben.osnabrueck.de/fileadmin/erleben/Stadt_erleben_allg._Bilder/City_Events/Jahrmaerkte/Marketing_Osnabrueck_Herbstjahrmarkt-40.jpg",
+      heroImageFallbackUrls: ["https://upload.wikimedia.org/wikipedia/commons/1/1e/Osnabr%C3%BCck_Herbstjahrmarkt_2017_fern.jpg"],
+      heroImageCredit: "Marketing Osnabrück · originaler Herbstjahrmarkt (Archivmotiv)",
+      heroImageSourceUrl: officialDateSource,
       cardImage: "https://erleben.osnabrueck.de/fileadmin/_processed_/b/1/csm_Marketing_Osnabrueck_Herbstjahrmarkt-77_9a11333ea3.jpg",
+      cardImageFallbackUrls: ["https://upload.wikimedia.org/wikipedia/commons/1/1e/Osnabr%C3%BCck_Herbstjahrmarkt_2017_fern.jpg"],
       cardImageCredit: "Stadt Osnabrück / Marketing Osnabrück · Herbstjahrmarkt (Archivaufnahme)",
       cardImageSourceUrl: officialDateSource,
       cardCopy: "30. Oktober – 8. November · 15 gemeldete Fahr-, Lauf- und Erlebnisgeschäfte · Feuerwerk freitags · Familientag 04.11.",
