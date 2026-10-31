@@ -1919,3 +1919,19 @@ body[data-park="meppen-herbstkirmes-2026"] .hero {
 /* Köln-Deutz Herbstvolksfest: independent fair ambience, not Phantasialand default. */
 body[data-park="koeln-deutz-herbstvolksfest-2026"] .parkAtmosphere{background:linear-gradient(180deg,rgba(6,14,28,.15),rgba(9,13,25,.55) 56%,#090b10 97%),var(--park-hero-image, url("https://media04.rheinische-anzeigenblaetter.de/article/2022/10/27/2/933212_XXL.jpg")) center 36%/cover no-repeat,linear-gradient(130deg,#18223a,#361e38 48%,#071921)}
 body[data-park="koeln-deutz-herbstvolksfest-2026"] .hero{border-color:#efd18c70;background:linear-gradient(125deg,#3b2639,#171927 66%,#102433)}
+
+/* NÄHEN · Osnabrücker Herbstjahrmarkt 2026: eigene Jahrmarktnacht statt Phantasialand-Standard. */
+body[data-park="osnabrueck-herbstjahrmarkt-2026"]{--accent:#ffc66c;--accent2:#7bd7f7;--line:#725277}
+body[data-park="osnabrueck-herbstjahrmarkt-2026"] .parkAtmosphere{
+  background:linear-gradient(180deg,rgba(6,9,24,.20) 0%,rgba(8,9,19,.57) 48%,#090b10 94%),
+    var(--park-hero-image, url("https://erleben.osnabrueck.de/fileadmin/erleben/Stadt_erleben_allg._Bilder/City_Events/Jahrmaerkte/Marketing_Osnabrueck_Herbstjahrmarkt-40.jpg")) center 38%/cover no-repeat,
+    linear-gradient(135deg,#180f2a,#102539 48%,#130e20);
+}
+body[data-park="osnabrueck-herbstjahrmarkt-2026"] .hero{
+  border:1px solid #ffc66c70;
+  background:radial-gradient(circle at 8% 0%,#f4717930,transparent 36%),
+    radial-gradient(circle at 92% 0%,#5bd4ff26,transparent 41%),
+    linear-gradient(130deg,#301b40,#181b2c 64%,#0d2433);
+  box-shadow:inset 0 1px #fff2ce25,0 15px 32px #0707136e;
+}
+body[data-park="osnabrueck-herbstjahrmarkt-2026"] .hero h1{text-shadow:0 3px 12px #0a0b1c}
