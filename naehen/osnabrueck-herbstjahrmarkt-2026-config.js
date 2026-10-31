@@ -185,8 +185,8 @@
     "capacity": "27 Personen",
     "rideIndexUrl": "https://ride-index.de/2005/01/11/new-world-3000/",
     "description": "Simulator von Kutschenbauer, früher bekannt als New World 3000.",
-    "imageUrl": "https://ride-index.de/wp-content/uploads/2005/01/NEWWORLD3000_Boeker2023R.jpg",
-    "imageCredit": "Ride-Index · dieselbe Simulatoranlage als „New World 3000“ (Archivfoto 2023, vor Betreiber- und Namenswechsel)",
+    "imageUrl": "https://www.kirmesecke.de/Bilder/poi/678/4-newworld3000-ahlen23-c-UMM-schoen.jpg",
+    "imageCredit": "Kirmesecke / Christian Schön · dieselbe Simulatoranlage als „New World 3000“ (Archivfoto Ahlen 2023)",
     "imageSourceUrl": "https://ride-index.de/2005/01/11/new-world-3000/"
   },
   {
