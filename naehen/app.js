@@ -461,6 +461,8 @@
   let globalArchiveRequest = 0;
   let achievements = {};
   let fairPrices = {};
+  const pendingQueueStarts = new Map();
+  let finishingQueue = false;
 
   function attractionFontConfig(rideId, parkSlug = activeParkSlug || "phantasialand") {
     const module = parkModuleFor(parkSlug);
@@ -1209,10 +1211,7 @@
     }
 
     const days = daysResult.data || [];
-    if (!days.length) {
-      if (activeParkSlug === parkSlug) parkArchive = [];
-      return;
-    }
+    if (!days.length) return; // Never erase a locally saved visit merely because cloud has none.
 
     const dayIds = days.map((day) => day.id);
     const sessionResult = await supa
@@ -1224,8 +1223,7 @@
 
     if (sessionResult.error) {
       console.warn("Archiv-Fahrten konnten nicht geladen werden", sessionResult.error);
-      if (activeParkSlug === parkSlug) parkArchive = days.map((day) => ({ day: day, sessions: [] }));
-      return;
+      return; // Keep the last good local receipt on transient API errors.
     }
 
     const grouped = new Map();
@@ -1235,10 +1233,24 @@
     });
 
     if (activeParkSlug !== parkSlug) return;
-    parkArchive = days.map((day) => ({
-      day: day,
-      sessions: grouped.get(day.id) || []
-    }));
+    const localDays = new Map(parkArchive.map((entry) => [String(entry.day?.id), entry]));
+    const needsRepair = [];
+    const fromCloud = days.map((day) => {
+      const remote = grouped.get(day.id) || [];
+      const local = localDays.get(String(day.id))?.sessions || [];
+      const remoteById = new Map(remote.map((session) => [String(session.id), session]));
+      local.forEach((session) => {
+        if (hasFinishedSession(session) &&
+            !hasFinishedSession(remoteById.get(String(session.id)))) needsRepair.push(session);
+      });
+      return { day, sessions: mergeSessionSnapshots(local, remote) };
+    });
+    parkArchive = mergeGlobalArchiveEntries(fromCloud, parkArchive);
+    persistLocalState();
+    for (const session of needsRepair) {
+      // The day is owned by this authenticated user (queried above).
+      await repairCachedFinishedSession(session, currentUserId());
+    }
   }
 
   async function loadAccountState(parkSlug = activeParkSlug || "phantasialand") {
@@ -1267,7 +1279,15 @@
         .eq("park_day_id", parkDay.id)
         .order("started_at", { ascending: false });
 
-      if (!sessionResult.error) sessions = (sessionResult.data || []).map((row) => dbSessionToClient(row, parkSlug));
+      if (!sessionResult.error) {
+        const remote = (sessionResult.data || []).map((row) => dbSessionToClient(row, parkSlug));
+        const remoteById = new Map(remote.map((session) => [String(session.id), session]));
+        const recover = sessions.filter((session) => hasFinishedSession(session) &&
+          String(session.parkDayId) === String(parkDay.id) &&
+          !hasFinishedSession(remoteById.get(String(session.id))));
+        sessions = mergeSessionSnapshots(sessions, remote);
+        for (const session of recover) await repairCachedFinishedSession(session, currentUserId());
+      }
 
       const waiting = sessions.find((s) => s.status === "waiting");
       if (waiting) active = waiting;
@@ -1327,6 +1347,69 @@
       parkDayId: row.park_day_id,
       synced: true
     };
+  }
+
+  function hasFinishedSession(session) {
+    return !!session && ["ridden", "aborted"].includes(session.status) &&
+      Number.isFinite(Number(session.endedAt)) && Number(session.endedAt) > 0;
+  }
+
+  // Prefer genuine completed local sessions over stale cloud 'waiting' snapshots.
+  // Preserve every unique session rather than letting one archive source replace another.
+  function mergeSessionSnapshots(localSessions = [], cloudSessions = []) {
+    const combined = new Map();
+    const keyFor = (session) => String(session.id || session.rideId + ":" + session.startedAt);
+    (cloudSessions || []).forEach((session) => { if (session) combined.set(keyFor(session), session); });
+    (localSessions || []).forEach((local) => {
+      if (!local) return;
+      const key = keyFor(local), cloud = combined.get(key);
+      if (!cloud || (hasFinishedSession(local) && !hasFinishedSession(cloud))) {
+        combined.set(key, local);
+      }
+    });
+    return Array.from(combined.values()).sort((a, b) => Number(a.startedAt || 0) - Number(b.startedAt || 0));
+  }
+
+  function cloudQueuePayload(session, userId) {
+    return {
+      id: session.id,
+      user_id: userId,
+      park_day_id: session.parkDayId,
+      ride_id: session.rideId,
+      ride_name: session.rideName,
+      queue_type: session.type,
+      posted_wait: session.posted,
+      price_euro: session.priceEuro,
+      started_at: new Date(session.startedAt).toISOString(),
+      ended_at: session.endedAt ? new Date(session.endedAt).toISOString() : null,
+      wait_seconds: Number.isFinite(Number(session.duration)) && session.duration !== null
+        ? Math.max(0, Math.round(session.duration / 1000)) : null,
+      status: session.status
+    };
+  }
+
+  async function saveFinishedToCloud(session, userId) {
+    // Upsert, not a blind UPDATE: an earlier start-INSERT may have been delayed or lost.
+    // .select() ensures a missing/unmodified row is NOT reported as a successful save.
+    const result = await supa.from("queue_sessions")
+      .upsert(cloudQueuePayload(session, userId), { onConflict: "id" })
+      .select("id,status");
+    if (result.error) throw result.error;
+    if (!result.data?.some((row) => String(row.id) === String(session.id) && row.status === session.status)) {
+      throw new Error("Fahrtabschluss wurde von der Datenbank nicht bestätigt");
+    }
+  }
+
+  async function repairCachedFinishedSession(session, userId) {
+    if (!supa || !userId || !hasFinishedSession(session) || !session.parkDayId) return false;
+    try {
+      await saveFinishedToCloud(session, userId);
+      session.synced = true;
+      return true;
+    } catch (error) {
+      console.warn("Archiv-Fahrt noch nicht in der Cloud gesichert", session.rideName, error);
+      return false;
+    }
   }
 
   async function fetchRealtimeLivePayload(park) {
@@ -1930,10 +2013,16 @@
       if (!day || !(day.ended_at || day.endedAt)) return;
       const slug = day.park_slug || day.parkSlug || entry.parkSlug || "phantasialand";
       const key = String(day.id || slug + ":" + (day.started_at || day.startedAt));
-      if (!merged.has(key)) merged.set(key, normalizeArchiveEntry({
+      const next = normalizeArchiveEntry({
         day: { ...day, park_slug: slug },
         sessions: entry.sessions || []
-      }, slug));
+      }, slug);
+      if (!next) return;
+      if (!merged.has(key)) merged.set(key, next);
+      else {
+        const prior = merged.get(key);
+        prior.sessions = mergeSessionSnapshots(next.sessions, prior.sessions);
+      }
     }));
     return Array.from(merged.values())
       .sort((left, right) => parkDayStartMs(right.day) - parkDayStartMs(left.day));
@@ -2277,6 +2366,10 @@
 
   async function endParkDay() {
     if (!parkDay) return;
+    if (finishingQueue) {
+      toast("Fahrt wird noch gespeichert. Bitte kurz danach erneut beenden.");
+      return;
+    }
     if (active) {
       toast("Erst die aktive Queue abschließen oder vernähen.");
       openActive();
@@ -2306,6 +2399,9 @@
 
     renderRecap(sessions, completedDay);
     openSheet("recapSheet");
+    if (supa && currentUserId() && sessions.some((session) => hasFinishedSession(session) && !session.synced)) {
+      toast("Einige Fahrten sind bisher nur lokal gespeichert – Archiv-Sync wird erneut versucht.");
+    }
     parkDay = null;
     persistLocalState();
     renderAll();
@@ -2452,7 +2548,7 @@
   }
 
   async function startQueue() {
-    if (!selectedRide || !parkDay) return;
+    if (!selectedRide || !parkDay || active || finishingQueue) return;
 
     const input = $("#postedWait").value.trim();
     const posted = input === "" ? null : Math.max(0, Number(input));
@@ -2472,10 +2568,8 @@
     }
 
     const now = Date.now();
-    const id = createId();
-
-    active = {
-      id: id,
+    const started = {
+      id: createId(),
       rideId: selectedRide.id,
       rideName: selectedRide.name,
       operator: venueIsFair() ? (selectedRide.operatorFull || selectedRide.operator || "") : "",
@@ -2492,33 +2586,32 @@
       synced: false
     };
 
-    sessions = [active].concat(sessions.filter((s) => s.id !== active.id));
+    active = started;
+    sessions = [started].concat(sessions.filter((session) => session.id !== started.id));
     persistLocalState();
     closeSheet("queueSheet");
     updateActiveTimer();
     openActive();
 
-    if (supa && currentUserId()) {
-      const result = await supa.from("queue_sessions").insert({
-        id: id,
-        user_id: currentUserId(),
-        park_day_id: parkDay.id,
-        ride_id: active.rideId,
-        ride_name: active.rideName,
-        queue_type: active.type,
-        posted_wait: active.posted,
-        price_euro: active.priceEuro,
-        started_at: new Date(active.startedAt).toISOString(),
-        status: "waiting"
-      });
-      if (!result.error) {
-        active.synced = true;
-        const found = sessions.find((s) => s.id === active.id);
-        if (found) found.synced = true;
-        persistLocalState();
-      } else {
-        console.warn("Queue-Start nur lokal gespeichert", result.error);
-        toast("Timer läuft – Cloud-Sync gerade fehlgeschlagen.");
+    const userId = currentUserId();
+    if (supa && userId) {
+      const startPromise = (async () => {
+        const result = await supa.from("queue_sessions")
+          .insert(cloudQueuePayload(started, userId));
+        if (result.error) throw result.error;
+      })();
+      pendingQueueStarts.set(started.id, startPromise);
+      try {
+        await startPromise;
+        const stored = sessions.find((session) => session.id === started.id);
+        if (stored) stored.synced = true;
+        if (active?.id === started.id) active.synced = true;
+        if (activeParkSlug === started.parkSlug) persistLocalState();
+      } catch (error) {
+        console.warn("Queue-Start nur lokal gespeichert", error);
+        toast("Timer läuft – Cloud-Sync wird beim Abschluss erneut versucht.");
+      } finally {
+        pendingQueueStarts.delete(started.id);
       }
     }
 
@@ -2552,58 +2645,68 @@
   }
 
   async function finishSession(status) {
-    if (!active) return;
-
+    if (!active || finishingQueue || !["ridden", "aborted"].includes(status)) return;
+    finishingQueue = true;
+    const running = active;
     const ended = Date.now();
-    const finished = Object.assign({}, active, {
+    const finished = Object.assign({}, running, {
       endedAt: ended,
-      duration: ended - active.startedAt,
-      status: status
+      duration: ended - running.startedAt,
+      status,
+      synced: false
     });
-
     sessions = sessions.map((session) => session.id === finished.id ? finished : session);
     if (!sessions.some((session) => session.id === finished.id)) sessions.unshift(finished);
+    if (status === "ridden") totalRideCount += 1;
 
-    if (status === "ridden") {
-      totalRideCount += 1;
-    }
-
-    if (supa && currentUserId()) {
-      const result = await supa.from("queue_sessions").update({
-        ended_at: new Date(ended).toISOString(),
-        wait_seconds: Math.round(finished.duration / 1000),
-        price_euro: finished.priceEuro,
-        status: status
-      }).eq("id", finished.id).eq("user_id", currentUserId());
-
-      if (result.error) console.warn("Queue-Ende konnte nicht synchronisiert werden", result.error);
-    }
-
-    if (status === "ridden" && finished.type === "single") {
-      await recordSrReport(finished);
-    }
-
-    const unlockedAchievements = status === "ridden"
-      ? await evaluateRideAchievements(finished)
-      : [];
-
-    active = null;
+    // Preserve the completed status immediately, even if the network disappears.
     persistLocalState();
-    closeSheet("activeSheet");
-    renderAll();
 
-    if (unlockedAchievements.length === 1) {
-      const unlockedAchievement = unlockedAchievements[0];
-      const extra = unlockedAchievement.speedKmh
-        ? " · " + unlockedAchievement.speedKmh + " km/h"
-        : unlockedAchievement.waitedMinutes
-          ? " · " + unlockedAchievement.waitedMinutes + " min"
-          : "";
-      toast("🏅 " + unlockedAchievement.title + " freigeschaltet!" + extra);
-    } else if (unlockedAchievements.length > 1) {
-      toast("🏅 " + unlockedAchievements.length + " Achievements freigeschaltet!");
-    } else {
-      toast(status === "ridden" ? "🎢 Sauber genäht." : "💀 Vernäht.");
+    try {
+      const userId = currentUserId();
+      if (supa && userId) {
+        const pendingStart = pendingQueueStarts.get(finished.id);
+        if (pendingStart) {
+          try { await pendingStart; }
+          catch (error) { console.warn("Queue-Start fehlgeschlagen; Abschluss legt Datensatz an", error); }
+        }
+        try {
+          await saveFinishedToCloud(finished, userId);
+          finished.synced = true;
+          const stored = sessions.find((session) => session.id === finished.id);
+          if (stored) stored.synced = true;
+        } catch (error) {
+          console.warn("Queue-Ende nur lokal gespeichert", error);
+          toast("Fahrt lokal genäht – Cloud-Sync fehlgeschlagen. Archiv behält den Eintrag.");
+        }
+      }
+
+      if (status === "ridden" && finished.type === "single") {
+        await recordSrReport(finished);
+      }
+      const unlockedAchievements = status === "ridden"
+        ? await evaluateRideAchievements(finished)
+        : [];
+
+      if (unlockedAchievements.length === 1) {
+        const achievement = unlockedAchievements[0];
+        const extra = achievement.speedKmh
+          ? " · " + achievement.speedKmh + " km/h"
+          : achievement.waitedMinutes ? " · " + achievement.waitedMinutes + " min" : "";
+        toast("🏅 " + achievement.title + " freigeschaltet!" + extra);
+      } else if (unlockedAchievements.length > 1) {
+        toast("🏅 " + unlockedAchievements.length + " Achievements freigeschaltet!");
+      } else if (finished.synced || !supa || !userId) {
+        toast(status === "ridden" ? "🎢 Sauber genäht." : "💀 Vernäht.");
+      }
+    } finally {
+      if (active?.id === finished.id) active = null;
+      finishingQueue = false;
+      if (activeParkSlug === finished.parkSlug) {
+        persistLocalState();
+        closeSheet("activeSheet");
+        renderAll();
+      }
     }
   }
 
