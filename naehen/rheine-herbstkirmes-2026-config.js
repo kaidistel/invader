@@ -52,7 +52,7 @@
   },
   {
     "id": "hangover-the-ride",
-    "name": "Hangover The Ride",
+    "name": "Hangover The Ride", "height": "12 m", "technicalSourceUrl": "https://www.freizeitparkapp.de/parks/deutschland/muenster-herbstsend/hangover-the-ride/", 
     "operator": "Richter",
     "operatorFull": "Richter",
     "zone": "Elisabethplatz",
@@ -82,7 +82,7 @@
   },
   {
     "id": "nordic-tower",
-    "name": "Nordic Tower",
+    "name": "Nordic Tower", "height": "80 m", "technicalSourceUrl": "https://www.hamburg.de/politik-und-verwaltung/behoerden/bwai/aktuelles/pressemeldungen/winterdom-2024-mit-drei-neuheiten-986394", 
     "operator": "Nülken",
     "operatorFull": "Nülken",
     "zone": "Elisabethplatz",
@@ -112,7 +112,7 @@
   },
   {
     "id": "intoxx",
-    "name": "Intoxx",
+    "name": "Intoxx", "height": "22 m", "technicalSourceUrl": "https://data.coaster.cloud/de/attractions/ddc711c3-intoxx", 
     "operator": "Benning",
     "operatorFull": "Benning",
     "zone": "Elisabethplatz",
@@ -127,7 +127,7 @@
   },
   {
     "id": "rocket",
-    "name": "Rocket",
+    "name": "Rocket", "height": "ca. 25 m", "technicalSourceUrl": "https://funfair-entertainment.de/news/rheiner-herbstkirmes-2026-nordic-tower-hangover-wilde-maus-beschickung", 
     "operator": "M. Hartmann & Söhne",
     "operatorFull": "M. Hartmann & Söhne",
     "zone": "Elisabethplatz",
