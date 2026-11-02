@@ -2178,6 +2178,8 @@
       sum + entry.sessions.filter(session => session.status === "ridden").length, 0);
     const queueMs = visible.reduce((sum, entry) =>
       sum + buildDayFacts(entry.day, entry.sessions, entry.day.park_slug).queueMs, 0);
+    const fairSpend = visible.reduce((sum, entry) => sum + (venueIsFair(entry.day.park_slug)
+      ? fairMoneySummary(entry.sessions).total : 0), 0);
     summary.innerHTML = "<div class=\"archiveSummaryGrid\">" +
       recapStat(visible.length, "Besuche im Filter") +
       recapStat(countParks, "Parktage insgesamt") +
@@ -2206,8 +2208,12 @@
         (fair ? "🎡 KIRMESTAG" : "🎢 PARKTAG") + " · " + escapeHtml(parkName) +
         "</span><h3>" + escapeHtml(parkDayDateLabel(day)) + "</h3></div><span class=\"archiveChevron\">›</span></div>" +
         "<div class=\"archiveDayStats\"><span><b>" + fact.rides + "×</b> Fahrten</span>" +
-        "<span><b>" + escapeHtml(formatDurationHuman(fact.queueMs)) + "</b> Queue</span>" +
-        "<span><b>" + escapeHtml(formatDurationHuman(fact.parkMs)) + "</b> Besuchszeit</span></div>" +
+        (fair
+          ? "<span><b>" + fact.uniqueRides + "</b> Geschäfte</span>" +
+            "<span><b>" + escapeHtml(formatEuro(fairMoneySummary(entry.sessions).total)) + "</b> Ausgaben</span>"
+          : "<span><b>" + escapeHtml(formatDurationHuman(fact.queueMs)) + "</b> Queue</span>" +
+            "<span><b>" + escapeHtml(formatDurationHuman(fact.parkMs)) + "</b> Besuchszeit</span>") +
+        "</div>" +
         "<div class=\"archiveDayFoot\">" +
         escapeHtml(fact.topRide ? "Meistgenäht: " + fact.topRide.name +
           (fact.topRide.count > 1 ? " ×" + fact.topRide.count : "") : "Noch keine Fahrt") +
@@ -2243,6 +2249,7 @@
     const facts = entries.map((entry) => buildDayFacts(entry.day, entry.sessions, entry.day?.park_slug || activeParkSlug));
     const totalRides = facts.reduce((sum, fact) => sum + fact.rides, 0);
     const totalQueueMs = facts.reduce((sum, fact) => sum + fact.queueMs, 0);
+    const totalFairSpend = entries.reduce((sum, entry) => sum + fairMoneySummary(entry.sessions).total, 0);
     const bestDay = entries.map((entry, index) => ({ entry, fact: facts[index] }))
       .sort((a, b) => b.fact.rides - a.fact.rides || b.fact.parkMs - a.fact.parkMs)[0] || null;
 
@@ -2250,7 +2257,7 @@
       "<div class=\"archiveSummaryGrid\">" +
         recapStat(entries.length, "gespeicherte " + dayPlural) +
         recapStat(totalRides + "×", "Fahrten im Archiv") +
-        recapStat(formatDurationHuman(totalQueueMs), "Queue insgesamt") +
+        recapStat(venueIsFair() ? formatEuro(totalFairSpend) : formatDurationHuman(totalQueueMs), venueIsFair() ? "Ausgaben" : "Queue insgesamt") +
         recapStat(entries.length ? (totalRides / entries.length).toFixed(1) : "0", "Fahrten / " + dayWord) +
       "</div>" +
       (bestDay && bestDay.fact.rides
@@ -2271,8 +2278,11 @@
         "<div class=\"archiveDayTop\"><div><span class=\"eyebrow\">" + escapeHtml(parkName) + "</span><h3>" + escapeHtml(parkDayDateLabel(day)) + "</h3></div><span class=\"archiveChevron\">›</span></div>" +
         "<div class=\"archiveDayStats\">" +
           "<span><b>" + fact.rides + "×</b> Fahrten</span>" +
-          "<span><b>" + escapeHtml(formatDurationHuman(fact.queueMs)) + "</b> Queue</span>" +
-          "<span><b>" + escapeHtml(formatDurationHuman(fact.parkMs)) + "</b> Besuchszeit</span>" +
+          (venueIsFair(day?.park_slug || activeParkSlug)
+            ? "<span><b>" + fact.uniqueRides + "</b> Geschäfte</span>" +
+              "<span><b>" + escapeHtml(formatEuro(fairMoneySummary(entry.sessions).total)) + "</b> Ausgaben</span>"
+            : "<span><b>" + escapeHtml(formatDurationHuman(fact.queueMs)) + "</b> Queue</span>" +
+              "<span><b>" + escapeHtml(formatDurationHuman(fact.parkMs)) + "</b> Besuchszeit</span>") +
         "</div>" +
         "<div class=\"archiveDayFoot\">meistgenäht: <b>" + escapeHtml(topRide) + "</b></div>" +
       "</button>";
@@ -2299,7 +2309,44 @@
     if (!detail) return;
 
     $("#archiveDetailTitle").textContent = parkDayDateLabel(day);
-    $("#archiveDetailMeta").textContent = parkName + " · " + formatDurationHuman(fact.parkMs);
+    $("#archiveDetailMeta").textContent = venueIsFair(parkSlug)
+      ? parkName + " · " + fact.rides + " Fahrten"
+      : parkName + " · " + formatDurationHuman(fact.parkMs);
+
+    if (venueIsFair(parkSlug)) {
+      const money = fairMoneySummary(entry.sessions);
+      const chronological = entry.sessions.slice().sort((a,b) => Number(a.startedAt || 0) - Number(b.startedAt || 0));
+      const timeline = chronological.map((session) => {
+        const price = session.priceEuro === null || session.priceEuro === undefined
+          ? "Preis fehlt" : formatEuro(session.priceEuro);
+        const state = session.status === "ridden" ? "genäht" : session.status === "aborted" ? "vernäht" : "offen";
+        const operator = operatorForSession(session, parkSlug);
+        return "<div class=\"archiveRideRow\"><div><b>" + escapeHtml(session.rideName) +
+          "</b><small>" + escapeHtml(rideTimeLabel(session)) + " · " + escapeHtml(state) + "</small>" +
+          (operator ? "<small class=\"archiveOperator\">Schausteller: " + escapeHtml(operator) + "</small>" : "") +
+          "</div><div><b>" + escapeHtml(price) + "</b></div></div>";
+      }).join("");
+      detail.innerHTML =
+        "<div class=\"archiveHeroFacts\">" +
+          recapStat(money.count + "×", "Fahrten") +
+          recapStat(money.unique, "verschiedene Geschäfte") +
+          recapStat((money.count - money.unique) + "×", "Wiederholungen") +
+          recapStat(formatEuro(money.total), "Ausgaben") +
+        "</div>" +
+        (money.missing ? "<div class=\"message\">" + money.missing +
+          " Fahrt(en) ohne Preis – Summe ist unvollständig.</div>" : "") +
+        fairReceiptHtml(entry.sessions, day) +
+        "<div class=\"sectionHead archiveTimelineHead\"><h2>Fahrtenprotokoll</h2><span>" +
+          chronological.length + " Einträge</span></div><div class=\"archiveTimeline\">" +
+          (timeline || "<div class=\"empty\">Keine Fahrten gespeichert.</div>") + "</div>";
+      openSheet("archiveDetailSheet");
+      if (!history.state?.naehenArchiveDetail) {
+        history.pushState(Object.assign({}, history.state || {}, {
+          naehenArchiveDetail: true, archiveDayId: dayId
+        }), "", location.href);
+      }
+      return;
+    }
 
     const comparisonText = fact.postedComparableCount
       ? (fact.savedMinutes >= 0
@@ -3170,6 +3217,33 @@
     toast("🔔 Näh-Alarme sind scharf.");
   }
 
+  function fairDailyRecap(sourceSessions, day) {
+    const slug = day?.park_slug || day?.parkSlug || activeParkSlug;
+    const money = fairMoneySummary(sourceSessions);
+    const ridden = (sourceSessions || []).filter(row => row.status === "ridden")
+      .sort((a,b) => Number(a.startedAt || 0) - Number(b.startedAt || 0));
+    const topCounts = new Map();
+    ridden.forEach(row => {
+      const key = row.rideId || row.rideName;
+      const count = topCounts.get(key) || { name: row.rideName, count: 0 };
+      count.count += 1;
+      topCounts.set(key, count);
+    });
+    const favourite = Array.from(topCounts.values()).sort((a,b) => b.count - a.count)[0];
+    return "<div class=\"recapBox\"><div class=\"recapGrid\">" +
+      recapStat(money.count + "×", "Fahrten") +
+      recapStat(money.unique, "verschiedene Geschäfte") +
+      recapStat(money.count - money.unique + "×", "Wiederholungen") +
+      recapStat(formatEuro(money.total), "Ausgaben") +
+      "</div></div>" +
+      (favourite ? "<div class=\"recapBox\"><b>🏆 Meistgenäht</b><p>" +
+        escapeHtml(favourite.name + " ×" + favourite.count) + "</p></div>" : "") +
+      (money.missing ? "<div class=\"message\">Für " + money.missing +
+        " Fahrt(en) fehlt ein Preis. Gesamtsumme enthält nur gespeicherte Preise.</div>" : "") +
+      fairReceiptHtml(sourceSessions, day) +
+      "<div class=\"recapBox\"><b>💾 Kirmestag archiviert</b><p>Fahrten und Preise sind gespeichert. Keine künstlichen Queue-Zeiten.</p></div>";
+  }
+
   function renderRecap(sourceSessions, sourceDay = parkDay) {
     const day = sourceDay || {
       park_slug: activeParkSlug || "phantasialand",
@@ -3177,6 +3251,10 @@
       ended_at: new Date().toISOString()
     };
     const dayParkSlug = day.park_slug || activeParkSlug || "phantasialand";
+    if (venueIsFair(dayParkSlug)) {
+      $("#recapContent").innerHTML = fairDailyRecap(sourceSessions, day);
+      return;
+    }
     const dayWord = visitDayWord(dayParkSlug);
     const supportsPostedWait = PARKS[dayParkSlug]?.supportsPostedWait !== false;
     const fact = buildDayFacts(day, sourceSessions, dayParkSlug);
