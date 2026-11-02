@@ -463,6 +463,7 @@
   let fairPrices = {};
   const pendingQueueStarts = new Map();
   let finishingQueue = false;
+  let savingFairRide = false;
 
   function attractionFontConfig(rideId, parkSlug = activeParkSlug || "phantasialand") {
     const module = parkModuleFor(parkSlug);
@@ -987,7 +988,12 @@
     const archiveIntroTitle = $("#archiveIntroTitle");
     if (archiveIntroTitle) archiveIntroTitle.textContent = "Deine " + visitDayPlural(parkSlug) + " verschwinden nicht mehr.";
     const archiveIntroCopy = $("#archiveIntroCopy");
-    if (archiveIntroCopy) archiveIntroCopy.textContent = "Jeder abgeschlossene " + dayWord + " bleibt mit Fahrten, echten Queue-Zeiten und Nerd-Statistiken erhalten.";
+    if (archiveIntroCopy) archiveIntroCopy.textContent = venueIsFair(parkSlug)
+      ? "Jeder Kirmestag bleibt mit Fahrten, Preisen und Kassenzettel erhalten – ganz ohne Queue-Timer."
+      : "Jeder abgeschlossene " + dayWord + " bleibt mit Fahrten, echten Queue-Zeiten und Nerd-Statistiken erhalten.";
+    const queueStatLabel = $("#queueTodayLabel"), uniqueStatLabel = $("#srTodayLabel");
+    if (queueStatLabel) queueStatLabel.textContent = venueIsFair(parkSlug) ? "Ausgaben" : "echte Queue";
+    if (uniqueStatLabel) uniqueStatLabel.textContent = venueIsFair(parkSlug) ? "Geschäfte" : "Single Rider";
     const profileDayCountLabel = $("#profileDayCountLabel");
     if (profileDayCountLabel) profileDayCountLabel.textContent = "Gespeicherte " + visitDayPlural(parkSlug) + " in diesem " + (venueIsFair(parkSlug) ? "Event" : "Park");
     const recapEyebrow = $("#recapDayEyebrow");
@@ -1609,8 +1615,35 @@
   }
 
   function ridePriceText(ride) {
-    const value = manualFairPrice(ride?.id);
-    return value === null ? "manuell eintragen" : formatEuro(value);
+    return venueIsFair() ? "pro Fahrt eingeben" : "–";
+  }
+
+
+  function fairMoneySummary(rows) {
+    const ridden = (rows || []).filter(row => row.status === "ridden");
+    const priced = ridden.filter(row => row.priceEuro !== null && row.priceEuro !== undefined &&
+      row.priceEuro !== "" && Number.isFinite(Number(row.priceEuro)) && Number(row.priceEuro) >= 0);
+    return {
+      total: priced.reduce((sum, row) => sum + Number(row.priceEuro), 0),
+      missing: ridden.length - priced.length,
+      count: ridden.length,
+      unique: new Set(ridden.map(row => row.rideId || row.rideName)).size
+    };
+  }
+
+  function techValue(value, suffix = "") {
+    if (value === undefined || value === null || value === "") return "Nicht veröffentlicht";
+    const val = String(value).trim();
+    return suffix && /^\d+(?:[.,]\d+)?$/.test(val) ? val + " " + suffix : val;
+  }
+
+  function fairTechnicalDetails(ride) {
+    const tech = rideConfigForPark()?.[ride.id] || {};
+    return [
+      ["↕", "Höhe", techValue(ride.height ?? ride.heightMeters, "m")],
+      ["➤", "Geschwindigkeit", techValue(ride.speedKmh ?? ride.maxSpeedKmh ?? tech.speedKmh, "km/h")],
+      ["◉", "Max. G-Kräfte", techValue(ride.gForce ?? ride.maxGForce ?? ride.gForces, "g")]
+    ];
   }
 
   // Retrieve the operator using the archived venue, never the currently open venue.
@@ -1811,6 +1844,7 @@
         ? "Schausteller: " + ride.operator + " · " + ride.zone
         : ride.zone;
       const queueDisabled = closed ? " disabled" : "";
+    const queueLabel = fair ? "FAHRT EINTRAGEN" : (closed ? "ZU" : "ANSTELLEN");
 
       return "<article class=\"ride\" data-park=\"" + escapeHtml(activeParkSlug || "phantasialand") + "\" data-world=\"" + escapeHtml(ride.id) + "\" data-detail=\"" + escapeHtml(ride.id) + "\">" +
         (artSrc ? "<img referrerpolicy=\"no-referrer\" class=\"rideArt\" src=\"" + escapeHtml(artSrc) + "\" alt=\"\" loading=\"lazy\" decoding=\"async\">" : "") +
@@ -1821,7 +1855,7 @@
           "</div>" +
           "<div class=\"meta\">" + newBadge + priceBadge + sr +
             (hasPublicLive ? "<span class=\"trend " + ride.trend + "\">" + escapeHtml(trendText) + "</span><span>·</span>" : "") +
-            "<button class=\"btn secondary\" style=\"padding:7px 10px;font-size:11px\" data-queue=\"" + ride.id + "\"" + queueDisabled + ">" + (closed ? "ZU" : "ANSTELLEN") + "</button>" +
+            "<button class=\"btn secondary\" style=\"padding:7px 10px;font-size:11px\" data-queue=\"" + ride.id + "\"" + queueDisabled + ">" + queueLabel + "</button>" +
             "<button class=\"btn ghost\" style=\"padding:7px 4px;font-size:11px\" data-detail-btn=\"" + ride.id + "\">DETAILS</button>" +
           "</div>" +
         "</div>" +
@@ -2366,6 +2400,7 @@
 
   async function endParkDay() {
     if (!parkDay) return;
+    if (savingFairRide) { toast("Fahrt wird gespeichert. Bitte danach den Kirmestag beenden."); return; }
     if (finishingQueue) {
       toast("Fahrt wird noch gespeichert. Bitte kurz danach erneut beenden.");
       return;
@@ -2409,10 +2444,16 @@
 
   function renderStats() {
     const ridden = sessions.filter((s) => s.status === "ridden");
-    const queueMs = ridden.reduce((sum, s) => sum + (s.duration || 0), 0);
     $("#ridesToday").textContent = ridden.length + "×";
-    $("#queueToday").textContent = minutesRounded(queueMs) + "m";
-    $("#srToday").textContent = ridden.filter((s) => s.type === "single").length + "×";
+    if (venueIsFair()) {
+      const money = fairMoneySummary(sessions);
+      $("#queueToday").textContent = formatEuro(money.total);
+      $("#srToday").textContent = money.unique + "×";
+    } else {
+      const queueMs = ridden.reduce((sum, s) => sum + (s.duration || 0), 0);
+      $("#queueToday").textContent = minutesRounded(queueMs) + "m";
+      $("#srToday").textContent = ridden.filter((s) => s.type === "single").length + "×";
+    }
     $("#totalRides").textContent = totalRideCount;
   }
 
@@ -2424,13 +2465,16 @@
       return;
     }
     container.innerHTML = sessions.slice().sort((a,b) => b.startedAt - a.startedAt).map(session => {
-      const duration = session.duration === null || session.duration === undefined ? "läuft" : minutesRounded(session.duration) + " min";
+      const duration = venueIsFair(session.parkSlug || activeParkSlug)
+        ? (session.status === "ridden" && session.priceEuro !== null && session.priceEuro !== undefined
+          ? formatEuro(session.priceEuro) : "–")
+        : (session.duration === null || session.duration === undefined ? "läuft" : minutesRounded(session.duration) + " min");
       const state = session.status === "ridden" ? "🧵 genäht" : session.status === "aborted" ? "💀 vernäht" : "⏱ läuft";
       const operator = operatorForSession(session, session.parkSlug || activeParkSlug);
       const deletable = !!parkDay && ["ridden","aborted"].includes(session.status) && (!active || String(active.id) !== String(session.id));
       return "<div class=\"logItem\"><div class=\"logEntryInfo\"><b>" + escapeHtml(session.rideName) + "</b>" +
         (operator ? "<small class=\"logOperator\">Schausteller: " + escapeHtml(operator) + "</small>" : "") +
-        "<small>" + (session.type === "single" ? "👤 Single Rider" : "Regular") + " · " +
+        "<small>" + (venueIsFair(session.parkSlug || activeParkSlug) ? "Fahrt" : (session.type === "single" ? "👤 Single Rider" : "Regular")) + " · " +
         new Date(session.startedAt).toLocaleTimeString("de-DE", {hour:"2-digit",minute:"2-digit"}) +
         "</small></div><div class=\"logEntryActions\"><b>" + escapeHtml(duration) + "</b><small>" +
         escapeHtml(state) + "</small>" + (deletable ? "<button type=\"button\" class=\"logDeleteBtn\" data-delete-log-id=\"" + escapeHtml(String(session.id)) + "\" aria-label=\"Eintrag " + escapeHtml(session.rideName) + " löschen\">🗑 Löschen</button>" : "") +
@@ -2524,6 +2568,18 @@
 
     queueType = "regular";
     $("#sheetRide").textContent = selectedRide.name;
+    const isFair = venueIsFair();
+    const sheet = $("#queueSheet");
+    sheet?.classList.toggle("fairLogMode", isFair);
+    const sheetLabel = $("#queueSheetEyebrow");
+    if (sheetLabel) sheetLabel.textContent = isFair ? "KIRMES · FAHRT BUCHEN" : "Queue-Timer";
+    const sheetHelp = $("#queueSheetHelp");
+    if (sheetHelp) sheetHelp.textContent = isFair
+      ? "Fahrt direkt als genäht speichern. Ohne Timer oder Wartezeit-Erfassung."
+      : "Beim Anstellen starten. Die Zeit bleibt korrekt, auch wenn das Handy gesperrt wird.";
+    const submit = $("#startQueue");
+    if (submit) submit.textContent = isFair ? "🧵 FAHRT JETZT EINTRAGEN" : "🧵 ANSTELLEN & TIMER STARTEN";
+    $("#queueTypeSelector")?.classList.toggle("hidden", isFair);
     const postedWaitField = $("#postedWaitField");
     const supportsPostedWait = activeParkConfig()?.supportsPostedWait !== false;
     if (postedWaitField) postedWaitField.classList.toggle("hidden", !supportsPostedWait);
@@ -2547,7 +2603,62 @@
     openSheet("queueSheet");
   }
 
+
+  async function recordFairRide() {
+    if (!venueIsFair() || !parkDay || !selectedRide || savingFairRide) return;
+    const input = $("#fairPriceInput");
+    const raw = (input?.value || "").trim().replace(",", ".");
+    const price = Number(raw);
+    if (!raw || !Number.isFinite(price) || price < 0 || !/^\\d+(?:\\.\\d{1,2})?$/.test(raw)) {
+      toast("💶 Bitte den tatsächlich gezahlten Fahrpreis eingeben (auch 0,00 € ist möglich).");
+      input?.focus();
+      return;
+    }
+    savingFairRide = true;
+    $("#startQueue").disabled = true;
+    const timestamp = Date.now();
+    const session = {
+      id: createId(),
+      rideId: selectedRide.id,
+      rideName: selectedRide.name,
+      operator: selectedRide.operatorFull || selectedRide.operator || "",
+      parkSlug: activeParkSlug,
+      type: "regular",
+      posted: null,
+      priceEuro: Math.round(price * 100) / 100,
+      startedAt: timestamp,
+      endedAt: timestamp,
+      duration: null,
+      status: "ridden",
+      parkDayId: parkDay.id,
+      synced: false
+    };
+    // Store the completed ride BEFORE making a network request. No waiting state is created.
+    sessions = [session, ...sessions];
+    totalRideCount += 1;
+    persistLocalState();
+    closeSheet("queueSheet");
+    renderAll();
+    try {
+      if (supa && currentUserId()) {
+        await saveFinishedToCloud(session, currentUserId());
+        session.synced = true;
+        persistLocalState();
+        toast("🧵 Fahrt gespeichert · " + formatEuro(session.priceEuro));
+      } else {
+        toast("🧵 Fahrt lokal gespeichert · " + formatEuro(session.priceEuro));
+      }
+    } catch (error) {
+      console.warn("Kirmesfahrt lokal gesichert, Cloud-Sync fehlgeschlagen", error);
+      toast("🧵 Lokal gespeichert. Cloud-Sync wird später erneut versucht.");
+    } finally {
+      savingFairRide = false;
+      $("#startQueue").disabled = false;
+    }
+  }
+
   async function startQueue() {
+    if (venueIsFair()) return recordFairRide();
     if (!selectedRide || !parkDay || active || finishingQueue) return;
 
     const input = $("#postedWait").value.trim();
@@ -2754,12 +2865,12 @@
 
     const fair = venueIsFair();
     const facts = [];
-    if (fair) facts.push(["Fahrpreis", ridePriceText(ride), "price"]);
+    if (fair) facts.push(["Fahrpreis", "pro Fahrt manuell", "price"]);
     if (ride.operatorFull || ride.operator) facts.push(["Schausteller", ride.operatorFull || ride.operator, "operator"]);
     if (ride.manufacturer) facts.push(["Hersteller", ride.manufacturer, ""]);
     if (ride.type) facts.push(["Typ", ride.type, ""]);
     if (ride.year) facts.push(["Baujahr", String(ride.year), ""]);
-    if (ride.dimensions) facts.push(["Maße / Höhe", ride.dimensions, ""]);
+    if (ride.dimensions) facts.push(["Maße (B × T × H)", ride.dimensions, ""]);
     if (ride.capacity) facts.push(["Kapazität", ride.capacity, ""]);
 
     const factHtml = facts.map(([label, value, extraClass]) =>
@@ -2772,6 +2883,9 @@
     if (ride.rideIndexUrl) {
       links.push("<a href=\"" + escapeHtml(ride.rideIndexUrl) + "\" target=\"_blank\" rel=\"noopener\">Ride-Index Steckbrief ↗</a>");
     }
+    if (ride.technicalSourceUrl && ride.technicalSourceUrl !== ride.rideIndexUrl) {
+      links.push("<a href=\"" + escapeHtml(ride.technicalSourceUrl) + "\" target=\"_blank\" rel=\"noopener\">Technische Daten · Quelle ↗</a>");
+    }
     if (world?.imageSourceUrl || ride.imageSourceUrl) {
       const sourceUrl = world?.imageSourceUrl || ride.imageSourceUrl;
       const credit = world?.imageCredit || ride.imageCredit || "Bildquelle";
@@ -2782,10 +2896,14 @@
     }
 
     box.innerHTML =
-      (fair ? "<div class=\"rideFactsEyebrow\">KIRMES-NERD-DATEN</div>" : "") +
+      (fair ? "<div class=\"rideFactsEyebrow\">TECHNIK · FAHRGESCHÄFTSDATEN</div>" +
+        "<div class=\"fairTechGrid\">" + fairTechnicalDetails(ride).map(([symbol, label, value]) =>
+          "<div class=\"fairTechCell\"><span aria-hidden=\"true\">" + symbol + "</span><small>" +
+          escapeHtml(label) + "</small><b>" + escapeHtml(value) + "</b></div>"
+        ).join("") + "</div>" : "") +
       "<div class=\"rideFactGrid\">" + factHtml + "</div>" +
       (fair
-        ? "<div class=\"ridePriceNote\">Fahrpreise kommen ausschließlich von dir. Beim Anstellen gibst du den aktuellen Preis manuell ein; NÄHEN recherchiert oder übernimmt nichts automatisch.</div>"
+        ? "<div class=\"ridePriceNote\">Technikwerte nur aus belegten Quellen, keine Schätzwerte. Den tatsächlichen Fahrpreis trägst du bei jeder Fahrt neu ein.</div>"
         : "") +
       (links.length ? "<div class=\"rideFactSources\">" + links.join("") + "</div>" : "");
 
@@ -2861,7 +2979,9 @@
       ].filter(Boolean);
       const noLiveText = park?.noLiveMessage ||
         ("Für " + (park?.name || "dieses Ziel") + " sind in NÄHEN keine öffentlichen Live-Wartezeiten hinterlegt. Deinen eigenen Queue-Timer kannst du trotzdem nutzen.");
-      $("#rideDetailStatus").textContent = (rideFacts.length ? rideFacts.join(" · ") + " · " : "") + noLiveText;
+      $("#rideDetailStatus").textContent = venueIsFair()
+        ? "🎡 Fahrgeschäft · ohne Queue-Timer. Fahrt und tatsächlichen Preis direkt eintragen."
+        : (rideFacts.length ? rideFacts.join(" · ") + " · " : "") + noLiveText;
     } else if (selectedDetailRide.source === "queue-times") {
       $("#rideDetailWait").textContent = selectedDetailRide.isOpen ? selectedDetailRide.wait + " min" : "Geschlossen";
       $("#rideDetailStatus").textContent = selectedDetailRide.isOpen ? "Als geöffnet gemeldet · Daten von Queue-Times, keine offizielle Park-Livezeit." : "Attraktion wird aktuell als geschlossen gemeldet.";
@@ -2873,6 +2993,7 @@
     renderRideExtraFacts(selectedDetailRide, world);
 
     $("#rideQueueBtn").disabled = publicLive && selectedDetailRide.source === "queue-times" && !selectedDetailRide.isOpen;
+    $("#rideQueueBtn").textContent = venueIsFair() ? "🧵 FAHRT EINTRAGEN" : "🧵 ANSTELLEN";
     $("#srCommunity").innerHTML = venueIsFair()
       ? ""
       : "<div class=\"message\">Single-Rider-Informationen laden…</div>";
