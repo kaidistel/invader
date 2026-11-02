@@ -36,7 +36,7 @@ const read={get:(key,fallback)=>records[key]??fallback};
 const mergeStart=code.indexOf("  function hasFinishedSession(");
 const mergeEnd=code.indexOf("  function cloudQueuePayload(",mergeStart);
 assert.ok(mergeStart>0&&mergeEnd>mergeStart);
-const mergeSessions=new Function(code.slice(mergeStart,mergeEnd)+"\\nreturn mergeSessionSnapshots;".replace(/\\n/g,"\\n"))();
+const mergeSessions=new Function(code.slice(mergeStart,mergeEnd)+"\nreturn mergeSessionSnapshots;")();
 const utilities=new Function("store","PARKS","parkStoreKey","activeParkSlug","parkArchive","normalizeArchiveEntry","parkDayStartMs","mergeSessionSnapshots",
   code.slice(sourceStart,sourceEnd)+"\nreturn {localGlobalArchive,mergeGlobalArchiveEntries};");
 const normal=(entry,slug)=>({day:entry.day,sessions:entry.sessions.map(session=>({...session,parkSlug:slug}))});
