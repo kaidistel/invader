@@ -123,7 +123,7 @@
   },
   {
     "id": "bremen-freimarkt26-air-power",
-    "name": "Air Power",
+    "name": "Air Power", "height": "21 m", "technicalSourceUrl": "https://www.hamburg.de/politik-und-verwaltung/behoerden/bwai/aktuelles/pressemeldungen/winterdom-2024-mit-drei-neuheiten-986394", 
     "operator": "Heine",
     "operatorFull": "Tom Heine (Bremen)",
     "zone": "Fahr- und Laufgeschäfte",
