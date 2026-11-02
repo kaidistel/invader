@@ -11,7 +11,8 @@ assert.ok(html.includes('id="pickerAllDaysBtn"'));
 assert.ok(html.includes('id="allDaysList"'));
 assert.ok(html.includes('data-archive-filter="fair"'));
 assert.ok(html.includes('data-archive-filter="park"'));
-assert.ok(sw.includes("naehen-v125"));
+const buildVersion=/app\.js\?v=(\d+)/.exec(html)?.[1];
+assert.ok(buildVersion&&sw.includes("naehen-v"+buildVersion),"PWA cache must match app build version");
 assert.ok(code.includes('async function loadGlobalCloudArchive('));
 assert.ok(code.includes('.eq("user_id", userId).not("ended_at", "is", null)'));
 assert.ok(code.includes('dbSessionToClient(row, day.park_slug || "phantasialand")'));
@@ -32,11 +33,15 @@ const records={
  }]
 };
 const read={get:(key,fallback)=>records[key]??fallback};
-const utilities=new Function("store","PARKS","parkStoreKey","activeParkSlug","parkArchive","normalizeArchiveEntry","parkDayStartMs",
+const mergeStart=code.indexOf("  function hasFinishedSession(");
+const mergeEnd=code.indexOf("  function cloudQueuePayload(",mergeStart);
+assert.ok(mergeStart>0&&mergeEnd>mergeStart);
+const mergeSessions=new Function(code.slice(mergeStart,mergeEnd)+"\\nreturn mergeSessionSnapshots;".replace(/\\n/g,"\\n"))();
+const utilities=new Function("store","PARKS","parkStoreKey","activeParkSlug","parkArchive","normalizeArchiveEntry","parkDayStartMs","mergeSessionSnapshots",
   code.slice(sourceStart,sourceEnd)+"\nreturn {localGlobalArchive,mergeGlobalArchiveEntries};");
 const normal=(entry,slug)=>({day:entry.day,sessions:entry.sessions.map(session=>({...session,parkSlug:slug}))});
 const tools=utilities(read,{"phantasialand":{},"hamburg-winterdom-2026":{}},
- (base,slug)=>base+":"+slug,null,[],normal,day=>new Date(day.started_at).getTime());
+ (base,slug)=>base+":"+slug,null,[],normal,day=>new Date(day.started_at).getTime(),mergeSessions);
 const local=tools.localGlobalArchive();
 assert.equal(local.length,2);
 assert.equal(local[0].day.park_slug,"hamburg-winterdom-2026");
