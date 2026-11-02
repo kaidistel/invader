@@ -1637,10 +1637,19 @@
     return suffix && /^\d+(?:[.,]\d+)?$/.test(val) ? val + " " + suffix : val;
   }
 
+  function heightFromDimensions(dims) {
+    if (typeof dims !== "string") return null;
+    // Only B×T×H dimensions qualify. Two-dimensional ground space is NOT a ride height.
+    const three = dims.match(/(?:\d+(?:[.,]\d+)?\s*[mM]?\s*[x×]\s*){2}(?:max\.?\s*)?(\d+(?:[.,]\d+)?)\s*m/i);
+    if (three) return three[1] + " m";
+    const explicit = dims.match(/(?:bis(?:\s+zu)?|max\.?)\s*(\d+(?:[.,]\d+)?)\s*m\s*(?:Höhe)?/i);
+    return explicit ? explicit[1] + " m" : null;
+  }
+
   function fairTechnicalDetails(ride) {
     const tech = rideConfigForPark()?.[ride.id] || {};
     return [
-      ["↕", "Höhe", techValue(ride.height ?? ride.heightMeters, "m")],
+      ["↕", "Höhe", techValue(ride.height ?? ride.heightMeters ?? heightFromDimensions(ride.dimensions), "m")],
       ["➤", "Geschwindigkeit", techValue(ride.speedKmh ?? ride.maxSpeedKmh ?? tech.speedKmh, "km/h")],
       ["◉", "Max. G-Kräfte", techValue(ride.gForce ?? ride.maxGForce ?? ride.gForces, "g")]
     ];
@@ -2656,7 +2665,7 @@
     const input = $("#fairPriceInput");
     const raw = (input?.value || "").trim().replace(",", ".");
     const price = Number(raw);
-    if (!raw || !Number.isFinite(price) || price < 0 || !/^\\d+(?:\\.\\d{1,2})?$/.test(raw)) {
+    if (!raw || !Number.isFinite(price) || price < 0 || !/^\d+(?:\.\d{1,2})?$/.test(raw)) {
       toast("💶 Bitte den tatsächlich gezahlten Fahrpreis eingeben (auch 0,00 € ist möglich).");
       input?.focus();
       return;
