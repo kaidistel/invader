@@ -1935,3 +1935,20 @@ body[data-park="osnabrueck-herbstjahrmarkt-2026"] .hero{
   box-shadow:inset 0 1px #fff2ce25,0 15px 32px #0707136e;
 }
 body[data-park="osnabrueck-herbstjahrmarkt-2026"] .hero h1{text-shadow:0 3px 12px #0a0b1c}
+
+/* v136: Fairground-specific technical identity and one-tap ride log.
+   Never hide theme park queue/timer controls. */
+body[data-park] .fairTechGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:13px 0 17px}
+body[data-park] .fairTechCell{
+  border:1px solid #eed0a13f;border-radius:12px;padding:13px 8px;min-height:114px;
+  background:linear-gradient(156deg,#30253fe0,#101d2beb);display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:5px;text-align:center;min-width:0;box-shadow:inset 0 1px #fff6d51b;
+}
+.fairTechCell>span{font-size:19px;line-height:1;color:#f0cb86}
+.fairTechCell small{font:750 10px/1.25 'Barlow Condensed',system-ui,sans-serif;letter-spacing:1px;text-transform:uppercase;color:#f5c6a7}
+.fairTechCell b{font:800 clamp(11px,2.4vw,15px)/1.25 system-ui,sans-serif;overflow-wrap:anywhere;color:#fff4db;max-width:100%}
+#queueSheet.fairLogMode .seg,#queueSheet.fairLogMode #postedWaitField{display:none!important}
+#queueSheet.fairLogMode .sheetCard{border-color:#e8ba7770;background:linear-gradient(146deg,#27203a,#181927 60%,#162938)}
+#queueSheet.fairLogMode #queueSheetEyebrow{color:#f7cb82}
+#queueSheet.fairLogMode #startQueue{margin-top:12px;background:linear-gradient(120deg,#f3d092,#f0a868);color:#22172b}
+@media(max-width:380px){body[data-park] .fairTechGrid{gap:5px}.fairTechCell{padding:10px 5px;min-height:106px}}
