@@ -1655,6 +1655,18 @@
     ];
   }
 
+  function fairRideSpecPreview(ride) {
+    if (!venueIsFair()) return "";
+    const known = fairTechnicalDetails(ride)
+      .filter(([, , value]) => value !== "Nicht veröffentlicht")
+      .map(([icon, label, value]) => "<span>" + icon + " " + escapeHtml(value) + "</span>");
+    if (!known.length) {
+      if (ride.manufacturer) known.push("<span>⚙ " + escapeHtml(ride.manufacturer) + "</span>");
+      if (ride.year) known.push("<span>◷ " + escapeHtml(String(ride.year)) + "</span>");
+    }
+    return known.length ? "<div class=\"fairRideSpecMini\">" + known.join("") + "</div>" : "";
+  }
+
   // Retrieve the operator using the archived venue, never the currently open venue.
   function operatorForSession(session, parkSlug = session?.parkSlug || activeParkSlug || "phantasialand") {
     if (!session || !venueIsFair(parkSlug)) return "";
@@ -1867,6 +1879,7 @@
             "<button class=\"btn secondary\" style=\"padding:7px 10px;font-size:11px\" data-queue=\"" + ride.id + "\"" + queueDisabled + ">" + queueLabel + "</button>" +
             "<button class=\"btn ghost\" style=\"padding:7px 4px;font-size:11px\" data-detail-btn=\"" + ride.id + "\">DETAILS</button>" +
           "</div>" +
+          (fair ? fairRideSpecPreview(ride) : "") +
         "</div>" +
         (hasPublicLive ? "<div class=\"wait\"><strong>" + waitMain + "</strong><small>" + waitSub + "</small></div>" : "") +
       "</article>";
