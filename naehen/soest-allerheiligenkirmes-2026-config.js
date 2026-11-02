@@ -59,7 +59,7 @@
       imageCredit:"Nordkirmes.net", imageSourceUrl:"https://nordkirmes.net/"
     },
     {
-      id:"tiki-taki", name:"Tiki Taki XXL", operator:"Paulsen", operatorFull:"Robert Paulsen (Handorf)",
+      id:"tiki-taki", name:"Tiki Taki XXL", "height": "46,5 m", "speedKmh": 130, "gForce": 4, "technicalSourceUrl": "https://www.radiohamburg.de/aktuelles/hamburg/Der-Winterdom-ist-wieder-da-und-bringt-Weltpremieren-mit-id1510516.html",  operator:"Paulsen", operatorFull:"Robert Paulsen (Handorf)",
       new2026:true, manufacturer:"KMG (NL)", type:"XXL", year:2025,
       dimensions:"18 × 13 × 46,5 m", capacity:"20 Personen", priceEuro:null,
       rideIndexUrl:"https://ride-index.de/2025/11/02/tiki-taxi-xxl/",
@@ -75,7 +75,7 @@
       imageCredit:"Ummet-Eck · Christian Schön", imageSourceUrl:"https://www.ummet-eck.de/regionen/103142-Autoscooter-Number-1-Isken-/"
     },
     {
-      id:"hangover-the-tower", name:"Hangover The Tower", operator:"Schneider", operatorFull:"Schneider & Co. oHG (München)",
+      id:"hangover-the-tower", name:"Hangover The Tower", "height": "85 m", "speedKmh": 90, "technicalSourceUrl": "https://www.ganz-muenchen.de/oktoberfest/fahrgeschaefte/modern/hangover-the-tower/freifallturm.html",  operator:"Schneider", operatorFull:"Schneider & Co. oHG (München)",
       new2026:false, manufacturer:"Funtime (A)", type:"Free Fall", year:2015,
       dimensions:"21 × 18 × 85 m", capacity:"24 Personen", priceEuro:null,
       rideIndexUrl:"https://ride-index.de/2015/07/19/hangover/",
