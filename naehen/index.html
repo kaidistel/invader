@@ -145,8 +145,8 @@
         </div>
         <div class="stats">
           <div class="stat"><strong id="ridesToday">0×</strong><span>genäht</span></div>
-          <div class="stat"><strong id="queueToday">0m</strong><span>echte Queue</span></div>
-          <div class="stat"><strong id="srToday">0×</strong><span>Single Rider</span></div>
+          <div class="stat"><strong id="queueToday">0m</strong><span id="queueTodayLabel">echte Queue</span></div>
+          <div class="stat"><strong id="srToday">0×</strong><span id="srTodayLabel">Single Rider</span></div>
         </div>
       </div>
 
@@ -267,10 +267,10 @@
   <section class="sheet" id="queueSheet">
     <div class="sheetCard">
       <button aria-label="Schließen" class="close" data-close="queueSheet">✕</button>
-      <div class="eyebrow">Queue-Timer</div>
+      <div class="eyebrow" id="queueSheetEyebrow">Queue-Timer</div>
       <h2 id="sheetRide">Taron</h2>
-      <p>Beim Anstellen starten. Die Zeit bleibt korrekt, auch wenn das Handy gesperrt wird.</p>
-      <div class="seg">
+      <p id="queueSheetHelp">Beim Anstellen starten. Die Zeit bleibt korrekt, auch wenn das Handy gesperrt wird.</p>
+      <div class="seg" id="queueTypeSelector">
         <button class="on" data-qtype="regular">Regular</button>
         <button data-qtype="single">Single Rider</button>
       </div>
