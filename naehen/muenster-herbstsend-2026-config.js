@@ -113,7 +113,7 @@
   },
   {
     "id": "mayday",
-    "name": "MayDay – The Ultimate Thrill",
+    "name": "MayDay – The Ultimate Thrill", "height": "Nicht eindeutig belegt", "technicalSourceUrl": "https://funfair-entertainment.de/news/geschaeft-im-fokus-mayday-horlbeck-meyer", 
     "operator": "Horlbeck/Meyer",
     "operatorFull": "Horlbeck/Meyer GbR (Neumünster)",
     "type": "Pegasus 16",
