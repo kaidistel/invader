@@ -104,7 +104,7 @@ Hard rules:
 - never prefill the last price paid for that ride
 - never treat an operator's published price as the user's actual paid amount
 - the price input starts blank for every new fair ride session
-- the user must enter the amount before the queue session starts
+- the user must enter the amount before the direct fair ride is saved
 - vouchers, discounts, free rides and price changes must therefore be representable exactly
 - `0,00 €` is valid when the user actually paid nothing
 
@@ -229,9 +229,7 @@ Do not infer “new” merely because NÄHEN has not seen the ride before.
 
 # 6. No Fake Live Wait Times
 
-Kirmes events normally have no public structured live wait-time feed.
-
-Default fair configuration:
+Kirmes events have no synthetic or inferred live wait times. Defaults:
 
 ```js
 liveDataUrl: null,
@@ -239,65 +237,49 @@ liveWaits: false,
 supportsPostedWait: false
 ```
 
-Consequences:
+No Queue-Times API polling, queue-drop alerts, public live labels, or wait-time input in a Kirmes.
 
-- no Queue-Times polling
-- no fake 0-minute values
-- no “LIVE” labels
-- no wait-time push alerts
-- no public wait-time box in ride details
-- no displayed-wait input when the event does not publish one
-
-The personal queue timer remains fully available.
-
-NÄHEN measures the user’s real queue duration itself.
+**Current NÄHEN policy (November 2026): Kirmes has NO personal queue timer.** A fair ride is logged directly as completed, with manual price and real entry timestamp. The traditional queue timer remains exclusive to permanent parks.
 
 ---
 
 # 7. Kirmestag Terminology
 
-For `kind: "fair"`, user-facing copy must use Kirmes terminology:
-
-- Kirmestag starten
-- Kirmestag beenden
-- aktueller Kirmestag
-- Kirmestag-Archiv
-- gespeicherte Kirmestage
-
-Do not show “Parktag” for a fair.
-
-Underlying database tables may keep generic historic names such as `park_days`; this must not leak into the UI.
+Use event vocabulary: Kirmestag starten/beenden, Fahrten eintragen, Fahrtenprotokoll, Kirmestag-Archiv, Kassenzettel. Underlying Supabase tables may retain their historical names.
 
 ---
 
-# 8. Queue Timer
+# 8. Direct Ride Logging — NO Queue Timer On Fairs
 
-The personal queue timer is a major fair feature.
+1. Start Kirmestag.
+2. Choose the exact travelling ride.
+3. Tap **FAHRT EINTRAGEN** (never ANSTELLEN).
+4. Enter the exact actual price, blank by default; 0,00 € is a valid paid amount.
+5. Save once. Create one completed record with `status: "ridden"`, `started_at` and `ended_at` equal to the entry timestamp, and `wait_seconds: null`; do **not** fabricate zero-second wait times.
+6. Persist locally **before** Supabase upsert. Verify cloud response. Recover locally completed rows on later archive sync.
+7. Refresh ride count, spending summary, receipt and history.
+8. Allow repeats of the same ride with independent prices.
 
-It must work without public wait data:
+Do not display a timer, regular/single queue choice, queue measurements, wait averages or queue-related achievements in fair-specific UI. Existing permanent park timer must remain unchanged.
 
-1. user starts Kirmestag
-2. opens a ride
-3. taps ANSTELLEN
-4. timer measures actual queue time
-5. BOARDING · GENÄHT closes the session
-6. ride and wait time are stored in the Kirmestag archive
-
-If no official posted wait exists, the posted-wait field must be hidden.
+For an older archived Kirmestag, preserve historical queue data in the database, but don't require or emphasize it in fair recap/receipt.
 
 ---
 
-# 9. Achievements and Nerd Stats
+# 9. Technical Facts Are First-Class Per-Ride Statistics
 
-Measured queue achievements can work normally on fairs.
+Every fair attraction detail must show a **technical data panel** with:
 
-Example:
+- **Höhe** (m)
+- **Geschwindigkeit** (km/h)
+- **Max. G-Kräfte** (g)
+- manufacturer, type, construction year, dimensions, capacity and operator where verified
 
-- “Ich hab mir das nicht Ausgesucht” unlocks from the actual NÄHEN timer
+Use exact manufacturer/ride/operator information from Ride-Index or credible primary/reputable sources. When data are not published, display **Nicht veröffentlicht**, not an invented number and not a generic model's figure. A different travelling ride sharing the model is insufficient evidence. An explicitly labelled manufacturer/model specification is only usable if it applies to the exact unit.
 
-Speed or technical achievements must only use verified metadata.
+Store backed values in fields `height`, `speedKmh`, `gForce` and `technicalSourceUrl`, preserving source-specific precision such as `ca.` and `bis zu`. Do not infer real experienced forces from height/speed. A height may be extracted from the height position of explicitly marked three-dimensional B×T×H published dimensions; a two-dimensional footprint must never be treated as height.
 
-Never invent ride speed, height, manufacturer or forces simply to populate nerd statistics.
+Kirmes daily summaries and archive focus on **number of rides, distinct rides, repeats, spend and receipts**, not personal queue metrics. Technical stats are per attraction, and are separate from visit statistics.
 
 ---
 
@@ -563,20 +545,14 @@ Only when map mode is **MIT KARTE**:
 
 When map mode is **OHNE KARTE**, skip this entire phase.
 
-## Phase E — Kirmestag Price Capture
+## Phase E — Kirmestag Direct Ride Entry / Price Capture
 
-For every fair queue start:
-
-1. open the queue sheet
-2. show `FAHRPREIS (€) · MANUELL`
-3. leave it blank every time
-4. require a valid number >= 0
-5. store it on that exact session as `priceEuro`
-6. persist it locally
-7. if Supabase sync exists, write it to `queue_sessions.price_euro`
-8. restore it when loading active/archive sessions
-
-Never prefill the previous ride price.
+1. Open the **FAHRT EINTRAGEN** sheet (not a queue timer).
+2. Show manual required price, blank on every new entry.
+3. Accept valid amounts >= 0, with 0,00 € valid.
+4. Save the ride directly as **ridden**, with `wait_seconds: null` and no fake duration.
+5. Persist locally before uploading, then confirm cloud upsert; recover on next archive synchronization.
+6. Show expenses/ride counts, preserving each ride's operator and original event.
 
 ## Phase F — Kirmestag Receipt
 
