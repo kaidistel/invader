@@ -199,7 +199,7 @@
   },
   {
     "id": "mayday",
-    "name": "Mayday – The Ultimate Thrill",
+    "name": "Mayday – The Ultimate Thrill", "height": "Nicht eindeutig belegt", "technicalSourceUrl": "https://funfair-entertainment.de/news/geschaeft-im-fokus-mayday-horlbeck-meyer", 
     "operator": "Horlbeck / Meyer",
     "operatorFull": "Horlbeck / Meyer",
     "zone": "Fahrgeschäfte",
