@@ -281,7 +281,7 @@
   },
   {
     "id": "bremen-freimarkt26-tiki-taki",
-    "name": "Tiki Taki",
+    "name": "Tiki Taki", "height": "46,5 m", "speedKmh": 130, "gForce": 4, "technicalSourceUrl": "https://www.radiohamburg.de/aktuelles/hamburg/Der-Winterdom-ist-wieder-da-und-bringt-Weltpremieren-mit-id1510516.html", 
     "operator": "Paulsen",
     "operatorFull": "Robert Paulsen",
     "zone": "Fahr- und Laufgeschäfte",
