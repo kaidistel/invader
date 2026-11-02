@@ -64,7 +64,7 @@
   },
   {
     "id": "airborne",
-    "name": "Airborne",
+    "name": "Airborne", "speedKmh": 120, "gForce": 4, "technicalSourceUrl": "https://www.ummet-eck.de/regionen/101060-Airborne-Ordelman-/", 
     "operator": "Ordelman",
     "operatorFull": "Willy Ordelman (NL)",
     "type": "Speed 32",
