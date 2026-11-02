@@ -1952,3 +1952,8 @@ body[data-park] .fairTechCell{
 #queueSheet.fairLogMode #queueSheetEyebrow{color:#f7cb82}
 #queueSheet.fairLogMode #startQueue{margin-top:12px;background:linear-gradient(120deg,#f3d092,#f0a868);color:#22172b}
 @media(max-width:380px){body[data-park] .fairTechGrid{gap:5px}.fairTechCell{padding:10px 5px;min-height:106px}}
+
+/* v137 · compact, source-backed mechanical details in the fairground list. */
+.fairRideSpecMini{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px;align-items:center}
+.fairRideSpecMini span{display:inline-flex;align-items:center;min-width:0;padding:4px 7px;border:1px solid #e6b87950;border-radius:7px;
+background:#20172aab;color:#ffe2b0;font:700 10px/1.25 'Barlow Condensed',system-ui,sans-serif;letter-spacing:.2px}
