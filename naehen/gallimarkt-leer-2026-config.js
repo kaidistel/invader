@@ -40,7 +40,7 @@
   },
   {
     "id": "infinity-2",
-    "name": "Infinity 2.0",
+    "name": "Infinity 2.0", "height": "65 m", "technicalSourceUrl": "https://kirmestermine.eu/attraktion/infinity-2/", 
     "operator": "Hoefnagels",
     "operatorFull": "Hoefnagels GmbH (Stuttgart)",
     "new2026": true,
@@ -89,7 +89,7 @@
   },
   {
     "id": "mach-1",
-    "name": "Mach 1",
+    "name": "Mach 1", "height": "ca. 40–42 m", "speedKmh": "ca. 100 km/h", "gForce": "bis zu 4 g", "technicalSourceUrl": "https://kuestenkirmes.de/mach-1-fehlauer/", 
     "operator": "Fehlauer",
     "operatorFull": "Fehlauer",
     "new2026": true,
