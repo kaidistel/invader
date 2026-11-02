@@ -131,7 +131,7 @@
       imageCredit:"Ummet-Eck · Christian Schön", imageSourceUrl:"https://www.ummet-eck.de/"
     },
     {
-      id:"intoxx", name:"Intoxx", operator:"Benning", operatorFull:"Benning (Theine)",
+      id:"intoxx", name:"Intoxx", "height": "22 m", "technicalSourceUrl": "https://data.coaster.cloud/de/attractions/ddc711c3-intoxx",  operator:"Benning", operatorFull:"Benning (Theine)",
       new2026:false, manufacturer:"Fabbri (I)", type:"Kamikaze III", year:2003,
       dimensions:"18,5 × 5 × 22 m", capacity:"16 Personen", priceEuro:null,
       rideIndexUrl:"https://ride-index.de/2009/09/02/intoxx/",
