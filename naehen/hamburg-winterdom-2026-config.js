@@ -178,7 +178,7 @@
   },
   {
     "id": "evolution",
-    "name": "Evolution",
+    "name": "Evolution", "height": "65 m", "speedKmh": 140, "gForce": 4.5, "technicalSourceUrl": "https://www.hamburg.de/politik-und-verwaltung/behoerden/bwai/aktuelles/pressemeldungen/winterdom-2024-mit-drei-neuheiten-986394", 
     "operator": "Fackler / Hartkopf",
     "operatorFull": "Fackler / Hartkopf",
     "zone": "Fahrgeschäfte",
@@ -216,7 +216,7 @@
   },
   {
     "id": "infinity-2",
-    "name": "Infinity 2.0",
+    "name": "Infinity 2.0", "height": "65 m", "technicalSourceUrl": "https://kirmestermine.eu/attraktion/infinity-2/", 
     "operator": "Hoefnagels",
     "operatorFull": "Hoefnagels",
     "zone": "Fahrgeschäfte",
