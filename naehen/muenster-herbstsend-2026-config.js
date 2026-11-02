@@ -81,7 +81,7 @@
   },
   {
     "id": "hangover-the-ride",
-    "name": "Hangover The Ride",
+    "name": "Hangover The Ride", "height": "12 m", "technicalSourceUrl": "https://www.freizeitparkapp.de/parks/deutschland/muenster-herbstsend/hangover-the-ride/", 
     "operator": "Richter",
     "operatorFull": "Kevin Richter (Torgau)",
     "type": "G-Force 16",
@@ -129,7 +129,7 @@
   },
   {
     "id": "nightfly",
-    "name": "Nightfly",
+    "name": "Nightfly", "height": "8 m", "technicalSourceUrl": "https://kirmestermine.eu/attraktion/night-fly-boers/", 
     "operator": "Boers",
     "operatorFull": "Boy Boers (Niederlande)",
     "type": "KMG Tripride / Scheibenwischer",
