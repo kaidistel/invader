@@ -1957,3 +1957,11 @@ body[data-park] .fairTechCell{
 .fairRideSpecMini{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px;align-items:center}
 .fairRideSpecMini span{display:inline-flex;align-items:center;min-width:0;padding:4px 7px;border:1px solid #e6b87950;border-radius:7px;
 background:#20172aab;color:#ffe2b0;font:700 10px/1.25 'Barlow Condensed',system-ui,sans-serif;letter-spacing:.2px}
+
+/* Soest combo tickets: compact and editable in the existing ride-booking sheet. */
+.fairTicketOptions{display:grid;gap:7px;margin:8px 0 10px}
+.fairTicketOptions button{border:1px solid var(--line);background:#10151f;color:var(--text);border-radius:6px;min-height:42px;padding:10px 12px;text-align:left;font:inherit;font-weight:800;cursor:pointer}
+.fairTicketOptions button.on{background:#e6c28e;color:#1f1730;border-color:#e6c28e}
+.fairTicketOptions button.hidden{display:none}
+.fairTicketHint{margin-bottom:9px}
+.rideComboPill{border:1px solid #d6ae75a8;border-radius:4px;padding:5px 7px;color:#e9c697;font-weight:800;font-size:11px}

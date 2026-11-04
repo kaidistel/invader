@@ -30,13 +30,16 @@ create table if not exists public.queue_sessions (
   wait_seconds integer,
   status text not null default 'waiting' check (status in ('waiting','ridden','aborted')),
   price_euro numeric(8,2) check (price_euro is null or price_euro >= 0),
+  ticket_metadata jsonb,
   created_at timestamptz not null default now()
 );
 
--- Existing installations: keep fair prices exact and persistent for Kirmestag receipts.
+-- Existing installations: keep fair prices and ticket pairings persistent.
 alter table public.queue_sessions
   add column if not exists price_euro numeric(8,2)
   check (price_euro is null or price_euro >= 0);
+alter table public.queue_sessions
+  add column if not exists ticket_metadata jsonb;
 
 create table if not exists public.favorites (
   user_id uuid not null references auth.users(id) on delete cascade,

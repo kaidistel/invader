@@ -5,7 +5,7 @@
     {
       id:"mythos", name:"Mythos", operator:"Högerle", operatorFull:"Jacqueline Högerle & Christian Göbel",
       new2026:true, manufacturer:"Technical Park (I)", type:"Heavy Rotation", year:2024,
-      dimensions:"19 × 18 × 18 m", capacity:"20 Personen · 10 Gondeln", priceEuro:null,
+      dimensions:"19 × 18 × 18 m", capacity:"20 Personen · 10 Gondeln", priceEuro:5,
       rideIndexUrl:"https://ride-index.de/2024/06/28/mythos/",
       imageUrl:"https://www.pz-news.de/cms_media/module_img/10280/5140079_1_detailinline_Mythos_eine_Bratpfanne_der_ganz_besonderen_Art._Hoegerle.jpg",
       imageCredit:"Pforzheimer Zeitung", imageSourceUrl:"https://www.pz-news.de/"
@@ -13,7 +13,7 @@
     {
       id:"eyecatcher", name:"Eyecatcher", operator:"Kipp", operatorFull:"Kipp & Sohn KG (Bonn)",
       new2026:true, manufacturer:"Mondial (NL)", type:"Riesenrad RR5542", year:2025,
-      dimensions:"23 × 19 × 55 m", capacity:"252 Personen · 42 Gondeln", priceEuro:null,
+      dimensions:"23 × 19 × 55 m", capacity:"252 Personen · 42 Gondeln", priceEuro:8,
       rideIndexUrl:"https://ride-index.de/2025/11/02/eyecatcher-kipp/",
       imageUrl:"https://img.allgemeine-zeitung.de/incoming/lbii9m-eyecatcher1.jpg/alternates/GOOGLE_1200_4_3/eyecatcher1.jpg.webp",
       imageCredit:"Allgemeine Zeitung", imageSourceUrl:"https://www.allgemeine-zeitung.de/"
@@ -21,7 +21,7 @@
     {
       id:"punk-flasher", name:"Punk Flasher", operator:"Glöss", operatorFull:"Dajana Glöss (Leer)",
       new2026:true, manufacturer:"Fabbri (I)", type:"Booster 27/8", year:2025,
-      dimensions:"19 × 7,5 × 27 m", capacity:"8 Personen", priceEuro:null,
+      dimensions:"19 × 7,5 × 27 m", capacity:"8 Personen", priceEuro:8,
       rideIndexUrl:"https://ride-index.de/2025/11/16/punk-flasher/",
       imageUrl:"https://i.imgur.com/nKpH7nh.jpeg",
       imageCredit:"Funfair2304 / polypweb.eu", imageSourceUrl:"https://www.polypweb.eu/viewtopic.php?t=25276"
@@ -29,7 +29,7 @@
     {
       id:"shock-wave", name:"Shock Wave", operator:"Hortz", operatorFull:"Karl Hortz (Langen/Emsland)",
       new2026:true, manufacturer:"Tivoli Enterprises (GB)", type:"Remix", year:2025,
-      dimensions:"Ø 16 m · max. 10 m hoch", capacity:"24 Personen", priceEuro:null,
+      dimensions:"Ø 16 m · max. 10 m hoch", capacity:"24 Personen", priceEuro:6,
       rideIndexUrl:"https://ride-index.de/2025/10/03/shock-wave/",
       imageUrl:"https://i.imgur.com/JdnEI3w.jpeg",
       imageCredit:"polypweb.eu", imageSourceUrl:"https://www.polypweb.eu/viewtopic.php?t=25019"
@@ -37,7 +37,7 @@
     {
       id:"avenger", name:"Avenger", operator:"Kirschbaum", operatorFull:"Florian Kirschbaum (Gollhofen)",
       new2026:true, manufacturer:"KMG (NL)", type:"Inversion 12", year:2013,
-      dimensions:"20 × 16 × 24 m", capacity:"12 Personen · 3 Gondeln", priceEuro:null,
+      dimensions:"20 × 16 × 24 m", capacity:"12 Personen · 3 Gondeln", priceEuro:7,
       rideIndexUrl:"https://ride-index.de/2013/03/31/avenger/",
       imageUrl:"https://www.ummet-eck.de/Bilder/fotosets/1024/avenger-royal-bad-griesbach23-c-KIE-c-schoen-4.jpg",
       imageCredit:"Ummet-Eck · Christian Schön", imageSourceUrl:"https://www.ummet-eck.de/"
@@ -53,7 +53,7 @@
     {
       id:"sound-wave", name:"Sound Wave", operator:"Schwerin", operatorFull:"Danny Schwerin (Trappenkamp-Soest)",
       new2026:true, manufacturer:"SBF Vista (I)", type:"Super Jump", year:2024,
-      dimensions:"18,5 × 17 m", capacity:"30 Personen · 10 Gondeln", priceEuro:null,
+      dimensions:"18,5 × 17 m", capacity:"30 Personen · 10 Gondeln", priceEuro:5,
       rideIndexUrl:"https://ride-index.de/2024/08/17/sound-wave/",
       imageUrl:"https://nordkirmes.net/media/1541-l%C3%BCn23-jpg/",
       imageCredit:"Nordkirmes.net", imageSourceUrl:"https://nordkirmes.net/"
@@ -61,7 +61,7 @@
     {
       id:"tiki-taki", name:"Tiki Taki XXL", "height": "46,5 m", "speedKmh": 130, "gForce": 4, "technicalSourceUrl": "https://www.radiohamburg.de/aktuelles/hamburg/Der-Winterdom-ist-wieder-da-und-bringt-Weltpremieren-mit-id1510516.html",  operator:"Paulsen", operatorFull:"Robert Paulsen (Handorf)",
       new2026:true, manufacturer:"KMG (NL)", type:"XXL", year:2025,
-      dimensions:"18 × 13 × 46,5 m", capacity:"20 Personen", priceEuro:null,
+      dimensions:"18 × 13 × 46,5 m", capacity:"20 Personen", priceEuro:8,
       rideIndexUrl:"https://ride-index.de/2025/11/02/tiki-taxi-xxl/",
       imageUrl:"https://nordkirmes.net/media/1398-whatsapp-image-2025-11-01-at-15-46-31-2-jpeg/?thumbnail=large",
       imageCredit:"Nordkirmes.net", imageSourceUrl:"https://nordkirmes.net/article/3503-tiki-taki-xxl-hamburger-dom-erlebt-emotionale-weltpremiere-einer-mega-schaukel/"
@@ -77,7 +77,7 @@
     {
       id:"hangover-the-tower", name:"Hangover The Tower", "height": "85 m", "speedKmh": 90, "technicalSourceUrl": "https://www.ganz-muenchen.de/oktoberfest/fahrgeschaefte/modern/hangover-the-tower/freifallturm.html",  operator:"Schneider", operatorFull:"Schneider & Co. oHG (München)",
       new2026:false, manufacturer:"Funtime (A)", type:"Free Fall", year:2015,
-      dimensions:"21 × 18 × 85 m", capacity:"24 Personen", priceEuro:null,
+      dimensions:"21 × 18 × 85 m", capacity:"24 Personen", priceEuro:8,
       rideIndexUrl:"https://ride-index.de/2015/07/19/hangover/",
       imageUrl:"https://images.coasterpedia.net/thumb/f/f9/HangOver_The_Tower_01.jpg/1000px-HangOver_The_Tower_01.jpg.webp",
       imageCredit:"Coasterpedia", imageSourceUrl:"https://coasterpedia.net/wiki/HangOver_The_Tower"
@@ -85,7 +85,7 @@
     {
       id:"heidi-the-coaster", name:"Heidi the Coaster", operator:"Schneider", operatorFull:"Schneider (Bielefeld/München)",
       new2026:false, manufacturer:"Reverchon (F)", type:"Spinning Coaster", year:2019,
-      dimensions:"42 × 22 × 13 m · 430 m Strecke", capacity:"40 Personen · 10 Gondeln", priceEuro:null,
+      dimensions:"42 × 22 × 13 m · 430 m Strecke", capacity:"40 Personen · 10 Gondeln", priceEuro:7,
       rideIndexUrl:"https://ride-index.de/2019/09/26/heidi-the-coaster/",
       imageUrl:"https://www.ummet-eck.de/Bilder/fotosets/1024/5-heidi-coaster-soest22-c-ummeteck-chr-schoen.jpg",
       imageCredit:"Ummet-Eck · Christian Schön", imageSourceUrl:"https://www.ummet-eck.de/"
@@ -93,7 +93,7 @@
     {
       id:"look-360", name:"Look 360°", operator:"Schneider", operatorFull:"F. T. Schneider GmbH (Soest)",
       new2026:false, manufacturer:"Funtime (A)", type:"Aussichtsturm", year:2024,
-      dimensions:"71 m hoch", capacity:"80 Personen · 4 Kabinen", priceEuro:null,
+      dimensions:"71 m hoch", capacity:"80 Personen · 4 Kabinen", priceEuro:8,
       rideIndexUrl:"https://ride-index.de/2024/07/14/look-schneider/",
       imageUrl:"https://look-panorama.com/_ipx/f_jpeg%26s_2048x1366/https%3A/cdn.cityoffer.net/generated/file-manager/cms-551/content/crop-focalpoint-0-5-0-5-1-2040-1360-look360panorama-personen-01-web.jpg",
       imageCredit:"LOOK 360° Panorama", imageSourceUrl:"https://look-panorama.com/"
@@ -101,7 +101,7 @@
     {
       id:"the-beast", name:"The Beast", operator:"Ahrend", operatorFull:"Frank Ahrend (Bremen)",
       new2026:false, manufacturer:"KMG (NL)", type:"Move It 24 2.0 (Nr. 2)", year:2021,
-      dimensions:"15 × 15 × 10 m", capacity:"24 Personen · 6 Gondeln", priceEuro:null,
+      dimensions:"15 × 15 × 10 m", capacity:"24 Personen · 6 Gondeln", priceEuro:6,
       rideIndexUrl:"https://ride-index.de/2024/12/06/the-beast-ahrend/",
       imageUrl:"https://i.postimg.cc/kG97LL3h/Lingen-25-38.jpg",
       imageCredit:"polypweb.eu", imageSourceUrl:"https://www.polypweb.eu/viewtopic.php?t=21618"
@@ -117,7 +117,7 @@
     {
       id:"hexentanz", name:"Hexentanz", operator:"Markmann", operatorFull:"Markmann (Bonn)",
       new2026:false, manufacturer:"Zierer (D)", type:"Hexentanz (Nr. 2)", year:1984,
-      dimensions:"23 × 25 × 16 m", capacity:null, priceEuro:null,
+      dimensions:"23 × 25 × 16 m", capacity:null, priceEuro:4.5,
       rideIndexUrl:"https://ride-index.de/2005/01/08/hexentanz/",
       imageUrl:"https://cdn.coaster.cloud/attractions/F9/2x/F92xXqWxBDSqZyNuhc7yWN.jpg?class=large",
       imageCredit:"coaster.cloud", imageSourceUrl:"https://coaster.cloud/"
@@ -125,7 +125,7 @@
     {
       id:"big-monster", name:"Big Monster", operator:"Krameyer", operatorFull:"Raoul Hermann Krameyer (Herford)",
       new2026:false, manufacturer:"Schwarzkopf (D)", type:"Monster 3", year:1981,
-      dimensions:"22 × 22,5 m", capacity:"50 Personen · 25 Gondeln", priceEuro:null,
+      dimensions:"22 × 22,5 m", capacity:"50 Personen · 25 Gondeln", priceEuro:5,
       rideIndexUrl:"https://ride-index.de/2005/01/04/big-monster/",
       imageUrl:"https://www.ummet-eck.de/Bilder/fotosets/1024/1-big-monster-rheinkirmes-c-ummeteck-christian-schoen.jpg",
       imageCredit:"Ummet-Eck · Christian Schön", imageSourceUrl:"https://www.ummet-eck.de/"
@@ -141,7 +141,7 @@
     {
       id:"jules-verne-tower", name:"Jules Verne Tower", operator:"Götzke", operatorFull:"Alexander Goetzke (München)",
       new2026:false, manufacturer:"Funtime (A)", type:"Starflyer / Kettenflieger", year:2017,
-      dimensions:"21 × 21 × 80 m", capacity:"32 Personen · 16 Gondeln", priceEuro:null,
+      dimensions:"21 × 21 × 80 m", capacity:"32 Personen · 16 Gondeln", priceEuro:7,
       rideIndexUrl:"https://ride-index.de/2017/04/19/jules-verne-tower/",
       imageUrl:"https://cdn.coaster.cloud/attractions/EJ/2w/EJ2wQPe3dNqCxMzNRSjcDc.jpg?class=large",
       imageCredit:"coaster.cloud", imageSourceUrl:"https://coaster.cloud/"
@@ -149,7 +149,7 @@
     {
       id:"shake-and-roll", name:"Shake & Roll", operator:"Schäfer", operatorFull:"Schäfer GmbH (Schwerte)",
       new2026:false, manufacturer:"Mondial (NL)", type:"Shake R5 (Nr. 1)", year:1991,
-      dimensions:"23 × 23 × 14 m", capacity:"40 Personen · 20 Gondeln", priceEuro:null,
+      dimensions:"23 × 23 × 14 m", capacity:"40 Personen · 20 Gondeln", priceEuro:5,
       rideIndexUrl:"https://ride-index.de/2005/01/13/shake-roll/",
       imageUrl:"https://www.ummet-eck.de/Bilder/fotosets/1024/9-shake-roll--simjue-2022-c-ummeteck-christian-schoen.jpg",
       imageCredit:"Ummet-Eck · Christian Schön", imageSourceUrl:"https://www.ummet-eck.de/"
@@ -288,6 +288,12 @@
       liveWaits:false,
       supportsPostedWait:false,
       sortMode:"configured",
+      comboTickets:[{
+        id:"hangover-heidi",
+        label:"Hangover + Heidi",
+        rideIds:["soest26-hangover-the-tower","soest26-heidi-the-coaster"],
+        priceEuro:12
+      }],
       specialMap:{
         title:"Kirmesplan 2026",
         subtitle:"Die roten Linkpunkte sitzen direkt an den Fahrgeschäften des offiziellen Plans.",

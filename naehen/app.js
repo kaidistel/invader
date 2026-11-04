@@ -461,6 +461,7 @@
   let globalArchiveRequest = 0;
   let achievements = {};
   let fairPrices = {};
+  let selectedFairTicket = "single";
   const pendingQueueStarts = new Map();
   let finishingQueue = false;
   let savingFairRide = false;
@@ -1350,6 +1351,9 @@
       duration: typeof row.wait_seconds === "number" ? row.wait_seconds * 1000 : null,
       status: row.status,
       priceEuro: row.price_euro === null || row.price_euro === undefined ? null : Number(row.price_euro),
+      ticketComboId: row.ticket_metadata?.comboId || null,
+      ticketComboRole: row.ticket_metadata?.role || null,
+      ticketPurchaseId: row.ticket_metadata?.purchaseId || null,
       parkDayId: row.park_day_id,
       synced: true
     };
@@ -1371,6 +1375,13 @@
       const key = keyFor(local), cloud = combined.get(key);
       if (!cloud || (hasFinishedSession(local) && !hasFinishedSession(cloud))) {
         combined.set(key, local);
+      } else {
+        // A cloud without ticket_metadata must not erase locally remembered combo purchases.
+        const merged = Object.assign({}, cloud);
+        for (const field of ["ticketComboId", "ticketComboRole", "ticketPurchaseId"]) {
+          if (!merged[field] && local[field]) merged[field] = local[field];
+        }
+        combined.set(key, merged);
       }
     });
     return Array.from(combined.values()).sort((a, b) => Number(a.startedAt || 0) - Number(b.startedAt || 0));
@@ -1390,16 +1401,29 @@
       ended_at: session.endedAt ? new Date(session.endedAt).toISOString() : null,
       wait_seconds: Number.isFinite(Number(session.duration)) && session.duration !== null
         ? Math.max(0, Math.round(session.duration / 1000)) : null,
-      status: session.status
+      status: session.status,
+      ...(session.ticketComboId ? {ticket_metadata:{
+        comboId:session.ticketComboId, role:session.ticketComboRole,
+        purchaseId:session.ticketPurchaseId || null
+      }} : {})
     };
   }
 
   async function saveFinishedToCloud(session, userId) {
     // Upsert, not a blind UPDATE: an earlier start-INSERT may have been delayed or lost.
     // .select() ensures a missing/unmodified row is NOT reported as a successful save.
-    const result = await supa.from("queue_sessions")
-      .upsert(cloudQueuePayload(session, userId), { onConflict: "id" })
+    const payload = cloudQueuePayload(session, userId);
+    let result = await supa.from("queue_sessions")
+      .upsert(payload, { onConflict: "id" })
       .select("id,status");
+    if (result.error && payload.ticket_metadata &&
+      /ticket_metadata|schema cache|unknown column/i.test(result.error.message || "")) {
+      // Existing Supabase installations keep working until the optional SQL migration runs.
+      delete payload.ticket_metadata;
+      result = await supa.from("queue_sessions")
+        .upsert(payload, { onConflict: "id" })
+        .select("id,status");
+    }
     if (result.error) throw result.error;
     if (!result.data?.some((row) => String(row.id) === String(session.id) && row.status === session.status)) {
       throw new Error("Fahrtabschluss wurde von der Datenbank nicht bestätigt");
@@ -1600,8 +1624,11 @@
     }
   }
 
-  function manualFairPrice(rideId) {
-    const value = Number(fairPrices?.[rideId]);
+  function manualFairPrice(priceKey) {
+    if (!Object.prototype.hasOwnProperty.call(fairPrices || {}, priceKey)) return null;
+    const raw = fairPrices[priceKey];
+    if (raw === null || raw === "" || raw === undefined) return null;
+    const value = Number(raw);
     return Number.isFinite(value) && value >= 0 ? value : null;
   }
 
@@ -1614,8 +1641,74 @@
     }) + " €";
   }
 
+  function defaultFairPrice(ride) {
+    const remembered = manualFairPrice(ride?.id);
+    if (remembered !== null) return remembered;
+    const configured = ride?.priceEuro;
+    return configured !== null && configured !== undefined && Number.isFinite(Number(configured)) &&
+      Number(configured) >= 0 ? Number(configured) : null;
+  }
+
   function ridePriceText(ride) {
-    return venueIsFair() ? "pro Fahrt eingeben" : "–";
+    if (!venueIsFair()) return "–";
+    const price = defaultFairPrice(ride);
+    return price === null ? "pro Fahrt eingeben" : formatEuro(price);
+  }
+
+  function fairComboForRide(rideId, parkSlug = activeParkSlug) {
+    return (PARKS[parkSlug]?.comboTickets || []).find(combo =>
+      Array.isArray(combo.rideIds) && combo.rideIds.includes(rideId)) || null;
+  }
+
+  // A combo purchase is attached to a completed ride; its partner ride is logged later.
+  // Do not count the partner's visit until it has actually happened.
+  function pendingFairCombo(rideId, combo) {
+    if (!parkDay || !combo) return null;
+    const redemptions = new Set(sessions
+      .filter(s => s.status === "ridden" && s.parkDayId === parkDay.id &&
+        s.ticketComboId === combo.id && s.ticketComboRole === "redeem")
+      .map(s => String(s.ticketPurchaseId)));
+    return sessions
+      .filter(s => s.status === "ridden" && s.parkDayId === parkDay.id &&
+        s.ticketComboId === combo.id && s.ticketComboRole === "purchase" &&
+        s.rideId !== rideId && !redemptions.has(String(s.id)))
+      .sort((a,b) => Number(a.startedAt) - Number(b.startedAt))[0] || null;
+  }
+
+  function fairTicketPrice(mode, ride, combo) {
+    if (mode === "redeem") return 0;
+    if (mode === "combo" && combo) {
+      return manualFairPrice("combo:" + combo.id) ?? Number(combo.priceEuro);
+    }
+    return defaultFairPrice(ride);
+  }
+
+  function updateFairTicketSelection(mode) {
+    if (!selectedRide || !venueIsFair()) return;
+    const combo = fairComboForRide(selectedRide.id);
+    const pending = pendingFairCombo(selectedRide.id, combo);
+    if (mode === "redeem" && !pending) mode = "single";
+    if (mode === "combo" && !combo) mode = "single";
+    selectedFairTicket = mode;
+    $("[data-fair-ticket]").forEach(button => {
+      button.classList.toggle("on", button.dataset.fairTicket === mode);
+      button.setAttribute("aria-pressed", String(button.dataset.fairTicket === mode));
+    });
+    const price = fairTicketPrice(mode, selectedRide, combo);
+    const input = $("#fairPriceInput");
+    if (input) input.value = price === null || !Number.isFinite(price) ? "" : price.toFixed(2).replace(".", ",");
+    const help = $("#fairTicketHint");
+    if (help) help.textContent = mode === "redeem"
+      ? "Der Kombipreis wurde bei der anderen Fahrt bezahlt. Hier werden 0,00 € erfasst – anpassbar."
+      : mode === "combo"
+        ? "12-€-Kombiticket als Vorschlag. Die andere Fahrt kannst du später kostenlos einlösen. Preis anpassbar."
+        : "Einzelfahrt. Den vorgeschlagenen Preis kannst du jederzeit ändern.";
+  }
+
+  function fairTicketNote(session) {
+    if (session.ticketComboRole === "purchase") return "Kombiticket gekauft";
+    if (session.ticketComboRole === "redeem") return "Kombiticket eingelöst";
+    return "";
   }
 
 
@@ -1685,6 +1778,7 @@
     const receiptPark = PARKS[slug] || {};
     const rows = sessionsForReceipt.map((session, index) => {
       const operator = operatorForSession(session, slug);
+      const ticketNote = fairTicketNote(session);
       const price = Number(session.priceEuro);
       const hasPrice = session.priceEuro !== null && session.priceEuro !== undefined &&
         session.priceEuro !== "" && Number.isFinite(price) && price >= 0;
@@ -1692,6 +1786,7 @@
         "<span class=\"fairReceiptQty\">" + String(index + 1).padStart(2, "0") + "</span>" +
         "<div><b>" + escapeHtml(session.rideName || "Fahrt") + "</b>" +
           (operator ? "<small class=\"fairReceiptOperator\">Schausteller: " + escapeHtml(operator) + "</small>" : "") +
+          (ticketNote ? "<small>" + escapeHtml(ticketNote) + "</small>" : "") +
           "<small>" + escapeHtml(rideTimeLabel(session)) + "</small></div>" +
         "<strong>" + escapeHtml(hasPrice ? formatEuro(price) : "PREIS FEHLT") + "</strong>" +
       "</div>";
@@ -1719,7 +1814,7 @@
         sessionsForReceipt.length + " Fahrt" + (sessionsForReceipt.length === 1 ? "" : "en") +
         (priced.length ? " · Ø " + escapeHtml(formatEuro(average)) + " / Fahrt" : "") +
         (missing ? "<br>" + missing + " Preis" + (missing === 1 ? "" : "e") + " fehlt/fehlen" : "") +
-        "<br>Fahrpreise wurden pro Fahrt manuell eingetragen." +
+        "<br>Fahrpreise basieren auf den je Fahrt gespeicherten Beträgen." +
         "<br><b>Danke fürs Nähen.</b>" +
       "</div></div>";
   }
@@ -1860,7 +1955,9 @@
       const sr = ride.singleRider ? "<span>👤 SR</span><span>·</span>" : "";
       const newBadge = ride.new2026 ? "<span class=\"rideBadgeNew\">✦ NEU 2026</span>" : "";
       const fair = venueIsFair();
-      const priceBadge = fair ? "<span class=\"ridePricePill\"><span>FAHRPREIS</span><b>" + escapeHtml(ridePriceText(ride)) + "</b></span>" : "";
+      const combo = fairComboForRide(ride.id);
+      const priceBadge = fair ? "<span class=\"ridePricePill\"><span>FAHRPREIS</span><b>" + escapeHtml(ridePriceText(ride)) + "</b></span>" +
+        (combo ? "<span class=\"rideComboPill\">Kombi " + escapeHtml(formatEuro(manualFairPrice("combo:" + combo.id) ?? combo.priceEuro)) + "</span>" : "") : "";
       const operatorLine = fair && ride.operator
         ? "Schausteller: " + ride.operator + " · " + ride.zone
         : ride.zone;
@@ -2339,6 +2436,7 @@
       const money = fairMoneySummary(entry.sessions);
       const chronological = entry.sessions.slice().sort((a,b) => Number(a.startedAt || 0) - Number(b.startedAt || 0));
       const timeline = chronological.map((session) => {
+        const ticketNote = fairTicketNote(session);
         const price = session.priceEuro === null || session.priceEuro === undefined
           ? "Preis fehlt" : formatEuro(session.priceEuro);
         const state = session.status === "ridden" ? "genäht" : session.status === "aborted" ? "vernäht" : "offen";
@@ -2346,6 +2444,7 @@
         return "<div class=\"archiveRideRow\"><div><b>" + escapeHtml(session.rideName) +
           "</b><small>" + escapeHtml(rideTimeLabel(session)) + " · " + escapeHtml(state) + "</small>" +
           (operator ? "<small class=\"archiveOperator\">Schausteller: " + escapeHtml(operator) + "</small>" : "") +
+          (ticketNote ? "<small>" + escapeHtml(ticketNote) + "</small>" : "") +
           "</div><div><b>" + escapeHtml(price) + "</b></div></div>";
       }).join("");
       detail.innerHTML =
@@ -2540,9 +2639,11 @@
         : (session.duration === null || session.duration === undefined ? "läuft" : minutesRounded(session.duration) + " min");
       const state = session.status === "ridden" ? "🧵 genäht" : session.status === "aborted" ? "💀 vernäht" : "⏱ läuft";
       const operator = operatorForSession(session, session.parkSlug || activeParkSlug);
+      const ticketNote = fairTicketNote(session);
       const deletable = !!parkDay && ["ridden","aborted"].includes(session.status) && (!active || String(active.id) !== String(session.id));
       return "<div class=\"logItem\"><div class=\"logEntryInfo\"><b>" + escapeHtml(session.rideName) + "</b>" +
         (operator ? "<small class=\"logOperator\">Schausteller: " + escapeHtml(operator) + "</small>" : "") +
+        (ticketNote ? "<small>" + escapeHtml(ticketNote) + "</small>" : "") +
         "<small>" + (venueIsFair(session.parkSlug || activeParkSlug) ? "Fahrt" : (session.type === "single" ? "👤 Single Rider" : "Regular")) + " · " +
         new Date(session.startedAt).toLocaleTimeString("de-DE", {hour:"2-digit",minute:"2-digit"}) +
         "</small></div><div class=\"logEntryActions\"><b>" + escapeHtml(duration) + "</b><small>" +
@@ -2555,6 +2656,12 @@
     if (!parkDay) return;
     const session = sessions.find(item => String(item.id) === String(sessionId));
     if (!session || (active && String(active.id) === String(session.id))) return;
+    if (session.ticketComboRole === "purchase" &&
+      sessions.some(s => s.status === "ridden" && s.ticketComboRole === "redeem" &&
+        String(s.ticketPurchaseId) === String(session.id))) {
+      toast("💶 Erst die Kombiticket-Einlösung löschen, danach den Kauf.");
+      return;
+    }
     if (!window.confirm('Eintrag „' + session.rideName + '“ wirklich löschen? Diese Fahrt wird aus dem laufenden Tag entfernt.')) return;
     const button = Array.from(document.querySelectorAll("[data-delete-log-id]")).find(el => el.dataset.deleteLogId === String(sessionId));
     if (button) button.disabled = true;
@@ -2656,12 +2763,29 @@
 
     const fairPriceField = $("#fairPriceField");
     const fairPriceInput = $("#fairPriceInput");
+    const fairTicketField = $("#fairTicketField");
     const fair = venueIsFair();
+    const combo = fair ? fairComboForRide(selectedRide.id) : null;
     if (fairPriceField) fairPriceField.classList.toggle("hidden", !fair);
+    if (fairTicketField) fairTicketField.classList.toggle("hidden", !combo);
     if (fairPriceInput) {
-      // Every fair ride gets a fresh, explicit price from the visitor.
-      // No cached/default price is prefilled because vouchers and prices can differ per ride.
-      fairPriceInput.value = "";
+      if (fair) {
+        const pending = pendingFairCombo(selectedRide.id, combo);
+        const single = $("[data-fair-ticket=\"single\"]");
+        const combined = $("[data-fair-ticket=\"combo\"]");
+        const redeem = $("[data-fair-ticket=\"redeem\"]");
+        if (single) single.textContent = "Einzelfahrt · " + ridePriceText(selectedRide);
+        if (combined && combo) combined.textContent = "Kombiticket · " +
+          formatEuro(manualFairPrice("combo:" + combo.id) ?? combo.priceEuro);
+        if (redeem) {
+          redeem.classList.toggle("hidden", !pending);
+          redeem.textContent = "Kombiticket einlösen · 0,00 €";
+        }
+        updateFairTicketSelection(pending ? "redeem" : "single");
+      } else {
+        selectedFairTicket = "single";
+        fairPriceInput.value = "";
+      }
     }
 
     const singleButton = $("[data-qtype=\"single\"]");
@@ -2683,6 +2807,13 @@
       input?.focus();
       return;
     }
+    const combo = fairComboForRide(selectedRide.id);
+    const ticketMode = combo ? selectedFairTicket : "single";
+    const pending = ticketMode === "redeem" ? pendingFairCombo(selectedRide.id, combo) : null;
+    if (ticketMode === "redeem" && !pending) {
+      toast("💶 Für diese Fahrt ist kein offenes Kombiticket vorhanden.");
+      return;
+    }
     savingFairRide = true;
     $("#startQueue").disabled = true;
     const timestamp = Date.now();
@@ -2695,6 +2826,9 @@
       type: "regular",
       posted: null,
       priceEuro: Math.round(price * 100) / 100,
+      ticketComboId: combo && ticketMode !== "single" ? combo.id : null,
+      ticketComboRole: combo && ticketMode !== "single" ? (ticketMode === "combo" ? "purchase" : "redeem") : null,
+      ticketPurchaseId: ticketMode === "redeem" ? pending.id : null,
       startedAt: timestamp,
       endedAt: timestamp,
       duration: null,
@@ -2702,6 +2836,8 @@
       parkDayId: parkDay.id,
       synced: false
     };
+    if (ticketMode === "single") fairPrices[selectedRide.id] = session.priceEuro;
+    if (combo && ticketMode === "combo") fairPrices["combo:" + combo.id] = session.priceEuro;
     // Store the completed ride BEFORE making a network request. No waiting state is created.
     sessions = [session, ...sessions];
     totalRideCount += 1;
@@ -2934,7 +3070,12 @@
 
     const fair = venueIsFair();
     const facts = [];
-    if (fair) facts.push(["Fahrpreis", "pro Fahrt manuell", "price"]);
+    if (fair) {
+      facts.push(["Fahrpreis", ridePriceText(ride), "price"]);
+      const combo = fairComboForRide(ride.id);
+      if (combo) facts.push(["Kombiticket · " + combo.label,
+        formatEuro(manualFairPrice("combo:" + combo.id) ?? combo.priceEuro), "price"]);
+    }
     if (ride.operatorFull || ride.operator) facts.push(["Schausteller", ride.operatorFull || ride.operator, "operator"]);
     if (ride.manufacturer) facts.push(["Hersteller", ride.manufacturer, ""]);
     if (ride.type) facts.push(["Typ", ride.type, ""]);
@@ -2972,7 +3113,7 @@
         ).join("") + "</div>" : "") +
       "<div class=\"rideFactGrid\">" + factHtml + "</div>" +
       (fair
-        ? "<div class=\"ridePriceNote\">Technikwerte nur aus belegten Quellen, keine Schätzwerte. Den tatsächlichen Fahrpreis trägst du bei jeder Fahrt neu ein.</div>"
+        ? "<div class=\"ridePriceNote\">Technikwerte nur aus belegten Quellen. Fahrpreise sind Vorschläge; du kannst sie bei jeder Fahrt ändern.</div>"
         : "") +
       (links.length ? "<div class=\"rideFactSources\">" + links.join("") + "</div>" : "");
 
@@ -3534,6 +3675,9 @@
 
     $("#parkDayBtn").addEventListener("click", () => parkDay ? endParkDay() : startParkDay());
     $("#startQueue").addEventListener("click", startQueue);
+    $("[data-fair-ticket]").forEach(button => {
+      button.addEventListener("click", () => updateFairTicketSelection(button.dataset.fairTicket));
+    });
     $("#boardBtn").addEventListener("click", () => finishSession("ridden"));
     $("#abortBtn").addEventListener("click", () => finishSession("aborted"));
     $("#queueBar").addEventListener("click", openActive);

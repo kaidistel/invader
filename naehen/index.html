@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="NÄHEN">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=138">
+  <link rel="stylesheet" href="./styles.css?v=139">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Staatliches&family=Stardos+Stencil:wght@400;700&family=Bangers&family=Bebas+Neue&family=Cinzel+Decorative:wght@400;700&family=Graduate&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
@@ -18,9 +18,9 @@
   <link href="https://fonts.cdnfonts.com/css/gang-of-three" rel="stylesheet">
   <link href="https://fonts.cdnfonts.com/css/old-london" rel="stylesheet">
   <link href="https://fonts2u.com/download/steampunk-machinery-fon-regular.font-face" rel="stylesheet">
-  <link rel="stylesheet" href="./portals.css?v=138">
+  <link rel="stylesheet" href="./portals.css?v=139">
   <title>NÄHEN · Parkday Companion</title>
-  <link rel="stylesheet" href="./ride-3d.css?v=138">
+  <link rel="stylesheet" href="./ride-3d.css?v=139">
 </head>
 <body>
   <div class="parkAtmosphere" aria-hidden="true"></div>
@@ -278,10 +278,19 @@
         <label>ANGEZEIGTE WARTEZEIT (OPTIONAL)</label>
         <input id="postedWait" inputmode="numeric" type="number" min="0" placeholder="z. B. 30">
       </div>
+      <div class="form hidden" id="fairTicketField">
+        <label>TICKETART</label>
+        <div class="fairTicketOptions" role="group" aria-label="Ticketart auswählen">
+          <button type="button" data-fair-ticket="single">Einzelfahrt</button>
+          <button type="button" data-fair-ticket="combo">Kombiticket</button>
+          <button type="button" data-fair-ticket="redeem" class="hidden">Kombiticket einlösen</button>
+        </div>
+        <div class="mini fairTicketHint" id="fairTicketHint"></div>
+      </div>
       <div class="form hidden fairPriceField" id="fairPriceField">
-        <label for="fairPriceInput">FAHRPREIS (€) · MANUELL</label>
+        <label for="fairPriceInput">FAHRPREIS (€) · ÄNDERBAR</label>
         <input id="fairPriceInput" inputmode="decimal" type="text" autocomplete="off" placeholder="z. B. 8,00">
-        <div class="mini fairPriceHint">Pflichtfeld auf der Kirmes · NÄHEN recherchiert oder übernimmt keinen Preis automatisch.</div>
+        <div class="mini fairPriceHint">Richtpreis vorausgefüllt, sofern bekannt. Prüfe den tatsächlich gezahlten Betrag; Änderungen sind jederzeit möglich.</div>
       </div>
       <button class="btn primary full" id="startQueue">🧵 ANSTELLEN & TIMER STARTEN</button>
     </div>
@@ -333,27 +342,27 @@
   </section>
 
   <script defer src="./config.js"></script>
-  <script defer src="./movie-park-config.js?v=138"></script>
-  <script defer src="./walibi-holland-config.js?v=138"></script>
-  <script defer src="./walibi-belgium-config.js?v=138"></script>
-  <script defer src="./europa-park-config.js?v=138"></script>
-  <script defer src="./hansa-park-config.js?v=138"></script>
-  <script defer src="./soest-allerheiligenkirmes-2026-config.js?v=138"></script>
-  <script defer src="./bocholt-kirmes-2026-config.js?v=138"></script>
-  <script defer src="./salzbergen-herbstkirmes-2026-config.js?v=138"></script>
-  <script defer src="./rheine-herbstkirmes-2026-config.js?v=138"></script>
-  <script defer src="./muenster-herbstsend-2026-config.js?v=138"></script>
-  <script defer src="./gallimarkt-leer-2026-config.js?v=138"></script>
-  <script defer src="./hamburg-winterdom-2026-config.js?v=138"></script>
-  <script defer src="./bremer-freimarkt-2026-config.js?v=138"></script>
-  <script defer src="./nordhorn-herbstkirmes-2026-config.js?v=138"></script>
-  <script defer src="./hochheimer-markt-2026-config.js?v=138"></script>
-  <script defer src="./cranger-weihnachtszauber-2026-config.js?v=138"></script>
-  <script defer src="./meppen-herbstkirmes-2026-config.js?v=138"></script>
-  <script defer src="./koeln-deutz-herbstvolksfest-2026-config.js?v=138"></script>
-  <script defer src="./osnabrueck-herbstjahrmarkt-2026-config.js?v=138"></script>
+  <script defer src="./movie-park-config.js?v=139"></script>
+  <script defer src="./walibi-holland-config.js?v=139"></script>
+  <script defer src="./walibi-belgium-config.js?v=139"></script>
+  <script defer src="./europa-park-config.js?v=139"></script>
+  <script defer src="./hansa-park-config.js?v=139"></script>
+  <script defer src="./soest-allerheiligenkirmes-2026-config.js?v=139"></script>
+  <script defer src="./bocholt-kirmes-2026-config.js?v=139"></script>
+  <script defer src="./salzbergen-herbstkirmes-2026-config.js?v=139"></script>
+  <script defer src="./rheine-herbstkirmes-2026-config.js?v=139"></script>
+  <script defer src="./muenster-herbstsend-2026-config.js?v=139"></script>
+  <script defer src="./gallimarkt-leer-2026-config.js?v=139"></script>
+  <script defer src="./hamburg-winterdom-2026-config.js?v=139"></script>
+  <script defer src="./bremer-freimarkt-2026-config.js?v=139"></script>
+  <script defer src="./nordhorn-herbstkirmes-2026-config.js?v=139"></script>
+  <script defer src="./hochheimer-markt-2026-config.js?v=139"></script>
+  <script defer src="./cranger-weihnachtszauber-2026-config.js?v=139"></script>
+  <script defer src="./meppen-herbstkirmes-2026-config.js?v=139"></script>
+  <script defer src="./koeln-deutz-herbstvolksfest-2026-config.js?v=139"></script>
+  <script defer src="./osnabrueck-herbstjahrmarkt-2026-config.js?v=139"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script defer src="./app.js?v=138"></script>
-  <script type="module" src="./ride-3d.js?v=138"></script>
+  <script defer src="./app.js?v=139"></script>
+  <script type="module" src="./ride-3d.js?v=139"></script>
 </body>
 </html>
