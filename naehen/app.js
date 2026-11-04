@@ -1690,7 +1690,7 @@
     if (mode === "redeem" && !pending) mode = "single";
     if (mode === "combo" && !combo) mode = "single";
     selectedFairTicket = mode;
-    $("[data-fair-ticket]").forEach(button => {
+    $$("[data-fair-ticket]").forEach(button => {
       button.classList.toggle("on", button.dataset.fairTicket === mode);
       button.setAttribute("aria-pressed", String(button.dataset.fairTicket === mode));
     });
@@ -3675,7 +3675,7 @@
 
     $("#parkDayBtn").addEventListener("click", () => parkDay ? endParkDay() : startParkDay());
     $("#startQueue").addEventListener("click", startQueue);
-    $("[data-fair-ticket]").forEach(button => {
+    $$("[data-fair-ticket]").forEach(button => {
       button.addEventListener("click", () => updateFairTicketSelection(button.dataset.fairTicket));
     });
     $("#boardBtn").addEventListener("click", () => finishSession("ridden"));
