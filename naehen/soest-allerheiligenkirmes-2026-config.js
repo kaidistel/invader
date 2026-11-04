@@ -45,7 +45,7 @@
     {
       id:"big-bamboo", name:"Big Bamboo", operator:"Hempen", operatorFull:"Hempen oHG (Oldenburg)",
       new2026:true, manufacturer:"Dietz (D)", type:"Laufgeschäft", year:2011,
-      dimensions:"22,5 × 13 × 16 m", capacity:null, priceEuro:null,
+      dimensions:"22,5 × 13 × 16 m", capacity:null, priceEuro:5,
       rideIndexUrl:"https://ride-index.de/2011/07/16/big-bamboo-hempen/",
       imageUrl:"./assets/soest-big-bamboo.webp",
       imageCredit:"Kermisplanner.nl", imageSourceUrl:"https://kermisplanner.nl/en/attraction/big-bamboo-sbOMEqfV"
@@ -91,7 +91,7 @@
       imageCredit:"Ummet-Eck · Christian Schön", imageSourceUrl:"https://www.ummet-eck.de/"
     },
     {
-      id:"look-360", name:"Look 360°", operator:"Schneider", operatorFull:"F. T. Schneider GmbH (Soest)",
+      id:"look-360", name:"Look 360° Panorama", operator:"Schneider", operatorFull:"F. T. Schneider GmbH (Soest)",
       new2026:false, manufacturer:"Funtime (A)", type:"Aussichtsturm", year:2024,
       dimensions:"71 m hoch", capacity:"80 Personen · 4 Kabinen", priceEuro:8,
       rideIndexUrl:"https://ride-index.de/2024/07/14/look-schneider/",
@@ -109,7 +109,7 @@
     {
       id:"nessy", name:"Nessy", operator:"Markmann", operatorFull:"Hans-Peter Markmann (Bonn)",
       new2026:false, manufacturer:"Kalbfleisch (D)", type:"Großschaukel", year:1978,
-      dimensions:"22 × 9 m", capacity:"50 Personen", priceEuro:null,
+      dimensions:"22 × 9 m", capacity:"50 Personen", priceEuro:4.5,
       rideIndexUrl:"https://ride-index.de/2005/01/11/nessy/",
       imageUrl:"https://www.medienwerkstatt-online.de/lws_wissen/bilder/35984-1.jpg",
       imageCredit:"Medienwerkstatt Mühlacker", imageSourceUrl:"https://www.medienwerkstatt-online.de/lws_wissen/vorlagen/showcard.php?id=35984"
@@ -133,7 +133,7 @@
     {
       id:"intoxx", name:"Intoxx", "height": "22 m", "technicalSourceUrl": "https://data.coaster.cloud/de/attractions/ddc711c3-intoxx",  operator:"Benning", operatorFull:"Benning (Theine)",
       new2026:false, manufacturer:"Fabbri (I)", type:"Kamikaze III", year:2003,
-      dimensions:"18,5 × 5 × 22 m", capacity:"16 Personen", priceEuro:null,
+      dimensions:"18,5 × 5 × 22 m", capacity:"16 Personen", priceEuro:6,
       rideIndexUrl:"https://ride-index.de/2009/09/02/intoxx/",
       imageUrl:"https://cdn.coaster.cloud/attractions/HE/qD/HEqDcFZqi17XJt82yfZDri.jpg?class=large",
       imageCredit:"coaster.cloud", imageSourceUrl:"https://coaster.cloud/"
@@ -157,7 +157,7 @@
     {
       id:"musik-express", name:"Musik Express", operator:"Schneider/Krause", operatorFull:"Eduard Krause KG (Bielefeld) · ehem. Schneider-Krause",
       new2026:false, manufacturer:"Mack (D)", type:"2-Säulen-Musik-Express / Berg- und Talbahn", year:1979,
-      dimensions:"20 × 18 × 7 m", capacity:"60 Personen · 20 Gondeln", priceEuro:null,
+      dimensions:"20 × 18 × 7 m", capacity:"60 Personen · 20 Gondeln", priceEuro:4.5,
       rideIndexUrl:"https://ride-index.de/2005/01/10/musik-express-schneider-krause/",
       imageUrl:"https://www.ummet-eck.de/Bilder/fotosets/1024/me-schneider-krause-puetzchens23-c-UMM-c-schoen-1.jpg",
       imageCredit:"Ummet-Eck · Christian Schön", imageSourceUrl:"https://www.ummet-eck.de/"
@@ -165,15 +165,15 @@
     {
       id:"aqua-velis", name:"Aqua Velis", operator:"Hofmann", operatorFull:"Hannes Hofmann (Rudolstadt)",
       new2026:false, manufacturer:"Dietz (D)", type:"3-Etagen-Laufgeschäft", year:1996,
-      dimensions:"20 × 11 × 14 m", capacity:null, priceEuro:null,
+      dimensions:"20 × 11 × 14 m", capacity:null, priceEuro:5,
       rideIndexUrl:"https://ride-index.de/2005/01/03/aqua-velis/",
       imageUrl:"https://www.ummet-eck.de/Bilder/fotosets/1024/1-aqua-velis-rheinkirmes22-c-UMM-chr-schoen.jpg",
       imageCredit:"Ummet-Eck · Christian Schön", imageSourceUrl:"https://www.ummet-eck.de/"
     },
     {
-      id:"wellenflieger", name:"Wellenflieger", operator:"Wendler", operatorFull:"Wendler (Unna)",
+      id:"wellenflieger", name:"Wellenflug", operator:"Wendler", operatorFull:"Wendler (Unna)",
       new2026:false, manufacturer:"Zierer (D)", type:"Wellenflug / Kettenflieger", year:1988,
-      dimensions:null, capacity:"48 Personen", priceEuro:null,
+      dimensions:null, capacity:"48 Personen", priceEuro:4.5,
       rideIndexUrl:"https://ride-index.de/2005/01/14/wellenflug-wendler/",
       imageUrl:"https://www.ummet-eck.de/Bilder/fotosets/1024/3-wellenflieger-simjue22-c-ummeteck-chr-schoen.jpg",
       imageCredit:"Ummet-Eck · Christian Schön", imageSourceUrl:"https://www.ummet-eck.de/"
@@ -181,7 +181,7 @@
     {
       id:"highway-no-1", name:"Highway No. 1", operator:"Schneider", operatorFull:"Johann Schneider & Sohn (Münster)",
       new2026:false, manufacturer:null, type:"2-Säulen-Skooter", year:null,
-      dimensions:"Fahrbahn 30 × 16 m", capacity:null, priceEuro:null,
+      dimensions:"Fahrbahn 30 × 16 m", capacity:null, priceEuro:4,
       rideIndexUrl:"https://ride-index.de/2007/07/11/as-schneider-johann-1/",
       imageUrl:"https://www.ummet-eck.de/Bilder/fotosets/678/1-highwayno1-herbstsend22-c-ummeteck-chr-schoen.jpg",
       imageCredit:"Ummet-Eck · Christian Schön", imageSourceUrl:"https://www.ummet-eck.de/"
@@ -189,10 +189,135 @@
     {
       id:"fahrt-zur-hoelle", name:"Fahrt zur Hölle", operator:"Fellerhoff", operatorFull:"Hermann Fellerhoff & Söhne (Düsseldorf / Bedburg/Erft)",
       new2026:false, manufacturer:"Arcadia (I)", type:"Geisterbahn", year:2001,
-      dimensions:"29 × 14,5 × 14 m", capacity:null, priceEuro:null,
+      dimensions:"29 × 14,5 × 14 m", capacity:null, priceEuro:6,
       rideIndexUrl:"https://ride-index.de/2005/01/06/fahrt-zur-hoelle/",
       imageUrl:"https://www.fellerhoff-geisterbahn.de/gallery/20250718_113412.jpg",
       imageCredit:"Fellerhoff Geisterbahn", imageSourceUrl:"https://www.fellerhoff-geisterbahn.de/"
+    },
+    {
+      id:"petersburger-schlittenfahrt",
+      name:"Petersburger Schlittenfahrt",
+      operator:"Burgdorf",
+      operatorFull:"Peter Burgdorf & Söhne",
+      manufacturer:"Mack (D)",
+      type:"2-Säulen-Schlittenfahrt",
+      year:1976,
+      dimensions:"19,7 × 18,2 m",
+      capacity:"40 Personen · 20 Gondeln",
+      technicalSourceUrl:"https://volksfestefinder.de/fahrgeschaeft/petersburger-schlittenfahrt-burgdorf",
+      imageUrl:"https://kermisplanner.nl/uploads/attractions/attraction-petersburger-schlittenfahrt/1676666248_6e02197cd6f4f62643e4.jpg",
+      imageCredit:"Kermisplanner.nl",
+      imageSourceUrl:"https://kermisplanner.nl/de/attraktion/petersburger-schlittenfahrt-qlQriTbX",
+      new2026:false,
+      priceEuro:4.5
+    },
+    {
+      id:"big-wave",
+      name:"Big Wave",
+      operator:"Milz",
+      operatorFull:"Dieter Milz (Engelskirchen)",
+      manufacturer:"KMG (NL)",
+      type:"Scheibenwischer",
+      capacity:"18 Personen",
+      rideIndexUrl:"https://ride-index.de/2008/01/30/big-wave-milz/",
+      imageUrl:"https://kermisplanner.nl/uploads/attractions/attraction-big-wave/1675635907_13caa353796cbfa59cd7.jpg",
+      imageCredit:"Kermisplanner.nl",
+      imageSourceUrl:"https://kermisplanner.nl/nl/attractie/big-wave-viFh69Mf",
+      new2026:false,
+      year:null,
+      dimensions:null,
+      priceEuro:4
+    },
+    {
+      id:"super-hupferl",
+      name:"Super Hupferl",
+      operator:"Kollmann",
+      operatorFull:"Martin Kollmann (Pfarrkirchen)",
+      manufacturer:"Höpler (D)",
+      type:"Schunkler",
+      dimensions:"15 × 15 × 9 m",
+      rideIndexUrl:"https://ride-index.de/2005/01/13/super-hupferl/",
+      imageUrl:"https://www.kirmesecke.de/Bilder/fotosets/1024/super-hupferl-soest2023-c-UMM-schoen-1.jpg",
+      imageCredit:"Kirmesecke · Christian Schön",
+      imageSourceUrl:"https://www.kirmesecke.de/bildgalerien/290-Super-Hupferl-Kollmann-Fahrgeschaeft-auf-der-Kirmes-bild-8657/",
+      new2026:false,
+      year:null,
+      capacity:null,
+      priceEuro:5
+    },
+    {
+      id:"spassstadl",
+      name:"Spaßstadl",
+      operator:"Renz",
+      operatorFull:"Nicola und Georgina Renz",
+      new2026:true,
+      manufacturer:"Alestechnic (CZ) · Rohbau",
+      type:"3-Etagen-Laufgeschäft",
+      year:2025,
+      dimensions:"20 × 7 × 11 m",
+      rideIndexUrl:"https://ride-index.de/2025/12/23/spassstadl/",
+      capacity:null,
+      priceEuro:5
+    },
+    {
+      id:"poco-loco",
+      name:"Poco Loco",
+      operator:"Schultze",
+      operatorFull:"Maximilian Schultze",
+      new2026:true,
+      manufacturer:"Dietz (D)",
+      type:"Interaktives Laufgeschäft / Irrgarten",
+      year:2026,
+      dimensions:"18 × 7 × 8 m",
+      technicalSourceUrl:"https://volksfestefinder.de/fahrgeschaeft/poco-loco-schultze",
+      imageUrl:"https://www.fronleichnamskirmes.de/files/2/1/2517/5071_sth1_poco_loco_a_sterkrader_fronleichnamskirmes.jpg",
+      imageCredit:"Sterkrader Fronleichnamskirmes",
+      imageSourceUrl:"https://www.fronleichnamskirmes.de/attraktionen/attraktionen-uebersicht.php?cat=1",
+      capacity:null,
+      priceEuro:5
+    },
+    {
+      id:"havanna",
+      name:"Havanna",
+      operator:"Hartmann",
+      operatorFull:"Dennis Hartmann",
+      type:"Fun Garage / Laufgeschäft",
+      new2026:false,
+      year:null,
+      dimensions:null,
+      capacity:null,
+      priceEuro:3.5
+    },
+    {
+      id:"looping-the-loop",
+      name:"Looping the Loop",
+      operator:"Marquis",
+      operatorFull:"Marquis & Sohn",
+      manufacturer:"Achtendung (D)",
+      type:"Überschlagschaukel",
+      year:1931,
+      dimensions:"18 × 8 × 6,5 m",
+      capacity:"16 Personen · 8 Käfiggondeln",
+      rideIndexUrl:"https://ride-index.de/2005/04/05/looping-the-loop-marquis/",
+      imageUrl:"https://historische-gesellschaft.org/media/k2/items/cache/bc5983b67a44bcede801e2ff363b54e0_XL.jpg",
+      imageCredit:"Historische Gesellschaft Deutscher Schausteller",
+      imageSourceUrl:"https://historische-gesellschaft.org/historie/loopingtheloop",
+      new2026:false,
+      priceEuro:4
+    },
+    {
+      id:"ballon-voyage",
+      name:"Ballon Voyage",
+      operator:"Markmann",
+      operatorFull:"Vanessa Markmann (Bonn)",
+      new2026:true,
+      manufacturer:"Wooddesign (NL)",
+      type:"Ballonfahrt",
+      year:2022,
+      dimensions:"14,5 × 10 × 14,5 m",
+      capacity:"32 Personen · 8 Gondeln",
+      rideIndexUrl:"https://ride-index.de/2022/12/10/ballon-voyage-de-weijer/",
+      priceEuro:3.5
     }
   ];
 
@@ -225,7 +350,15 @@
     "aqua-velis":{label:"AQUA VELIS · HOFMANN",line:"Dreistöckiges Dietz-Laufgeschäft mit Wasser-, Geschicklichkeits- und Überraschungselementen."},
     "wellenflieger":{label:"WELLENFLIEGER · WENDLER",line:"Zierer Wellenflug mit 48 Plätzen: klassische Kettenflieger-Runde zwischen Rathaus und St. Patrokli."},
     "highway-no-1":{label:"HIGHWAY NO. 1 · SCHNEIDER",line:"Zwei-Säulen-Autoscooter mit großer Fahrbahn – klassischer Treffpunkt für freie Runden und Rempler."},
-    "fahrt-zur-hoelle":{label:"FAHRT ZUR HÖLLE · FELLERHOFF",line:"Große transportable Geisterbahn mit aufwendig gestalteter Fassade und klassischer Fahrt durch mehrere Gruselszenen."}
+    "fahrt-zur-hoelle":{label:"FAHRT ZUR HÖLLE · FELLERHOFF",line:"Große transportable Geisterbahn mit aufwendig gestalteter Fassade und klassischer Fahrt durch mehrere Gruselszenen."},
+    "petersburger-schlittenfahrt":{label:"PETERSBURGER SCHLITTENFAHRT · BURGDORF",line:"Winterliche Fassaden, schwebende Schlitten und Berg-und-Tal-Runden mit frei schwingenden Gondeln."},
+    "big-wave":{label:"BIG WAVE · MILZ",line:"Tropisches Strand-Design und eine Sitzreihe, die als Scheibenwischer hin und her schwingt."},
+    "super-hupferl":{label:"SUPER HUPFERL · KOLLMANN",line:"Bayerische Gaudi mit kreisender und schwingender Fahrt – Schunkler-Feeling in Soest."},
+    "spassstadl":{label:"SPASSSTADL · RENZ · NEU 2026",line:"Dreistöckiges Funhouse im alpenländischen Stil, mit Überraschungen auf mehreren Ebenen."},
+    "poco-loco":{label:"POCO LOCO · SCHULTZE · NEU 2026",line:"Farbenfrohe Fiesta als interaktives Laufgeschäft: Hindernisse, Irrgarten und Sammelpunkte."},
+    "havanna":{label:"HAVANNA · HARTMANN",line:"Karibisch inspiriertes Laufgeschäft: unterwegs durch die Havanna Fun Garage."},
+    "looping-the-loop":{label:"LOOPING THE LOOP · MARQUIS",line:"Historische Loopingschaukel: Mit Timing und Gewichtsverlagerung aus eigener Kraft bis zum Überschlag."},
+    "ballon-voyage":{label:"BALLON VOYAGE · MARKMANN · NEU 2026",line:"Nostalgische Ballongondeln schweben auf einer familienfreundlichen Rundfahrt."}
   };
 
   const rideByRawId = Object.fromEntries(rawRides.map((ride) => [ride.id, ride]));
@@ -261,7 +394,15 @@
     "aqua-velis":{fontFamily:"'Zen Tokyo Zoo', sans-serif",theme:"fair-aqua"},
     "wellenflieger":{fontFamily:"'Diplomata SC', serif",theme:"fair-wellenflieger"},
     "highway-no-1":{fontFamily:"'Bungee', sans-serif",theme:"fair-highway"},
-    "fahrt-zur-hoelle":{fontFamily:"'Pirata One', serif",theme:"fair-hoelle"}
+    "fahrt-zur-hoelle":{fontFamily:"'Pirata One', serif",theme:"fair-hoelle"},
+    "petersburger-schlittenfahrt":{fontFamily:"'Stardos Stencil', serif",theme:"fair-petersburg"},
+    "big-wave":{fontFamily:"'Bungee', sans-serif",theme:"fair-big-wave"},
+    "super-hupferl":{fontFamily:"'Bangers', cursive",theme:"fair-super-hupferl"},
+    "spassstadl":{fontFamily:"'Almendra Display', serif",theme:"fair-spassstadl"},
+    "poco-loco":{fontFamily:"'Chango', cursive",theme:"fair-poco-loco"},
+    "havanna":{fontFamily:"'Diplomata SC', serif",theme:"fair-havanna"},
+    "looping-the-loop":{fontFamily:"'Cormorant Unicase', serif",theme:"fair-looping-loop"},
+    "ballon-voyage":{fontFamily:"'Playfair Display', serif",theme:"fair-ballon-voyage"}
   };
 
   const prefix = (id) => "soest26-" + id;
@@ -300,7 +441,7 @@
         sourceLabel:"Originalplan als PDF öffnen",
         sourceUrl:"https://www.so-ist-soest.de/de-wAssets/docs/veranstaltungen/Allerheiligenkirmes/Allerheiligenkirmes-Soest-Programmplan-2026.pdf",
         imageUrl:"./assets/soest-allerheiligenkirmes-2026-lageplan.png",
-        note:"Originaler Soester Lageplan 2026. Linkpunkt antippen → NÄHEN-Detailansicht.",
+        note:"Originaler Soester Lageplan 2026. Linkpunkte für 24 Geschäfte; alle 32 findest du in der Liste.",
         aspectRatio:"1310 / 1841",
         points:[
           {rideId:"soest26-eyecatcher",x:25.95,y:4.62},
@@ -330,7 +471,7 @@
         ]
       },
       cardImage:"./assets/soest-background.jpg",
-      cardCopy:"24 Fahrgeschäfte · 8 Neuheiten · fünf Tage Kirmes mitten in der Soester Altstadt.",
+      cardCopy:"32 Fahr- und Laufgeschäfte · 11 Neuheiten · fünf Tage Kirmes mitten in der Soester Altstadt.",
       noLiveLabel:"KIRMES · KEINE LIVE-WARTEZEITEN",
       noLiveMessage:"Auf der Soester Allerheiligenkirmes gibt es keine öffentlichen Live-Wartezeiten. NÄHEN misst stattdessen deine persönliche Queue.",
       noLiveAlarmMessage:"Für Kirmessen ohne öffentliche Wartezeitdaten sind Wartezeit-Alarme deaktiviert.",
