@@ -65,6 +65,33 @@ Deno.serve(async (req: Request) => {
     const admin = account?.user?.app_metadata?.naehen_role === "admin";
     const payload = await req.json().catch(() => ({}));
     if (payload.action === "status") return respond({ admin });
+    if (payload.action === "register-device") {
+      // Re-bind a browser's existing push subscription after an account switch.
+      // The original client-side upsert could fail RLS when another account
+      // previously owned the same unique endpoint on this device.
+      const endpoint = payload.endpoint;
+      const p256dh = payload.p256dh;
+      const authKey = payload.authKey;
+      let parsed: URL;
+      try { parsed = new URL(String(endpoint)); }
+      catch { return respond({ error: "Ungültiger Push-Endpunkt" }, 400); }
+      if (parsed.protocol !== "https:" || !valid(endpoint, 2048) ||
+          !valid(p256dh, 512) || !valid(authKey, 512) ||
+          !/^[A-Za-z0-9_-]{20,}$/.test(p256dh) || !/^[A-Za-z0-9_-]{10,}$/.test(authKey)) {
+        return respond({ error: "Push-Abonnement unvollständig" }, 400);
+      }
+      const { data: saved, error } = await db.from("push_subscriptions").upsert({
+        user_id: senderId,
+        endpoint, p256dh, auth: authKey,
+        user_agent: typeof payload.userAgent === "string" ? payload.userAgent.slice(0, 512) : "",
+        updated_at: new Date().toISOString()
+      }, { onConflict: "endpoint" }).select("id,user_id").single();
+      if (error) throw error;
+      if (saved?.user_id !== senderId) throw new Error("Push subscription was not saved for this account");
+      return respond({ registered: true });
+    }
+
+
     if (payload.action === "test-push") {
       // A signed-in user may test ONLY their own registered push subscription.
       // The message goes through the real push transport, not Notification() on this page.
