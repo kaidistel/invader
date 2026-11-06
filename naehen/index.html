@@ -243,7 +243,17 @@
         <label class="announceLabel" for="announcementTitle">TITEL</label>
         <input id="announcementTitle" maxlength="72" value="📯 NÄHEN-Zentrale" type="text">
         <label class="announceLabel" for="announcementBody">NACHRICHT</label>
-        <textarea id="announcementBody" rows="4" maxlength="240" placeholder="Deine persönliche Durchsage …"></textarea>
+        <textarea id="announcementBody" rows="4" maxlength="240" placeholder="Deine persönliche Durchsage … (bei Bildern optional)"></textarea>
+        <div class="announcementImageComposer">
+          <label for="announcementImageFile" class="announcementImagePicker">📷 BILD HINZUFÜGEN</label>
+          <input type="file" id="announcementImageFile" accept="image/*" hidden>
+          <p class="mini">Fotos werden automatisch verkleinert und privat gespeichert.</p>
+          <div id="announcementImagePreviewWrap" class="announcementImagePreview hidden">
+            <img id="announcementImagePreview" alt="Vorschau des ausgewählten Bildes">
+            <button type="button" class="btn ghost" id="announcementImageRemove">✕ BILD ENTFERNEN</button>
+          </div>
+          <p class="mini" id="announcementImageStatus" role="status"></p>
+        </div>
         <button class="btn primary full" id="announcementSend" disabled type="button">🧵 DURCHSAGE SENDEN</button>
         <p class="mini" id="announcementAdminStatus" role="status">Admin-Zugang wird geprüft …</p>
       </div>
