@@ -1969,3 +1969,25 @@ background:#20172aab;color:#ffe2b0;font:700 10px/1.25 'Barlow Condensed',system-
 /* v142: Disallow retired 3D models from old installed Phantasialand builds.
    Covers Taron, Black Mamba and Chiapas without affecting ordinary ride photos. */
 #rideSheet[data-park="phantasialand"] .ride3d{display:none!important;visibility:hidden!important}
+
+/* NÄHEN · Private personal announcements (v143) */
+.announceToggle{display:flex;align-items:center;gap:12px;margin:14px 0 8px;
+  padding:13px 12px;border:1px solid #ebb57960;border-radius:12px;
+  background:linear-gradient(120deg,#312641,#1a293a);color:#ffe7ba;font-weight:750}
+.announceToggle input{appearance:auto;accent-color:#f5b867;width:21px;height:21px;flex:0 0 auto}
+.announcementHeader,.announcementItemHead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.announcementHeader{margin:16px 0 10px}
+.announcementLabel{display:block;margin:12px 0 6px;letter-spacing:.08em;font-weight:800;font-size:12px;color:#f4c78b}
+#announcementAdminPanel select,#announcementAdminPanel input,#announcementAdminPanel textarea{
+  display:block;width:100%;max-width:100%;box-sizing:border-box;padding:12px 13px;border:1px solid #bcad9966;
+  border-radius:9px;background:#111925;color:#f5f3ea;font:500 15px/1.4 system-ui,sans-serif}
+#announcementAdminPanel select:disabled{opacity:.6}
+#announcementAdminPanel textarea{resize:vertical;min-height:106px}
+#announcementReloadRecipients{margin-top:10px}
+#announcementSend{margin-top:15px}
+#announcementAdminPanel .mini,#announcementConsentStatus{overflow-wrap:anywhere;line-height:1.45}
+.announcementItem{border:1px solid #c8b7a43f;border-radius:12px;padding:12px;margin:9px 0;
+  background:linear-gradient(120deg,#172332,#272036)}
+.announcementItemHead b{color:#ffe2af}
+.announcementItemHead small{color:#b6bbc8;font-size:11px}
+.announcementItem p{white-space:pre-wrap;overflow-wrap:anywhere;margin:7px 0 0}
