@@ -227,6 +227,27 @@
         <p class="meta">Persönliche Wartezeitlimits, Drops, Wiedereröffnungen und SR-Community-Meldungen.</p>
         <button class="btn secondary full" id="pushSettingsBtn">NÄH-ALARME EINSTELLEN</button>
       </div>
+      <div class="profileBox" id="announcementsPreferences">
+        <h3>📯 Persönliche Durchsagen</h3>
+        <p class="meta">Du entscheidest, ob du persönliche Nachrichten der NÄHEN-Zentrale erhalten möchtest. Standardmäßig deaktiviert.</p>
+        <label class="announceToggle"><input id="announcementConsent" type="checkbox" disabled> Persönliche Durchsagen erlauben</label>
+        <p class="mini" id="announcementConsentStatus" role="status">Einstellungen laden …</p>
+        <div class="announcementHeader"><b>📬 Nachrichten</b><button class="btn secondary compact" id="announcementRefresh" type="button">AKTUALISIEREN</button></div>
+        <div id="announcementInbox" aria-live="polite"></div>
+      </div>
+      <div class="profileBox hidden" id="announcementAdminPanel">
+        <h3>🚨 NÄHEN-Zentrale · Admin</h3>
+        <p class="meta">Eine persönliche Durchsage an einen Nutzer mit aktivierter Einwilligung.</p>
+        <label class="announceLabel" for="announcementRecipient">EMPFÄNGER</label>
+        <select id="announcementRecipient" disabled><option value="">Empfänger laden …</option></select>
+        <button class="btn secondary compact" id="announcementReloadRecipients" type="button">NEU LADEN</button>
+        <label class="announceLabel" for="announcementTitle">TITEL</label>
+        <input id="announcementTitle" maxlength="72" value="📯 NÄHEN-Zentrale" type="text">
+        <label class="announceLabel" for="announcementBody">NACHRICHT</label>
+        <textarea id="announcementBody" rows="4" maxlength="240" placeholder="Deine persönliche Durchsage …"></textarea>
+        <button class="btn primary full" id="announcementSend" disabled type="button">🧵 DURCHSAGE SENDEN</button>
+        <p class="mini" id="announcementAdminStatus" role="status">Admin-Zugang wird geprüft …</p>
+      </div>
       <div class="profileBox">
         <h3>🧵 Nähbilanz</h3>
         <p class="meta">Gesamtfahrten auf diesem Account/Gerät: <b id="totalRides">0</b></p>
