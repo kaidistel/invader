@@ -1,18 +1,35 @@
-# NÄHEN · Admin-Durchsagen
+# NÄHEN · Admin-Durchsagen und Web-Push
 
-Die NÄHEN-Zentrale ist nur für Accounts mit dem serverseitig gepflegten Merkmal `app_metadata.naehen_role = "admin"` sichtbar. Der Server prüft das Merkmal bei jeder Aktion erneut.
+Stand: NÄHEN v148 / 6. November 2026.
 
-## Empfänger
-Alle registrierten NÄHEN-Accounts außer dem Absender können direkt ausgewählt werden. Eine zusätzliche App-Einwilligung ist nicht erforderlich. Eine Durchsage wird sofort im privaten Postfach des Empfängers gespeichert. Der Empfänger kann es im Profil öffnen.
+## Architektur
 
-**System-Push** bei geschlossener App erfordert weiterhin eine auf dem jeweiligen Gerät erteilte Push-Erlaubnis und ein Push-Abonnement. Browser-/Geräteberechtigungen werden nicht umgangen. Die Edge Function benötigt außerdem den passenden privaten VAPID-Schlüssel als Supabase Secret `NAEHEN_VAPID_PRIVATE_KEY`. Dieser Schlüssel darf niemals im Repository liegen. Ist er nicht konfiguriert, funktioniert ausschließlich das In-App-Postfach.
+- **Supabase Edge Function `admin-announcements`:** Nach erfolgreicher Anmeldung und erneuter Admin-Prüfung wird eine persönliche Nachricht im eigenen Empfänger-Postfach gespeichert. Bei konfiguriertem VAPID-Schlüssel sendet die Funktion sofort einen echten Web-Push.
+- **Supabase Vault:** Der private VAPID-Schlüssel ist hier verschlüsselt gespeichert. Er wurde serverseitig aus bereits vorhandenen GitHub Actions Secrets übernommen. Zugriff nur über die beiden eingeschränkten RPCs mit `service_role`. Niemals privaten VAPID-Schlüssel ins Git-Repository, in Browsercode oder einen öffentlichen API-Endpunkt schreiben.
+- **GitHub Actions `NAEHEN Personal Push Delivery`:** Eigenständige geplante Rückfallebene für ältere oder temporär nicht sofort versendete Nachrichten, nicht mehr der Hauptversand. GitHub-Zeitpläne können sich verzögern.
+- **Service Worker `naehen/sw.js`:** Registriert unabhängig von geöffneten App-Fenstern einen Push-Event-Handler und zeigt jede erhaltene Nachricht als System-Benachrichtigung an.
+- **Client `naehen/app.js`:** Beim Login und nach Rückkehr in den Vordergrund wird ein vorhandenes Push-Abo erneut an den eingeloggten Account gebunden. Damit wird auch ein Accountwechsel am selben Gerät zuverlässig behandelt.
 
-## Sicherheit
-- Der Admin wird bei jeder Anfrage durch die Edge Function gegen Supabase Auth geprüft, nicht durch Browserzustand oder frei veränderbare `user_metadata`.
-- RLS erlaubt Empfängern nur das Lesen eigener Nachrichten. Das Schreiben ist ausschließlich über den Admin-Serverprozess möglich.
-- Versand nur an vorhandene Accounts, keine freie Massenadresse.
-- Maximal zehn Nachrichten pro Stunde; mindestens 90 Sekunden Abstand je Empfänger.
-- Die bisherigen Datenbanktabellen `admin_message_preferences` und `admin_messages` bleiben erhalten; die alte Einwilligungstabelle wird nicht mehr verwendet.
+## Nutzer: echte Hintergrund-Zustellung prüfen
 
-## Bedienung
-Startauswahl → 📯 NÄHEN-Zentrale (oder Profil) → Empfänger wählen → Titel und Nachricht → **Durchsage senden**.
+1. App auf dem Mobilgerät installiert öffnen. Auf iOS: NÄHEN zum Home-Bildschirm hinzufügen (iOS 16.4+). Web-Push aus einem normalen iPhone-Safari-Tab ist dafür nicht geeignet.
+2. Profil → Näh-Alarme einstellen → PUSH AKTIVIEREN; Betriebssystembenachrichtigungen zulassen.
+3. PUSH-STATUS PRÜFEN bestätigt die Speicherung und Accountzuordnung.
+4. **LOKAL TESTEN** prüft nur die Anzeige, wenn die App bereits läuft.
+5. **ECHTEN PUSH TESTEN** legt serverseitig eine eigene Testnachricht an. Anschließend NÄHEN vollständig schließen und auf die *System-Benachrichtigung* achten. Der Eingang im Postfach ist keine Bestätigung für Hintergrundzustellung.
+6. Bei Problemen prüfen: iOS Fokus / Mitteilungen-Einstellungen, Android Akkuoptimierung, Push-Berechtigung, Browser/PWA-Installation und Netzverbindung.
+
+## Zustellstatus
+
+`sent` = Push-Gateway hat angenommen, **nicht** „vom Betriebssystem angezeigt“ oder „gelesen“.
+`not_configured` = Edge konnte den Schlüssel nicht abrufen (soll nach Vault-Provisionierung nicht mehr auftreten).
+`no_subscription` = es gibt kein gültiges gespeichertes Gerät.
+`failed` = Versand fehlgeschlagen; Logs beachten.
+
+## Berechtigung und Sicherheit
+
+Nur der Server kontrolliert `app_metadata.naehen_role = admin`. Client-Benutzer können nur ihre eigenen Nachrichten lesen. Eigene Push-Selbsttests sind authentifiziert, auf das eigene Konto beschränkt und auf alle fünf Minuten begrenzt. Der Admin-Versand ist weiterhin durch bestehende Quoten geschützt. Auf dem Gerät kann man die System-Push-Berechtigung jederzeit entziehen.
+
+## Deployment
+
+GitHub Pages ist unabhängig von der Edge-Funktion. NÄHEN v148 verwendet neue PWA-Cache-Version; Veröffentlichung über Pages-Workflow. Edge-Funktion und Vault-Provisionierung wurden im Projekt aktiviert. Einen Push auf fremden Geräten kann die serverseitige Prüfung nicht beweisen; erforderlich ist ein echter Test bei geschlossener App.
