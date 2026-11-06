@@ -227,6 +227,7 @@
   let localMode = false;
   let announcementLastSeen = null;
   let pendingInboxMessageId = null;
+  let highlightedInboxMessageId = null;
   let announcementsInitialized = false;
   let sendingAnnouncement = false;
   let announcementImage = null;
@@ -2849,6 +2850,7 @@
 
     pendingInboxMessageId = typeof messageId === "string" &&
       /^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(messageId) ? messageId : null;
+    highlightedInboxMessageId = pendingInboxMessageId;
     switchView("profileView");
     void loadAnnouncementInbox();
 
@@ -2900,13 +2902,15 @@
         '</small></div><p>' + escapeHtml(message.body) + '</p>' + attachment + '</article>';
     }).join("") : '<p class="mini">Noch keine persönlichen Durchsagen.</p>';
 
-    if (pendingInboxMessageId) {
+    if (highlightedInboxMessageId) {
       const selected = Array.from(box.querySelectorAll("[data-announcement-message-id]"))
-        .find((node) => node.dataset.announcementMessageId === pendingInboxMessageId);
+        .find((node) => node.dataset.announcementMessageId === highlightedInboxMessageId);
       if (selected) {
         selected.classList.add("announcementItemTarget");
-        pendingInboxMessageId = null;
-        requestAnimationFrame(() => selected.scrollIntoView({ behavior: "smooth", block: "center" }));
+        if (pendingInboxMessageId) {
+          pendingInboxMessageId = null;
+          requestAnimationFrame(() => selected.scrollIntoView({ behavior: "smooth", block: "center" }));
+        }
       }
     }
 
@@ -3066,7 +3070,10 @@
       $("#pickerAdminBtn")?.classList.add("hidden");
       return;
     }
-    loadAnnouncementInbox();
+    // Cold-start deep links load the inbox in openPersonalInbox, not twice.
+    if (new URL(location.href).searchParams.get("inbox") !== "1") {
+      void loadAnnouncementInbox();
+    }
     checkAnnouncementAdmin();
   }
 
