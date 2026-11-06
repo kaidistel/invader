@@ -2831,12 +2831,14 @@
     $("#announcementAdminStatus").textContent = "Admin-Zugang wird geprüft …";
     try {
       const info = await announcementApi("status");
-      if (!info.admin) return;
+      if (!info.admin) { $("#pickerAdminBtn")?.classList.add("hidden"); return; }
       panel.classList.remove("hidden");
+      $("#pickerAdminBtn")?.classList.remove("hidden");
       await loadAnnouncementRecipients();
     } catch (error) {
       // Other users must never see the privileged controls.
       panel.classList.add("hidden");
+      $("#pickerAdminBtn")?.classList.add("hidden");
       console.warn("Admin-Durchsagen nicht erreichbar", error.message);
     }
   }
@@ -2917,6 +2919,7 @@
       $("#announcementConsentStatus").textContent = "Mit einem NÄHEN-Account verfügbar.";
       $("#announcementInbox").textContent = "Im lokalen Testmodus nicht verfügbar.";
       $("#announcementAdminPanel")?.classList.add("hidden");
+      $("#pickerAdminBtn")?.classList.add("hidden");
       return;
     }
     loadAnnouncementConsent();
@@ -3714,7 +3717,7 @@
   }
 
   function switchView(viewId) {
-    if (!activeParkSlug && viewId !== "allDaysView") {
+    if (!activeParkSlug && viewId !== "allDaysView" && viewId !== "profileView") {
       showParkPicker();
       return;
     }
@@ -3792,6 +3795,13 @@
       if (categoryButton) {
         event.preventDefault();
         setVenueKind(categoryButton.dataset.selectVenueKind);
+        return;
+      }
+      if (event.target.closest("#pickerAdminBtn")) {
+        event.preventDefault();
+        if ($("#announcementAdminPanel")?.classList.contains("hidden")) return;
+        openGlobalArchiveFromPicker({ pushHistory: true });
+        switchView("profileView");
         return;
       }
       if (event.target.closest("#pickerAllDaysBtn")) {
