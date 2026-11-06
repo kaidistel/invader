@@ -228,6 +228,8 @@
   let announcementLastSeen = null;
   let announcementsInitialized = false;
   let sendingAnnouncement = false;
+  let announcementImage = null;
+  let preparingAnnouncementImage = false;
   let lastPushSyncAt = 0;
   let pushSyncInFlight = null;
   let authMode = "login";
@@ -2762,13 +2764,76 @@
     return data || {};
   }
 
+  function clearAnnouncementImage() {
+    announcementImage = null;
+    const preview = $("#announcementImagePreview");
+    if (preview) preview.removeAttribute("src");
+    $("#announcementImagePreviewWrap")?.classList.add("hidden");
+    if ($("#announcementImageFile")) $("#announcementImageFile").value = "";
+    if ($("#announcementImageStatus")) $("#announcementImageStatus").textContent = "";
+  }
+
+  async function prepareAnnouncementImage(file) {
+    if (!file) return;
+    const output = $("#announcementImageStatus"), button = $("#announcementSend");
+    if (preparingAnnouncementImage || sendingAnnouncement) return;
+    if (!file.type.startsWith("image/") || file.type === "image/svg+xml" || file.size > 25000000) {
+      if (output) output.textContent = "Bitte ein Foto/Bild bis 25 MB auswählen (keine SVG-Datei).";
+      return;
+    }
+    preparingAnnouncementImage = true;
+    if (button) button.disabled = true;
+    if (output) output.textContent = "Bild wird für den Versand optimiert …";
+    const sourceUrl = URL.createObjectURL(file);
+    try {
+      const image = new Image();
+      image.src = sourceUrl;
+      await image.decode();
+      if (!image.naturalWidth || !image.naturalHeight) throw new Error("Bild konnte nicht gelesen werden.");
+      const scale = Math.min(1, 1400 / Math.max(image.naturalWidth, image.naturalHeight));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+      canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("Bildbearbeitung wird nicht unterstützt.");
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      let blob = null;
+      for (const quality of [0.83, 0.68, 0.51]) {
+        blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg", quality));
+        if (blob && blob.size <= 1400000) break;
+      }
+      if (!blob || blob.size > 1400000) throw new Error("Bild bleibt zu groß. Bitte ein kleineres Foto auswählen.");
+      const dataUrl = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || ""));
+        reader.onerror = () => reject(new Error("Bild konnte nicht geladen werden."));
+        reader.readAsDataURL(blob);
+      });
+      const base64 = dataUrl.split(",")[1];
+      if (!base64) throw new Error("Bilddaten konnten nicht erstellt werden.");
+      announcementImage = { base64, bytes: blob.size };
+      $("#announcementImagePreview").src = dataUrl;
+      $("#announcementImagePreviewWrap")?.classList.remove("hidden");
+      if (output) output.textContent = "✅ Bild bereit · " + Math.round(blob.size / 1024) + " KB · nur für Empfänger sichtbar.";
+    } catch (error) {
+      clearAnnouncementImage();
+      if (output) output.textContent = "❌ " + (error.message || "Bild konnte nicht verarbeitet werden.");
+    } finally {
+      URL.revokeObjectURL(sourceUrl);
+      preparingAnnouncementImage = false;
+      if (button) button.disabled = !$("#announcementRecipient")?.value;
+    }
+  }
+
   async function loadAnnouncementInbox({ silent = false } = {}) {
     if (!supa || !currentUserId() || localMode) return;
     const box = $("#announcementInbox");
     if (!box) return;
     if (!silent) box.innerHTML = '<p class="mini">Nachrichten werden geladen …</p>';
     const { data, error } = await supa.from("admin_messages")
-      .select("id,title,body,created_at,push_status")
+      .select("id,title,body,created_at,push_status,image_path")
       .eq("recipient_id", currentUserId()).order("created_at", { ascending: false }).limit(25);
     if (error) {
       if (!silent) box.textContent = "Postfach nicht verfügbar: " + error.message;
@@ -2785,10 +2850,30 @@
       const timestamp = new Date(message.created_at).toLocaleString("de-DE", {
         day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit"
       });
+      const attachment = message.image_path
+        ? '<div class="announcementReceivedImage"><img data-announcement-image-id="' +
+          escapeHtml(message.id) + '" loading="lazy" alt="Bild zur persönlichen Durchsage"></div>'
+        : "";
       return '<article class="announcementItem"><div class="announcementItemHead"><b>' +
         escapeHtml(message.title) + '</b><small>' + escapeHtml(timestamp) +
-        '</small></div><p>' + escapeHtml(message.body) + '</p></article>';
+        '</small></div><p>' + escapeHtml(message.body) + '</p>' + attachment + '</article>';
     }).join("") : '<p class="mini">Noch keine persönlichen Durchsagen.</p>';
+
+    const images = rows.filter((message) => !!message.image_path).map((message) => message.id);
+    if (images.length) {
+      try {
+        // Signed, short-lived URLs are issued ONLY for images on this user's
+        // own messages. Image objects themselves remain private in Storage.
+        const result = await announcementApi("image-urls", { messageIds: images });
+        for (const [id, url] of Object.entries(result.images || {})) {
+          const image = Array.from(box.querySelectorAll("[data-announcement-image-id]"))
+            .find((node) => node.dataset.announcementImageId === id);
+          if (image && typeof url === "string") image.src = url;
+        }
+      } catch (error) {
+        console.warn("Bilder im NÄHEN-Postfach konnten nicht geladen werden", error.message);
+      }
+    }
   }
 
   async function checkAnnouncementAdmin() {
@@ -2881,16 +2966,29 @@
     const title = $("#announcementTitle")?.value?.trim() || "";
     const body = $("#announcementBody")?.value?.trim() || "";
     const status = $("#announcementAdminStatus"), button = $("#announcementSend");
-    if (!recipientId || !title || !body) {
-      if (status) status.textContent = "Bitte Empfänger, Titel und Nachricht eingeben.";
+    if (preparingAnnouncementImage) {
+      if (status) status.textContent = "Bild wird noch vorbereitet.";
+      return;
+    }
+    if (!recipientId || !title || (!body && !announcementImage)) {
+      if (status) status.textContent = "Bitte Empfänger, Titel und eine Nachricht oder ein Bild auswählen.";
       return;
     }
     sendingAnnouncement = true;
     button.disabled = true;
     status.textContent = "Durchsage wird gespeichert und zugestellt …";
     try {
-      const result = await announcementApi("send", { recipientId, title, body });
+      let imagePath = null;
+      if (announcementImage) {
+        status.textContent = "📷 Bild wird sicher hochgeladen …";
+        const upload = await announcementApi("upload-image", { imageBase64: announcementImage.base64 });
+        if (!upload.imagePath) throw new Error("Bild-Upload nicht bestätigt.");
+        imagePath = upload.imagePath;
+      }
+      status.textContent = "📯 Durchsage wird verschickt …";
+      const result = await announcementApi("send", { recipientId, title, body, imagePath });
       if (!result.saved) throw new Error("Speichern nicht bestätigt.");
+      clearAnnouncementImage();
       const label = result.pushStatus === "sent"
         ? "✅ Push-Dienst hat die Durchsage angenommen (Geräteanzeige noch unbestätigt)."
         : result.pushStatus === "no_subscription"
@@ -3863,6 +3961,10 @@
     $("#announcementReloadRecipients")?.addEventListener("click", () => loadAnnouncementRecipients());
     $("#announcementRecipient")?.addEventListener("change", () => { $("#announcementSend").disabled = !$("#announcementRecipient").value; });
     $("#announcementSend")?.addEventListener("click", sendPersonalAnnouncement);
+    $("#announcementImageFile")?.addEventListener("change", (event) => {
+      void prepareAnnouncementImage(event.target.files?.[0]);
+    });
+    $("#announcementImageRemove")?.addEventListener("click", clearAnnouncementImage);
     window.setInterval(() => { if (!document.hidden && !localMode && currentUserId()) loadAnnouncementInbox({ silent: true }); }, 30000);
     $("#log")?.addEventListener("click", event => {
       const button = event.target.closest("[data-delete-log-id]");
