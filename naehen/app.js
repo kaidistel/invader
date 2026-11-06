@@ -228,6 +228,8 @@
   let announcementLastSeen = null;
   let announcementsInitialized = false;
   let sendingAnnouncement = false;
+  let lastPushSyncAt = 0;
+  let pushSyncInFlight = null;
   let authMode = "login";
   let rides = FALLBACK_RIDES.slice();
   let rideSearch = "";
@@ -1128,9 +1130,15 @@
   async function bootstrap() {
     removeRetiredPhlDioramas();
     document.addEventListener("visibilitychange", () => {
-      if (!document.hidden) checkForNewAppShell();
+      if (!document.hidden) {
+        checkForNewAppShell();
+        void syncPushSubscription();
+      }
     });
-    window.addEventListener("online", checkForNewAppShell);
+    window.addEventListener("online", () => {
+      checkForNewAppShell();
+      void syncPushSubscription();
+    });
     checkForNewAppShell();
     bindStaticEvents();
 
@@ -1252,6 +1260,7 @@
     renderParkPicker();
     showParkPicker({ replaceHistory: true });
     initAnnouncements();
+    void syncPushSubscription();
   }
 
   async function loadCloudParkArchive(parkSlug = activeParkSlug || "phantasialand") {
@@ -2883,7 +2892,7 @@
       const result = await announcementApi("send", { recipientId, title, body });
       if (!result.saved) throw new Error("Speichern nicht bestätigt.");
       const label = result.pushStatus === "sent"
-        ? "✅ Persönliche Durchsage gespeichert und Push verschickt."
+        ? "✅ Push-Dienst hat die Durchsage angenommen (Geräteanzeige noch unbestätigt)."
         : result.pushStatus === "no_subscription"
           ? "📬 Im Postfach gespeichert; Empfänger hat noch kein Push-Gerät aktiviert."
           : result.pushStatus === "not_configured"
@@ -3558,6 +3567,71 @@
     return Uint8Array.from(Array.from(rawData).map((char) => char.charCodeAt(0)));
   }
 
+  async function syncPushSubscription({ createIfMissing = false, force = false, interactive = false } = {}) {
+    if (!supa || !currentUserId() || localMode) {
+      if (interactive) toast("Für Push wird ein NÄHEN-Account benötigt.");
+      return { state: "no_account" };
+    }
+    if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) {
+      if (interactive) toast("Dieser Browser unterstützt keine Web-Pushs.");
+      return { state: "unsupported" };
+    }
+    if (!cfg.vapidPublicKey) return { state: "missing_key" };
+    if (Notification.permission !== "granted") return { state: Notification.permission };
+    if (!force && Date.now() - lastPushSyncAt < 120000) return { state: "recent" };
+    if (pushSyncInFlight) return pushSyncInFlight;
+
+    pushSyncInFlight = (async () => {
+      try {
+        const registration = await navigator.serviceWorker.ready;
+        let subscription = await registration.pushManager.getSubscription();
+        const wantedKey = urlBase64ToUint8Array(cfg.vapidPublicKey);
+        if (subscription?.options?.applicationServerKey) {
+          const actual = new Uint8Array(subscription.options.applicationServerKey);
+          const same = actual.length === wantedKey.length &&
+            actual.every((byte, index) => byte === wantedKey[index]);
+          if (!same) {
+            await subscription.unsubscribe();
+            subscription = null;
+          }
+        }
+        if (!subscription && createIfMissing) {
+          subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: wantedKey
+          });
+        }
+        if (!subscription) {
+          $("#enablePushBtn").textContent = "🔔 PUSH JETZT AKTIVIEREN";
+          return { state: "not_subscribed" };
+        }
+        const json = subscription.toJSON();
+        const keys = json.keys || {};
+        if (!keys.p256dh || !keys.auth) throw new Error("Push-Schlüssel fehlen auf dem Gerät.");
+        // Server-side upsert reclaims a push endpoint already owned by another
+        // NÄHEN login on the same browser. Client RLS upsert could not do that.
+        const result = await announcementApi("register-device", {
+          endpoint: subscription.endpoint,
+          p256dh: keys.p256dh,
+          authKey: keys.auth,
+          userAgent: navigator.userAgent
+        });
+        if (!result.registered) throw new Error("Das Push-Abo wurde nicht bestätigt.");
+        lastPushSyncAt = Date.now();
+        $("#enablePushBtn").textContent = "🔔 PUSH AKTIV ✓";
+        if (interactive) toast("🔔 Push-Abo für diesen Account erfolgreich bestätigt.");
+        return { state: "registered", endpoint: subscription.endpoint };
+      } catch (error) {
+        console.warn("NÄHEN Push-Registrierung fehlgeschlagen", error);
+        if (interactive) toast("Push-Abo fehlgeschlagen: " + (error.message || "Unbekannter Fehler"));
+        return { state: "error", detail: error.message || String(error) };
+      } finally {
+        pushSyncInFlight = null;
+      }
+    })();
+    return pushSyncInFlight;
+  }
+
   async function enablePush() {
     if (isIOS() && !isStandalone()) {
       toast("Auf iPhone zuerst NÄHEN zum Home-Bildschirm hinzufügen.");
@@ -3567,49 +3641,90 @@
       toast("Push wird von diesem Browser nicht unterstützt.");
       return;
     }
-    if (!cfg.vapidPublicKey) {
-      toast("VAPID-Key fehlt noch im einmaligen Backend-Setup.");
-      return;
-    }
     if (!supa || !currentUserId()) {
-      toast("Echte Pushes benötigen einen NÄHEN-Account.");
+      toast("Echte Pushs benötigen einen NÄHEN-Account.");
       return;
     }
-
     const permission = await Notification.requestPermission();
     if (permission !== "granted") {
-      toast("Push wurde nicht freigegeben.");
+      toast("Push wurde nicht freigegeben. Bitte die Geräte-/Browser-Einstellungen prüfen.");
       return;
     }
-
-    const registration = await navigator.serviceWorker.ready;
-    let subscription = await registration.pushManager.getSubscription();
-    if (!subscription) {
-      subscription = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(cfg.vapidPublicKey)
-      });
-    }
-
-    const json = subscription.toJSON();
-    const result = await supa.from("push_subscriptions").upsert({
-      user_id: currentUserId(),
-      endpoint: subscription.endpoint,
-      p256dh: json.keys && json.keys.p256dh ? json.keys.p256dh : "",
-      auth: json.keys && json.keys.auth ? json.keys.auth : "",
-      user_agent: navigator.userAgent,
-      updated_at: new Date().toISOString()
-    }, { onConflict: "endpoint" });
-
-    if (result.error) {
-      console.warn(result.error);
-      toast("Push-Abo konnte nicht gespeichert werden.");
-      return;
-    }
-
-    $("#enablePushBtn").textContent = "🔔 PUSH AKTIV ✓";
-    toast("🔔 Näh-Alarme sind scharf.");
+    await syncPushSubscription({ createIfMissing: true, force: true, interactive: true });
   }
+
+  function setPushDiagnostic(message) {
+    const output = $("#pushDiagnosticsStatus");
+    if (output) output.textContent = message;
+  }
+
+  async function checkPushDiagnostics() {
+    if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) {
+      setPushDiagnostic("❌ Dein aktueller Browser unterstützt keinen vollständigen Web-Push.");
+      return;
+    }
+    const permission = Notification.permission;
+    if (isIOS() && !isStandalone()) {
+      setPushDiagnostic("❌ iOS: Hintergrund-Push funktioniert nur aus der zum Home-Bildschirm hinzugefügten NÄHEN-App.");
+      return;
+    }
+    if (permission !== "granted") {
+      setPushDiagnostic("❌ Benachrichtigungen: " + permission +
+        ". In den System-Einstellungen erlauben und anschließend Push aktivieren.");
+      return;
+    }
+    setPushDiagnostic("Prüfe Service Worker, Geräte-Abo und Serverzuordnung …");
+    const report = await syncPushSubscription({ force: true });
+    if (report.state === "registered") {
+      setPushDiagnostic("✅ Browser erlaubt Benachrichtigungen · Push-Abo vorhanden · Supabase bestätigt die Zuordnung zum Account. Das bestätigt noch keine Hintergrundzustellung. Nutze den echten Push-Test und schließe danach die App.");
+    } else if (report.state === "not_subscribed") {
+      setPushDiagnostic("⚠️ Benachrichtigungen erlaubt, aber kein aktives Push-Abo. Bitte PUSH AKTIVIEREN drücken.");
+    } else {
+      setPushDiagnostic("⚠️ Push-Registrierung: " + report.state +
+        (report.detail ? " · " + report.detail : "") +
+        ". Bitte PUSH AKTIVIEREN erneut ausführen.");
+    }
+  }
+
+  async function showLocalPushTest() {
+    if (!("Notification" in window) || Notification.permission !== "granted") {
+      setPushDiagnostic("Benachrichtigungen müssen zuerst im Browser erlaubt werden.");
+      return;
+    }
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      await registration.showNotification("🔔 NÄHEN lokaler Hinweis", {
+        body: "Dies testet nur die Anzeige auf deinem Gerät, NICHT den Hintergrund-Push.",
+        icon: "./icon.svg", badge: "./icon.svg",
+        tag: "naehen-local-test-" + Date.now(),
+        data: "./"
+      });
+      setPushDiagnostic("✅ Lokale Testbenachrichtigung angefordert. Erscheint sie nicht, prüfe die System-Benachrichtigungseinstellungen von NÄHEN.");
+    } catch (error) {
+      setPushDiagnostic("❌ Lokaler Test fehlgeschlagen: " + (error.message || error));
+    }
+  }
+
+  async function sendRemotePushTest() {
+    const button = $("#remotePushTestBtn");
+    if (button) button.disabled = true;
+    try {
+      const verified = await syncPushSubscription({ force: true });
+      if (verified.state !== "registered") {
+        throw new Error("Zuerst PUSH AKTIVIEREN und PUSH-STATUS PRÜFEN.");
+      }
+      const result = await announcementApi("test-push");
+      if (!result.saved) throw new Error("Der Server hat die Testnachricht nicht gespeichert.");
+      setPushDiagnostic(result.pushStatus === "sent"
+        ? "🔔 Der Push-Dienst hat den Test angenommen. Schließe NÄHEN vollständig und kontrolliere die Systembenachrichtigungen."
+        : "🧪 Echter Push-Test eingeplant. NÄHEN jetzt vollständig schließen: Die Zustellung erfolgt im unabhängigen Server-Versandlauf und kann mehrere Minuten dauern. Der Eingang im Postfach allein ist kein bestandener Hintergrund-Test.");
+    } catch (error) {
+      setPushDiagnostic("❌ Echter Push-Test nicht gestartet: " + (error.message || error));
+    } finally {
+      if (button) button.disabled = false;
+    }
+  }
+
 
   function fairDailyRecap(sourceSessions, day) {
     const slug = day?.park_slug || day?.parkSlug || activeParkSlug;
@@ -3957,6 +4072,15 @@
     });
     $("#savePushSettingsBtn").addEventListener("click", savePushSettings);
     $("#enablePushBtn").addEventListener("click", enablePush);
+    $("#checkPushDiagnosticsBtn")?.addEventListener("click", checkPushDiagnostics);
+    $("#localPushTestBtn")?.addEventListener("click", showLocalPushTest);
+    $("#remotePushTestBtn")?.addEventListener("click", sendRemotePushTest);
+    navigator.serviceWorker?.addEventListener("message", (event) => {
+      if (event.data?.type === "NAEHEN_PUSH_SUBSCRIPTION_CHANGED") {
+        lastPushSyncAt = 0;
+        void syncPushSubscription({ force: true });
+      }
+    });
 
     $("#logoutBtn").addEventListener("click", async () => {
       if (supa && !localMode) await supa.auth.signOut();
