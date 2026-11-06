@@ -2826,20 +2826,51 @@
 
   async function checkAnnouncementAdmin() {
     const panel = $("#announcementAdminPanel");
+    const pickerButton = $("#pickerAdminBtn");
+    const status = $("#announcementAdminStatus");
     if (!panel || !currentUserId() || localMode || !supa) return;
-    panel.classList.add("hidden");
-    $("#announcementAdminStatus").textContent = "Admin-Zugang wird geprüft …";
-    try {
-      const info = await announcementApi("status");
-      if (!info.admin) { $("#pickerAdminBtn")?.classList.add("hidden"); return; }
+
+    // The UI is only a convenience. The Edge Function verifies the admin role
+    // again for each list/send action and never trusts these browser values.
+    let verifiedAdmin = user?.app_metadata?.naehen_role === "admin";
+    if (verifiedAdmin) {
       panel.classList.remove("hidden");
-      $("#pickerAdminBtn")?.classList.remove("hidden");
+      pickerButton?.classList.remove("hidden");
+      status.textContent = "Admin-Berechtigung wird abgeglichen …";
+    }
+    try {
+      // Read fresh server-owned app_metadata: the JWT cached before an admin
+      // promotion may still contain the old role until it is refreshed.
+      const { data, error } = await supa.auth.getUser();
+      if (!error && data?.user?.id === currentUserId()) {
+        verifiedAdmin = data.user.app_metadata?.naehen_role === "admin";
+        if (verifiedAdmin) {
+          panel.classList.remove("hidden");
+          pickerButton?.classList.remove("hidden");
+        }
+      }
+      const info = await announcementApi("status");
+      if (!info.admin) {
+        panel.classList.add("hidden");
+        pickerButton?.classList.add("hidden");
+        return;
+      }
+      panel.classList.remove("hidden");
+      pickerButton?.classList.remove("hidden");
       await loadAnnouncementRecipients();
     } catch (error) {
-      // Other users must never see the privileged controls.
-      panel.classList.add("hidden");
-      $("#pickerAdminBtn")?.classList.add("hidden");
-      console.warn("Admin-Durchsagen nicht erreichbar", error.message);
+      // An unavailable status endpoint must not silently hide an otherwise
+      // verified admin's entry. The server still blocks any unauthorized send.
+      if (verifiedAdmin) {
+        panel.classList.remove("hidden");
+        pickerButton?.classList.remove("hidden");
+        status.textContent = "⚠ NÄHEN-Zentrale erreichbar, aber Serverprüfung fehlgeschlagen: " +
+          (error?.message || "Netzwerkfehler") + ". Bitte neu laden.";
+      } else {
+        panel.classList.add("hidden");
+        pickerButton?.classList.add("hidden");
+      }
+      console.warn("Admin-Durchsagen nicht erreichbar", error);
     }
   }
 
