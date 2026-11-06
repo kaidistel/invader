@@ -28,7 +28,7 @@ Stand: NÄHEN v148 / 6. November 2026.
 
 ## Berechtigung und Sicherheit
 
-Nur der Server kontrolliert `app_metadata.naehen_role = admin`. Client-Benutzer können nur ihre eigenen Nachrichten lesen. Eigene Push-Selbsttests sind authentifiziert, auf das eigene Konto beschränkt und auf alle fünf Minuten begrenzt. Der Admin-Versand ist weiterhin durch bestehende Quoten geschützt. Auf dem Gerät kann man die System-Push-Berechtigung jederzeit entziehen.
+Nur der Server kontrolliert `app_metadata.naehen_role = admin`. Client-Benutzer können nur ihre eigenen Nachrichten lesen. Eigene Push-Selbsttests sind authentifiziert, auf das eigene Konto beschränkt und auf alle fünf Minuten begrenzt. Für Admin-Durchsagen gibt es weder ein stündliches Nachrichtenlimit noch eine Wartezeit zwischen Nachrichten an denselben Empfänger. Die serverseitige Admin-Prüfung, Empfängervalidierung und Push-Berechtigungen bleiben erhalten. Auf dem Gerät kann man die System-Push-Berechtigung jederzeit entziehen.
 
 ## Deployment
 
