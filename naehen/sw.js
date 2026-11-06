@@ -26,11 +26,18 @@ self.addEventListener('push', e=>{
   const title = String(message.title || "🧵 NÄHEN-Durchsage").slice(0,80);
   const body = String(message.body || "Es gibt eine neue Nachricht.").slice(0,500);
   const tag = "naehen-push-" + (message.id || Date.now() + "-" + Math.random().toString(36).slice(2,8));
-  e.waitUntil(self.registration.showNotification(title,{
+  const options = {
     body, icon:"./icon.svg",badge:"./icon.svg",tag,renotify:true,
     vibrate:[120,55,150],
     data:{url:message.url||"./",messageId:message.id||null}
-  }));
+  };
+  // Large notification images are optional in browsers/operating systems.
+  // A signed URL is only shown when it comes from our private Supabase bucket.
+  if (typeof message.image === "string" &&
+      /^https:\/\/hcnpgqfkeqxuihhxvnwl\.supabase\.co\/storage\/v1\/object\/sign\/naehen-admin-images\//.test(message.image)) {
+    options.image = message.image;
+  }
+  e.waitUntil(self.registration.showNotification(title, options));
 });
 self.addEventListener('notificationclick', e=>{
   e.notification.close();
