@@ -225,6 +225,9 @@
   let supa = null;
   let user = null;
   let localMode = false;
+  let announcementLastSeen = null;
+  let announcementsInitialized = false;
+  let sendingAnnouncement = false;
   let authMode = "login";
   let rides = FALLBACK_RIDES.slice();
   let rideSearch = "";
@@ -1248,6 +1251,7 @@
 
     renderParkPicker();
     showParkPicker({ replaceHistory: true });
+    initAnnouncements();
   }
 
   async function loadCloudParkArchive(parkSlug = activeParkSlug || "phantasialand") {
@@ -2731,6 +2735,195 @@
     toast("🗑 Eintrag gelöscht.");
   }
 
+
+  async function announcementApi(action, options = {}) {
+    if (!supa || !currentUserId() || localMode) throw new Error("NÄHEN-Account erforderlich.");
+    const { data, error } = await supa.functions.invoke("admin-announcements", {
+      body: { action, ...options }
+    });
+    if (error) {
+      let reason = error.message || "Server nicht erreichbar";
+      try {
+        const details = await error.context?.json?.();
+        if (details?.error) reason = details.error;
+      } catch (_) {}
+      throw new Error(reason);
+    }
+    if (data?.error) throw new Error(data.error);
+    return data || {};
+  }
+
+  async function loadAnnouncementConsent() {
+    const checkbox = $("#announcementConsent"), status = $("#announcementConsentStatus");
+    if (!checkbox || !status || !supa || !currentUserId() || localMode) return;
+    checkbox.disabled = true;
+    const response = await supa.from("admin_message_preferences")
+      .select("enabled").eq("user_id", currentUserId()).maybeSingle();
+    if (response.error) {
+      status.textContent = "Einwilligung aktuell nicht erreichbar: " + response.error.message;
+      return;
+    }
+    checkbox.checked = !!response.data?.enabled;
+    checkbox.disabled = false;
+    status.textContent = checkbox.checked
+      ? "Persönliche Durchsagen erlaubt. Du kannst sie jederzeit deaktivieren."
+      : "Deaktiviert · niemand kann dir persönliche Durchsagen schicken.";
+  }
+
+  async function saveAnnouncementConsent(allowed) {
+    const checkbox = $("#announcementConsent"), status = $("#announcementConsentStatus");
+    if (!checkbox || !status || !currentUserId() || !supa || localMode) return;
+    checkbox.disabled = true;
+    status.textContent = "Speichere Einstellung …";
+    try {
+      const { data, error } = await supa.from("admin_message_preferences").upsert({
+        user_id: currentUserId(),
+        enabled: !!allowed,
+        updated_at: new Date().toISOString()
+      }, { onConflict: "user_id" }).select("enabled");
+      if (error) throw error;
+      if (!data?.length) throw new Error("Speichern nicht bestätigt");
+      checkbox.checked = !!data[0].enabled;
+      status.textContent = checkbox.checked
+        ? "✅ Du hast persönliche NÄHEN-Durchsagen aktiviert."
+        : "🔕 Persönliche Durchsagen deaktiviert.";
+    } catch (error) {
+      checkbox.checked = !allowed;
+      status.textContent = "Speichern fehlgeschlagen: " + error.message;
+    } finally {
+      checkbox.disabled = false;
+    }
+  }
+
+  async function loadAnnouncementInbox({ silent = false } = {}) {
+    if (!supa || !currentUserId() || localMode) return;
+    const box = $("#announcementInbox");
+    if (!box) return;
+    if (!silent) box.innerHTML = '<p class="mini">Nachrichten werden geladen …</p>';
+    const { data, error } = await supa.from("admin_messages")
+      .select("id,title,body,created_at,push_status")
+      .eq("recipient_id", currentUserId()).order("created_at", { ascending: false }).limit(25);
+    if (error) {
+      if (!silent) box.textContent = "Postfach nicht verfügbar: " + error.message;
+      return;
+    }
+    const rows = data || [];
+    if (silent && announcementsInitialized && rows.length && announcementLastSeen &&
+        rows[0].id !== announcementLastSeen) {
+      toast("📯 Neue persönliche NÄHEN-Durchsage eingegangen!");
+    }
+    announcementLastSeen = rows[0]?.id || null;
+    announcementsInitialized = true;
+    box.innerHTML = rows.length ? rows.map((message) => {
+      const timestamp = new Date(message.created_at).toLocaleString("de-DE", {
+        day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit"
+      });
+      return '<article class="announcementItem"><div class="announcementItemHead"><b>' +
+        escapeHtml(message.title) + '</b><small>' + escapeHtml(timestamp) +
+        '</small></div><p>' + escapeHtml(message.body) + '</p></article>';
+    }).join("") : '<p class="mini">Noch keine persönlichen Durchsagen.</p>';
+  }
+
+  async function checkAnnouncementAdmin() {
+    const panel = $("#announcementAdminPanel");
+    if (!panel || !currentUserId() || localMode || !supa) return;
+    panel.classList.add("hidden");
+    $("#announcementAdminStatus").textContent = "Admin-Zugang wird geprüft …";
+    try {
+      const info = await announcementApi("status");
+      if (!info.admin) return;
+      panel.classList.remove("hidden");
+      await loadAnnouncementRecipients();
+    } catch (error) {
+      // Other users must never see the privileged controls.
+      panel.classList.add("hidden");
+      console.warn("Admin-Durchsagen nicht erreichbar", error.message);
+    }
+  }
+
+  async function loadAnnouncementRecipients() {
+    const select = $("#announcementRecipient"), status = $("#announcementAdminStatus");
+    const send = $("#announcementSend");
+    if (!select || !status || !send || !supa || !currentUserId()) return;
+    select.disabled = true;
+    send.disabled = true;
+    status.textContent = "Empfänger mit Einwilligung werden geladen …";
+    try {
+      const result = await announcementApi("recipients");
+      const people = result.recipients || [];
+      select.replaceChildren();
+      const placeholder = document.createElement("option");
+      placeholder.value = "";
+      placeholder.textContent = people.length ? "Empfänger auswählen …" : "Noch niemand hat Durchsagen erlaubt";
+      select.appendChild(placeholder);
+      for (const recipient of people) {
+        const opt = document.createElement("option");
+        opt.value = recipient.id;
+        const parkName = recipient.activePark
+          ? (PARKS[recipient.activePark]?.name || recipient.activePark)
+          : "Kein laufender Besuch";
+        opt.textContent = recipient.name + " · " + parkName +
+          (recipient.hasPush ? " · 🔔 Push aktiv" : " · 📬 In-App");
+        select.appendChild(opt);
+      }
+      select.disabled = !people.length;
+      status.textContent = people.length
+        ? people.length + " Nutzer haben persönliche Durchsagen aktiviert."
+        : "Keine Empfänger mit Einwilligung. Der Nutzer muss sie im Profil zuerst aktivieren.";
+    } catch (error) {
+      status.textContent = "Empfänger nicht verfügbar: " + error.message;
+    }
+  }
+
+  async function sendPersonalAnnouncement() {
+    if (sendingAnnouncement) return;
+    const recipientId = $("#announcementRecipient")?.value;
+    const title = $("#announcementTitle")?.value?.trim() || "";
+    const body = $("#announcementBody")?.value?.trim() || "";
+    const status = $("#announcementAdminStatus"), button = $("#announcementSend");
+    if (!recipientId || !title || !body) {
+      if (status) status.textContent = "Bitte Empfänger, Titel und Nachricht eingeben.";
+      return;
+    }
+    sendingAnnouncement = true;
+    button.disabled = true;
+    status.textContent = "Durchsage wird gespeichert und zugestellt …";
+    try {
+      const result = await announcementApi("send", { recipientId, title, body });
+      if (!result.saved) throw new Error("Speichern nicht bestätigt.");
+      const label = result.pushStatus === "sent"
+        ? "✅ Persönliche Durchsage gespeichert und Push verschickt."
+        : result.pushStatus === "no_subscription"
+          ? "📬 Im Postfach gespeichert; Empfänger hat noch kein Push-Gerät aktiviert."
+          : result.pushStatus === "not_configured"
+            ? "📬 Im Postfach gespeichert; Push-Versand noch nicht konfiguriert."
+            : "📬 Im Postfach gespeichert; Push-Zustellung nicht bestätigt.";
+      status.textContent = label;
+      toast("📯 Durchsage gespeichert!");
+    } catch (error) {
+      status.textContent = "Nicht versendet: " + error.message;
+    } finally {
+      sendingAnnouncement = false;
+      button.disabled = !$("#announcementRecipient")?.value;
+    }
+  }
+
+  function initAnnouncements() {
+    announcementLastSeen = null;
+    announcementsInitialized = false;
+    const consent = $("#announcementConsent");
+    if (consent) { consent.disabled = true; consent.checked = false; }
+    if (localMode || !currentUserId() || !supa) {
+      $("#announcementConsentStatus").textContent = "Mit einem NÄHEN-Account verfügbar.";
+      $("#announcementInbox").textContent = "Im lokalen Testmodus nicht verfügbar.";
+      $("#announcementAdminPanel")?.classList.add("hidden");
+      return;
+    }
+    loadAnnouncementConsent();
+    loadAnnouncementInbox();
+    checkAnnouncementAdmin();
+  }
+
   function renderProfile() {
     $("#totalRides").textContent = totalRideCount;
     const parkDays = $("#totalParkDays");
@@ -3563,6 +3756,12 @@
   });
 
   function bindStaticEvents() {
+    $("#announcementConsent")?.addEventListener("change", (event) => saveAnnouncementConsent(event.target.checked));
+    $("#announcementRefresh")?.addEventListener("click", () => loadAnnouncementInbox());
+    $("#announcementReloadRecipients")?.addEventListener("click", () => loadAnnouncementRecipients());
+    $("#announcementRecipient")?.addEventListener("change", () => { $("#announcementSend").disabled = !$("#announcementRecipient").value; });
+    $("#announcementSend")?.addEventListener("click", sendPersonalAnnouncement);
+    window.setInterval(() => { if (!document.hidden && !localMode && currentUserId()) loadAnnouncementInbox({ silent: true }); }, 30000);
     $("#log")?.addEventListener("click", event => {
       const button = event.target.closest("[data-delete-log-id]");
       if (button) void deleteCurrentDayEntry(button.dataset.deleteLogId);
