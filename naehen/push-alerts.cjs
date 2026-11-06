@@ -254,7 +254,8 @@ async function deliverPendingAdminMessages(subscriptions) {
       await webpush.sendNotification({
           endpoint: device.endpoint,
           keys: { p256dh: device.p256dh, auth: device.auth }
-        }, JSON.stringify({ title: message.title, body: message.body, url: "./" }), { TTL: 86400, urgency: "high" });
+        }, JSON.stringify({ title: message.title, body: message.body, id: message.id,
+          url: "./?inbox=1&message=" + encodeURIComponent(message.id) }), { TTL: 86400, urgency: "high" });
         successfulDevices++;
       } catch (error) {
         console.warn("Admin push delivery failed", error.statusCode || "", error.message || error);

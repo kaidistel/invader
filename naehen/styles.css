@@ -2019,3 +2019,7 @@ background:#20172aab;color:#ffe2b0;font:700 10px/1.25 'Barlow Condensed',system-
 .announcementReceivedImage{margin-top:12px}
 .announcementReceivedImage img{display:block;max-width:100%;width:auto;max-height:420px;
   border-radius:12px;border:1px solid #ffffff2b;background:#151e2b;object-fit:contain}
+
+/* Push click: briefly distinguish the specific announcement in the inbox. */
+#announcementsPreferences{scroll-margin-top:88px}
+.announcementItemTarget{border-color:#f3c475;box-shadow:0 0 0 2px #f3c47560,0 0 22px #f3c47525;scroll-margin-top:100px}

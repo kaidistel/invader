@@ -36,7 +36,7 @@ function allowedPushEndpoint(raw: string): boolean {
   } catch { return false; }
 }
 
-async function deliver(db: any, recipientId: string, title: string, body: string, imagePath?: string | null) {
+async function deliver(db: any, recipientId: string, title: string, body: string, imagePath?: string | null, messageId?: string) {
   let privateKey = Deno.env.get("NAEHEN_VAPID_PRIVATE_KEY") || "";
   if (!privateKey) {
     // The original VAPID private key is transferred by GitHub Actions directly
@@ -68,7 +68,9 @@ async function deliver(db: any, recipientId: string, title: string, body: string
       await webpush.sendNotification({
         endpoint: s.endpoint,
         keys: { p256dh: s.p256dh, auth: s.auth },
-      }, JSON.stringify({ title, body, url: "./", ...(imageUrl ? { image: imageUrl } : {}) }), { TTL: 86400, urgency: "high" });
+      }, JSON.stringify({ title, body, id: messageId || null,
+        url: "./?inbox=1" + (messageId ? "&message=" + encodeURIComponent(messageId) : ""),
+        ...(imageUrl ? { image: imageUrl } : {}) }), { TTL: 86400, urgency: "high" });
       delivered++;
     } catch (error: any) {
       console.warn("Push device error", error?.statusCode || "unknown");
@@ -148,7 +150,7 @@ Deno.serve(async (req: Request) => {
         .select("id").single();
       if (saveError) throw saveError;
       let pushStatus = "failed";
-      try { pushStatus = await deliver(db, senderId, title, body); }
+      try { pushStatus = await deliver(db, senderId, title, body, null, inserted.id); }
       catch (error) { console.warn("Push self-test delivery error", String(error)); }
       const { error: updateError } = await db.from("admin_messages")
         .update({ push_status: pushStatus }).eq("id", inserted.id);
@@ -267,7 +269,7 @@ Deno.serve(async (req: Request) => {
         .select("id").single();
       if (insertError) throw insertError;
       let pushStatus = "failed";
-      try { pushStatus = await deliver(db, recipientId, title, deliveredBody, imagePath); }
+      try { pushStatus = await deliver(db, recipientId, title, deliveredBody, imagePath, inserted.id); }
       catch (error) { console.warn("Push delivery error", String(error)); }
       await db.from("admin_messages").update({ push_status: pushStatus }).eq("id", inserted.id);
       return respond({ saved: true, pushStatus });

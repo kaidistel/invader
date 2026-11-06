@@ -226,6 +226,7 @@
   let user = null;
   let localMode = false;
   let announcementLastSeen = null;
+  let pendingInboxMessageId = null;
   let announcementsInitialized = false;
   let sendingAnnouncement = false;
   let announcementImage = null;
@@ -1263,6 +1264,10 @@
     showParkPicker({ replaceHistory: true });
     initAnnouncements();
     void syncPushSubscription();
+    const launchUrl = new URL(location.href);
+    if (launchUrl.searchParams.get("inbox") === "1") {
+      openPersonalInbox(launchUrl.searchParams.get("message"));
+    }
   }
 
   async function loadCloudParkArchive(parkSlug = activeParkSlug || "phantasialand") {
@@ -2827,6 +2832,41 @@
     }
   }
 
+  function openPersonalInbox(messageId = null) {
+    // Handle a push click without clearing queue timers or saved park sessions.
+    // The user may be on the park picker, an attraction, or just signing in.
+    if (!currentUserId() || localMode) return false;
+    if (!activeParkSlug) {
+      stopLiveRefresh();
+      document.body.removeAttribute("data-park");
+      document.body.style.removeProperty("--park-hero-image");
+    }
+    $("#parkPicker")?.classList.add("hidden");
+    $("#app")?.classList.remove("hidden");
+    $("#nav")?.classList.remove("hidden");
+    document.body.classList.remove("modalOpen");
+    document.querySelectorAll(".sheet.show").forEach((sheet) => sheet.classList.remove("show"));
+
+    pendingInboxMessageId = typeof messageId === "string" &&
+      /^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(messageId) ? messageId : null;
+    switchView("profileView");
+    void loadAnnouncementInbox();
+
+    requestAnimationFrame(() => {
+      const inbox = $("#announcementsPreferences");
+      inbox?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    // The deep link is used once and then removed from the visible URL.
+    const url = new URL(location.href);
+    if (url.searchParams.get("inbox") === "1") {
+      url.searchParams.delete("inbox");
+      url.searchParams.delete("message");
+      history.replaceState({ naehenInbox: true }, "", url.href);
+    }
+    return true;
+  }
+
   async function loadAnnouncementInbox({ silent = false } = {}) {
     if (!supa || !currentUserId() || localMode) return;
     const box = $("#announcementInbox");
@@ -2854,10 +2894,21 @@
         ? '<div class="announcementReceivedImage"><img data-announcement-image-id="' +
           escapeHtml(message.id) + '" loading="lazy" alt="Bild zur persönlichen Durchsage"></div>'
         : "";
-      return '<article class="announcementItem"><div class="announcementItemHead"><b>' +
+      return '<article class="announcementItem" data-announcement-message-id="' +
+        escapeHtml(message.id) + '"><div class="announcementItemHead"><b>' +
         escapeHtml(message.title) + '</b><small>' + escapeHtml(timestamp) +
         '</small></div><p>' + escapeHtml(message.body) + '</p>' + attachment + '</article>';
     }).join("") : '<p class="mini">Noch keine persönlichen Durchsagen.</p>';
+
+    if (pendingInboxMessageId) {
+      const selected = Array.from(box.querySelectorAll("[data-announcement-message-id]"))
+        .find((node) => node.dataset.announcementMessageId === pendingInboxMessageId);
+      if (selected) {
+        selected.classList.add("announcementItemTarget");
+        pendingInboxMessageId = null;
+        requestAnimationFrame(() => selected.scrollIntoView({ behavior: "smooth", block: "center" }));
+      }
+    }
 
     const images = rows.filter((message) => !!message.image_path).map((message) => message.id);
     if (images.length) {
@@ -3940,6 +3991,10 @@
       return;
     }
 
+    if (event.state?.naehenInbox) {
+      openPersonalInbox();
+      return;
+    }
     if (event.state?.naehenGlobalArchive) {
       openGlobalArchiveFromPicker({ pushHistory: false });
       return;
@@ -4178,6 +4233,11 @@
     $("#localPushTestBtn")?.addEventListener("click", showLocalPushTest);
     $("#remotePushTestBtn")?.addEventListener("click", sendRemotePushTest);
     navigator.serviceWorker?.addEventListener("message", (event) => {
+      if (event.data?.type === "NAEHEN_OPEN_INBOX") {
+        const opened = openPersonalInbox(event.data.messageId);
+        event.ports?.[0]?.postMessage({ ok: opened });
+        return;
+      }
       if (event.data?.type === "NAEHEN_PUSH_SUBSCRIPTION_CHANGED") {
         lastPushSyncAt = 0;
         void syncPushSubscription({ force: true });
