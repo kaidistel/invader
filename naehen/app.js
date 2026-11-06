@@ -2887,7 +2887,7 @@
         : result.pushStatus === "no_subscription"
           ? "📬 Im Postfach gespeichert; Empfänger hat noch kein Push-Gerät aktiviert."
           : result.pushStatus === "not_configured"
-            ? "📬 Im Postfach gespeichert; Push-Versand noch nicht konfiguriert."
+            ? "📬 Nachricht gespeichert; Push wird über den vorhandenen Versand automatisch nachgereicht."
             : "📬 Im Postfach gespeichert; Push-Zustellung nicht bestätigt.";
       status.textContent = label;
       toast("📯 Durchsage gespeichert!");
