@@ -3,8 +3,9 @@ const path = require("path");
 const vm = require("vm");
 const webpush = require("web-push");
 
-const livePaths = process.argv.slice(2);
-if (!livePaths.length) livePaths.push("naehen/live.json");
+const adminOnly = process.argv.includes("--admin-only");
+const livePaths = process.argv.slice(2).filter(value => value !== "--admin-only");
+if (!livePaths.length && !adminOnly) livePaths.push("naehen/live.json");
 const SUPABASE_URL = process.env.NAEHEN_SUPABASE_URL || "";
 const SERVICE_KEY = process.env.NAEHEN_SUPABASE_SECRET_KEY || process.env.NAEHEN_SUPABASE_SERVICE_ROLE_KEY || "";
 const VAPID_PUBLIC_KEY = process.env.NAEHEN_VAPID_PUBLIC_KEY || "";
@@ -238,7 +239,7 @@ async function deliverPendingAdminMessages(subscriptions) {
         await webpush.sendNotification({
           endpoint: device.endpoint,
           keys: { p256dh: device.p256dh, auth: device.auth }
-        }, JSON.stringify({ title: message.title, body: message.body, url: "./" }), { TTL: 3600 });
+        }, JSON.stringify({ title: message.title, body: message.body, url: "./" }), { TTL: 86400, urgency: "high" });
         successfulDevices++;
       } catch (error) {
         console.warn("Admin push delivery failed", error.statusCode || "", error.message || error);
@@ -266,6 +267,16 @@ async function deliverPendingAdminMessages(subscriptions) {
     " no_subscription=" + noSubscription + " retry=" + retry);
 }
 
+if (adminOnly) {
+  // Small independent job: no Pages build, no Queue-Times fetch and no user app.
+  (async () => {
+    const subscriptions = await rest("push_subscriptions?select=*") || [];
+    await deliverPendingAdminMessages(subscriptions);
+  })().catch(error => {
+    console.error("NÄHEN admin push job failed:", error.message || error);
+    process.exitCode = 1;
+  });
+} else {
 (async () => {
   const live = livePaths.flatMap((livePath) => {
     const isWalibiBelgium = /live-walibi-belgium\.json$/i.test(livePath);
@@ -348,10 +359,9 @@ async function deliverPendingAdminMessages(subscriptions) {
     });
   }
 
-  await deliverPendingAdminMessages(subscriptions);
-
   console.log("NÄHEN push evaluation complete:", logRows.length, "notifications/events.");
 })().catch((error) => {
   console.error(error);
   process.exit(1);
 });
+}
