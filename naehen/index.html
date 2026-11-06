@@ -335,6 +335,16 @@
       <h2>Näh-Alarme</h2>
       <p>Favorisiere Attraktionen und lege fest, wann NÄHEN dich annähen darf.</p>
       <button class="btn primary full" id="enablePushBtn">🔔 PUSH AKTIVIEREN</button>
+      <div class="pushDiagnostics">
+        <div class="sectionHead"><h2>🔬 Push-Diagnose</h2><span>HINTERGRUND</span></div>
+        <p class="mini">Wichtig: Nur der echte Hintergrund-Test prüft, ob eine Nachricht bei geschlossener App eintreffen kann.</p>
+        <button class="btn secondary full" type="button" id="checkPushDiagnosticsBtn">PUSH-STATUS PRÜFEN</button>
+        <div class="pushTestButtons">
+          <button class="btn ghost" type="button" id="localPushTestBtn">LOKAL TESTEN</button>
+          <button class="btn secondary" type="button" id="remotePushTestBtn">ECHTEN PUSH TESTEN</button>
+        </div>
+        <p class="mini" id="pushDiagnosticsStatus" role="status" aria-live="polite">Noch nicht geprüft.</p>
+      </div>
       <div class="sectionHead"><h2>Favoriten</h2><span>PRO RIDE</span></div>
       <div id="pushRideSettings"></div>
       <button class="btn secondary full" id="savePushSettingsBtn">EINSTELLUNGEN SPEICHERN</button>
