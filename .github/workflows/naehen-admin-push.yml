@@ -32,6 +32,30 @@ jobs:
         run: |
           mkdir -p /tmp/naehen-push
           npm install --silent --no-save --prefix /tmp/naehen-push web-push@3.6.7
+      - name: Provision VAPID key in Supabase Vault (encrypted, server-only)
+        if: github.event_name != 'schedule'
+        env:
+          NAEHEN_SUPABASE_URL: ${{ secrets.NAEHEN_SUPABASE_URL }}
+          NAEHEN_SUPABASE_SECRET_KEY: ${{ secrets.NAEHEN_SUPABASE_SECRET_KEY }}
+          NAEHEN_VAPID_PRIVATE_KEY: ${{ secrets.NAEHEN_VAPID_PRIVATE_KEY }}
+        run: |
+          node <<'NODE'
+          const url = process.env.NAEHEN_SUPABASE_URL;
+          const key = process.env.NAEHEN_SUPABASE_SECRET_KEY;
+          const vapid = process.env.NAEHEN_VAPID_PRIVATE_KEY;
+          if (!url || !key || !vapid) throw Error("Required server-side secrets unavailable");
+          const headers = { apikey: key, "Content-Type": "application/json" };
+          if (!key.startsWith("sb_secret_")) headers.Authorization = "Bearer " + key;
+          (async () => {
+            const response = await fetch(url + "/rest/v1/rpc/naehen_provision_vapid_key", {
+              method: "POST",
+              headers,
+              body: JSON.stringify({ p_key: vapid })
+            });
+            if (!response.ok) throw Error("Vault provisioning rejected (HTTP " + response.status + ")");
+            console.log("Private VAPID key synchronized to encrypted Supabase Vault.");
+          })().catch(error => { console.error(error.message); process.exitCode = 1; });
+          NODE
       - name: Deliver pending private notifications
         env:
           NAEHEN_SUPABASE_URL: ${{ secrets.NAEHEN_SUPABASE_URL }}
