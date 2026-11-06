@@ -2002,3 +2002,20 @@ background:#20172aab;color:#ffe2b0;font:700 10px/1.25 'Barlow Condensed',system-
 .pushDiagnostics .pushTestButtons button{font-size:12px;min-width:0;white-space:normal;line-height:1.25;padding:12px 8px}
 #pushDiagnosticsStatus{margin:12px 0 0;padding:10px;border-radius:9px;background:#111723;
   border:1px solid #f2d6a345;min-height:48px;white-space:pre-wrap;overflow-wrap:anywhere}
+
+/* NÄHEN – private image attachments in admin announcements */
+.announcementImageComposer{margin:14px 0 16px;padding:12px;border:1px solid #d3a86055;
+  border-radius:13px;background:linear-gradient(135deg,#1f2435,#2a2037)}
+.announcementImageComposer .mini{margin:8px 0;line-height:1.45}
+.announcementImagePicker{display:flex;align-items:center;justify-content:center;cursor:pointer;
+  text-align:center;font-weight:850;letter-spacing:.06em;padding:13px 12px;
+  color:#211527;background:#f3c475;border-radius:10px;min-height:45px}
+.announcementImagePicker:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.announcementImagePreview{margin-top:12px}
+.announcementImagePreview img{display:block;width:100%;max-height:320px;object-fit:contain;
+  border:1px solid #ffffff33;background:#111724;border-radius:10px}
+.announcementImagePreview button{display:block;margin:10px auto 0}
+#announcementImageStatus{overflow-wrap:anywhere}
+.announcementReceivedImage{margin-top:12px}
+.announcementReceivedImage img{display:block;max-width:100%;width:auto;max-height:420px;
+  border-radius:12px;border:1px solid #ffffff2b;background:#151e2b;object-fit:contain}
