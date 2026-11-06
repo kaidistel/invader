@@ -204,10 +204,24 @@ function eventPayload(type, ride, extra) {
   return { title: "🧵 Näh-Alarm", body: "Da wird genäht.", url: "./" };
 }
 
+function allowedPushEndpoint(raw) {
+  try {
+    const url = new URL(raw);
+    if (url.protocol !== "https:" || url.port || url.username || url.password) return false;
+    const host = url.hostname.toLowerCase();
+    return host === "fcm.googleapis.com" || host === "android.googleapis.com" ||
+      host === "updates.push.services.mozilla.com" ||
+      /^jmt[0-9]+\.google\.com$/.test(host) ||
+      host === "push.apple.com" || host.endsWith(".push.apple.com") ||
+      host.endsWith(".notify.windows.com");
+  } catch (_) { return false; }
+}
+
 async function sendToUser(userId, payload, subscriptions) {
   const userSubs = subscriptions.filter((sub) => sub.user_id === userId);
   for (const sub of userSubs) {
     try {
+      if (!allowedPushEndpoint(sub.endpoint)) throw new Error("Unsupported push service");
       await webpush.sendNotification({
         endpoint: sub.endpoint,
         keys: { p256dh: sub.p256dh, auth: sub.auth }
@@ -236,7 +250,8 @@ async function deliverPendingAdminMessages(subscriptions) {
     let successfulDevices = 0;
     for (const device of devices) {
       try {
-        await webpush.sendNotification({
+        if (!allowedPushEndpoint(device.endpoint)) throw new Error("Unsupported push service");
+      await webpush.sendNotification({
           endpoint: device.endpoint,
           keys: { p256dh: device.p256dh, auth: device.auth }
         }, JSON.stringify({ title: message.title, body: message.body, url: "./" }), { TTL: 86400, urgency: "high" });
