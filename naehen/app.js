@@ -2753,48 +2753,6 @@
     return data || {};
   }
 
-  async function loadAnnouncementConsent() {
-    const checkbox = $("#announcementConsent"), status = $("#announcementConsentStatus");
-    if (!checkbox || !status || !supa || !currentUserId() || localMode) return;
-    checkbox.disabled = true;
-    const response = await supa.from("admin_message_preferences")
-      .select("enabled").eq("user_id", currentUserId()).maybeSingle();
-    if (response.error) {
-      status.textContent = "Einwilligung aktuell nicht erreichbar: " + response.error.message;
-      return;
-    }
-    checkbox.checked = !!response.data?.enabled;
-    checkbox.disabled = false;
-    status.textContent = checkbox.checked
-      ? "Persönliche Durchsagen erlaubt. Du kannst sie jederzeit deaktivieren."
-      : "Deaktiviert · niemand kann dir persönliche Durchsagen schicken.";
-  }
-
-  async function saveAnnouncementConsent(allowed) {
-    const checkbox = $("#announcementConsent"), status = $("#announcementConsentStatus");
-    if (!checkbox || !status || !currentUserId() || !supa || localMode) return;
-    checkbox.disabled = true;
-    status.textContent = "Speichere Einstellung …";
-    try {
-      const { data, error } = await supa.from("admin_message_preferences").upsert({
-        user_id: currentUserId(),
-        enabled: !!allowed,
-        updated_at: new Date().toISOString()
-      }, { onConflict: "user_id" }).select("enabled");
-      if (error) throw error;
-      if (!data?.length) throw new Error("Speichern nicht bestätigt");
-      checkbox.checked = !!data[0].enabled;
-      status.textContent = checkbox.checked
-        ? "✅ Du hast persönliche NÄHEN-Durchsagen aktiviert."
-        : "🔕 Persönliche Durchsagen deaktiviert.";
-    } catch (error) {
-      checkbox.checked = !allowed;
-      status.textContent = "Speichern fehlgeschlagen: " + error.message;
-    } finally {
-      checkbox.disabled = false;
-    }
-  }
-
   async function loadAnnouncementInbox({ silent = false } = {}) {
     if (!supa || !currentUserId() || localMode) return;
     const box = $("#announcementInbox");
@@ -2880,14 +2838,14 @@
     if (!select || !status || !send || !supa || !currentUserId()) return;
     select.disabled = true;
     send.disabled = true;
-    status.textContent = "Empfänger mit Einwilligung werden geladen …";
+    status.textContent = "NÄHEN-Accounts werden geladen …";
     try {
       const result = await announcementApi("recipients");
       const people = result.recipients || [];
       select.replaceChildren();
       const placeholder = document.createElement("option");
       placeholder.value = "";
-      placeholder.textContent = people.length ? "Empfänger auswählen …" : "Noch niemand hat Durchsagen erlaubt";
+      placeholder.textContent = people.length ? "Empfänger auswählen …" : "Keine weiteren NÄHEN-Accounts vorhanden";
       select.appendChild(placeholder);
       for (const recipient of people) {
         const opt = document.createElement("option");
@@ -2901,8 +2859,8 @@
       }
       select.disabled = !people.length;
       status.textContent = people.length
-        ? people.length + " Nutzer haben persönliche Durchsagen aktiviert."
-        : "Keine Empfänger mit Einwilligung. Der Nutzer muss sie im Profil zuerst aktivieren.";
+        ? people.length + " NÄHEN-Accounts verfügbar. Push benötigt eine Freigabe auf dem Empfängergerät."
+        : "Keine weiteren Accounts vorhanden.";
     } catch (error) {
       status.textContent = "Empfänger nicht verfügbar: " + error.message;
     }
@@ -2944,16 +2902,12 @@
   function initAnnouncements() {
     announcementLastSeen = null;
     announcementsInitialized = false;
-    const consent = $("#announcementConsent");
-    if (consent) { consent.disabled = true; consent.checked = false; }
     if (localMode || !currentUserId() || !supa) {
-      $("#announcementConsentStatus").textContent = "Mit einem NÄHEN-Account verfügbar.";
       $("#announcementInbox").textContent = "Im lokalen Testmodus nicht verfügbar.";
       $("#announcementAdminPanel")?.classList.add("hidden");
       $("#pickerAdminBtn")?.classList.add("hidden");
       return;
     }
-    loadAnnouncementConsent();
     loadAnnouncementInbox();
     checkAnnouncementAdmin();
   }
@@ -3790,7 +3744,6 @@
   });
 
   function bindStaticEvents() {
-    $("#announcementConsent")?.addEventListener("change", (event) => saveAnnouncementConsent(event.target.checked));
     $("#announcementRefresh")?.addEventListener("click", () => loadAnnouncementInbox());
     $("#announcementReloadRecipients")?.addEventListener("click", () => loadAnnouncementRecipients());
     $("#announcementRecipient")?.addEventListener("change", () => { $("#announcementSend").disabled = !$("#announcementRecipient").value; });

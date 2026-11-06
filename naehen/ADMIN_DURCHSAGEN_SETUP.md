@@ -1,16 +1,18 @@
-# NÄHEN · Persönliche Admin-Durchsagen
+# NÄHEN · Admin-Durchsagen
 
-## Status
-Die zwei Datenbank-Migrationen wurden am 06.11.2026 auf das Projekt angewendet. Die Edge Function `admin-announcements` wurde mit JWT-Prüfung bereitgestellt. Die UI ist ab NÄHEN v143 verfügbar.
+Die NÄHEN-Zentrale ist nur für Accounts mit dem serverseitig gepflegten Merkmal `app_metadata.naehen_role = "admin"` sichtbar. Der Server prüft das Merkmal bei jeder Aktion erneut.
 
-## Berechtigungen
-Nur der von Supabase selbst verwaltete Auth-Wert `app_metadata.naehen_role = "admin"` berechtigt zum Versenden. Die Edge Function prüft dies bei jeder Anfrage direkt über `auth.admin.getUserById`; niemals `user_metadata`, eine E-Mail aus dem Client oder lokale Schalter vertrauen. Empfänger müssen die persönliche Einwilligung im Profil aktivieren (standardmäßig aus). Normale Clients können ausschließlich Nachrichten an den eingeloggten Nutzer lesen.
+## Empfänger
+Alle registrierten NÄHEN-Accounts außer dem Absender können direkt ausgewählt werden. Eine zusätzliche App-Einwilligung ist nicht erforderlich. Eine Durchsage wird sofort im privaten Postfach des Empfängers gespeichert. Der Empfänger kann es im Profil öffnen.
 
-## Versand
-Admin: Profil → NÄHEN-Zentrale → Empfänger → Titel und Inhalt → Senden. Empfänger: Profil → persönliche Durchsagen erlauben. Nachrichten werden in der Datenbank gespeichert und in der App alle 30 Sekunden bzw. per Aktualisieren angezeigt. Spam-Bremse: maximal 10 pro Stunde und mindestens 90 Sekunden Abstand je Empfänger.
+**System-Push** bei geschlossener App erfordert weiterhin eine auf dem jeweiligen Gerät erteilte Push-Erlaubnis und ein Push-Abonnement. Browser-/Geräteberechtigungen werden nicht umgangen. Die Edge Function benötigt außerdem den passenden privaten VAPID-Schlüssel als Supabase Secret `NAEHEN_VAPID_PRIVATE_KEY`. Dieser Schlüssel darf niemals im Repository liegen. Ist er nicht konfiguriert, funktioniert ausschließlich das In-App-Postfach.
 
-## Für echte Betriebssystem-Pushs (auch bei geschlossener App)
-In Supabase **Edge Functions → Secrets** den bestehenden privaten VAPID-Schlüssel als `NAEHEN_VAPID_PRIVATE_KEY` konfigurieren. Er muss zum öffentlichen Schlüssel in `naehen/config.js` gehören. Nur dort hinzufügen, NICHT in Git oder dem Browser. Ohne diesen geheimen Schlüssel wird eine Durchsage korrekt im In-App-Postfach gespeichert, jedoch kein Hintergrund-Push gesendet. Ein aktives Geräte-Push-Abonnement ist zusätzlich erforderlich.
+## Sicherheit
+- Der Admin wird bei jeder Anfrage durch die Edge Function gegen Supabase Auth geprüft, nicht durch Browserzustand oder frei veränderbare `user_metadata`.
+- RLS erlaubt Empfängern nur das Lesen eigener Nachrichten. Das Schreiben ist ausschließlich über den Admin-Serverprozess möglich.
+- Versand nur an vorhandene Accounts, keine freie Massenadresse.
+- Maximal zehn Nachrichten pro Stunde; mindestens 90 Sekunden Abstand je Empfänger.
+- Die bisherigen Datenbanktabellen `admin_message_preferences` und `admin_messages` bleiben erhalten; die alte Einwilligungstabelle wird nicht mehr verwendet.
 
-## Laufende Tests
-Nie eine echte Durchsage versenden, ohne sie im Admin-Panel bewusst auszulösen. Funktioniert die Auflistung nicht, prüfen: Admin-Rolle, JWT, Einwilligung, Edge-Logs. NÄHEN meldet Push-Zustellstatus separat und zeigt keine falsche Erfolgsmeldung für System-Pushs.
+## Bedienung
+Startauswahl → 📯 NÄHEN-Zentrale (oder Profil) → Empfänger wählen → Titel und Nachricht → **Durchsage senden**.

@@ -68,25 +68,28 @@ Deno.serve(async (req: Request) => {
     if (!admin) return respond({ error: "Administrator permission required" }, 403);
 
     if (payload.action === "recipients") {
-      const { data: prefs, error } = await db.from("admin_message_preferences")
-        .select("user_id").eq("enabled", true).limit(100);
+      // Account membership, not an extra opt-in checkbox, controls the list.
+      // The caller must already have passed the server-owned admin-role check.
+      const { data: profiles, error } = await db.from("profiles")
+        .select("id,username").neq("id", senderId).order("username", { ascending: true }).limit(250);
       if (error) throw error;
-      const ids = (prefs || []).map((p: any) => p.user_id).filter((id: string) => id !== senderId);
+      const people = profiles || [];
+      const ids = people.map((p: any) => p.id);
       if (!ids.length) return respond({ recipients: [] });
-      const [profiles, subscriptions, visits] = await Promise.all([
-        db.from("profiles").select("id,username").in("id", ids),
+      const [subscriptions, visits] = await Promise.all([
         db.from("push_subscriptions").select("user_id").in("user_id", ids),
         db.from("park_days").select("user_id,park_slug,started_at")
           .in("user_id", ids).is("ended_at", null)
           .gte("started_at", new Date(Date.now() - 18 * 3600 * 1000).toISOString()),
       ]);
-      for (const result of [profiles, subscriptions, visits]) if (result.error) throw result.error;
-      const usernames = new Map((profiles.data || []).map((p: any) => [p.id, p.username]));
+      for (const result of [subscriptions, visits]) if (result.error) throw result.error;
       const pushIds = new Set((subscriptions.data || []).map((p: any) => p.user_id));
       const parks = new Map((visits.data || []).map((p: any) => [p.user_id, p.park_slug]));
-      return respond({ recipients: ids.map((id: string) => ({
-        id, name: String(usernames.get(id) || "NÄHEN-Account").slice(0, 60),
-        activePark: parks.get(id) || null, hasPush: pushIds.has(id),
+      return respond({ recipients: people.map((person: any) => ({
+        id: person.id,
+        name: String(person.username || "NÄHEN-Account").slice(0, 60),
+        activePark: parks.get(person.id) || null,
+        hasPush: pushIds.has(person.id),
       })) });
     }
 
@@ -99,10 +102,12 @@ Deno.serve(async (req: Request) => {
           recipientId === senderId || !valid(title, 72) || !valid(body, 240)) {
         return respond({ error: "Invalid message or recipient" }, 400);
       }
-      const { data: preference, error: preferenceError } = await db
-        .from("admin_message_preferences").select("enabled").eq("user_id", recipientId).maybeSingle();
-      if (preferenceError) throw preferenceError;
-      if (!preference?.enabled) return respond({ error: "Recipient has not opted in" }, 409);
+      // Only send to an actual registered NÄHEN account; no separate app consent
+      // is required. Device-level push permission remains under browser control.
+      const { data: recipient, error: recipientError } = await db.from("profiles")
+        .select("id").eq("id", recipientId).maybeSingle();
+      if (recipientError) throw recipientError;
+      if (!recipient) return respond({ error: "Empfänger-Account existiert nicht" }, 404);
 
       const { count, error: countError } = await db.from("admin_messages")
         .select("id", { head: true, count: "exact" }).eq("sender_id", senderId)

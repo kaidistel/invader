@@ -1985,7 +1985,7 @@ background:#20172aab;color:#ffe2b0;font:700 10px/1.25 'Barlow Condensed',system-
 #announcementAdminPanel textarea{resize:vertical;min-height:106px}
 #announcementReloadRecipients{margin-top:10px}
 #announcementSend{margin-top:15px}
-#announcementAdminPanel .mini,#announcementConsentStatus{overflow-wrap:anywhere;line-height:1.45}
+#announcementAdminPanel .mini{overflow-wrap:anywhere;line-height:1.45}
 .announcementItem{border:1px solid #c8b7a43f;border-radius:12px;padding:12px;margin:9px 0;
   background:linear-gradient(120deg,#172332,#272036)}
 .announcementItemHead b{color:#ffe2af}
