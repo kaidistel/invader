@@ -4,6 +4,9 @@ import webpush from "npm:web-push@3.6.7";
 const PUBLIC_VAPID = "BDxPEYxaMC9ldXnE5X7NHO35E0VvkFAFH9BS1ICNZKQXfeifjLSqBF9x7hsK2posMXjoKPDj1Q1kOnlzCRonX58";
 const VAPID_CONTACT = "https://kaidistel.github.io/invader/naehen/";
 const SITE = "https://kaidistel.github.io";
+const IMAGE_BUCKET = "naehen-admin-images";
+const IMAGE_MAX_BYTES = 1500000;
+const IMAGE_PATH_PATTERN = /^[0-9a-f-]{36}\/[0-9a-f-]{36}\.jpg$/;
 
 const respond = (value: unknown, status = 200) => new Response(JSON.stringify(value), {
   status,
@@ -33,7 +36,7 @@ function allowedPushEndpoint(raw: string): boolean {
   } catch { return false; }
 }
 
-async function deliver(db: any, recipientId: string, title: string, body: string) {
+async function deliver(db: any, recipientId: string, title: string, body: string, imagePath?: string | null) {
   let privateKey = Deno.env.get("NAEHEN_VAPID_PRIVATE_KEY") || "";
   if (!privateKey) {
     // The original VAPID private key is transferred by GitHub Actions directly
@@ -52,6 +55,12 @@ async function deliver(db: any, recipientId: string, title: string, body: string
   if (error) throw error;
   if (!subs?.length) return "no_subscription";
   webpush.setVapidDetails(VAPID_CONTACT, PUBLIC_VAPID, privateKey);
+  let imageUrl: string | null = null;
+  if (imagePath) {
+    const signed = await db.storage.from(IMAGE_BUCKET).createSignedUrl(imagePath, 86400);
+    if (signed.error) console.warn("Signed push image unavailable", signed.error.message);
+    else imageUrl = signed.data?.signedUrl || null;
+  }
   let delivered = 0;
   for (const s of subs) {
     try {
@@ -59,7 +68,7 @@ async function deliver(db: any, recipientId: string, title: string, body: string
       await webpush.sendNotification({
         endpoint: s.endpoint,
         keys: { p256dh: s.p256dh, auth: s.auth },
-      }, JSON.stringify({ title, body, url: "./" }), { TTL: 86400, urgency: "high" });
+      }, JSON.stringify({ title, body, url: "./", ...(imageUrl ? { image: imageUrl } : {}) }), { TTL: 86400, urgency: "high" });
       delivered++;
     } catch (error: any) {
       console.warn("Push device error", error?.statusCode || "unknown");
@@ -147,7 +156,53 @@ Deno.serve(async (req: Request) => {
       return respond({ saved: true, pushStatus, testId: inserted.id });
     }
 
+    if (payload.action === "image-urls") {
+      // Authorized recipients only: no arbitrary object paths or filenames accepted.
+      const ids = Array.isArray(payload.messageIds) ? payload.messageIds : [];
+      if (!ids.length || ids.length > 25 ||
+          ids.some((id: unknown) => typeof id !== "string" ||
+            !/^[0-9a-f]{8}-[0-9a-f-]{27,}$/.test(id))) {
+        return respond({ error: "Ungültige Nachrichten-Auswahl" }, 400);
+      }
+      const { data: rows, error } = await db.from("admin_messages")
+        .select("id,image_path").eq("recipient_id", senderId).in("id", ids)
+        .not("image_path", "is", null);
+      if (error) throw error;
+      const urls: Record<string, string> = {};
+      await Promise.all((rows || []).map(async (row: any) => {
+        if (!row.image_path || !IMAGE_PATH_PATTERN.test(row.image_path)) return;
+        const signed = await db.storage.from(IMAGE_BUCKET)
+          .createSignedUrl(row.image_path, 3600);
+        if (!signed.error && signed.data?.signedUrl) urls[row.id] = signed.data.signedUrl;
+      }));
+      return respond({ images: urls });
+    }
+
     if (!admin) return respond({ error: "Administrator permission required" }, 403);
+
+    if (payload.action === "upload-image") {
+      // The browser resizes to JPEG before uploading. The Edge Function
+      // validates the encoded bytes and never exposes direct Storage writes.
+      const encoded = payload.imageBase64;
+      if (typeof encoded !== "string" || !encoded.length ||
+          encoded.length > Math.ceil(IMAGE_MAX_BYTES * 4 / 3) + 16 ||
+          !/^[A-Za-z0-9+/]+={0,2}$/.test(encoded)) {
+        return respond({ error: "Bild ungültig oder zu groß (max. 1,5 MB)." }, 400);
+      }
+      let bytes: Uint8Array;
+      try { bytes = Uint8Array.from(atob(encoded), c => c.charCodeAt(0)); }
+      catch { return respond({ error: "Ungültige Bilddaten." }, 400); }
+      if (bytes.length < 150 || bytes.length > IMAGE_MAX_BYTES ||
+          bytes[0] !== 255 || bytes[1] !== 216 || bytes[2] !== 255 ||
+          bytes[bytes.length - 2] !== 255 || bytes[bytes.length - 1] !== 217) {
+        return respond({ error: "Nur gültige JPEG-Bilder bis 1,5 MB erlaubt." }, 400);
+      }
+      const imagePath = senderId + "/" + crypto.randomUUID() + ".jpg";
+      const { error } = await db.storage.from(IMAGE_BUCKET)
+        .upload(imagePath, bytes, { contentType: "image/jpeg", upsert: false, cacheControl: "3600" });
+      if (error) throw error;
+      return respond({ imagePath });
+    }
 
     if (payload.action === "recipients") {
       // Account membership, not an extra opt-in checkbox, controls the list.
@@ -178,11 +233,27 @@ Deno.serve(async (req: Request) => {
     if (payload.action === "send") {
       const recipientId = payload.recipientId;
       const title = payload.title?.trim();
-      const body = payload.body?.trim();
+      const body = typeof payload.body === "string" ? payload.body.trim() : "";
+      const imagePath = payload.imagePath || null;
+      const deliveredBody = body || (imagePath ? "📷 Bild von der NÄHEN-Zentrale" : "");
       if (typeof recipientId !== "string" ||
           !/^[0-9a-f]{8}-[0-9a-f-]{27,}$/.test(recipientId) ||
-          recipientId === senderId || !valid(title, 72) || !valid(body, 240)) {
+          recipientId === senderId || !valid(title, 72) || !valid(deliveredBody, 240)) {
         return respond({ error: "Invalid message or recipient" }, 400);
+      }
+      if (imagePath !== null) {
+        // An admin may only attach an image under their own upload prefix.
+        if (typeof imagePath !== "string" || !IMAGE_PATH_PATTERN.test(imagePath) ||
+            !imagePath.startsWith(senderId + "/")) {
+          return respond({ error: "Ungültiger Bildanhang." }, 400);
+        }
+        const filename = imagePath.slice(senderId.length + 1);
+        const { data: objects, error: lookupError } = await db.storage
+          .from(IMAGE_BUCKET).list(senderId, { limit: 10, search: filename });
+        if (lookupError) throw lookupError;
+        if (!(objects || []).some((item: any) => item.name === filename)) {
+          return respond({ error: "Bildanhang wurde nicht gefunden." }, 404);
+        }
       }
       // Only send to an actual registered NÄHEN account; no separate app consent
       // is required. Device-level push permission remains under browser control.
@@ -192,11 +263,11 @@ Deno.serve(async (req: Request) => {
       if (!recipient) return respond({ error: "Empfänger-Account existiert nicht" }, 404);
 
       const { data: inserted, error: insertError } = await db.from("admin_messages")
-        .insert({ sender_id: senderId, recipient_id: recipientId, title, body })
+        .insert({ sender_id: senderId, recipient_id: recipientId, title, body: deliveredBody, image_path: imagePath })
         .select("id").single();
       if (insertError) throw insertError;
       let pushStatus = "failed";
-      try { pushStatus = await deliver(db, recipientId, title, body); }
+      try { pushStatus = await deliver(db, recipientId, title, deliveredBody, imagePath); }
       catch (error) { console.warn("Push delivery error", String(error)); }
       await db.from("admin_messages").update({ push_status: pushStatus }).eq("id", inserted.id);
       return respond({ saved: true, pushStatus });
