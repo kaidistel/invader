@@ -191,18 +191,6 @@ Deno.serve(async (req: Request) => {
       if (recipientError) throw recipientError;
       if (!recipient) return respond({ error: "Empfänger-Account existiert nicht" }, 404);
 
-      const { count, error: countError } = await db.from("admin_messages")
-        .select("id", { head: true, count: "exact" }).eq("sender_id", senderId)
-        .gte("created_at", new Date(Date.now() - 3600_000).toISOString());
-      if (countError) throw countError;
-      if ((count || 0) >= 10) return respond({ error: "Hourly limit reached" }, 429);
-      const { data: recent, error: recentError } = await db.from("admin_messages")
-        .select("created_at").eq("sender_id", senderId).eq("recipient_id", recipientId)
-        .order("created_at", { ascending: false }).limit(1);
-      if (recentError) throw recentError;
-      if (recent?.length && Date.now() - Date.parse(recent[0].created_at) < 90_000) {
-        return respond({ error: "Please wait 90 seconds between messages" }, 429);
-      }
       const { data: inserted, error: insertError } = await db.from("admin_messages")
         .insert({ sender_id: senderId, recipient_id: recipientId, title, body })
         .select("id").single();
