@@ -34,7 +34,7 @@ async function deliver(db: any, recipientId: string, title: string, body: string
       await webpush.sendNotification({
         endpoint: s.endpoint,
         keys: { p256dh: s.p256dh, auth: s.auth },
-      }, JSON.stringify({ title, body, url: "./" }), { TTL: 600 });
+      }, JSON.stringify({ title, body, url: "./" }), { TTL: 86400, urgency: "high" });
       delivered++;
     } catch (error: any) {
       console.warn("Push device error", error?.statusCode || "unknown");
@@ -65,6 +65,36 @@ Deno.serve(async (req: Request) => {
     const admin = account?.user?.app_metadata?.naehen_role === "admin";
     const payload = await req.json().catch(() => ({}));
     if (payload.action === "status") return respond({ admin });
+    if (payload.action === "test-push") {
+      // A signed-in user may test ONLY their own registered push subscription.
+      // The message goes through the real push transport, not Notification() on this page.
+      const { data: devices, error: deviceError } = await db.from("push_subscriptions")
+        .select("id").eq("user_id", senderId).limit(1);
+      if (deviceError) throw deviceError;
+      if (!devices?.length) return respond({ error: "Kein Push-Gerät registriert. Bitte Push aktivieren." }, 409);
+
+      const title = "🔔 NÄHEN Hintergrund-Push-Test";
+      const { data: recent, error: recentError } = await db.from("admin_messages")
+        .select("id").eq("sender_id", senderId).eq("recipient_id", senderId)
+        .eq("title", title)
+        .gte("created_at", new Date(Date.now() - 5 * 60_000).toISOString()).limit(1);
+      if (recentError) throw recentError;
+      if (recent?.length) return respond({ error: "Bitte 5 Minuten bis zum nächsten Push-Test warten." }, 429);
+
+      const body = "Wenn diese Meldung bei geschlossener NÄHEN-App erscheint, funktioniert der echte Hintergrund-Push. 🧵";
+      const { data: inserted, error: saveError } = await db.from("admin_messages")
+        .insert({ sender_id: senderId, recipient_id: senderId, title, body })
+        .select("id").single();
+      if (saveError) throw saveError;
+      let pushStatus = "failed";
+      try { pushStatus = await deliver(db, senderId, title, body); }
+      catch (error) { console.warn("Push self-test delivery error", String(error)); }
+      const { error: updateError } = await db.from("admin_messages")
+        .update({ push_status: pushStatus }).eq("id", inserted.id);
+      if (updateError) throw updateError;
+      return respond({ saved: true, pushStatus, testId: inserted.id });
+    }
+
     if (!admin) return respond({ error: "Administrator permission required" }, 403);
 
     if (payload.action === "recipients") {
