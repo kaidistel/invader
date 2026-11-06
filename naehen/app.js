@@ -2971,7 +2971,7 @@
       $("#pushDiagnostics")?.classList.remove("hidden");
       panel.classList.remove("hidden");
       pickerButton?.classList.remove("hidden");
-      await loadAnnouncementRecipients();
+      await Promise.allSettled([loadAnnouncementRecipients(), loadAdminActivity()]);
     } catch (error) {
       verifiedAnnouncementAdmin = false;
       $("#pushDiagnostics")?.classList.add("hidden");
@@ -2987,6 +2987,98 @@
         pickerButton?.classList.add("hidden");
       }
       console.warn("Admin-Durchsagen nicht erreichbar", error);
+    }
+  }
+
+  let adminActivityLoading = false;
+
+  function renderAdminActivity(accounts, checkedAt) {
+    const list = $("#adminActivityList");
+    if (!list) return;
+    const activeDays = accounts.filter(person => person.dayOpen);
+    $("#adminActivityOpenCount").textContent = String(activeDays.length);
+    $("#adminActivityQueueCount").textContent = String(activeDays.filter(person => person.currentQueue).length);
+    $("#adminActivityAccountCount").textContent = String(accounts.length);
+    const clock = value => {
+      if (!value) return "–";
+      const date = new Date(value);
+      return Number.isNaN(date.valueOf()) ? "–" :
+        date.toLocaleString("de-DE", { day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit" });
+    };
+    const age = value => {
+      const minutes = Math.max(0, Math.floor((Date.now() - Date.parse(value || "")) / 60000));
+      if (!Number.isFinite(minutes)) return "";
+      if (minutes < 1) return "gerade eben";
+      if (minutes < 60) return "vor " + minutes + " Min.";
+      if (minutes < 24 * 60) return "vor " + Math.floor(minutes / 60) + " Std.";
+      return "vor " + Math.floor(minutes / 1440) + " Tagen";
+    };
+    const label = entry => {
+      if (!entry) return "Keine Fahrt protokolliert";
+      if (entry.status === "waiting" && !entry.endedAt) return "Queue begonnen · noch nicht abgeschlossen";
+      if (entry.status === "ridden") return "Fahrt abgeschlossen";
+      if (entry.status === "aborted") return "Queue abgebrochen";
+      return "Eintrag: " + (entry.status || "unbekannt");
+    };
+    const entryRow = entry => {
+      const ride = escapeHtml(entry.rideName || "Attraktion");
+      const time = clock(entry.endedAt || entry.startedAt);
+      return '<div class="adminActivityEntry"><b>' + ride + '</b><span>' +
+        escapeHtml(label(entry)) + ' · ' + escapeHtml(time) + '</span></div>';
+    };
+    list.innerHTML = accounts.length ? accounts.map(person => {
+      const open = !!person.dayOpen;
+      const parkName = person.parkSlug
+        ? (PARKS[person.parkSlug]?.name || person.parkSlug)
+        : "Kein kürzlich protokollierter Park";
+      const name = escapeHtml(person.name || "NÄHEN-Account");
+      const status = open ? "Parktag offen" : person.parkSlug ? "Letzter Parktag beendet/älter" : "Kein Parktag";
+      const live = person.currentQueue;
+      const currently = !open
+        ? "Aktuell kein offener Parktag aus den letzten 18 Stunden."
+        : live
+          ? "⏱ Queue-Eintrag läuft: " + escapeHtml(live.rideName) + " · gestartet " + escapeHtml(age(live.startedAt))
+          : "Derzeit keine laufende Queue im NÄHEN-Protokoll.";
+      const last = person.lastEntry
+        ? '<div class="adminActivityLast"><small>LETZTER EINTRAG</small>' +
+          entryRow(person.lastEntry) + '</div>'
+        : '<p class="adminActivityMuted">Noch keine Fahrt für diesen Parktag gespeichert.</p>';
+      const history = (person.recentEntries || []).length > 1
+        ? '<details class="adminActivityHistory"><summary>Letzte ' +
+          (person.recentEntries.length) + ' Einträge ansehen</summary><div>' +
+          person.recentEntries.map(entryRow).join("") + '</div></details>'
+        : "";
+      return '<article class="adminActivityCard' + (open ? ' isOpen' : '') + '">' +
+        '<div class="adminActivityCardTop"><strong>' + name +
+        '</strong><span class="adminActivityState">' + escapeHtml(status) + '</span></div>' +
+        '<p class="adminActivityPark">' + (open ? "🎢 " : "📍 ") + escapeHtml(parkName) + '</p>' +
+        (person.dayStartedAt ? '<p class="adminActivityMuted">Parktag ab ' + escapeHtml(clock(person.dayStartedAt)) +
+          (person.dayEndedAt ? ' · beendet ' + escapeHtml(clock(person.dayEndedAt)) : '') + '</p>' : '') +
+        '<p class="adminActivityCurrent">' + currently + '</p>' + last + history +
+        '<p class="adminActivityTime">Letzte protokollierte Aktivität: ' +
+        (person.lastActivityAt ? escapeHtml(age(person.lastActivityAt)) + ' · ' +
+        escapeHtml(clock(person.lastActivityAt)) : 'Keine') + '</p></article>';
+    }).join("") : '<p class="mini">Keine anderen NÄHEN-Accounts vorhanden.</p>';
+    $("#adminActivityChecked").textContent = "Abfrage: " + clock(checkedAt) +
+      " · Aktualisierung alle 45 Sekunden, solange die Zentrale sichtbar ist.";
+  }
+
+  async function loadAdminActivity({ silent = false } = {}) {
+    if (!verifiedAnnouncementAdmin || adminActivityLoading || localMode || !currentUserId()) return;
+    adminActivityLoading = true;
+    const refresh = $("#adminActivityRefresh");
+    if (refresh) refresh.disabled = true;
+    if (!silent) $("#adminActivityChecked").textContent = "Aktuelle Parktage und Queue-Einträge werden abgefragt …";
+    try {
+      const response = await announcementApi("activity");
+      if (!verifiedAnnouncementAdmin) return;
+      renderAdminActivity(response.accounts || [], response.checkedAt || new Date().toISOString());
+    } catch (error) {
+      $("#adminActivityChecked").textContent = "Parkradar nicht verfügbar: " + (error.message || error);
+      if (!silent) $("#adminActivityList").textContent = "Erneut auf AKTUALISIEREN tippen.";
+    } finally {
+      adminActivityLoading = false;
+      if (refresh) refresh.disabled = false;
     }
   }
 
@@ -4035,6 +4127,12 @@
   function bindStaticEvents() {
     $("#announcementRefresh")?.addEventListener("click", () => loadAnnouncementInbox());
     $("#announcementReloadRecipients")?.addEventListener("click", () => loadAnnouncementRecipients());
+    $("#adminActivityRefresh")?.addEventListener("click", () => loadAdminActivity());
+    window.setInterval(() => {
+      if (verifiedAnnouncementAdmin && !document.hidden && !$("#profileView")?.classList.contains("hidden")) {
+        void loadAdminActivity({ silent: true });
+      }
+    }, 45000);
     $("#announcementRecipient")?.addEventListener("change", () => { $("#announcementSend").disabled = !$("#announcementRecipient").value; });
     $("#announcementSend")?.addEventListener("click", sendPersonalAnnouncement);
     $("#announcementImageFile")?.addEventListener("change", (event) => {
@@ -4079,6 +4177,7 @@
         if ($("#announcementAdminPanel")?.classList.contains("hidden")) return;
         openGlobalArchiveFromPicker({ pushHistory: true });
         switchView("profileView");
+        requestAnimationFrame(() => $("#adminActivityPanel")?.scrollIntoView({ behavior: "smooth", block: "start" }));
         return;
       }
       if (event.target.closest("#pickerAllDaysBtn")) {

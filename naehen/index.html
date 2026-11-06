@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="NÄHEN">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=153">
+  <link rel="stylesheet" href="./styles.css?v=154">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Staatliches&family=Stardos+Stencil:wght@400;700&family=Bangers&family=Bebas+Neue&family=Cinzel+Decorative:wght@400;700&family=Graduate&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
   <link href="https://fonts.cdnfonts.com/css/gang-of-three" rel="stylesheet">
   <link href="https://fonts.cdnfonts.com/css/old-london" rel="stylesheet">
   <link href="https://fonts2u.com/download/steampunk-machinery-fon-regular.font-face" rel="stylesheet">
-  <link rel="stylesheet" href="./portals.css?v=153">
+  <link rel="stylesheet" href="./portals.css?v=154">
   <style id="phl-retired-dioramas">#rideSheet[data-park="phantasialand"] .ride3d{display:none!important;visibility:hidden!important}</style>
   <title>NÄHEN · Parkday Companion</title>
 </head>
@@ -228,6 +228,7 @@
         <p class="meta">Persönliche Wartezeitlimits, Drops, Wiedereröffnungen und SR-Community-Meldungen.</p>
         <button class="btn secondary full" id="pushSettingsBtn">NÄH-ALARME EINSTELLEN</button>
       </div>
+      <p class="mini" id="activityPrivacyNotice">Transparenz: Während du einen Parktag mit NÄHEN protokollierst, kann die NÄHEN-Administration deine eingetragenen Parks, Fahrten und Queue-Zeiten einsehen. Es werden keine GPS-Standorte erfasst.</p>
       <div class="profileBox" id="announcementsPreferences">
         <h3>📬 Persönliche Durchsagen</h3>
         <p class="meta">Nachrichten der NÄHEN-Zentrale landen direkt hier. System-Pushs erhältst du nur, wenn du Push-Benachrichtigungen für NÄHEN aktiviert hast.</p>
@@ -236,6 +237,20 @@
       </div>
       <div class="profileBox hidden" id="announcementAdminPanel">
         <h3>🚨 NÄHEN-Zentrale · Admin</h3>
+        <section class="adminActivityPanel" id="adminActivityPanel" aria-label="Admin Parkradar">
+          <div class="adminActivityHeading">
+            <div><span class="adminActivityEyebrow">ADMIN · PARKRADAR</span><h3>🛰️ Wer näht gerade?</h3></div>
+            <button class="btn secondary compact" type="button" id="adminActivityRefresh">AKTUALISIEREN</button>
+          </div>
+          <p class="meta">Aktuelle Parktage und protokollierte Fahrten aller anderen NÄHEN-Accounts. Kein GPS: Ein offener Parktag bestätigt nicht den tatsächlichen Standort.</p>
+          <div class="adminActivityOverview">
+            <div><strong id="adminActivityOpenCount">–</strong><small>Offene Parktage</small></div>
+            <div><strong id="adminActivityQueueCount">–</strong><small>Queue-Einträge laufen</small></div>
+            <div><strong id="adminActivityAccountCount">–</strong><small>Andere Accounts</small></div>
+          </div>
+          <p class="mini" id="adminActivityChecked" role="status">Parkaktivität wird geladen …</p>
+          <div id="adminActivityList" class="adminActivityList" aria-live="polite"></div>
+        </section>
         <p class="meta">Eine persönliche Durchsage an einen NÄHEN-Account. Nur dein Admin-Account darf Nachrichten versenden.</p>
         <label class="announceLabel" for="announcementRecipient">EMPFÄNGER</label>
         <select id="announcementRecipient" disabled><option value="">Empfänger laden …</option></select>
@@ -382,26 +397,26 @@
   </section>
 
   <script defer src="./config.js"></script>
-  <script defer src="./movie-park-config.js?v=153"></script>
-  <script defer src="./walibi-holland-config.js?v=153"></script>
-  <script defer src="./walibi-belgium-config.js?v=153"></script>
-  <script defer src="./europa-park-config.js?v=153"></script>
-  <script defer src="./hansa-park-config.js?v=153"></script>
-  <script defer src="./soest-allerheiligenkirmes-2026-config.js?v=153"></script>
-  <script defer src="./bocholt-kirmes-2026-config.js?v=153"></script>
-  <script defer src="./salzbergen-herbstkirmes-2026-config.js?v=153"></script>
-  <script defer src="./rheine-herbstkirmes-2026-config.js?v=153"></script>
-  <script defer src="./muenster-herbstsend-2026-config.js?v=153"></script>
-  <script defer src="./gallimarkt-leer-2026-config.js?v=153"></script>
-  <script defer src="./hamburg-winterdom-2026-config.js?v=153"></script>
-  <script defer src="./bremer-freimarkt-2026-config.js?v=153"></script>
-  <script defer src="./nordhorn-herbstkirmes-2026-config.js?v=153"></script>
-  <script defer src="./hochheimer-markt-2026-config.js?v=153"></script>
-  <script defer src="./cranger-weihnachtszauber-2026-config.js?v=153"></script>
-  <script defer src="./meppen-herbstkirmes-2026-config.js?v=153"></script>
-  <script defer src="./koeln-deutz-herbstvolksfest-2026-config.js?v=153"></script>
-  <script defer src="./osnabrueck-herbstjahrmarkt-2026-config.js?v=153"></script>
+  <script defer src="./movie-park-config.js?v=154"></script>
+  <script defer src="./walibi-holland-config.js?v=154"></script>
+  <script defer src="./walibi-belgium-config.js?v=154"></script>
+  <script defer src="./europa-park-config.js?v=154"></script>
+  <script defer src="./hansa-park-config.js?v=154"></script>
+  <script defer src="./soest-allerheiligenkirmes-2026-config.js?v=154"></script>
+  <script defer src="./bocholt-kirmes-2026-config.js?v=154"></script>
+  <script defer src="./salzbergen-herbstkirmes-2026-config.js?v=154"></script>
+  <script defer src="./rheine-herbstkirmes-2026-config.js?v=154"></script>
+  <script defer src="./muenster-herbstsend-2026-config.js?v=154"></script>
+  <script defer src="./gallimarkt-leer-2026-config.js?v=154"></script>
+  <script defer src="./hamburg-winterdom-2026-config.js?v=154"></script>
+  <script defer src="./bremer-freimarkt-2026-config.js?v=154"></script>
+  <script defer src="./nordhorn-herbstkirmes-2026-config.js?v=154"></script>
+  <script defer src="./hochheimer-markt-2026-config.js?v=154"></script>
+  <script defer src="./cranger-weihnachtszauber-2026-config.js?v=154"></script>
+  <script defer src="./meppen-herbstkirmes-2026-config.js?v=154"></script>
+  <script defer src="./koeln-deutz-herbstvolksfest-2026-config.js?v=154"></script>
+  <script defer src="./osnabrueck-herbstjahrmarkt-2026-config.js?v=154"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script defer src="./app.js?v=153"></script>
+  <script defer src="./app.js?v=154"></script>
 </body>
 </html>
