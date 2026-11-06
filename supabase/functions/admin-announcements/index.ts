@@ -128,8 +128,32 @@ Deno.serve(async (req: Request) => {
     }
 
 
+    if (payload.action === "image-urls") {
+      // Authorized recipients only: no arbitrary object paths or filenames accepted.
+      const ids = Array.isArray(payload.messageIds) ? payload.messageIds : [];
+      if (!ids.length || ids.length > 25 ||
+          ids.some((id: unknown) => typeof id !== "string" ||
+            !/^[0-9a-f]{8}-[0-9a-f-]{27,}$/.test(id))) {
+        return respond({ error: "Ungültige Nachrichten-Auswahl" }, 400);
+      }
+      const { data: rows, error } = await db.from("admin_messages")
+        .select("id,image_path").eq("recipient_id", senderId).in("id", ids)
+        .not("image_path", "is", null);
+      if (error) throw error;
+      const urls: Record<string, string> = {};
+      await Promise.all((rows || []).map(async (row: any) => {
+        if (!row.image_path || !IMAGE_PATH_PATTERN.test(row.image_path)) return;
+        const signed = await db.storage.from(IMAGE_BUCKET)
+          .createSignedUrl(row.image_path, 3600);
+        if (!signed.error && signed.data?.signedUrl) urls[row.id] = signed.data.signedUrl;
+      }));
+      return respond({ images: urls });
+    }
+
+    if (!admin) return respond({ error: "Administrator permission required" }, 403);
+
     if (payload.action === "test-push") {
-      // A signed-in user may test ONLY their own registered push subscription.
+      // An authenticated ADMIN may test ONLY their own registered push subscription.
       // The message goes through the real push transport, not Notification() on this page.
       const { data: devices, error: deviceError } = await db.from("push_subscriptions")
         .select("id").eq("user_id", senderId).limit(1);
@@ -157,30 +181,6 @@ Deno.serve(async (req: Request) => {
       if (updateError) throw updateError;
       return respond({ saved: true, pushStatus, testId: inserted.id });
     }
-
-    if (payload.action === "image-urls") {
-      // Authorized recipients only: no arbitrary object paths or filenames accepted.
-      const ids = Array.isArray(payload.messageIds) ? payload.messageIds : [];
-      if (!ids.length || ids.length > 25 ||
-          ids.some((id: unknown) => typeof id !== "string" ||
-            !/^[0-9a-f]{8}-[0-9a-f-]{27,}$/.test(id))) {
-        return respond({ error: "Ungültige Nachrichten-Auswahl" }, 400);
-      }
-      const { data: rows, error } = await db.from("admin_messages")
-        .select("id,image_path").eq("recipient_id", senderId).in("id", ids)
-        .not("image_path", "is", null);
-      if (error) throw error;
-      const urls: Record<string, string> = {};
-      await Promise.all((rows || []).map(async (row: any) => {
-        if (!row.image_path || !IMAGE_PATH_PATTERN.test(row.image_path)) return;
-        const signed = await db.storage.from(IMAGE_BUCKET)
-          .createSignedUrl(row.image_path, 3600);
-        if (!signed.error && signed.data?.signedUrl) urls[row.id] = signed.data.signedUrl;
-      }));
-      return respond({ images: urls });
-    }
-
-    if (!admin) return respond({ error: "Administrator permission required" }, 403);
 
     if (payload.action === "upload-image") {
       // The browser resizes to JPEG before uploading. The Edge Function

@@ -230,6 +230,7 @@
   let highlightedInboxMessageId = null;
   let announcementsInitialized = false;
   let sendingAnnouncement = false;
+  let verifiedAnnouncementAdmin = false;
   let announcementImage = null;
   let preparingAnnouncementImage = false;
   let lastPushSyncAt = 0;
@@ -2932,6 +2933,8 @@
   }
 
   async function checkAnnouncementAdmin() {
+    verifiedAnnouncementAdmin = false;
+    $("#pushDiagnostics")?.classList.add("hidden");
     const panel = $("#announcementAdminPanel");
     const pickerButton = $("#pickerAdminBtn");
     const status = $("#announcementAdminStatus");
@@ -2958,14 +2961,20 @@
       }
       const info = await announcementApi("status");
       if (!info.admin) {
+        verifiedAnnouncementAdmin = false;
+        $("#pushDiagnostics")?.classList.add("hidden");
         panel.classList.add("hidden");
         pickerButton?.classList.add("hidden");
         return;
       }
+      verifiedAnnouncementAdmin = true;
+      $("#pushDiagnostics")?.classList.remove("hidden");
       panel.classList.remove("hidden");
       pickerButton?.classList.remove("hidden");
       await loadAnnouncementRecipients();
     } catch (error) {
+      verifiedAnnouncementAdmin = false;
+      $("#pushDiagnostics")?.classList.add("hidden");
       // An unavailable status endpoint must not silently hide an otherwise
       // verified admin's entry. The server still blocks any unauthorized send.
       if (verifiedAdmin) {
@@ -3062,6 +3071,8 @@
   }
 
   function initAnnouncements() {
+    verifiedAnnouncementAdmin = false;
+    $("#pushDiagnostics")?.classList.add("hidden");
     announcementLastSeen = null;
     announcementsInitialized = false;
     if (localMode || !currentUserId() || !supa) {
@@ -3815,6 +3826,7 @@
   }
 
   async function checkPushDiagnostics() {
+    if (!verifiedAnnouncementAdmin) return;
     if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) {
       setPushDiagnostic("❌ Dein aktueller Browser unterstützt keinen vollständigen Web-Push.");
       return;
@@ -3843,6 +3855,7 @@
   }
 
   async function showLocalPushTest() {
+    if (!verifiedAnnouncementAdmin) return;
     if (!("Notification" in window) || Notification.permission !== "granted") {
       setPushDiagnostic("Benachrichtigungen müssen zuerst im Browser erlaubt werden.");
       return;
@@ -3862,6 +3875,7 @@
   }
 
   async function sendRemotePushTest() {
+    if (!verifiedAnnouncementAdmin) return;
     const button = $("#remotePushTestBtn");
     if (button) button.disabled = true;
     try {
