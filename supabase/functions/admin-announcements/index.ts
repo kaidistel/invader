@@ -206,6 +206,87 @@ Deno.serve(async (req: Request) => {
       return respond({ imagePath });
     }
 
+    if (payload.action === "activity") {
+      // Admin-only (this branch is after the server-side app_metadata gate).
+      // NÄHEN records, never inferred physical whereabouts or GPS signals.
+      const profilesResult = await db.from("profiles")
+        .select("id,username").neq("id", senderId)
+        .order("username", { ascending: true }).limit(250);
+      if (profilesResult.error) throw profilesResult.error;
+      const people = profilesResult.data || [];
+      if (!people.length) return respond({ accounts: [], checkedAt: new Date().toISOString() });
+      const ids = people.map((person: any) => person.id);
+      const now = Date.now();
+      const daysResult = await db.from("park_days")
+        .select("id,user_id,park_slug,started_at,ended_at")
+        .in("user_id", ids)
+        .gte("started_at", new Date(now - 36 * 3600_000).toISOString())
+        .order("started_at", { ascending: false }).limit(400);
+      if (daysResult.error) throw daysResult.error;
+      const days = daysResult.data || [];
+      const dayIds = days.map((day: any) => day.id);
+      let records: any[] = [];
+      if (dayIds.length) {
+        const sessionsResult = await db.from("queue_sessions")
+          .select("id,park_day_id,ride_name,queue_type,status,started_at,ended_at")
+          .in("park_day_id", dayIds)
+          .order("started_at", { ascending: false }).limit(1200);
+        if (sessionsResult.error) throw sessionsResult.error;
+        records = sessionsResult.data || [];
+      }
+      const dayByUser = new Map<string, any>();
+      for (const day of days) {
+        if (!dayByUser.has(day.user_id)) dayByUser.set(day.user_id, day);
+        // Prefer a currently open day within 18 hours over an older/closed one.
+        const current = dayByUser.get(day.user_id);
+        const freshOpen = !day.ended_at && Date.parse(day.started_at) >= now - 18 * 3600_000;
+        const currentFreshOpen = !current.ended_at &&
+          Date.parse(current.started_at) >= now - 18 * 3600_000;
+        if (freshOpen && !currentFreshOpen) dayByUser.set(day.user_id, day);
+      }
+      const sessionsByDay = new Map<string, any[]>();
+      for (const record of records) {
+        const list = sessionsByDay.get(record.park_day_id) || [];
+        if (list.length < 6) list.push(record);
+        sessionsByDay.set(record.park_day_id, list);
+      }
+      const accounts = people.map((person: any) => {
+        const day = dayByUser.get(person.id);
+        if (!day) {
+          return { id: person.id, name: String(person.username || "NÄHEN-Account").slice(0, 60),
+            parkSlug: null, dayOpen: false, dayStartedAt: null,
+            dayEndedAt: null, currentQueue: null, lastEntry: null, recentEntries: [], lastActivityAt: null };
+        }
+        const dayOpen = !day.ended_at && Date.parse(day.started_at) >= now - 18 * 3600_000;
+        const entries = sessionsByDay.get(day.id) || [];
+        const currentQueue = dayOpen ? entries.find((entry: any) =>
+          entry.status === "waiting" && !entry.ended_at &&
+          Date.parse(entry.started_at) >= now - 4 * 3600_000) || null : null;
+        const lastEntry = entries[0] || null;
+        const lastActivityAt = [
+          day.started_at, day.ended_at,
+          ...entries.flatMap((entry: any) => [entry.started_at,entry.ended_at])
+        ].filter(Boolean).sort().at(-1) || day.started_at;
+        const clean = (entry: any) => entry ? {
+          rideName: String(entry.ride_name || "Attraktion").slice(0, 100),
+          status: String(entry.status || "").slice(0, 30),
+          queueType: String(entry.queue_type || "").slice(0, 30),
+          startedAt: entry.started_at, endedAt: entry.ended_at
+        } : null;
+        return {
+          id: person.id, name: String(person.username || "NÄHEN-Account").slice(0, 60),
+          parkSlug: String(day.park_slug || "").slice(0, 80), dayOpen,
+          dayStartedAt: day.started_at, dayEndedAt: day.ended_at,
+          currentQueue: clean(currentQueue), lastEntry: clean(lastEntry),
+          recentEntries: entries.slice(0, 5).map(clean), lastActivityAt
+        };
+      });
+      accounts.sort((a: any,b: any) => Number(b.dayOpen) - Number(a.dayOpen) ||
+        Date.parse(b.lastActivityAt || 0) - Date.parse(a.lastActivityAt || 0) ||
+        a.name.localeCompare(b.name, "de"));
+      return respond({ accounts, checkedAt: new Date().toISOString() });
+    }
+
     if (payload.action === "recipients") {
       // Account membership, not an extra opt-in checkbox, controls the list.
       // The caller must already have passed the server-owned admin-role check.
