@@ -21,7 +21,18 @@ const valid = (value: unknown, max: number) => typeof value === "string" &&
   !/[\u0000-\u001f]/.test(value);
 
 async function deliver(db: any, recipientId: string, title: string, body: string) {
-  const privateKey = Deno.env.get("NAEHEN_VAPID_PRIVATE_KEY") || "";
+  let privateKey = Deno.env.get("NAEHEN_VAPID_PRIVATE_KEY") || "";
+  if (!privateKey) {
+    // The original VAPID private key is transferred by GitHub Actions directly
+    // to Supabase Vault (encrypted at rest), never committed or sent to a browser.
+    // This RPC is executable by service_role ONLY, not authenticated clients.
+    const { data: vaultedKey, error: vaultError } = await db.rpc("naehen_read_vapid_key");
+    if (vaultError) {
+      console.warn("Vault push key unavailable", vaultError.code || "rpc_error");
+      return "not_configured";
+    }
+    if (typeof vaultedKey === "string") privateKey = vaultedKey;
+  }
   if (!privateKey) return "not_configured";
   const { data: subs, error } = await db.from("push_subscriptions")
     .select("id,endpoint,p256dh,auth").eq("user_id", recipientId).limit(10);
