@@ -221,6 +221,51 @@ async function sendToUser(userId, payload, subscriptions) {
   }
 }
 
+
+async function deliverPendingAdminMessages(subscriptions) {
+  const from = new Date(Date.now() - 48 * 3600 * 1000).toISOString();
+  const messages = await rest("admin_messages?select=id,recipient_id,title,body,push_status" +
+    "&push_status=in.(pending,not_configured)&created_at=gte." + encodeURIComponent(from) +
+    "&order=created_at.asc&limit=50");
+  if (!messages.length) return;
+
+  let delivered = 0, noSubscription = 0, retry = 0;
+  for (const message of messages) {
+    const devices = subscriptions.filter(sub => sub.user_id === message.recipient_id);
+    let successfulDevices = 0;
+    for (const device of devices) {
+      try {
+        await webpush.sendNotification({
+          endpoint: device.endpoint,
+          keys: { p256dh: device.p256dh, auth: device.auth }
+        }, JSON.stringify({ title: message.title, body: message.body, url: "./" }), { TTL: 3600 });
+        successfulDevices++;
+      } catch (error) {
+        console.warn("Admin push delivery failed", error.statusCode || "", error.message || error);
+        if (error.statusCode === 404 || error.statusCode === 410) {
+          await rest("push_subscriptions?id=eq." + encodeURIComponent(device.id), {
+            method: "DELETE", headers
+          });
+        }
+      }
+    }
+    const nextStatus = successfulDevices ? "sent" : (!devices.length ? "no_subscription" : null);
+    if (nextStatus) {
+      await rest("admin_messages?id=eq." + encodeURIComponent(message.id) +
+        "&push_status=in.(pending,not_configured)", {
+        method: "PATCH",
+        headers: { ...headers, Prefer: "return=representation" },
+        body: JSON.stringify({ push_status: nextStatus })
+      });
+    }
+    if (successfulDevices) delivered++;
+    else if (!devices.length) noSubscription++;
+    else retry++;
+  }
+  console.log("NÄHEN admin push: delivered=" + delivered +
+    " no_subscription=" + noSubscription + " retry=" + retry);
+}
+
 (async () => {
   const live = livePaths.flatMap((livePath) => {
     const isWalibiBelgium = /live-walibi-belgium\.json$/i.test(livePath);
@@ -302,6 +347,8 @@ async function sendToUser(userId, payload, subscriptions) {
       body: JSON.stringify(live)
     });
   }
+
+  await deliverPendingAdminMessages(subscriptions);
 
   console.log("NÄHEN push evaluation complete:", logRows.length, "notifications/events.");
 })().catch((error) => {
