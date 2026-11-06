@@ -1991,3 +1991,14 @@ background:#20172aab;color:#ffe2b0;font:700 10px/1.25 'Barlow Condensed',system-
 .announcementItemHead b{color:#ffe2af}
 .announcementItemHead small{color:#b6bbc8;font-size:11px}
 .announcementItem p{white-space:pre-wrap;overflow-wrap:anywhere;margin:7px 0 0}
+
+/* v148 · Real background push diagnostics, separate from a local-only notification. */
+.pushDiagnostics{margin:16px 0;padding:13px 12px 12px;border:1px solid #dfa66370;border-radius:13px;
+  background:linear-gradient(145deg,#251d37,#152438);}
+.pushDiagnostics .sectionHead{margin:0 0 8px}
+.pushDiagnostics .sectionHead h2{font-size:17px}
+.pushDiagnostics>.mini{margin:7px 0 12px;line-height:1.5}
+.pushDiagnostics .pushTestButtons{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:9px 0}
+.pushDiagnostics .pushTestButtons button{font-size:12px;min-width:0;white-space:normal;line-height:1.25;padding:12px 8px}
+#pushDiagnosticsStatus{margin:12px 0 0;padding:10px;border-radius:9px;background:#111723;
+  border:1px solid #f2d6a345;min-height:48px;white-space:pre-wrap;overflow-wrap:anywhere}
