@@ -1078,7 +1078,57 @@
     return user && user.id ? user.id : null;
   }
 
+
+  // Retired PHL dioramas from legacy PWA v140 may still inject themselves from
+  // an older cached ride-3d.js. Remove them even if that old script is running.
+  function removeRetiredPhlDioramas() {
+    const detailSheet = $("#rideSheet");
+    if (!detailSheet) return;
+    const purge = () => {
+      if (detailSheet.dataset.park !== "phantasialand") return;
+      detailSheet.querySelectorAll(".ride3d").forEach((element) => element.remove());
+    };
+    purge();
+    new MutationObserver(purge).observe(detailSheet, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: ["data-park"]
+    });
+  }
+
+  async function checkForNewAppShell() {
+    // A running timer must not be interrupted by an automatic PWA refresh.
+    if (active || finishingQueue || savingFairRide || !navigator.onLine) return;
+    try {
+      const activeSrc = document.querySelector('script[src*="app.js?v="]')?.getAttribute("src") || "";
+      const current = Number(/[?&]v=(\d+)/.exec(activeSrc)?.[1] || 0);
+      if (!current) return;
+      const url = new URL("./index.html", location.href);
+      url.searchParams.set("_naehen_refresh", String(Date.now()));
+      const response = await fetch(url, { cache: "no-store" });
+      if (!response.ok) return;
+      const latestHtml = await response.text();
+      const latest = Number(/app\.js\?v=(\d+)/.exec(latestHtml)?.[1] || 0);
+      if (latest <= current || active || finishingQueue || savingFairRide) return;
+      const once = "naehen:refreshed-to-v" + latest;
+      if (sessionStorage.getItem(once)) return;
+      sessionStorage.setItem(once, "1");
+      const destination = new URL(location.href);
+      destination.searchParams.set("build", String(latest));
+      location.replace(destination.href);
+    } catch (error) {
+      console.warn("NÄHEN Versionsprüfung nicht erreichbar", error);
+    }
+  }
+
   async function bootstrap() {
+    removeRetiredPhlDioramas();
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) checkForNewAppShell();
+    });
+    window.addEventListener("online", checkForNewAppShell);
+    checkForNewAppShell();
     bindStaticEvents();
 
     if ("serviceWorker" in navigator) {

@@ -3638,3 +3638,7 @@
 #rideSheet[data-park="cranger-weihnachtszauber-2026"] .worldArt{height:300px!important}
 #rideSheet[data-park="cranger-weihnachtszauber-2026"] #rideTitle{font-size:clamp(24px,6.8vw,36px)!important}
 }
+
+/* v142: Disallow retired 3D models from old installed Phantasialand builds.
+   Covers Taron, Black Mamba and Chiapas without affecting ordinary ride photos. */
+#rideSheet[data-park="phantasialand"] .ride3d{display:none!important;visibility:hidden!important}

@@ -1965,3 +1965,7 @@ background:#20172aab;color:#ffe2b0;font:700 10px/1.25 'Barlow Condensed',system-
 .fairTicketOptions button.hidden{display:none}
 .fairTicketHint{margin-bottom:9px}
 .rideComboPill{border:1px solid #d6ae75a8;border-radius:4px;padding:5px 7px;color:#e9c697;font-weight:800;font-size:11px}
+
+/* v142: Disallow retired 3D models from old installed Phantasialand builds.
+   Covers Taron, Black Mamba and Chiapas without affecting ordinary ride photos. */
+#rideSheet[data-park="phantasialand"] .ride3d{display:none!important;visibility:hidden!important}
