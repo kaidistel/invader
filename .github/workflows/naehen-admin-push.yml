@@ -1,0 +1,43 @@
+name: NAEHEN Personal Push Delivery
+
+on:
+  schedule:
+    - cron: '1-56/5 * * * *'
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - '.github/workflows/naehen-admin-push.yml'
+      - 'naehen/push-alerts.cjs'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: naehen-personal-push
+  cancel-in-progress: false
+
+jobs:
+  deliver:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install web-push
+        run: |
+          mkdir -p /tmp/naehen-push
+          npm install --silent --no-save --prefix /tmp/naehen-push web-push@3.6.7
+      - name: Deliver pending private notifications
+        env:
+          NAEHEN_SUPABASE_URL: ${{ secrets.NAEHEN_SUPABASE_URL }}
+          NAEHEN_SUPABASE_SECRET_KEY: ${{ secrets.NAEHEN_SUPABASE_SECRET_KEY }}
+          NAEHEN_VAPID_PUBLIC_KEY: ${{ secrets.NAEHEN_VAPID_PUBLIC_KEY }}
+          NAEHEN_VAPID_PRIVATE_KEY: ${{ secrets.NAEHEN_VAPID_PRIVATE_KEY }}
+          NAEHEN_VAPID_SUBJECT: ${{ secrets.NAEHEN_VAPID_SUBJECT }}
+          NODE_PATH: /tmp/naehen-push/node_modules
+        run: node naehen/push-alerts.cjs --admin-only
