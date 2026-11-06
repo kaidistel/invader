@@ -20,6 +20,19 @@ const valid = (value: unknown, max: number) => typeof value === "string" &&
   value.trim().length > 0 && [...value.trim()].length <= max &&
   !/[\u0000-\u001f]/.test(value);
 
+function allowedPushEndpoint(raw: string): boolean {
+  try {
+    const url = new URL(raw);
+    if (url.protocol !== "https:" || url.port || url.username || url.password) return false;
+    const host = url.hostname.toLowerCase();
+    return host === "fcm.googleapis.com" || host === "android.googleapis.com" ||
+      host === "updates.push.services.mozilla.com" ||
+      /^jmt[0-9]+\.google\.com$/.test(host) ||
+      host === "push.apple.com" || host.endsWith(".push.apple.com") ||
+      host.endsWith(".notify.windows.com");
+  } catch { return false; }
+}
+
 async function deliver(db: any, recipientId: string, title: string, body: string) {
   let privateKey = Deno.env.get("NAEHEN_VAPID_PRIVATE_KEY") || "";
   if (!privateKey) {
@@ -42,6 +55,7 @@ async function deliver(db: any, recipientId: string, title: string, body: string
   let delivered = 0;
   for (const s of subs) {
     try {
+      if (!allowedPushEndpoint(s.endpoint)) throw new Error("Unsupported push service");
       await webpush.sendNotification({
         endpoint: s.endpoint,
         keys: { p256dh: s.p256dh, auth: s.auth },
@@ -86,7 +100,7 @@ Deno.serve(async (req: Request) => {
       let parsed: URL;
       try { parsed = new URL(String(endpoint)); }
       catch { return respond({ error: "Ungültiger Push-Endpunkt" }, 400); }
-      if (parsed.protocol !== "https:" || !valid(endpoint, 2048) ||
+      if (!allowedPushEndpoint(endpoint) || !valid(endpoint, 2048) ||
           !valid(p256dh, 512) || !valid(authKey, 512) ||
           !/^[A-Za-z0-9_-]{20,}$/.test(p256dh) || !/^[A-Za-z0-9_-]{10,}$/.test(authKey)) {
         return respond({ error: "Push-Abonnement unvollständig" }, 400);
