@@ -26,6 +26,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Validate NÄHEN application and push service worker syntax
+        run: |
+          node --check naehen/app.js
+          node --check naehen/sw.js
+          node --check naehen/push-alerts.cjs
+
       - name: Test Rheine fair onboarding
         run: node naehen/test-rheine-onboarding.cjs
       - name: Test Münster Herbstsend onboarding
