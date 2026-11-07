@@ -1362,3 +1362,232 @@ A park is visually complete only when:
 - shared NÄHEN functionality remains consistent underneath the custom presentation
 
 The quality target is **bespoke attraction portals on top of a reusable technical platform**.
+
+
+---
+
+# 33. Cross-Park Visual Uniqueness — Hard Rule
+
+NÄHEN must not become a library of repeated attraction templates with different images.
+
+Every new attraction should feel like a deliberately designed mini-world. Similar ride types, themes, manufacturers, or genres are **not** a reason to reuse the same visual treatment across different parks.
+
+Before styling a new park or attraction, audit the existing NÄHEN parks for:
+
+- already-used display fonts
+- title plaque shapes
+- hero compositions
+- image crops
+- border systems
+- panel shapes
+- gradients
+- background materials
+- accent combinations
+- text-shadow treatments
+- clip-path shapes
+- status-box layouts
+- decorative motifs
+- overall Detail-view composition
+
+The default decision should be:
+
+> If a visual solution already strongly defines another attraction, create a different solution.
+
+Do not repeatedly solve:
+- every Western ride with Rye + brown wood
+- every sci-fi ride with Orbitron + blue panels
+- every spooky ride with Creepster + purple
+- every historical ride with Almendra + gold
+- every water ride with blue gradients
+- every family ride with the same cartoon font
+- every Detail view with the same full-bleed image + title + three boxes
+
+Those can be starting references, never automatic final designs.
+
+---
+
+# 34. Font Diversity Across the Whole App
+
+Font selection is global across NÄHEN, not merely local to one park.
+
+Before assigning a font:
+
+1. inspect fonts already used by attractions in all existing parks
+2. understand the attraction's actual signage, logo, story and architecture
+3. search for a more specific typeface when an existing font would make two unrelated attractions feel duplicated
+4. reuse a font only when there is a strong visual or thematic reason
+
+A font being technically suitable is not enough.
+
+For example:
+- two medieval attractions do not automatically need the same medieval font
+- two launch coasters do not automatically need the same techno font
+- two children's rides do not automatically need the same comic font
+
+When the exact official attraction logo has a distinctive typographic character, use that as the primary visual reference.
+
+The goal is that users can recognize an attraction's identity from the typography even before reading the title.
+
+Existing approved special fonts may still be reused when they genuinely fit best, but repeated use must be intentional rather than convenient.
+
+---
+
+# 35. Layout Diversity Across the Whole App
+
+Attraction Detail pages must not all share the same visual composition.
+
+The stable product functions stay consistent:
+- close control
+- wait information
+- Single Rider/community information
+- queue CTA
+- Back behavior
+- readable body copy
+
+Everything surrounding those functions may be attraction-specific.
+
+Vary where appropriate:
+
+- image size and crop
+- full-bleed vs framed hero
+- title position
+- title alignment
+- typography scale
+- whether a title plaque exists at all
+- asymmetric vs centered composition
+- decorative separators
+- panel silhouette
+- surface materials
+- image-to-content transition
+- visual depth
+- pseudo-3D elements
+- foreground props
+- layered scenery
+- ride-vehicle silhouettes
+- architecture-inspired framing
+- attraction-specific symbols
+
+A page may resemble:
+- a control panel
+- a station sign
+- a map
+- an expedition journal
+- a machinery plate
+- a theatre poster
+- a laboratory interface
+- a wooden notice board
+- a hotel key card
+- a newspaper
+- a flight document
+- a temple wall
+- a racing dashboard
+
+Choose the metaphor from the actual attraction.
+
+Do not force every attraction into the same generic "hero image on top, dark gradient, big title underneath" template.
+
+---
+
+# 36. Immersion Standard
+
+The target is not simply "themed".
+
+The target is:
+
+> Opening the Detail view should immediately feel like entering that attraction's world.
+
+Use official visual references to understand:
+
+- attraction logo
+- entrance signage
+- ride vehicle
+- station
+- major props
+- landscape
+- architecture
+- color palette
+- materials
+- lighting
+- fictional story
+- cultural setting
+- soundtrack/energy where visually translatable
+
+When appropriate, build attraction-specific graphic elements inspired by those references.
+
+Allowed techniques include:
+
+- CSS-created dimensional objects
+- layered 2.5D scenery
+- perspective transforms
+- simplified 3D-looking ride vehicles
+- silhouettes
+- recognizable props
+- signage-inspired graphics
+- attraction symbols
+- texture layers
+- custom SVG/CSS motifs
+- landscape framing
+
+Do not merely decorate a generic card.
+
+Any recreated graphic should support the theme and remain performant on mobile.
+
+---
+
+# 37. Visual Reference Workflow
+
+For every major attraction Detail view:
+
+1. open the official attraction page
+2. inspect several current images of the attraction
+3. inspect the logo/signage where available
+4. identify 2–4 visually distinctive elements
+5. identify the primary material language
+6. identify a unique composition idea
+7. compare the proposed design against already implemented NÄHEN attractions
+8. reject the design if it looks substantially like an existing unrelated attraction
+9. only then implement it
+
+Useful distinctive elements can include:
+
+- a specific train/gondola
+- a recognizable tower
+- rock formations
+- pipes
+- gears
+- temple carvings
+- industrial tanks
+- neon signs
+- flight instruments
+- wooden supports
+- waterfalls
+- masks
+- portals
+- roofs
+- tracks
+- lanterns
+- machinery
+- fictional artifacts
+
+Use these as inspiration for the Detail world's structure.
+
+---
+
+# 38. Cross-Park Uniqueness QA
+
+Before a park is considered finished, compare it against all existing parks.
+
+Check:
+
+- [ ] no attraction Detail page is an obvious copy of another park's Detail page
+- [ ] fonts are not being reused repeatedly out of convenience
+- [ ] major coasters have individually recognizable visual identities
+- [ ] themed areas do not collapse into generic genre templates
+- [ ] title treatments vary appropriately
+- [ ] hero compositions vary appropriately
+- [ ] panels/materials derive from the attraction rather than the NÄHEN default
+- [ ] attraction-specific objects or motifs are used where they materially improve immersion
+- [ ] the operational UI remains readable despite the stronger theming
+- [ ] Home remains structurally consistent even while Detail pages become highly individual
+
+If two unrelated attractions look interchangeable after replacing their images and titles, the design is not finished.
