@@ -635,6 +635,310 @@
       noLiveAlarmMessage:"Für den Winterdom ohne Live-Feed sind öffentliche Wartezeit-Alarme deaktiviert.",
       disclaimer:"Unabhängige Fan-Übersicht, kein offizielles Angebot der Stadt Hamburg. Die 36 Groß-, Fahr-, Lauf- und Gruselgeschäfte stammen aus einer vorläufigen Nordkirmes-Beschickung vom 28.09.2026; die offizielle Winterdom-Liste liegt noch nicht vor und es können sich Änderungen ergeben. Kinderfahrgeschäfte und Marktstände sind nicht Teil dieser Übersicht. NEU-Markierungen: laut vorläufiger DOM-Information, nicht unbedingt technisch neue Fahrgeschäfte. Bildnachweise und Quellen in den Attraktionsdetails; fehlende Bilder werden nicht durch Fotos anderer Anlagen ersetzt. Fahrpreise ausschließlich manuell pro Fahrt.",
     },
+    specialMap:{
+    "title": "Winterdom 2026 · Lageplan",
+    "eyebrow": "HAMBURG · HEILIGENGEISTFELD",
+    "subtitle": "Tippe auf ein gedrucktes Fahrgeschäftsfeld, um die Attraktionsdetails zu öffnen.",
+    "note": "Originaler DOM-Lageplan mit transparenten Klickflächen. Die Attraktionen lassen sich auch über die Liste unterhalb der Karte öffnen.",
+    "imageUrl": "./assets/hamburg-winterdom-2026-lageplan.png",
+    "imageAlt": "Original-Lageplan des Hamburger Winterdoms 2026",
+    "imageCredit": "© Hamburger DOM · veröffentlicht von der HafenCity Zeitung",
+    "sourceUrl": "https://hafencityzeitung.com/696-winterdom-neuer-nervenkitzel/",
+    "sourceLabel": "Bildquelle · HafenCity Zeitung",
+    "aspectRatio": "2048 / 1448",
+    "points": [
+        {
+            "rideId": "winterdom26-stardust-2",
+            "x": 22.013,
+            "y": 40.633,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-shaker",
+            "x": 28.606,
+            "y": 39.317,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-evolution",
+            "x": 40.404,
+            "y": 38.811,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-love-dream",
+            "x": 48.594,
+            "y": 37.899,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-star-club",
+            "x": 65.528,
+            "y": 37.493,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-fuzzys-lachsaloon",
+            "x": 80.589,
+            "y": 37.492,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-spuk",
+            "x": 73.649,
+            "y": 41.24,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-predator",
+            "x": 66.778,
+            "y": 41.24,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-ballonfahrt",
+            "x": 60.392,
+            "y": 41.24,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-car-wash",
+            "x": 57.756,
+            "y": 41.24,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-dom-dancer",
+            "x": 52.203,
+            "y": 41.241,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-spass-allee",
+            "x": 48.525,
+            "y": 41.444,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-take-off",
+            "x": 32.563,
+            "y": 46.813,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-mayday",
+            "x": 38.254,
+            "y": 49.142,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-air-power",
+            "x": 22.361,
+            "y": 51.978,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-phaenomenon",
+            "x": 20.002,
+            "y": 48.129,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-glasirrgarten",
+            "x": 30.966,
+            "y": 41.343,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-wilde-maus",
+            "x": 34.575,
+            "y": 52.282,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-alpencoaster",
+            "x": 58.172,
+            "y": 51.471,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-break-dancer-no-2",
+            "x": 63.447,
+            "y": 55.928,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-infinity-2",
+            "x": 66.709,
+            "y": 60.486,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-die-verrueckte-farm",
+            "x": 79.756,
+            "y": 54.104,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-action",
+            "x": 81.213,
+            "y": 47.622,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-happy-family",
+            "x": 19.169,
+            "y": 59.575,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-wellenflug",
+            "x": 20.696,
+            "y": 64.234,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-rotor",
+            "x": 31.037,
+            "y": 66.563,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-der-grosse-irrgarten",
+            "x": 35.617,
+            "y": 66.159,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-nordic-tower",
+            "x": 40.197,
+            "y": 65.956,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-kuddel-der-hai",
+            "x": 45.126,
+            "y": 66.158,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-mondlift",
+            "x": 58.172,
+            "y": 63.525,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-halloween",
+            "x": 73.163,
+            "y": 66.462,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-viva-mexico",
+            "x": 27.566,
+            "y": 63.221,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-hip-hop-jumper",
+            "x": 39.225,
+            "y": 62.309,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-doom-dark-ride",
+            "x": 43.876,
+            "y": 62.107,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-bumper-1",
+            "x": 51.371,
+            "y": 61.499,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        },
+        {
+            "rideId": "winterdom26-bayrisches-riesenrad",
+            "x": 22.708,
+            "y": 59.474,
+            "w": 1.6,
+            "h": 2.2,
+            "labelHitbox": true
+        }
+    ],
+    "imageSourceUrl": "https://hafencityzeitung.com/wp-content/uploads/2026/11/Web_HCZ_Lageplan.Winterdom2026.%C2%A9Hamburger-DOM-2048x1403.jpg",
+    "officialMapUrl": "https://www.hamburg.de/freizeit/dom/interaktive-dom-karte"
+},
     rides,worlds,fonts,aliases,rideConfig,exclusions:{ids:[],namePatterns:[]}
   };
 })();
