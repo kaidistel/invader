@@ -634,8 +634,7 @@
       noLiveMessage:"Auf dem Hamburger Winterdom gibt es keine öffentlichen Live-Wartezeiten. NÄHEN misst deine persönliche Queue.",
       noLiveAlarmMessage:"Für den Winterdom ohne Live-Feed sind öffentliche Wartezeit-Alarme deaktiviert.",
       disclaimer:"Unabhängige Fan-Übersicht, kein offizielles Angebot der Stadt Hamburg. Die 36 Groß-, Fahr-, Lauf- und Gruselgeschäfte stammen aus einer vorläufigen Nordkirmes-Beschickung vom 28.09.2026; die offizielle Winterdom-Liste liegt noch nicht vor und es können sich Änderungen ergeben. Kinderfahrgeschäfte und Marktstände sind nicht Teil dieser Übersicht. NEU-Markierungen: laut vorläufiger DOM-Information, nicht unbedingt technisch neue Fahrgeschäfte. Bildnachweise und Quellen in den Attraktionsdetails; fehlende Bilder werden nicht durch Fotos anderer Anlagen ersetzt. Fahrpreise ausschließlich manuell pro Fahrt.",
-    },
-    specialMap:{
+      specialMap:{
     "title": "Winterdom 2026 · Lageplan",
     "eyebrow": "HAMBURG · HEILIGENGEISTFELD",
     "subtitle": "Tippe auf ein gedrucktes Fahrgeschäftsfeld, um die Attraktionsdetails zu öffnen.",
@@ -938,7 +937,8 @@
     ],
     "imageSourceUrl": "https://hafencityzeitung.com/wp-content/uploads/2026/11/Web_HCZ_Lageplan.Winterdom2026.%C2%A9Hamburger-DOM-2048x1403.jpg",
     "officialMapUrl": "https://www.hamburg.de/freizeit/dom/interaktive-dom-karte"
-},
+      },
+    },
     rides,worlds,fonts,aliases,rideConfig,exclusions:{ids:[],namePatterns:[]}
   };
 })();
