@@ -2057,3 +2057,51 @@ background:#20172aab;color:#ffe2b0;font:700 10px/1.25 'Barlow Condensed',system-
 #activityPrivacyNotice{padding:10px 12px;background:#23304466;border-radius:9px;line-height:1.45}
 @media(max-width:410px){.adminActivityHeading h3{font-size:17px}.adminActivityHeading button{font-size:11px;padding:8px}
 .adminActivityPanel{padding:12px}.adminActivityOverview strong{font-size:21px}}
+
+
+/* Hamburger Winterdom 2026 — unchanged original PNG with invisible field hitboxes. */
+body[data-park="hamburg-winterdom-2026"] .venueSpecialMap{display:block!important;width:100%}
+body[data-park="hamburg-winterdom-2026"] .venueMapCanvas{
+  padding:10px;background:#e6e7e8;overflow:auto;overscroll-behavior-inline:contain;
+}
+body[data-park="hamburg-winterdom-2026"] .soestOriginalPlanWrap{
+  width:100%;max-width:1180px;aspect-ratio:2048 / 1448;margin:0 auto;
+  overflow:visible;background:#fff;border:1px solid #d0d0d0;
+}
+body[data-park="hamburg-winterdom-2026"] .soestOriginalPlan{
+  width:100%;height:100%;object-fit:contain;filter:none;
+}
+body[data-park="hamburg-winterdom-2026"] .soestPlanHotspots{
+  display:block!important;position:absolute;inset:0;z-index:7;pointer-events:none;
+}
+body[data-park="hamburg-winterdom-2026"] .soestPlanLink.mapLabelHitbox{
+  position:absolute;left:var(--map-x);top:var(--map-y);
+  width:var(--map-w);height:var(--map-h);min-width:14px;min-height:15px;
+  transform:translate(-50%,-50%);padding:0;border:1px solid transparent;
+  border-radius:3px;background:transparent;box-shadow:none;
+  color:transparent;cursor:pointer;pointer-events:auto;
+}
+body[data-park="hamburg-winterdom-2026"] .soestPlanLink.mapLabelHitbox>span{
+  display:none!important;
+}
+body[data-park="hamburg-winterdom-2026"] .soestPlanLink.mapLabelHitbox:hover,
+body[data-park="hamburg-winterdom-2026"] .soestPlanLink.mapLabelHitbox:focus-visible{
+  transform:translate(-50%,-50%);border-color:#c91f2c;
+  background:rgba(241,175,35,.18);outline:2px solid #fff;outline-offset:0;z-index:15;
+}
+body[data-park="hamburg-winterdom-2026"] .soestPlanLink.mapLabelHitbox>b{
+  position:absolute;bottom:calc(100% + 5px);left:50%;
+  transform:translateX(-50%);padding:5px 7px;border-radius:4px;
+  background:#151515;color:#fff;font:700 12px/1.2 system-ui,sans-serif;
+  white-space:nowrap;opacity:0;visibility:hidden;pointer-events:none;
+}
+body[data-park="hamburg-winterdom-2026"] .soestPlanLink.mapLabelHitbox:hover>b,
+body[data-park="hamburg-winterdom-2026"] .soestPlanLink.mapLabelHitbox:focus-visible>b{
+  opacity:1;visibility:visible;
+}
+@media(max-width:650px){
+  body[data-park="hamburg-winterdom-2026"] .venueMapCanvas{padding:4px}
+  body[data-park="hamburg-winterdom-2026"] .soestOriginalPlanWrap{
+    width:900px;max-width:none;
+  }
+}
