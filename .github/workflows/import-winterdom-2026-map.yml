@@ -1,0 +1,93 @@
+name: Import Hamburger Winterdom 2026 original map PNG
+on:
+  push:
+    branches:
+      - feature/winterdom-2026-clickable-original-plan
+    paths:
+      - .github/workflows/import-winterdom-2026-map.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  official-map:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install image and HTML tools
+        run: python3 -m pip install --quiet pillow requests beautifulsoup4
+      - name: Find published official DOM map and preserve its artwork
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from urllib.parse import urljoin
+          from io import BytesIO
+          import hashlib, re
+          import requests
+          from bs4 import BeautifulSoup
+          from PIL import Image
+
+          url = "https://hafencityzeitung.com/696-winterdom-neuer-nervenkitzel/"
+          headers = {"User-Agent":"Mozilla/5.0 (compatible; Naehen-original-map-import/1.0)"}
+          resp=requests.get(url,headers=headers,timeout=40)
+          resp.raise_for_status()
+          soup=BeautifulSoup(resp.text,"html.parser")
+          selected=[]
+          for fig in soup.select('figure'):
+              caption=fig.get_text(" ",strip=True).lower()
+              if "lageplan" in caption and ("dom" in caption or "winter" in caption):
+                  selected.extend(fig.select('img'))
+          for img in soup.select('img'):
+              desc=str(img.get('alt',''))+" "+str(img.get('title',''))
+              if 'lageplan' in desc.lower() and img not in selected:
+                  selected.append(img)
+          if not selected:
+              raise RuntimeError("Published 2026 map not found in article: refuse to use a wrong image")
+          candidates=[]
+          for img in selected:
+              for attr in ['data-src','data-lazy-src','src','data-large-file','data-orig-file']:
+                  val=img.get(attr)
+                  if val and not val.startswith('data:'):
+                      candidates.append(urljoin(url,val))
+              for item in str(img.get('srcset','')).split(','):
+                  sub=item.strip().split(' ')[0]
+                  if sub and not sub.startswith('data:'):
+                      candidates.append(urljoin(url,sub))
+          choices=[]
+          for src in dict.fromkeys(candidates):
+              try:
+                  rr=requests.get(src,headers=headers,timeout=40)
+                  rr.raise_for_status()
+                  pic=Image.open(BytesIO(rr.content))
+                  pic.load()
+                  w,h=pic.size
+                  if w>=600 and h>=400 and abs(w/h-2048/1448)<0.075:
+                      choices.append((w*h,src,rr.content,pic.copy()))
+              except Exception as err:
+                  print('Skip',src,type(err).__name__,str(err)[:120])
+          if not choices:
+              raise RuntimeError("No matching-resolution landscape DOM plan found; no file written")
+          _,src,raw,pic=max(choices,key=lambda c:c[0])
+          print('Selected published plan:',src,'dimensions:',pic.size,'sha256:',hashlib.sha256(raw).hexdigest())
+          # The source is the published DOM artwork, NEVER a traced/recreated map.
+          # Export to the existing NÄHEN PNG canvas size, preserving layout and field coordinates.
+          pic=pic.convert("RGBA")
+          if pic.size!=(2048,1448):
+              pic=pic.resize((2048,1448),Image.Resampling.LANCZOS)
+          out=Path('naehen/assets/hamburg-winterdom-2026-lageplan.png')
+          out.parent.mkdir(parents=True,exist_ok=True)
+          pic.save(out,format='PNG',optimize=True,compress_level=9)
+          assert Image.open(out).size==(2048,1448)
+          print('Saved:',out,'bytes:',out.stat().st_size,'sha256:',hashlib.sha256(out.read_bytes()).hexdigest())
+          PY
+      - name: Commit PNG to the same feature branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          test -s naehen/assets/hamburg-winterdom-2026-lageplan.png
+          git add naehen/assets/hamburg-winterdom-2026-lageplan.png
+          if ! git diff --cached --quiet; then
+            git commit -m "assets(naehen): add Winterdom 2026 original printed plan PNG"
+            git push origin HEAD:feature/winterdom-2026-clickable-original-plan
+          fi
