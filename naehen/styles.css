@@ -1256,7 +1256,7 @@ body:is([data-park="soest-allerheiligenkirmes-2026"],[data-park="bocholt-kirmes-
   line-height:1.4;
 }
 .venueMapKey{display:none}
-body:not([data-park="soest-allerheiligenkirmes-2026"]):not([data-park="bocholt-kirmes-2026"]) .venueSpecialMap{display:none!important}
+body:not([data-park="soest-allerheiligenkirmes-2026"]):not([data-park="bocholt-kirmes-2026"]):not([data-park="hamburg-winterdom-2026"]) .venueSpecialMap{display:none!important}
 @media(max-width:650px){
   .venueMapHead{display:block;padding:14px}
   .venueMapSource{display:inline-block;margin-top:10px}
