@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TIKI TAKI XXL | Operator Simulator</title>
+<style>
+:root{color-scheme:dark;--gold:#ffd229;--green:#49f981;--red:#ff4966;--bg:#080e12;--panel:#131c21;--line:#334047}
+*{box-sizing:border-box}body{margin:0;font:14px system-ui,Arial;background:var(--bg);color:#e8f1f1}
+header{display:flex;justify-content:space-between;align-items:center;padding:10px 19px;background:#10191c;border-bottom:2px solid #d89d25;gap:10px;flex-wrap:wrap}
+h1{font-size:21px;margin:0;color:var(--gold);letter-spacing:.06em}small,.hint{color:#9eb0b4}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 370px;height:calc(100vh - 64px);min-height:560px}
+.viewport{position:relative;min-height:400px;overflow:hidden;background:linear-gradient(#557888,#d6a865)}
+canvas{display:block;width:100%;height:100%}.hud{position:absolute;top:14px;left:14px;display:grid;grid-template-columns:repeat(2,minmax(115px,1fr));gap:7px;pointer-events:none;max-width:345px}
+.metric{background:#071115dc;border:1px solid #ffffff26;border-radius:7px;padding:8px 11px}.metric b{font:600 21px ui-monospace,monospace;color:#fff;display:block}.metric span{font-size:10px;color:#b1c8cf;text-transform:uppercase}
+.cam{position:absolute;bottom:12px;left:12px;right:12px;display:flex;gap:6px;flex-wrap:wrap}
+.cam button{background:#0d181cdb}.panel{overflow:auto;background:linear-gradient(150deg,#1b292d,#0c1215);border-left:2px solid #36484c;padding:14px}
+h2{font-size:13px;letter-spacing:.11em;color:#f4c44c;text-transform:uppercase;margin:18px 0 9px;border-bottom:1px solid #36484c;padding-bottom:6px}
+button,select,input[type=range]{accent-color:#f7ca37}button,select{background:#25343a;color:white;border:1px solid #53666d;border-radius:7px;padding:9px;cursor:pointer;font-weight:700}
+button:hover{filter:brightness(1.2)}button:disabled{opacity:.36;cursor:not-allowed}.active{background:#b27f14!important;color:#111!important}.danger{background:#a3192a;border-color:#ff6071}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}.full{grid-column:1/-1}
+.status{padding:10px;background:#060d0f;border:1px solid #425457;border-radius:8px;color:#93efaa;font-family:ui-monospace,monospace;margin:10px 0}
+label{display:block;margin:9px 0;font-size:12px;color:#c9d8db}label input[type=range]{width:100%;margin-top:7px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px}.row select{max-width:175px}
+.seats{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin:4px 0 11px}
+.seat{min-width:0;padding:6px 0;font-size:10px;text-align:center;background:#222d31;color:#ccd;border:1px solid #53666d}
+.seat.locked{background:#12683a;color:#dcffe2;border-color:#4cf184}.seat.fault{background:#912537}
+.seatled{display:inline-block;width:8px;height:8px;border-radius:100%;background:#354041;margin-right:3px}.locked .seatled{background:#3aff6a;box-shadow:0 0 8px #20ff61}
+.foot{color:#9db0b5;font-size:11px;line-height:1.45}.tag{font-weight:800;letter-spacing:.08em;color:#9dffb8}
+#eventlog{font:11px ui-monospace,monospace;color:#b2c0c3;background:#050a0b;padding:9px;max-height:85px;overflow:auto;border-radius:5px}
+@media(max-width:920px){.main{display:flex;flex-direction:column;height:auto}.viewport{height:65vh;min-height:390px}.panel{overflow:visible}.hud{grid-template-columns:repeat(2,minmax(95px,1fr))}}
+</style>
+</head>
+<body>
+<header><h1>🌺 TIKI TAKI <span style="color:white">XXL</span></h1><span class="tag">KMG XXL · OPERATOR SIMULATOR <small> / FAN PROJECT</small></span></header>
+<div class="main">
+<div class="viewport" id="viewport">
+<div class="hud"><div class="metric"><span>Pendelwinkel</span><b id="angle">0.0°</b></div><div class="metric"><span>Gondel</span><b id="rpm">0.0 rpm</b></div><div class="metric"><span>Amplitude</span><b id="peak">0.0°</b></div><div class="metric"><span>Fahrtzeit</span><b id="elapsed">00:00</b></div></div>
+<div class="cam"><button data-camera="operator">Bedienplatz</button><button data-camera="orbit">Orbit</button><button data-camera="onride">Onride</button><button data-camera="technical">Technik</button><button id="day">☀️ Tag / Nacht</button></div>
+</div>
+<aside class="panel">
+<div class="status" id="state">POWER_OFF — Hauptschalter ausschaltet</div>
+<div class="actions"><button id="power">⏻ Hauptschalter EIN</button><button id="control">Steuerung aktivieren</button></div>
+<h2>01 · Bügelüberwachung / 20 Sitze</h2>
+<div id="gondolas"></div>
+<div class="actions"><button id="close">Bügel schließen</button><button id="open">Bügel öffnen</button><button id="lockall">Verriegelung prüfen</button><button id="fault">Test: Fehler S03</button></div>
+<h2>02 · Fahrbetrieb</h2>
+<div class="row"><label for="program">Programm</label><select id="program"><option value="gentle">Sanft</option><option value="normal" selected>Normal</option><option value="intense">Intensiv</option><option value="manual">Manuell</option></select></div>
+<label>Zielamplitude (Spielwert) <strong id="aVal">70°</strong><input type="range" id="amp" min="20" max="105" value="70"></label>
+<label>Gondelrotation (Spielwert) <strong id="sVal">8 rpm</strong><input type="range" id="spin" min="0" max="16" value="8" step=".5"></label>
+<div class="actions"><button id="start">▶ FAHRT STARTEN</button><button id="stop">■ Normalstopp</button><button id="emergency" class="danger full">NOT-HALT (SIMULIERT)</button><button id="reset" class="full">Störung quittieren / Zurücksetzen</button></div>
+<h2>03 · Betriebsdaten</h2>
+<div class="row"><span>Verriegelt</span><strong id="lockedCount">0 / 20</strong></div>
+<div class="row"><span>Fahrfreigabe</span><strong id="ready">GESPERRT</strong></div>
+<div class="row"><span>Onride Sitz</span><select id="onrideSeat"></select></div>
+<div class="row"><span>Simulationsmodus</span><select id="mode"><option value="operator">Operator</option><option value="free">Freie Simulation</option></select></div>
+<div class="row"><span>Modell laden (.glb)</span><input id="glb" type="file" accept=".glb,.gltf" style="max-width:160px;font-size:11px"></div>
+<p class="foot" id="modelInfo">Prozedurales Referenzmodell aktiv. Eine passende, mechanisch separierte GLB kann nach Zuordnung integriert werden.</p>
+<h2>04 · Betriebsprotokoll</h2><div id="eventlog"></div>
+<p class="foot">Technische Werte und Fahrprogramme sind plausible <b>Spielparameter</b>, keine verifizierten KMG-Betriebsdaten. Sicherheitsfunktionen sind ausschließlich simuliert. Eine importierte GLB wird zunächst separat zur Inspektion angezeigt und nicht ungeprüft bewegt.</p>
+</aside></div>
+<script type="importmap">{"imports":{"three":"https://esm.sh/three@0.180.0","three/addons/":"https://esm.sh/three@0.180.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+const $=id=>document.getElementById(id);
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x87b0bc);scene.fog=new THREE.Fog(0x87b0bc,85,190);
+const camera=new THREE.PerspectiveCamera(52,1,.1,250);camera.position.set(34,18,42);
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;$('viewport').prepend(renderer.domElement);
+const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,13,0);controls.enableDamping=true;controls.maxDistance=100;
+const ambient=new THREE.HemisphereLight(0xdff6ff,0x4c4e30,2);scene.add(ambient);const sun=new THREE.DirectionalLight(0xfff1c8,2.4);sun.position.set(-35,70,25);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-48;sun.shadow.camera.right=48;sun.shadow.camera.top=50;sun.shadow.camera.bottom=-50;scene.add(sun);
+const mat=(c,metal=.1)=>new THREE.MeshStandardMaterial({color:c,metalness:metal,roughness:.42});
+const yellow=mat(0xffcc13,.65),yellow2=mat(0xe8a70b,.6),red=mat(0xd71b34,.35),black=mat(0x101417,.2),steel=mat(0xc9cbd0,.75),floor=mat(0x7a8482,.25),green=mat(0x14bd65),pink=mat(0xff339d);
+function block(parent,w,h,d,x,y,z,m){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;parent.add(o);return o}
+function ball(parent,r,x,y,z,m){const o=new THREE.Mesh(new THREE.SphereGeometry(r,12,10),m);o.position.set(x,y,z);parent.add(o);return o}
+function rod(parent,a,b,r,m){const u=new THREE.Vector3(...a),v=new THREE.Vector3(...b),diff=v.clone().sub(u),o=new THREE.Mesh(new THREE.CylinderGeometry(r,r,diff.length(),10),m);o.position.copy(u.add(v).multiplyScalar(.5));o.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),diff.normalize());o.castShadow=true;parent.add(o);return o}
+const ground=block(scene,200,.3,200,0,-.3,0,mat(0x586969));const base=block(scene,37,.8,23,0,.1,0,floor);
+for(let i=-17;i<=17;i+=3)block(scene,.14,.03,21,i,.55,0,yellow2);
+for(const z of [-9,9])for(const x of [-15,15])rod(scene,[x,.5,z],[0,34,z*.16],.34,yellow);
+rod(scene,[0,34,-3.2],[0,34,3.2],.62,steel);
+const pivot=new THREE.Group();pivot.position.set(0,34,0);scene.add(pivot);
+rod(pivot,[0,0,0],[0,-24,0],.74,yellow);
+rod(pivot,[0,-2,0],[0,-23,0],.22,yellow2);
+block(pivot,2.7,2.3,2.7,0,-24,0,yellow2);
+const spinRig=new THREE.Group();spinRig.position.set(0,-25,0);pivot.add(spinRig);
+ball(spinRig,2.3,0,0,0,yellow);
+const rows=[],leds=[],restraintMeshes=[],seatPositions=[];
+const ledOff=()=>new THREE.MeshStandardMaterial({color:0x292e2a,emissive:0x08110a,emissiveIntensity:.1});
+const ledOn=()=>new THREE.MeshStandardMaterial({color:0x42ff70,emissive:0x00ff55,emissiveIntensity:2.8});
+for(let g=0;g<4;g++){
+ const theta=g*Math.PI/2;const dir=new THREE.Vector3(Math.cos(theta),0,Math.sin(theta));
+ const group=new THREE.Group();group.rotation.y=-theta;spinRig.add(group);rows.push(group);
+ rod(group,[0,0,0],[6.2,0,0],.32,yellow);
+ const row=block(group,1.1,1.6,10.5,6.3,-.3,0,yellow);
+ const indicator=block(group,.26,.6,6.2,6.05,1.8,0,black);
+ for(let s=0;s<5;s++){
+  const z=(s-2)*2.04;const seat=block(group,1.6,.36,1.75,6.7,-1.45,z,red);
+  block(group,.55,1.95,1.65,6.1,-.28,z,black);
+  const restraint=new THREE.Group();restraint.position.set(6.25,.4,z);group.add(restraint);
+  rod(restraint,[0,0,-.69],[.8,-1.4,-.69],.16,black);
+  rod(restraint,[0,0,.69],[.8,-1.4,.69],.16,black);
+  rod(restraint,[.8,-1.4,-.69],[.8,-1.4,.69],.18,black);
+  restraintMeshes.push(restraint);
+  const light=ball(group,.19,6.05,1.85,z,ledOff());leds.push(light);
+  seatPositions.push(new THREE.Vector3(7.15,-.5,z));
+ }
+}
+function textSprite(msg,color='#ffe16b',scale=1){const canvas=document.createElement('canvas');canvas.width=512;canvas.height=128;const ctx=canvas.getContext('2d');ctx.fillStyle='#15211b';ctx.fillRect(0,0,512,128);ctx.font='900 75px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.strokeStyle='#44220d';ctx.lineWidth=10;ctx.strokeText(msg,256,64);ctx.fillStyle=color;ctx.fillText(msg,256,64);const tx=new THREE.CanvasTexture(canvas);tx.colorSpace=THREE.SRGBColorSpace;const m=new THREE.SpriteMaterial({map:tx});const sp=new THREE.Sprite(m);sp.scale.set(10*scale,2.5*scale,1);return sp}
+const sign=textSprite('TIKI TAKI', '#ffe75a',1.25);sign.position.set(0,35.8,0);scene.add(sign);
+for(let x=-16;x<=16;x+=4){const pole=rod(scene,[x,.6,-10],[x,5,-10],.12,yellow);if(Math.abs(x)>10){const deco=ball(scene,.7,x,5,-10,pink)}}
+for(let x=-15;x<=15;x+=3)for(let i=0;i<3;i++)ball(scene,.12,x,1.5+i*1.4,-10,i%2?green:pink);
+const tiki=textSprite('🌴 TIKI TAKI 🌺','#ffb93b',1);tiki.position.set(-1,3,-10.3);scene.add(tiki);
+const axes=new THREE.AxesHelper(6);axes.position.set(0,34,0);axes.visible=false;scene.add(axes);
+const orbitCameraPos=new THREE.Vector3(34,18,42),cameraTarget=new THREE.Vector3(),tempV=new THREE.Vector3(),tempQ=new THREE.Quaternion();
+const seatStates=Array(20).fill('OPEN');
+let power=false,enabled=false,mode='operator',state='POWER_OFF',startPermitted=false,emergency=false,angle=0,omega=0,phi=0,spinOmega=0,peak=0,elapsed=0,rideClock=0,targetAngle=70*Math.PI/180,targetRPM=8,phase='idle',camMode='operator',night=false,accum=0,last=performance.now(),imported=null;
+const presets={gentle:{a:42,r:4,duration:65},normal:{a:70,r:8,duration:95},intense:{a:95,r:12,duration:120}};
+function log(t){const line=document.createElement('div');line.textContent=new Date().toLocaleTimeString('de-DE')+' '+t;$('eventlog').prepend(line);while($('eventlog').children.length>15)$('eventlog').lastChild.remove()}
+function setState(next){state=next;$('state').textContent=next.replaceAll('_',' ')+' — '+(next==='READY'?'Anlage fahrbereit':next==='FAULT'?'Verriegelung prüfen':next==='RUNNING'?'Fahrt läuft':next==='EMERGENCY_STOP'?'Simulation: Sicherer Abbremsmodus':next==='POWER_OFF'?'Hauptschalter ausgeschaltet':'Simulationsstatus');}
+function countLocked(){return seatStates.filter(s=>s==='LOCKED').length}
+function idle(){return Math.abs(angle)<.028 && Math.abs(omega)<.045 && Math.abs(spinOmega)<.045}
+function canStart(){return power&&enabled&&countLocked()===20&&!emergency&&['READY','SAFETY_CHECK','LOADING'].includes(state)&&idle()}
+function showSeats(){let html='';for(let g=0;g<4;g++){html+='<div class="row"><small>GONDEL '+(g+1)+'</small><small>'+(seatStates.slice(g*5,g*5+5).every(x=>x==='LOCKED')?'● FREIGABE':'○ GESPERRT')+'</small></div><div class="seats">';for(let s=0;s<5;s++){const i=g*5+s;html+='<button class="seat '+(seatStates[i]==='LOCKED'?'locked':seatStates[i]==='FAULT'?'fault':'')+'" data-seat="'+i+'" title="Klicken: Bügelstatus testen"><i class="seatled"></i>S'+String(i+1).padStart(2,'0')+'</button>'}html+='</div>'}$('gondolas').innerHTML=html;document.querySelectorAll('[data-seat]').forEach(b=>b.addEventListener('click',()=>{if(!power||!idle()||['RUNNING','STARTING','STOPPING','EMERGENCY_STOP'].includes(state))return;const i=+b.dataset.seat;seatStates[i]=seatStates[i]==='LOCKED'?'CLOSED_UNLOCKED':'LOCKED';if(seatStates[i]==='LOCKED'&&state==='LOADING')setState('SAFETY_CHECK');refreshSafety()}))}
+function refreshSafety(){for(let i=0;i<20;i++){const active=seatStates[i]==='LOCKED';leds[i].material.color.set(active?0x47ff6c:0x2a302b);leds[i].material.emissive.set(active?0x00ff50:0x08100a);leds[i].material.emissiveIntensity=active?2.6:.1;restraintMeshes[i].rotation.z=seatStates[i]==='OPEN'?.75:0}
+$('lockedCount').textContent=countLocked()+' / 20';$('ready').textContent=canStart()?'FREI':'GESPERRT';$('ready').style.color=canStart()?'#42ff80':'#ff6b7d';showSeats()}
+$('power').onclick=()=>{if(power){if(!idle()||['RUNNING','STARTING','STOPPING'].includes(state))return log('Ausschalten bei laufender Anlage gesperrt');power=false;enabled=false;startPermitted=false;seatStates.fill('OPEN');setState('POWER_OFF')}else{power=true;setState('POWER_ON')}refreshSafety()};
+$('control').onclick=()=>{if(!power)return log('Hauptschalter zunächst einschalten');enabled=!enabled;if(enabled){setState('LOADING');log('Steuerung aktiviert')}else{if(!idle())return;setState('POWER_ON')}refreshSafety()};
+$('close').onclick=()=>{if(!enabled||!idle()||!['LOADING','SAFETY_CHECK','READY'].includes(state))return;setState('RESTRAINT_CLOSING');seatStates.fill('CLOSED_UNLOCKED');setTimeout(()=>{if(state==='RESTRAINT_CLOSING'){setState('SAFETY_CHECK');refreshSafety();log('Bügel geschlossen — Verriegelung noch unbestätigt')}},900);refreshSafety()};
+$('lockall').onclick=()=>{if(!enabled||!['SAFETY_CHECK','READY','LOADING'].includes(state)||!idle())return;for(let i=0;i<20;i++)if(seatStates[i]==='CLOSED_UNLOCKED')seatStates[i]='LOCKED';setState(countLocked()===20?'READY':'FAULT');refreshSafety();log(countLocked()+' von 20 Verriegelungen bestätigt')};
+$('fault').onclick=()=>{if(!power||!idle()||['RUNNING','STARTING'].includes(state))return;seatStates[2]='FAULT';setState('FAULT');refreshSafety();log('Testfehler: Bügel S03')};
+$('open').onclick=()=>{if(!power||!enabled||!idle()||!['LOADING','READY','SAFETY_CHECK','UNLOADING','POSITIONING'].includes(state))return log('Bügelöffnung verriegelt');seatStates.fill('OPEN');setState('LOADING');refreshSafety();log('Bügel geöffnet')};
+$('program').onchange=()=>{const p=presets[$('program').value];if(p){$('amp').value=p.a;$('spin').value=p.r;$('aVal').textContent=p.a+'°';$('sVal').textContent=p.r+' rpm'}};
+$('amp').oninput=()=>{$('aVal').textContent=$('amp').value+'°'};$('spin').oninput=()=>{$('sVal').textContent=$('spin').value+' rpm'};
+$('mode').onchange=e=>{mode=e.target.value;log('Modus '+mode);};
+$('start').onclick=()=>{if(!canStart())return log('Start blockiert: Steuerung / Bügel / Stillstand prüfen');targetAngle=(+$('amp').value)*Math.PI/180;targetRPM=+$('spin').value;elapsed=0;rideClock=0;peak=0;phase='driving';setState('STARTING');startPermitted=true;log('Fahrprogramm '+$('program').selectedOptions[0].text+' gestartet');refreshSafety()};
+$('stop').onclick=()=>{if(!['RUNNING','STARTING'].includes(state))return;phase='braking';setState('STOPPING');log('Kontrolliertes Ausschwingen')};
+$('emergency').onclick=()=>{if(!power)return;emergency=true;phase='braking';startPermitted=false;setState('EMERGENCY_STOP');log('SIMULIERTER NOT-HALT: Antrieb deaktiviert, kontrollierte Abbremsung');refreshSafety()};
+$('reset').onclick=()=>{if(!idle())return log('Rücksetzung erst nach vollständigem Stillstand');emergency=false;phase='idle';startPermitted=false;if(seatStates.includes('FAULT')){for(let i=0;i<20;i++)if(seatStates[i]==='FAULT')seatStates[i]='CLOSED_UNLOCKED'}setState(power?(enabled?(countLocked()===20?'READY':'SAFETY_CHECK'):'POWER_ON'):'POWER_OFF');log('Störungsquittierung / Reset');refreshSafety()};
+document.querySelectorAll('[data-camera]').forEach(b=>b.onclick=()=>{camMode=b.dataset.camera;axes.visible=camMode==='technical';controls.enabled=camMode!=='onride';document.querySelectorAll('[data-camera]').forEach(x=>x.classList.toggle('active',x===b))});
+$('day').onclick=()=>{night=!night;scene.background.set(night?0x050b20:0x87b0bc);scene.fog.color.set(night?0x050b20:0x87b0bc);ambient.intensity=night?.45:2;sun.intensity=night?.25:2.4};
+for(let i=0;i<20;i++){$('onrideSeat').add(new Option('S'+String(i+1).padStart(2,'0'),i))}
+$('glb').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;const url=URL.createObjectURL(file);try{const gltf=await new GLTFLoader().loadAsync(url);if(imported)scene.remove(imported);imported=gltf.scene;const box=new THREE.Box3().setFromObject(imported);const size=box.getSize(new THREE.Vector3());const max=Math.max(size.x,size.y,size.z);if(max>0){imported.scale.setScalar(20/max);box.setFromObject(imported);imported.position.set(45-box.getCenter(new THREE.Vector3()).x,-box.min.y,0)}scene.add(imported);let meshes=0;imported.traverse(o=>{if(o.isMesh)meshes++});$('modelInfo').textContent='GLB-Inspektion: '+file.name+' · '+meshes+' Meshes. Rechts neben der Anlage sichtbar. Noch kein mechanisches Rig; für die Zuordnung müssen die Nodes geprüft werden.';log('GLB geladen: '+file.name+' ('+meshes+' Meshes)')}catch(err){log('GLB konnte nicht geladen werden');$('modelInfo').textContent=String(err)}finally{URL.revokeObjectURL(url)}};
+function step(dt){
+if(!power)return;
+const g=9.81,L=21,friction=.035; // bewusst kalibrierbare Spielwerte, keine KMG-Werksdaten
+let torque=0;
+const drive=phase==='driving',braking=phase==='braking';
+if(drive){
+ const energy=1-Math.cos(angle)+.5*(L/g)*omega*omega;
+ const targetEnergy=1-Math.cos(targetAngle);
+ // Energiegeregelte Einspeisung nur nahe dem tiefen Bahnpunkt
+ if(Math.abs(angle)<.46 && energy<targetEnergy)torque=Math.sign(omega||1)*Math.min(2.8,1.4+2*(targetEnergy-energy));
+ if(energy>targetEnergy*1.035)torque=-Math.sign(omega)*Math.min(.55,(energy-targetEnergy)*2);
+}else if(braking){torque=-Math.sign(omega)*Math.min(4.7,2.4+Math.abs(omega)*1.5)}
+const accel=-(g/L)*Math.sin(angle)-friction*omega+torque;
+omega+=accel*dt;omega=THREE.MathUtils.clamp(omega,-1.6,1.6);angle+=omega*dt;
+if(phase==='driving'){elapsed+=dt;rideClock+=dt;if(state==='STARTING'&&Math.abs(angle)>.12)setState('RUNNING');const p=presets[$('program').value];if(p&&rideClock>p.duration){phase='braking';setState('STOPPING');log('Fahrprogramm beendet, Auslauf läuft')}}
+if(braking&&Math.abs(angle)<.012&&Math.abs(omega)<.06){angle=0;omega=0;phase='positioning';if(!emergency)setState('POSITIONING')}
+const rpmTarget=(drive?targetRPM:0)*Math.PI*2/60;
+spinOmega=THREE.MathUtils.damp(spinOmega,rpmTarget,braking?1.5:.32,dt);
+if(Math.abs(spinOmega)<.003&&!drive)spinOmega=0;
+phi+=spinOmega*dt;
+if(phase==='positioning'&&Math.abs(spinOmega)<.004){const nearest=Math.round(phi/(Math.PI/2))*Math.PI/2;phi=THREE.MathUtils.damp(phi,nearest,1.7,dt);if(Math.abs(nearest-phi)<.003){phi=nearest;phase='idle';setState('UNLOADING');log('Ladeposition erreicht; Bügel können geöffnet werden')}}
+peak=Math.max(peak,Math.abs(angle));pivot.rotation.z=angle;spinRig.rotation.y=phi;
+}
+function drawCamera(dt){if(camMode==='operator'){camera.position.lerp(tempV.set(33,10,40),.05);controls.target.lerp(tempV.set(0,17,0),.07)}else if(camMode==='technical'){camera.position.lerp(tempV.set(48,30,1),.05);controls.target.lerp(tempV.set(0,20,0),.06)}else if(camMode==='onride'){const selected=+$('onrideSeat').value,group=rows[Math.floor(selected/5)],local=seatPositions[selected];group.updateWorldMatrix(true,false);const pos=group.localToWorld(local.clone());const target=group.localToWorld(local.clone().add(new THREE.Vector3(5,.2,0)));camera.position.lerp(pos,.25);camera.lookAt(target);return}controls.update()}
+function render(t){requestAnimationFrame(render);const dt=Math.min((t-last)/1000,.05);last=t;accum+=dt;let n=0;while(accum>=1/120&&n++<8){step(1/120);accum-=1/120}drawCamera(dt);renderer.render(scene,camera);$('angle').textContent=(angle*180/Math.PI).toFixed(1)+'°';$('rpm').textContent=(spinOmega*60/(2*Math.PI)).toFixed(1)+' rpm';$('peak').textContent=(peak*180/Math.PI).toFixed(1)+'°';$('elapsed').textContent=String(Math.floor(elapsed/60)).padStart(2,'0')+':'+String(Math.floor(elapsed%60)).padStart(2,'0');}
+function resize(){const r=$('viewport').getBoundingClientRect();camera.aspect=r.width/r.height;camera.updateProjectionMatrix();renderer.setSize(r.width,r.height)}new ResizeObserver(resize).observe($('viewport'));resize();refreshSafety();requestAnimationFrame(render);log('Referenzmodell initialisiert — 4 × 5 Sitze');
+</script></body></html>
