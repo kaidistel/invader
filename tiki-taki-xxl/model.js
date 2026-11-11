@@ -249,6 +249,52 @@ export function createTikiTaki(scene) {
  signage(booth,'TICKETS',5.7,1.35,0,5.74,2.17);
  signage(booth,'TIKI TAKI',6.45,1.05,0,.9,2.07);
  for(const x of [-3.25,3.25]){ball(booth,.44,x,1.5,2.13,'green','SMALL_CORNER_TIKI_MASK');for(const side of [-.18,.18])ball(booth,.09,x+side,1.56,2.50,'orange','SMALL_TIKI_EYE');ball(booth,.17,x,1.32,2.50,'red','SMALL_TIKI_MOUTH')}
+ // DETAIL 03 / carved Tiki facade: thickness behind the photographic paintwork.
+ // Main silhouettes and colour locations follow the supplied front photograph.
+ const frontCarving=new THREE.Group();frontCarving.name='DETAIL_03_FRONT_CARVING_RELIEF';fixed.add(frontCarving);
+ for(const side of [-1,1]){
+  const x=side*5.18;
+  // TIKI and TAKI are raised, almost full-height pieces rather than a flat generic banner.
+  block(frontCarving,7.18,.16,.43,x,2.23,6.43,'darkYellow','FRONT_CARVED_FASCIA_TOP_RIM');
+  block(frontCarving,7.18,.16,.43,x,.31,6.43,'darkYellow','FRONT_CARVED_FASCIA_BOTTOM_RIM');
+  for(let n=0;n<11;n++){
+   const xx=x+(n-5)*.58;
+   rod(frontCarving,[xx,.37,6.88],[xx+.23,1.99,6.89],.025,'wood','FRONT_RAISED_WOOD_GRAIN');
+  }
+  for(let a=0;a<9;a++){
+   const xx=x-3.19+a*.8;
+   ball(frontCarving,.078,xx,2.28,6.90,a%3===0?'magenta':'wood','FRONT_FASCIA_RIVET',10);
+  }
+ }
+ // Volcanic kiosk: layered, sloped painted fibreglass under the photo-cutout upper sign.
+ const sculptedKiosk=new THREE.Group();sculptedKiosk.name='DETAIL_03_TIKI_TICKETS_KIOSK';booth.add(sculptedKiosk);
+ for(const side of [-1,1]){
+  const x=side*3.58;
+  girder(sculptedKiosk,[x,.47,1.86],[x,5.38,1.86],.27,.29,'wood','BAMBOO_TICKET_CORNER_FRAME');
+  for(let j=0;j<9;j++)ball(sculptedKiosk,.065,x,.91+j*.47,2.03,'darkYellow','BAMBOO_KNOT_RING',10);
+  block(sculptedKiosk,.36,.33,.32,x,5.28,1.83,'green','BOOTH_CORNER_FLORAL_FINIAL');
+ }
+ // Distinct leaf blades, hibiscus centers and moulded tropical fronds behind the canopy.
+ for(let i=0;i<26;i++){
+  const a=Math.PI*i/25,x=Math.cos(a)*3.68,y=5.35+Math.sin(a)*.87;
+  const leaf=ball(sculptedKiosk,.27,x,y-.1,1.96,i%4===0?'teal':'green','SCULPTED_TROPICAL_FOLIAGE',12);
+  leaf.scale.set(.75,1.9,.44);leaf.rotation.z=a-Math.PI/2;
+  for(let p=0;p<5;p++){
+   const b=p*Math.PI*2/5;
+   const petal=ball(sculptedKiosk,.115,x+Math.sin(b)*.19,y+Math.cos(b)*.19,2.00,i%3===0?'orange':'magenta','SCULPTED_HIBISCUS_PETAL',10);
+   petal.scale.set(1.2,1.1,.5);
+  }
+ }
+ // Photo front tiki sculpture gains real depth at sides (without overlaying the reference texture).
+ const sculptedIdol=new THREE.Group();sculptedIdol.name='DETAIL_03_TIKI_IDOL_DEPTH';idol.add(sculptedIdol);
+ for(const side of [-1,1]){
+  const x=side*1.20;
+  girder(sculptedIdol,[x,1.2,-.22],[x,3.76,-.22],.26,.42,'wood','TIKI_STATUE_SIDE_RIB');
+  for(let j=0;j<5;j++){
+   const t=j/4;
+   ball(sculptedIdol,.17,x,1.52+t*2.00,.27,j%2===0?'green':'wood','TIKI_STATUE_CARVED_SIDE_RELIEF',12);
+  }
+ }
  // Entrance rails, show loudspeakers and safety fencing.
  for(let i=0;i<18;i++)rod(fixed,[-8.3+i*.98,.45,5.4],[-8.3+i*.98,1.65,5.4],.035,'yellow','FRONT_QUEUE_FENCE_POST');
  for(const y of [1.03,1.63])rod(fixed,[-8.7,y,5.4],[8.7,y,5.4],.045,'yellow','FRONT_QUEUE_FENCE_RAIL');
