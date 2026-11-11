@@ -429,6 +429,15 @@ export function createTikiTaki(scene) {
  for(let y of [3.3,4.07])block(cabin,3.8,.11,.10,0,y,.93,'darkYellow','OPERATOR_CABIN_WINDOW_TRANSOM');
  for(let x of [-1.24,.3,1.30])block(cabin,.05,.5,.015,x,3.67,.98,'steel','OPERATOR_CABIN_REFLECTION');
 
+ // DETAIL 06 / keep close-up fast without deleting geometry. Small physical parts
+ // remain available in a close camera, but do not generate expensive moving shadows.
+ const fineDetails=[];
+ root.traverse(o=>{
+  if(!o.isMesh)return;
+  if(/BOLT|SCREW|RIVET|PIN|KNOT|WELD|CABLE_P_CLIP|HIBISCUS_PETAL|FLOWER_PETAL|PETAL|LEAF|MAIN_A_FRAME_LED|PINK_TOP_BULB|IDOL_COLUMN_DETAIL|SEAT_SHELL_SCREW/.test(o.name)){
+   o.castShadow=false;o.receiveShadow=false;fineDetails.push(o);
+  }
+ });
  const axes=new THREE.AxesHelper(5);axes.position.set(0,29,0);axes.visible=false;scene.add(axes);
- return {root,pivot,spinRig,rows,leds,restraintMeshes,seatPositions,axes,decorativeLightStrips};
+ return {root,pivot,spinRig,rows,leds,restraintMeshes,seatPositions,axes,decorativeLightStrips,fineDetails};
 }
