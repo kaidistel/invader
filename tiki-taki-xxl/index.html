@@ -73,6 +73,28 @@ const camera=new THREE.PerspectiveCamera(45,1,.1,250);camera.position.set(16,17,
 const renderer=new THREE.WebGLRenderer({antialias:true});renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.2;renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;$('viewport').prepend(renderer.domElement);
 const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(2.4,14.5,0);controls.enableDamping=true;controls.maxDistance=100;
 const ambient=new THREE.HemisphereLight(0xdff6ff,0x4c4e30,2);scene.add(ambient);const sun=new THREE.DirectionalLight(0xfff1c8,2.4);sun.position.set(-35,70,25);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-48;sun.shadow.camera.right=48;sun.shadow.camera.top=50;sun.shadow.camera.bottom=-50;scene.add(sun);
+// DETAIL 07 / open-air fairground setting: compact asphalt, soft shadows and distant autumn trees.
+// Environment is illustrative; no claim that adjacent stalls are at these exact coordinates.
+const fairground=new THREE.Group();fairground.name='FAIRGROUND_SURROUNDINGS';scene.add(fairground);
+const asphalt=new THREE.Mesh(new THREE.PlaneGeometry(250,250),new THREE.MeshStandardMaterial({color:0x55595b,roughness:.94,metalness:0}));
+asphalt.name='ASPHALT_PAVEMENT';asphalt.rotation.x=-Math.PI/2;asphalt.position.y=-.72;asphalt.receiveShadow=true;fairground.add(asphalt);
+const curbMat=new THREE.MeshStandardMaterial({color:0x777a75,roughness:.9});
+function curb(x,z,w){const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,.11,.18),curbMat);mesh.position.set(x,-.58,z);mesh.receiveShadow=true;fairground.add(mesh)}
+for(let x=-32;x<=32;x+=13){curb(x,-21,13)}
+const treeTrunkMat=new THREE.MeshStandardMaterial({color:0x3e3327,roughness:.95});
+const foliageMats=[0x4d5a33,0x677442,0x746842,0x8a7145].map(color=>new THREE.MeshStandardMaterial({color,roughness:1}));
+const trunkGeometry=new THREE.CylinderGeometry(.24,.42,4.5,7),crownGeometry=new THREE.IcosahedronGeometry(1.9,1);
+for(let n=0;n<24;n++){
+ const x=-64+n*5.1+(n%4)*.8, z=-31-(n%3)*4;
+ const height=5.3+(n%5)*.7;
+ const trunk=new THREE.Mesh(trunkGeometry,treeTrunkMat);trunk.position.set(x,height*.40,z);trunk.scale.set(1,height/5,1);fairground.add(trunk);
+ for(let j=0;j<3;j++){
+  const crown=new THREE.Mesh(crownGeometry,foliageMats[(n+j)%foliageMats.length]);
+  crown.position.set(x+(j-1)*1.18,height+(j%2)*.5,z+(j-1)*.75);
+  crown.scale.set(1.15+(n%3)*.14,.92+(j%2)*.2,.85);fairground.add(crown);
+ }
+}
+
 const mat=(c,metal=.1)=>new THREE.MeshStandardMaterial({color:c,metalness:metal,roughness:.42});
 const yellow=mat(0xffcc13,.65),yellow2=mat(0xe8a70b,.6),red=mat(0xd71b34,.35),black=mat(0x101417,.2),steel=mat(0xc9cbd0,.75),floor=mat(0x7a8482,.25),green=mat(0x14bd65),pink=mat(0xff339d);
 function block(parent,w,h,d,x,y,z,m){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;parent.add(o);return o}
