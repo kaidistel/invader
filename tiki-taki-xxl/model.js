@@ -330,10 +330,11 @@ export function createTikiTaki(scene) {
   }
  }
  // Real photo positions show arrays of small, individually controlled RGB lenses.
+ const decorativeLightStrips=[];
  function instancedPixels(p,name,positions,colors,rad){
    const mesh=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(rad,0),new THREE.MeshBasicMaterial({color:0xffffff}),positions.length);
    mesh.name=name;const obj=new THREE.Object3D();positions.forEach((xyz,i)=>{obj.position.set(...xyz);obj.updateMatrix();mesh.setMatrixAt(i,obj.matrix);mesh.setColorAt(i,new THREE.Color(colors[i]))});
-   mesh.instanceMatrix.needsUpdate=true;mesh.instanceColor.needsUpdate=true;p.add(mesh);return mesh;
+   mesh.instanceMatrix.needsUpdate=true;mesh.instanceColor.needsUpdate=true;mesh.userData.lightColors=colors.slice();decorativeLightStrips.push(mesh);p.add(mesh);return mesh;
  }
  const rgbPalette=[0xff218d,0x00e7ff,0xffb528,0x9b28f8,0xfff165];
  for(const z of [-4.6,4.6])for(const x of [-7.9,7.9]){
@@ -429,5 +430,5 @@ export function createTikiTaki(scene) {
  for(let x of [-1.24,.3,1.30])block(cabin,.05,.5,.015,x,3.67,.98,'steel','OPERATOR_CABIN_REFLECTION');
 
  const axes=new THREE.AxesHelper(5);axes.position.set(0,29,0);axes.visible=false;scene.add(axes);
- return {root,pivot,spinRig,rows,leds,restraintMeshes,seatPositions,axes};
+ return {root,pivot,spinRig,rows,leds,restraintMeshes,seatPositions,axes,decorativeLightStrips};
 }
