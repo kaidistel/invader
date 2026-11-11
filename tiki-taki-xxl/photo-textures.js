@@ -896,7 +896,8 @@ export async function applyPhotoMaterials(root){
  const idol=root.getObjectByName('TIKI_CARVED_FRONT_IDOL');
  if(idol){
   // Hide only decorative low-poly parts; retain base stair structure.
-  idol.traverse(o=>{if(o.isMesh&&!o.name.includes('TIKI_STONE_STAIR'))o.visible=false});
+  const preserveRelief=['TIKI_STONE_STAIR','CARVED_WOOD_TIKI_HEAD','WOODEN_IDOL_COLUMN','TIKI_STATUE_SIDE_RIB','TIKI_STATUE_CARVED_SIDE_RELIEF'];
+   idol.traverse(o=>{if(o.isMesh&&!preserveRelief.some(name=>o.name.includes(name)))o.visible=false});
   const photoStatue=new THREE.Mesh(new THREE.PlaneGeometry(3.85,4.15),new THREE.MeshBasicMaterial({map:statue,transparent:true,alphaTest:.08,side:THREE.DoubleSide,depthWrite:false,toneMapped:false}));
   photoStatue.name='AUTHENTIC_TIKI_ENTRANCE_PHOTO_CUTOUT';photoStatue.position.set(0,2.31,1.05);idol.add(photoStatue);
  }
