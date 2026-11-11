@@ -21,3 +21,9 @@ Die **fototexturierte V4-GLB** (5,5 MB, 3.719 Meshes) wurde zusätzlich separat 
 Die originalen KMG-CAD-Dateien und Original-Steuerpläne sind nicht verfügbar. Unbekannte Maße bleiben Annäherungen. Die Typenschild-Höhenangabe 38,80 m und die verbreitete Angabe 46,5 m sind nicht offensichtlich äquivalent. Kein Teil der simulierten Sicherheitslogik ist eine echte KMG-Steuerung, Bedienungsanleitung oder Betriebsfreigabe.
 
 Geprüft wurden die Quellcode-Syntax, die zwingenden Modellknoten und die Existenz von exakt 20 benannten LEDs. Ein Live-GitHub-Pages-End-to-End-Test wurde bislang nicht durchgeführt.
+
+## Foto-Rekonstruktion (11.11.2026)
+
+Das Standardmodell lädt die vom Nutzer bereitgestellten Fototexturen nun **automatisch** aus `photo-textures.js`. Der Nutzer muss für die neue Bemalung keine GLB mehr manuell auswählen. Verwendet werden: Panorama-Rückwand, TIKI/TAKI-Front, detaillierte komplette Ticketkasse mit Vulkanaufbau und Fenstern, geschnitzte Eingangsfigur und Bedienkabinen-Fenster. Die Fotos sind in diesem Repository als eigenständiges, base64-kodiertes WebP-Atlas-Modul enthalten und benötigen deshalb keine externen Bildhoster. Teile der Fotos sind aus perspektivischen Aufnahmen entzerrt; eine millimetergenaue Geometrie wird dadurch nicht ersetzt.
+
+Fehlgeschlagene Fototextur-Loads zeigen einen Fehler im Simulator an; der mechanische 3D-Basisaufbau bleibt sichtbar. Die Prozeduralgeometrie ist weiterhin ein **Prototyp**, nicht KMG-CAD. Der Import einer separat erstellten, benannten GLB bleibt optional verfügbar. Der Simulator benötigt weiterhin Three.js vom CDN. Ein vollständig visueller Live-Browsertest konnte nicht durchgeführt werden.
