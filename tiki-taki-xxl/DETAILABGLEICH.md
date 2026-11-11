@@ -39,13 +39,14 @@
 | 21 | Dynamische Lichtsequenzen (pink/cyan/gelb) | Simulator integriert | Unabhängig von 20 Sicherheits-LEDs |
 | 22 | Gondel-, Kassen-, Gesamt-, Technik- und Onridekamera | Simulator integriert | 20 Sitzplätze anwählbar |
 | 23 | Performance für entfernte Schrauben/Bolzen | Erste Optimierung | 603 kleinere Hardwareobjekte in Gesamtansicht ausgeblendet |
-| 24 | Originale 3D-Form des Tiki-Kopfes statt Foto-Billboard | **Offen** | Benötigt eigene Sculpt-/Meshrekonstruktion |
-| 25 | Fotorealistische, verzerrungsarme Rücken-, Sitz- und Bügelprofile | **Offen** | Benötigt bessere seitliche Detailfotos |
-| 26 | Fahrgast-/Bügelanimation samt Ein-/Ausstieg und Körperbewegung | **Offen** | Render-/Physikabgleich |
-| 27 | Originalgetreue Lautsprecher-/Lichtanordnung | **Offen** | Weitere Bilder des Aufbaus nötig |
-| 28 | Komplette realitätsnahe Bedienpult-Optik | **Offen** | Originalpult bislang nicht ausreichend dokumentiert |
-| 29 | Kamerafahrten, Musikplayer und Rekommandeur-Mikrofon | **Offen** | Browserberechtigungen / Audiosignalweg |
-| 30 | Ende-zu-Ende-Test im echten GitHub-Pages-Browser | **Noch nicht nachgewiesen** | Browser-Test mit sichtbarem Modell und Bedienelementen |
+| 24 | Asphaltplatz, Schatten und ferne Herbstbäume | Erste 3D-Fassung | Umgebung illustrativ, keine genaue Standplatzaufnahme |
+| 25 | Originale 3D-Form des Tiki-Kopfes statt Foto-Billboard | **Offen** | Benötigt eigene Sculpt-/Meshrekonstruktion |
+| 26 | Fotorealistische, verzerrungsarme Rücken-, Sitz- und Bügelprofile | **Offen** | Benötigt bessere seitliche Detailfotos |
+| 27 | Fahrgast-/Bügelanimation samt Ein-/Ausstieg und Körperbewegung | **Offen** | Render-/Physikabgleich |
+| 28 | Originalgetreue Lautsprecher-/Lichtanordnung | **Offen** | Weitere Bilder des Aufbaus nötig |
+| 29 | Komplette realitätsnahe Bedienpult-Optik | **Offen** | Originalpult bislang nicht ausreichend dokumentiert |
+| 30 | Kamerafahrten, Musikplayer und Rekommandeur-Mikrofon | **Offen** | Browserberechtigungen / Audiosignalweg |
+| 31 | Ende-zu-Ende-Test im echten GitHub-Pages-Browser | **Noch nicht nachgewiesen** | Browser-Test mit sichtbarem Modell und Bedienelementen |
 
 ## Nachvollziehbarkeit / aktuelle Änderungen
 
@@ -55,6 +56,7 @@
 - Detail 04: sechs prüfbare Kamerapositionen
 - Detail 05: animierte RGB-Lichtstreifen ohne Eingriff in die Sicherheitsanzeigen
 - Detail 06: Hardware-LOD / keine dynamischen Schatten für Kleinbauteile
+- Detail 07: Asphalt, schattenfähiger Boden, zurückhaltende Baumkulisse
 
 ## Feststehende Tests (aus Quellcode-Initialisierung)
 
