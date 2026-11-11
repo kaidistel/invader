@@ -25,7 +25,7 @@ label{display:block;margin:9px 0;font-size:12px;color:#c9d8db}label input[type=r
 .seat{min-width:0;padding:6px 0;font-size:10px;text-align:center;background:#222d31;color:#ccd;border:1px solid #53666d}
 .seat.locked{background:#12683a;color:#dcffe2;border-color:#4cf184}.seat.fault{background:#912537}
 .seatled{display:inline-block;width:8px;height:8px;border-radius:100%;background:#354041;margin-right:3px}.locked .seatled{background:#3aff6a;box-shadow:0 0 8px #20ff61}
-.foot{color:#9db0b5;font-size:11px;line-height:1.45}.tag{font-weight:800;letter-spacing:.08em;color:#9dffb8}
+.foot{color:#9db0b5;font-size:11px;line-height:1.45}.model-state{position:absolute;right:12px;top:13px;max-width:45%;z-index:3;background:#071716e8;border:1px solid #297c52;border-radius:8px;padding:9px 11px;color:#9effbd;font:700 12px system-ui}.model-state.failed{border-color:#ff536b;color:#ffdce0;background:#450d1fe9}.tag{font-weight:800;letter-spacing:.08em;color:#9dffb8}
 #eventlog{font:11px ui-monospace,monospace;color:#b2c0c3;background:#050a0b;padding:9px;max-height:85px;overflow:auto;border-radius:5px}
 @media(max-width:920px){.main{display:flex;flex-direction:column;height:auto}.viewport{height:65vh;min-height:390px}.panel{overflow:visible}.hud{grid-template-columns:repeat(2,minmax(95px,1fr))}}
 </style>
@@ -33,7 +33,7 @@ label{display:block;margin:9px 0;font-size:12px;color:#c9d8db}label input[type=r
 <body>
 <header><h1>🌺 TIKI TAKI <span style="color:white">XXL</span></h1><span class="tag">KMG XXL · OPERATOR SIMULATOR <small> / FAN PROJECT</small></span></header>
 <div class="main">
-<div class="viewport" id="viewport">
+<div class="viewport" id="viewport"><div id="modelState" class="model-state">3D-Modell wird geladen …</div>
 <div class="hud"><div class="metric"><span>Pendelwinkel</span><b id="angle">0.0°</b></div><div class="metric"><span>Gondel</span><b id="rpm">0.0 rpm</b></div><div class="metric"><span>Amplitude</span><b id="peak">0.0°</b></div><div class="metric"><span>Fahrtzeit</span><b id="elapsed">00:00</b></div></div>
 <div class="cam"><button data-camera="operator">Bedienplatz</button><button data-camera="orbit">Orbit</button><button data-camera="onride">Onride</button><button data-camera="technical">Technik</button><button id="day">☀️ Tag / Nacht</button></div>
 </div>
@@ -59,12 +59,13 @@ label{display:block;margin:9px 0;font-size:12px;color:#c9d8db}label input[type=r
 <p class="foot">Technische Werte und Fahrprogramme sind plausible <b>Spielparameter</b>, keine verifizierten KMG-Betriebsdaten. Sicherheitsfunktionen sind ausschließlich simuliert. GLB-Dateien mit passenden Rig-Namen ersetzen die gesamte Anlage und werden direkt animiert. Andere Dateien werden wegen inkompatibler Bewegungsachsen abgelehnt.</p>
 </aside></div>
 <script type="importmap">{"imports":{"three":"https://esm.sh/three@0.180.0","three/addons/":"https://esm.sh/three@0.180.0/examples/jsm/"}}</script>
+<script>window.addEventListener('error',e=>{const state=document.getElementById('modelState');if(state){state.classList.add('failed');state.textContent='3D-Fehler: '+(e.message||'Modul nicht geladen')};console.error(e)});window.addEventListener('unhandledrejection',e=>{const state=document.getElementById('modelState');if(state){state.classList.add('failed');state.textContent='3D-Fehler: '+String(e.reason||'Laden fehlgeschlagen')};console.error(e.reason)});</script>
 <script type="module">
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
-import {createTikiTaki} from './model.js';
+import {createTikiTaki} from './model.js?v=fix-20261111-1340';
 const $=id=>document.getElementById(id);
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x87b0bc);scene.fog=new THREE.Fog(0x87b0bc,85,190);
 const camera=new THREE.PerspectiveCamera(52,1,.1,250);camera.position.set(20,13,30);
@@ -77,6 +78,7 @@ function block(parent,w,h,d,x,y,z,m){const o=new THREE.Mesh(new THREE.BoxGeometr
 function ball(parent,r,x,y,z,m){const o=new THREE.Mesh(new THREE.SphereGeometry(r,12,10),m);o.position.set(x,y,z);parent.add(o);return o}
 function rod(parent,a,b,r,m){const u=new THREE.Vector3(...a),v=new THREE.Vector3(...b),diff=v.clone().sub(u),o=new THREE.Mesh(new THREE.CylinderGeometry(r,r,diff.length(),10),m);o.position.copy(u.add(v).multiplyScalar(.5));o.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),diff.normalize());o.castShadow=true;parent.add(o);return o}
 const {root:modelRoot,pivot,spinRig,rows,leds,restraintMeshes,seatPositions,axes}=createTikiTaki(scene);
+$('modelState').textContent='✓ 3D-Modell aktiv · 20 Sitze';
 let activeRoot=modelRoot,activePivot=pivot,activeSpinRig=spinRig,activeRows=rows,activeLeds=leds,activeRestraints=restraintMeshes,activeSeats=null;
 let loadedScene=null;
 const orbitCameraPos=new THREE.Vector3(20,13,30),cameraTarget=new THREE.Vector3(),tempV=new THREE.Vector3(),tempQ=new THREE.Quaternion();
