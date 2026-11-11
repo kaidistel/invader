@@ -1,37 +1,23 @@
-# Tiki Taki XXL – Operator Simulator (Fan-Projekt)
+# Tiki Taki XXL · Modell V4 (Fan-Rekonstruktion)
 
-Browserbasierter Simulator der KMG XXL von Robert Paulsen. Keine originale KMG-Steuerungssoftware und kein Hersteller-CAD.
+Eine eigenständige, clientseitige Three.js-Anwendung für die KMG-XXL-Riesenschaukel von Robert Paulsen.
 
-## In GitHub Pages
-`https://kaidistel.github.io/invader/tiki-taki-xxl/`
+## Simulator / GitHub Pages
+https://kaidistel.github.io/invader/tiki-taki-xxl/
 
-- `index.html`: Steuerpult, Game-Loop, Verriegelungsprüfung und GLB-Importer
-- `model.js`: lokal ohne zusätzliche GLB prozedural generiertes Tiki-Taki-Rig
-- Der Nutzer kann die detailliertere, fototexturierte **Tiki_Taki_XXL_V3_Reference_Reconstruction.glb** über „Modell laden (.glb)“ in derselben Seite aktivieren. Diese GLB wurde separat in ChatGPT aus den bereitgestellten Referenzfotos erzeugt; sie ist noch **nicht** im Repository hochgeladen.
-- „Eigenes Tiki Taki Modell als GLB exportieren“ speichert die jeweils aktive Geometrie als GLB.
+- `index.html`: Bedienpult, fester Physik-Zeitschritt, Lade-/Verriegelungslogik, 20 LEDs, GLB-Loader, Kamera und GLB-Exporter.
+- `model.js`: V4 des **prozeduralen Web-Modells**, einschließlich detaillierterer A-Träger, LED-Strips, Tiki-Dekoration, Kasse, Vulkan, Sitze, Wartungsdetails und Bedienkabine.
 
-## Referenzabgleich
-Gesichert dokumentiert: KMG XXL, Paulsen, Baujahr 2025, 20 Sitzplätze, 18 × 13 m Standfläche, 46,5 m maximale Bewegungshöhe. Weitere Abmessungen sind mangels Zeichnungen approximiert.
+Die **fototexturierte V4-GLB** (5,5 MB, 3.719 Meshes) wurde zusätzlich separat als herunterladbare Datei erzeugt und kann mit dem Dateidialog des Simulators importiert werden. Diese GLB ist derzeit **nicht automatisch im Repository gehostet**. Der Import benötigt die Knoten `MAIN_PENDULUM_PIVOT`, `GONDOLA_SPIN_PIVOT`, `GONDOLA_1`…`GONDOLA_4`, `SEAT_01`…`SEAT_20`, `RESTRAINT_01`…`RESTRAINT_20`, `LOCK_INDICATOR_S01`…`S20`.
 
-- 4 Sitzreihen à 5 Sitze an einem starren rotierenden Stern, nach innen ausgerichtet
-- je 5 grüne Verriegelungs-LEDs auf einer zentralen Anzeige **über dem mittleren Sitz**
-- 20 individuell benannte Bügel `RESTRAINT_01`–`RESTRAINT_20`
-- `MAIN_PENDULUM_PIVOT`: Hauptpendelachse am oberen Lager
-- `GONDOLA_SPIN_PIVOT`: zweite, mit dem Pendel bewegte lokale Rotationsachse
-- gelbe A-Rahmen-Stützen, pinke Lauflichter, riesige Tiki-Masken, Vorderfront TIKI/TAKI, Tropenkulisse, Vulkan, TICKETS-Kasse
+## Quellenabgleich
+- Eigene Referenz: 4 vom Nutzer bereitgestellte Aufnahmen von Tiki Taki XXL.
+- Hersteller-Typenschild (Fotografie): https://onride.de/onride-upic584757@1120 — max. Pendelwinkel **120°**, max. Gondelrotation **16 U/min** und **20 Sitzplätze**.
+- https://ride-index.de/2025/11/02/tiki-taxi-xxl/ — Baujahr 2025, Aufstellfläche 18 × 13 m und Marketinghöhe 46,5 m.
+- https://nordkirmes.net/article/3503-tiki-taki-xxl-hamburger-dom-erlebt-emotionale-weltpremiere-einer-mega-schaukel/ — Gesamteindruck, Kasse und Farbgestaltung.
+- https://www.kirmesforum.de/threads/tiki-taki-xxl-paulsen-kmg-rides.68941/page-5 — Design/Farbgebung und LEDs.
 
-## Bedienung
-1. Hauptschalter einschalten
-2. Steuerung aktivieren
-3. Bügel schließen (damit zunächst nur `CLOSED_UNLOCKED`)
-4. Verriegelungen prüfen, anschließend leuchten alle 20 LEDs grün
-5. Fahrprogramm und gewünschte Amplitude wählen und starten
-6. Kontrolliert stoppen; Ausstieg erst bei stillstehenden Achsen
+## Grenzen und Vorsicht
+Die originalen KMG-CAD-Dateien und Original-Steuerpläne sind nicht verfügbar. Unbekannte Maße bleiben Annäherungen. Die Typenschild-Höhenangabe 38,80 m und die verbreitete Angabe 46,5 m sind nicht offensichtlich äquivalent. Kein Teil der simulierten Sicherheitslogik ist eine echte KMG-Steuerung, Bedienungsanleitung oder Betriebsfreigabe.
 
-Not-Halt und Grenzwerte bilden **ausschließlich eine spielerische Simulation** ab.
-
-## Technische Einschränkungen
-- Nicht alle Profile, Bemalungsdetails, Bolzenpositionen, LEDs, Programme und Führungen sind durch die vier Fotos eindeutig bestimmt.
-- Die lokal erstellte GLB nutzt Fototexturen aus den vom Nutzer bereitgestellten Bildern. Die `model.js`-Standardversion ersetzt sie durch selbst gezeichnete Canvas-Kulissen.
-- Hosting ist über den bestehenden GitHub-Pages-Pfad vorgesehen; ein vollständiger Browser-End-to-End-Test wurde noch nicht durchgeführt.
-- Der Simulator ist ein Fanprojekt, kein Fahrbetriebs- oder Sicherheitsnachweis.
+Geprüft wurden die Quellcode-Syntax, die zwingenden Modellknoten und die Existenz von exakt 20 benannten LEDs. Ein Live-GitHub-Pages-End-to-End-Test wurde bislang nicht durchgeführt.
