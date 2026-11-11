@@ -888,7 +888,10 @@ export async function applyPhotoMaterials(root){
   const photoRoof=new THREE.Mesh(new THREE.PlaneGeometry(8.55,3.48),new THREE.MeshBasicMaterial({map:roof,side:THREE.DoubleSide,transparent:true,alphaTest:.08,depthWrite:false,toneMapped:false}));
   photoRoof.name='AUTHENTIC_TIKI_TAKI_TICKETS_CANOPY';photoRoof.position.set(0,6.54,2.47);booth.add(photoRoof);
   const front=booth.getObjectByName('SIGN_TIKI TAKI');
-  if(front)front.material=painted(crop(atlas,512,400,1024,640));
+  if(front)front.visible=false;
+  const kioskFront=new THREE.Mesh(new THREE.PlaneGeometry(7.62,4.1),painted(crop(atlas,512,400,1024,640)));
+  kioskFront.name='AUTHENTIC_TIKI_TAKI_TICKET_WINDOWS_AND_FASCIA';
+  kioskFront.position.set(0,2.56,2.52);booth.add(kioskFront);
  }
  const idol=root.getObjectByName('TIKI_CARVED_FRONT_IDOL');
  if(idol){
