@@ -78,7 +78,8 @@ const yellow=mat(0xffcc13,.65),yellow2=mat(0xe8a70b,.6),red=mat(0xd71b34,.35),bl
 function block(parent,w,h,d,x,y,z,m){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;parent.add(o);return o}
 function ball(parent,r,x,y,z,m){const o=new THREE.Mesh(new THREE.SphereGeometry(r,12,10),m);o.position.set(x,y,z);parent.add(o);return o}
 function rod(parent,a,b,r,m){const u=new THREE.Vector3(...a),v=new THREE.Vector3(...b),diff=v.clone().sub(u),o=new THREE.Mesh(new THREE.CylinderGeometry(r,r,diff.length(),10),m);o.position.copy(u.add(v).multiplyScalar(.5));o.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),diff.normalize());o.castShadow=true;parent.add(o);return o}
-const {root:modelRoot,pivot,spinRig,rows,leds,restraintMeshes,seatPositions,axes,decorativeLightStrips}=createTikiTaki(scene);
+const {root:modelRoot,pivot,spinRig,rows,leds,restraintMeshes,seatPositions,axes,decorativeLightStrips,fineDetails}=createTikiTaki(scene);
+for(const detail of fineDetails)detail.visible=false;
 $('modelState').textContent='3D-Modell aktiv · Originaldekoration wird geladen …';
 applyPhotoMaterials(modelRoot).then(()=>{
  $('modelState').textContent='✓ Originalfoto-Dekoration aktiv · 20 Sitze';
@@ -134,7 +135,7 @@ $('start').onclick=()=>{if(!canStart())return log('Start blockiert: Steuerung / 
 $('stop').onclick=()=>{if(!['RUNNING','STARTING'].includes(state))return;phase='braking';setState('STOPPING');log('Kontrolliertes Ausschwingen')};
 $('emergency').onclick=()=>{if(!power)return;emergency=true;phase='braking';startPermitted=false;setState('EMERGENCY_STOP');log('SIMULIERTER NOT-HALT: Antrieb deaktiviert, kontrollierte Abbremsung');refreshSafety()};
 $('reset').onclick=()=>{if(!idle())return log('Rücksetzung erst nach vollständigem Stillstand');emergency=false;phase='idle';startPermitted=false;if(seatStates.includes('FAULT')){for(let i=0;i<20;i++)if(seatStates[i]==='FAULT')seatStates[i]='CLOSED_UNLOCKED'}setState(power?(enabled?(countLocked()===20?'READY':'SAFETY_CHECK'):'POWER_ON'):'POWER_OFF');log('Störungsquittierung / Reset');refreshSafety()};
-document.querySelectorAll('[data-camera]').forEach(b=>b.onclick=()=>{camMode=b.dataset.camera;axes.visible=camMode==='technical';controls.enabled=camMode==='orbit'||camMode==='technical';if(camMode==='orbit'){controls.target.set(2.4,14.5,0)}document.querySelectorAll('[data-camera]').forEach(x=>x.classList.toggle('active',x===b))});document.querySelector('[data-camera="operator"]')?.classList.add('active');controls.enabled=false;;
+document.querySelectorAll('[data-camera]').forEach(b=>b.onclick=()=>{camMode=b.dataset.camera;axes.visible=camMode==='technical';for(const detail of fineDetails)detail.visible=camMode!=='operator';controls.enabled=camMode==='orbit'||camMode==='technical';if(camMode==='orbit'){controls.target.set(2.4,14.5,0)}document.querySelectorAll('[data-camera]').forEach(x=>x.classList.toggle('active',x===b))});document.querySelector('[data-camera="operator"]')?.classList.add('active');controls.enabled=false;;
 $('day').onclick=()=>{night=!night;scene.background.set(night?0x050b20:0xb8d5e5);scene.fog.color.set(night?0x050b20:0x87b0bc);ambient.intensity=night?.45:2;sun.intensity=night?.25:2.4};
 for(let i=0;i<20;i++){$('onrideSeat').add(new Option('S'+String(i+1).padStart(2,'0'),i))}
 $('glb').onchange=async e=>{
