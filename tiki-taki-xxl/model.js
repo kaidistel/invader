@@ -434,7 +434,7 @@ export function createTikiTaki(scene) {
  const fineDetails=[];
  root.traverse(o=>{
   if(!o.isMesh)return;
-  if(/BOLT|SCREW|RIVET|PIN|KNOT|WELD|CABLE_P_CLIP|HIBISCUS_PETAL|FLOWER_PETAL|PETAL|LEAF|MAIN_A_FRAME_LED|PINK_TOP_BULB|IDOL_COLUMN_DETAIL|SEAT_SHELL_SCREW/.test(o.name)){
+  if(/BOLT|SCREW|RIVET|PIN|KNOT|WELD|CABLE_P_CLIP|SEAT_SHELL_SCREW/.test(o.name)){
    o.castShadow=false;o.receiveShadow=false;fineDetails.push(o);
   }
  });
