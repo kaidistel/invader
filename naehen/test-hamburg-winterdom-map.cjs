@@ -42,8 +42,11 @@ const sw=fs.readFileSync(path.join(root,"sw.js"),"utf8");
 assert.ok(app.includes("window.NAEHEN_HAMBURG_WINTERDOM_2026"));
 assert.ok(app.includes("const map = activeParkConfig()?.specialMap;"));
 assert.ok(html.includes("hamburg-winterdom-2026-config.js?v=155"));
-assert.ok(html.includes("styles.css?v=155"));
-assert.ok(sw.includes("naehen-v155"));
+// Asset versions evolve with each new event. Keep CSS and PWA cache in sync
+// without pinning this older Winterdom test to a retired global version.
+const styleVersion=html.match(/styles\\.css\\?v=(\\d+)/)?.[1];
+assert.ok(styleVersion,"Versioned stylesheet must be loaded");
+assert.ok(sw.includes("naehen-v"+styleVersion),"PWA cache must match stylesheet version");
 assert.ok(css.includes('body[data-park="hamburg-winterdom-2026"] .venueSpecialMap'));
 assert.ok(css.includes('body[data-park="hamburg-winterdom-2026"] .soestPlanLink.mapLabelHitbox'));
 console.log("PASS: Winterdom map is visible by app config, PNG exists and 36 click targets resolve");
