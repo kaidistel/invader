@@ -177,7 +177,7 @@ export function createTikiTaki(scene) {
   cpm.fillStyle='#5e7077';cpm.fillRect(x+4+(Math.floor(y/16)%2)*5,y+8,7,2);
  }
  const deckTexture=new THREE.CanvasTexture(metalPattern);deckTexture.wrapS=deckTexture.wrapT=THREE.RepeatWrapping;deckTexture.repeat.set(8,6);deckTexture.colorSpace=THREE.SRGBColorSpace;
- const deckDetail=add(fixed,new THREE.PlaneGeometry(17.6,12.55),new THREE.MeshStandardMaterial({map:deckTexture,metalness:.45,roughness:.56,side:THREE.DoubleSide}),'V4_PERFORATED_METAL_DECK',[0,.365,0],[-Math.PI/2,0,0]);
+ const deckDetail=put(fixed,new THREE.PlaneGeometry(17.6,12.55),new THREE.MeshStandardMaterial({map:deckTexture,metalness:.45,roughness:.56,side:THREE.DoubleSide}),'V4_PERFORATED_METAL_DECK',0,.365,0); deckDetail.rotation.x=-Math.PI/2;
  // Guard-fence replacement with two physical exit openings near the front idol.
  for(let sx of [-1,1]){
   for(let j=0;j<8;j++){const x=sx*(3.3+j*.71);
@@ -250,7 +250,7 @@ export function createTikiTaki(scene) {
    // Individual headrest side bolsters and structural red seat shells.
    for(const q of [-1,1]){
     ball(seat,.24,.48,.86,q*.46,'coal','V4_PADDED_HEADREST_LATERAL');
-    block(seat,.48,.20,.24,-.54,-.84,q*.58,'wine','V4_RED_SEAT_SHELL_FIN');
+    block(seat,.48,.20,.24,-.54,-.84,q*.58,'red','V4_RED_SEAT_SHELL_FIN');
     ball(seat,.065,.34,.94,q*.58,'steel','V4_HARNESS_LOCK_PIN');
    }
    block(seat,1.21,.19,1.32,-.20,-.95,0,'red','V4_MOLDED_SEAT_UNDERTRAY');
