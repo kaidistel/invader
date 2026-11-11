@@ -20,9 +20,9 @@
     "capacity": "20 Personen",
     "technicalSourceUrl": "https://volksfestefinder.de/fahrgeschaeft/tiki-taki-xxl-paulsen",
     "rideIndexUrl": "https://ride-index.de/2025/11/02/tiki-taxi-xxl/",
-    "imageUrl": "https://www.hamburg-dom-fieber.de/images/hamburg-dom-fieberde/xxl-schaukel-tiki-taki-xxl-og.jpeg.webp",
-    "imageCredit": "Hamburg DOM Fieber · Tiki Taki XXL (Paulsen), Archivaufnahme",
-    "imageSourceUrl": "https://www.hamburg-dom-fieber.de/xxl-schaukel-tiki-taki-xxl",
+    "imageUrl": "https://nordkirmes.net/media/1398-whatsapp-image-2025-11-01-at-15-46-31-2-jpeg/?thumbnail=large",
+    "imageCredit": "Nordkirmes.net · Tiki Taki XXL (Paulsen), Hamburger Winterdom 2025",
+    "imageSourceUrl": "https://nordkirmes.net/article/3503-tiki-taki-xxl-hamburger-dom-erlebt-emotionale-weltpremiere-einer-mega-schaukel/",
     "description": "Tropische XXL-Schaukel mit vier nach innen gerichteten Sitzreihen, drehendem Gondelkreuz und großer Pendelbewegung.",
     "lineupStatus": "provisional"
   },
