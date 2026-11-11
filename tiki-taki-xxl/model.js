@@ -97,6 +97,49 @@ export function createTikiTaki(scene) {
  block(fixed,18,6.6,.19,0,3.75,-6.5,'darkYellow','REAR_MURAL_CARRIER');
  put(fixed,new THREE.PlaneGeometry(17.8,6.4),new THREE.MeshStandardMaterial({map:scenicMural(),roughness:1,side:THREE.DoubleSide}),'ACTUAL_THEME_INSPIRED_TROPICAL_MURAL',0,3.8,-6.38);
  for(let x=-8.9;x<8.9;x+=.13)ball(fixed,.055,x,7.08,-6.1,'magenta','PINK_TOP_BULB',8);
+ // DETAIL 01 / photographed construction: three transport spines, bolted foundations and bearing assembly.
+ // Individual section dimensions are visual approximations, not certified KMG CAD.
+ const chassis=new THREE.Group();chassis.name='DETAIL_01_THREE_TRANSPORT_FRAMES';fixed.add(chassis);
+ for(const [index,z] of [-4.25,0,4.25].entries()){
+  const car=new THREE.Group();car.name='STOWED_CENTRAL_TRANSPORT_'+(index+1);chassis.add(car);
+  for(const x of [-7.6,7.6])girder(car,[x,-.48,z],[x,.15,z],.34,.43,'darkYellow','CHASSIS_BOX_END_'+(x<0?'L':'R'));
+  for(const off of [-.62,.62])girder(car,[-8.25,-.43,z+off],[8.25,-.43,z+off],.29,.22,'steel','CHASSIS_LONGITUDINAL_BEAM');
+  for(let n=-7;n<=7;n+=2)girder(car,[n,-.43,z-.62],[n,-.43,z+.62],.17,.21,'darkYellow','CHASSIS_CROSSMEMBER');
+  for(const x of [-6.9,6.9])for(const zz of [-.51,.51]){
+    block(car,.34,.16,.27,x,-.65,z+zz,'coal','CHASSIS_TIE_DOWN_BRAKET');
+    ball(car,.055,x,-.56,z+zz,'silver','CHASSIS_PIN');
+  }
+ }
+ // Upper main bearing: the massive axle has distinct side collars, flanges and bolts.
+ for(const z of [-4.8,4.8]){
+  const side=z>0?1:-1;
+  rod(fixed,[0,29,z-side*.4],[0,29,z+side*.24],.87,'darkYellow','UPPER_BEARING_CIRCULAR_COLLAR',20);
+  rod(fixed,[0,29,z+side*.19],[0,29,z+side*.27],1.06,'yellow','UPPER_BEARING_OUTER_FLANGE',24);
+  for(let k=0;k<16;k++){
+   const a=2*Math.PI*k/16;
+   ball(fixed,.07,Math.sin(a)*.83,29+Math.cos(a)*.83,z+side*.29,'steel','UPPER_BEARING_BOLT_'+k,8);
+  }
+  rod(fixed,[0,29,z+side*.31],[0,29,z+side*.49],.46,'steel','UPPER_BEARING_CENTRE_CAP',20);
+ }
+ // Side-beam plates: boxed steel profile, welded collar bands and small fastening heads.
+ for(const z of [-4.6,4.6])for(const x of [-7.9,7.9]){
+   const side=Math.sign(x);
+   for(const t of [.075,.16,.31,.46,.61,.76,.88]){
+     const y=.5+28.5*t,xx=x*(1-t),zz=z*(1-t*.38);
+     const collar=block(fixed,.83,.14,.85,xx,y,zz,'darkYellow','A_FRAME_BOX_WELD_COLLAR');
+     collar.rotation.z=side*.255;
+     for(const a of [-.24,.24])for(const b of [-.27,.27])
+       ball(fixed,.036,xx+a,y,zz+b,'steel','A_FRAME_BOLT_HEAD',8);
+   }
+ }
+ // Wire conduit brackets on opposite sides of the stationary arms.
+ for(const z of [-4.6,4.6])for(const x of [-7.9,7.9]){
+  const edge=Math.sign(x),depth=Math.sign(z);
+  for(let k=1;k<=13;k++){
+    const t=k/16,xx=x*(1-t),yy=.55+28.4*t,zz=z*(1-t*.38);
+    rod(fixed,[xx+edge*.28,yy,zz+depth*.48],[xx+edge*.28,yy+.12,zz+depth*.48],.025,'steel','A_FRAME_CABLE_P_CLIP');
+  }
+ }
  // Pendulum, 27m long, swings in X/Y only.
  girder(pivot,[0,-.2,0],[0,-27,0],1.32,1.1,'yellow','CLOSED_STEEL_MAIN_PENDULUM_ARM');
  for(const z of [-.68,.68]){rod(pivot,[0,-2,z],[0,-24,z],.09,'bright','ARM_OUTER_LONGITUDINAL_RIB');rod(pivot,[0,-1,z+.15],[0,-21,z+.15],.055,'steel','HYDRAULIC_METAL_PIPE')}
