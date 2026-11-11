@@ -44,7 +44,7 @@ assert.ok(app.includes("const map = activeParkConfig()?.specialMap;"));
 assert.ok(html.includes("hamburg-winterdom-2026-config.js?v=155"));
 // Asset versions evolve with each new event. Keep CSS and PWA cache in sync
 // without pinning this older Winterdom test to a retired global version.
-const styleVersion=html.match(/styles\\.css\\?v=(\\d+)/)?.[1];
+const styleVersion=html.match(/styles\.css\?v=(\d+)/)?.[1];
 assert.ok(styleVersion,"Versioned stylesheet must be loaded");
 assert.ok(sw.includes("naehen-v"+styleVersion),"PWA cache must match stylesheet version");
 assert.ok(css.includes('body[data-park="hamburg-winterdom-2026"] .venueSpecialMap'));
