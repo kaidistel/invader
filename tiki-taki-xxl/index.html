@@ -78,7 +78,7 @@ const yellow=mat(0xffcc13,.65),yellow2=mat(0xe8a70b,.6),red=mat(0xd71b34,.35),bl
 function block(parent,w,h,d,x,y,z,m){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;parent.add(o);return o}
 function ball(parent,r,x,y,z,m){const o=new THREE.Mesh(new THREE.SphereGeometry(r,12,10),m);o.position.set(x,y,z);parent.add(o);return o}
 function rod(parent,a,b,r,m){const u=new THREE.Vector3(...a),v=new THREE.Vector3(...b),diff=v.clone().sub(u),o=new THREE.Mesh(new THREE.CylinderGeometry(r,r,diff.length(),10),m);o.position.copy(u.add(v).multiplyScalar(.5));o.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),diff.normalize());o.castShadow=true;parent.add(o);return o}
-const {root:modelRoot,pivot,spinRig,rows,leds,restraintMeshes,seatPositions,axes}=createTikiTaki(scene);
+const {root:modelRoot,pivot,spinRig,rows,leds,restraintMeshes,seatPositions,axes,decorativeLightStrips}=createTikiTaki(scene);
 $('modelState').textContent='3D-Modell aktiv · Originaldekoration wird geladen …';
 applyPhotoMaterials(modelRoot).then(()=>{
  $('modelState').textContent='✓ Originalfoto-Dekoration aktiv · 20 Sitze';
@@ -91,6 +91,24 @@ applyPhotoMaterials(modelRoot).then(()=>{
 });
 let activeRoot=modelRoot,activePivot=pivot,activeSpinRig=spinRig,activeRows=rows,activeLeds=leds,activeRestraints=restraintMeshes,activeSeats=null;
 let loadedScene=null;
+let lastDecorationLightUpdate=0;
+const rgbColors=[0xff2294,0x22d6ef,0xffc43d,0x8d5af4,0xfff3c8].map(color=>new THREE.Color(color));
+function updateDecorativeLights(now){
+ if(!decorativeLightStrips||now-lastDecorationLightUpdate<160)return;
+ lastDecorationLightUpdate=now;
+ const chase=Math.floor(now/(phase==='driving'?195:410));
+ for(let strip=0;strip<decorativeLightStrips.length;strip++){
+  const mesh=decorativeLightStrips[strip];
+  for(let i=0;i<mesh.count;i++){
+   const band=Math.floor(i/16);
+   const color=rgbColors[(band+strip+chase)%rgbColors.length].clone();
+   color.multiplyScalar(night?1:.56);
+   mesh.setColorAt(i,color);
+  }
+  if(mesh.instanceColor)mesh.instanceColor.needsUpdate=true;
+ }
+}
+
 const orbitCameraPos=new THREE.Vector3(16,17,40),cameraTarget=new THREE.Vector3(),tempV=new THREE.Vector3(),tempQ=new THREE.Quaternion();
 const seatStates=Array(20).fill('OPEN');
 let power=false,enabled=false,mode='operator',state='POWER_OFF',startPermitted=false,emergency=false,angle=0,omega=0,phi=0,spinOmega=0,peak=0,elapsed=0,rideClock=0,targetAngle=70*Math.PI/180,targetRPM=8,phase='idle',camMode='operator',night=false,accum=0,last=performance.now(),imported=null;
@@ -194,6 +212,6 @@ function drawCamera(dt){
  }
  controls.update()
 }
-function render(t){requestAnimationFrame(render);const dt=Math.min((t-last)/1000,.05);last=t;accum+=dt;let n=0;while(accum>=1/120&&n++<8){step(1/120);accum-=1/120}drawCamera(dt);renderer.render(scene,camera);$('angle').textContent=(angle*180/Math.PI).toFixed(1)+'°';$('rpm').textContent=(spinOmega*60/(2*Math.PI)).toFixed(1)+' rpm';$('peak').textContent=(peak*180/Math.PI).toFixed(1)+'°';$('elapsed').textContent=String(Math.floor(elapsed/60)).padStart(2,'0')+':'+String(Math.floor(elapsed%60)).padStart(2,'0');}
+function render(t){requestAnimationFrame(render);const dt=Math.min((t-last)/1000,.05);last=t;accum+=dt;updateDecorativeLights(t);let n=0;while(accum>=1/120&&n++<8){step(1/120);accum-=1/120}drawCamera(dt);renderer.render(scene,camera);$('angle').textContent=(angle*180/Math.PI).toFixed(1)+'°';$('rpm').textContent=(spinOmega*60/(2*Math.PI)).toFixed(1)+' rpm';$('peak').textContent=(peak*180/Math.PI).toFixed(1)+'°';$('elapsed').textContent=String(Math.floor(elapsed/60)).padStart(2,'0')+':'+String(Math.floor(elapsed%60)).padStart(2,'0');}
 function resize(){const r=$('viewport').getBoundingClientRect();camera.aspect=r.width/r.height;camera.updateProjectionMatrix();renderer.setSize(r.width,r.height)}new ResizeObserver(resize).observe($('viewport'));resize();refreshSafety();requestAnimationFrame(render);log('Referenzmodell initialisiert — 4 × 5 Sitze');
 </script></body></html>
