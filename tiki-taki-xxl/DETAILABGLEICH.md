@@ -40,7 +40,7 @@
 | 22 | Gondel-, Kassen-, Gesamt-, Technik- und Onridekamera | Simulator integriert | 20 Sitzplätze anwählbar |
 | 23 | Performance für entfernte Schrauben/Bolzen | Erste Optimierung | 603 kleinere Hardwareobjekte in Gesamtansicht ausgeblendet |
 | 24 | Asphaltplatz, Schatten und ferne Herbstbäume | Erste 3D-Fassung | Umgebung illustrativ, keine genaue Standplatzaufnahme |
-| 25 | Originale 3D-Form des Tiki-Kopfes statt Foto-Billboard | **Offen** | Benötigt eigene Sculpt-/Meshrekonstruktion |
+| 25 | Originale 3D-Form des Tiki-Kopfes (vollständige 3D-Seiten) | **Offen** — photo-projiziertes Relief ist erster Zwischenschritt | Benötigt eigene Sculpt-/Meshrekonstruktion |
 | 26 | Fotorealistische, verzerrungsarme Rücken-, Sitz- und Bügelprofile | **Offen** | Benötigt bessere seitliche Detailfotos |
 | 27 | Fahrgast-/Bügelanimation samt Ein-/Ausstieg und Körperbewegung | **Offen** | Render-/Physikabgleich |
 | 28 | Originalgetreue Lautsprecher-/Lichtanordnung | **Offen** | Weitere Bilder des Aufbaus nötig |
@@ -57,6 +57,7 @@
 - Detail 05: animierte RGB-Lichtstreifen ohne Eingriff in die Sicherheitsanzeigen
 - Detail 06: Hardware-LOD / keine dynamischen Schatten für Kleinbauteile
 - Detail 07: Asphalt, schattenfähiger Boden, zurückhaltende Baumkulisse
+- Detail 08: fotobasierte mittige Tiki-Figur als gewölbtes Relief statt einer komplett flachen Bildfläche
 
 ## Feststehende Tests (aus Quellcode-Initialisierung)
 
@@ -64,5 +65,5 @@
 - 20 unabhängige Schulterbügel und 20 unabhängige Kontroll-LEDs
 - 6 dekorative InstancedMesh-Strips
 - 603 kleinste Hardwareobjekte in LOD-Gruppe
-- Quellcode der drei Module syntaktisch korrekt
+- Quellcode der drei Module syntaktisch korrekt (einschließlich überarbeiteter Fotorelief-Geometrie)
 - Kein Nachweis des finalen Live-Renderings; keine Behauptung von 1:1-Fotorealismus
