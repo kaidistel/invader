@@ -21,8 +21,8 @@ export function createTikiTaki(scene) {
    const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d');
    const grad=g.createLinearGradient(0,0,w,h);grad.addColorStop(0,background);grad.addColorStop(.5,'#7c472b');grad.addColorStop(1,background);
    g.fillStyle=grad;g.beginPath();g.roundRect(9,8,w-18,h-16,45);g.fill();
-   g.lineWidth=16;g.strokeStyle=edge;g.stroke();g.fillStyle=ink;g.font='900 '+Math.floor(h*.62)+'px system-ui';g.textAlign='center';g.textBaseline='middle';g.lineJoin='round';
-   while(g.measureText(text).width>w-75){let sz=parseInt(g.font.match(/\d+/)[0]);g.font='900 '+(sz-5)+'px system-ui'}
+   g.lineWidth=16;g.strokeStyle=edge;g.stroke();g.fillStyle=ink;let fontSize=Math.floor(h*.62);g.font='900 '+fontSize+'px system-ui';g.textAlign='center';g.textBaseline='middle';g.lineJoin='round';
+   while(g.measureText(text).width>w-75&&fontSize>18){fontSize-=5;g.font='900 '+fontSize+'px system-ui'}
    g.lineWidth=15;g.strokeStyle='#4c230f';g.strokeText(text,w/2,h/2);g.fillText(text,w/2,h/2);
    const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;return t
  }
