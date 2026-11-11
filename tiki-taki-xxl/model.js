@@ -241,7 +241,7 @@ export function createTikiTaki(scene) {
   const monitor=block(group,.26,.74,1.21,3.60,1.77,0,'coal','V4_INTEGRATED_FIVE_LED_MONITOR');
   for(let k=0;k<5;k++){
    const zz=(k-2)*.172;
-   ball(group,.115,3.44,1.50,zz,'steel','V4_LED_CHROME_BEZEL');
+   ball(group,.115,3.57,1.50,zz,'steel','V4_LED_CHROME_BEZEL');
   }
   for(let j=0;j<5;j++){
    const n=g*5+j+1,z=(j-2)*1.76;
