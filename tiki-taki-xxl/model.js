@@ -179,6 +179,50 @@ export function createTikiTaki(scene) {
    seatPositions.push(new THREE.Vector3(3.9,-.2,seatZ));
   }
  }
+ // DETAIL 02 / inward-facing gondola star, per-seat molded shells, harness hinges and five-LED monitors.
+ // Derived from the user's 2026 seat close-up; approximate thickness and fillet radii.
+ for(let g=0;g<4;g++){
+  const section=rows[g];const groupName='G'+(g+1);
+  // The corners of the square seating cage are connected by rigid welded crossmembers.
+  for(const s of [-1,1]){
+   girder(section,[2.1,-.32,s*2.1],[4.35,-.35,s*4.34],.16,.18,'yellow','SQUARE_ROTOR_DIAGONAL_TIE_'+groupName);
+   girder(section,[2.4,-.1,s*3.7],[4.5,.37,s*4.41],.09,.13,'darkYellow','ROTOR_CORNER_TRIANGLE_'+groupName);
+   ball(section,.2,4.42,-.26,s*4.45,'darkYellow','OUTER_FRAME_ENDCAP_'+groupName,16);
+  }
+  // Monitoring housing has 5 separately controlled lenses over the middle seat.
+  const monitor=section.getObjectByName('CENTRAL_BLACK_LOCK_MONITOR_CASE');
+  if(monitor){
+   block(section,.33,.09,1.11,3.55,2.15,0,'coal','LED_MONITOR_WEATHER_HOOD_'+groupName);
+   block(section,.26,.10,1.03,3.53,1.35,0,'yellow','LED_MONITOR_BOTTOM_BEZEL_'+groupName);
+  }
+  for(let s=0;s<5;s++){
+   const id=g*5+s+1,number=String(id).padStart(2,'0');
+   const seat=section.getObjectByName('SEAT_'+number);
+   const harness=section.getObjectByName('RESTRAINT_'+number);
+   if(!seat||!harness)throw new Error('Missing independently rigged seat '+number);
+   // Red moulded bucket contours visible beneath the hanging legs.
+   const pad=ball(seat,.65,-.20,-.66,0,'red','BUCKET_SEAT_ROUNDED_UPHOLSTERY_'+number,18);
+   pad.scale.set(.94,.22,1.14);
+   for(const side of [-1,1]){
+    const backWing=ball(seat,.27,.34,.17,side*.60,'black','BUCKET_BACKREST_PADDED_SIDE_'+number,16);
+    backWing.scale.set(.54,2.55,.59);
+    const hip=ball(seat,.23,-.48,-.63,side*.69,'red','HIP_SIDE_HUGGER_'+number,12);
+    hip.scale.set(1.3,.68,.61);
+    ball(seat,.095,.40,1.05,side*.60,'steel','HARNESS_HINGE_METAL_PIN_'+number,12);
+    ball(harness,.115,0,0,side*.57,'coal','HARNESS_SWIVEL_COVER_'+number,12);
+    rod(harness,[-.75,-1.14,side*.66],[-.88,-1.35,side*.51],.08,'coal','HARNESS_RUBBER_END_CAP_'+number);
+   }
+   // Visible safety belt webbing, not another moving ride axis.
+   const belt=block(seat,.052,.54,1.16,-.11,-.33,0,'coal','CENTRE_SAFETY_BELT_'+number);
+   belt.rotation.z=-.17;
+   block(seat,.13,.13,.22,-.10,-.50,0,'steel','SAFETY_BELT_METAL_BUCKLE_'+number);
+   // Reinforcement and fasteners under the suspended five-seat row.
+   for(const side of [-.50,.50]){
+    rod(seat,[-.73,-1.03,side],[.24,-1.03,side],.063,'steel','UNDER_SEAT_SUPPORT_RAIL_'+number);
+   }
+   for(const side of [-.64,.64])ball(seat,.035,-.62,-.52,side,'silver','SEAT_SHELL_SCREW_'+number,8);
+  }
+ }
  // Actual front aesthetic: TIKI / TAKI fascia split around carved idol sculpture.
  for(const [x,title] of [[-5.2,'TIKI'],[5.2,'TAKI']]){
   block(fixed,7.15,1.8,.35,x,1.2,6.6,'yellow','WOOD_CARVED_SPLIT_FASCIA');
