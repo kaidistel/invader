@@ -3642,3 +3642,46 @@
 /* v142: Disallow retired 3D models from old installed Phantasialand builds.
    Covers Taron, Black Mamba and Chiapas without affecting ordinary ride photos. */
 #rideSheet[data-park="phantasialand"] .ride3d{display:none!important;visibility:hidden!important}
+
+
+/* Eigene Portale für die acht Frost-&-Fun-Anlagen; ausschließlich dieses Event. */
+#rideSheet[data-park="mannheim-frost-and-fun-2026"]{--mf-ice:#bdefff;--mf-neon:#ffcf9d;--mf-deep:#142938}
+#rideSheet[data-park="mannheim-frost-and-fun-2026"] .sheetCard{
+  border-top:5px solid var(--mf-ice)!important;
+  background:radial-gradient(circle at 80% 9%,#c6eaff1b,transparent 31%),
+    linear-gradient(159deg,#152c3e,var(--mf-deep) 52%,#10121e)!important;
+}
+#rideSheet[data-park="mannheim-frost-and-fun-2026"] .worldArt{
+  height:360px!important;overflow:hidden;
+  background:radial-gradient(circle at 50% 15%,#bdefff24,#152637 65%)!important;
+}
+#rideSheet[data-park="mannheim-frost-and-fun-2026"] .worldArt img{
+  width:100%!important;height:100%!important;object-fit:cover!important;
+  object-position:center 46%;filter:saturate(1.1) contrast(1.09)!important;
+}
+#rideSheet[data-park="mannheim-frost-and-fun-2026"] .worldArt:after{
+  content:"";position:absolute;inset:0!important;
+  background:linear-gradient(180deg,transparent 24%,#0c1b2b1a 45%,#102131e8 100%)!important;
+}
+#rideSheet[data-park="mannheim-frost-and-fun-2026"] #rideTitle{
+  position:relative;z-index:3;padding:11px 14px!important;
+  color:#fff5ea!important;border-left:6px solid var(--mf-neon)!important;
+  background:linear-gradient(90deg,var(--mf-deep),transparent)!important;
+  font-family:var(--attraction-font,'Bebas Neue',sans-serif)!important;
+  line-height:1.06!important;
+  text-shadow:0 4px 10px #07101c,0 0 19px var(--mf-neon)!important;
+}
+#rideSheet[data-park="mannheim-frost-and-fun-2026"] #rideZone{color:var(--mf-ice)!important;letter-spacing:.12em}
+#rideSheet[data-park="mannheim-frost-and-fun-2026"][data-theme="mannheim-frost26-tiki-taki-xxl"]{--mf-ice:#ffe676;--mf-neon:#f48e70;--mf-deep:#283521}
+#rideSheet[data-park="mannheim-frost-and-fun-2026"][data-theme="mannheim-frost26-avenger-royal"]{--mf-ice:#f0b9b9;--mf-neon:#e14750;--mf-deep:#352025}
+#rideSheet[data-park="mannheim-frost-and-fun-2026"][data-theme="mannheim-frost26-bayern-breaker"]{--mf-ice:#b9e6ff;--mf-neon:#78a8ff;--mf-deep:#1a3355}
+#rideSheet[data-park="mannheim-frost-and-fun-2026"][data-theme="mannheim-frost26-magic"]{--mf-ice:#fada7b;--mf-neon:#ed7d8c;--mf-deep:#453047}
+#rideSheet[data-park="mannheim-frost-and-fun-2026"][data-theme="mannheim-frost26-eyecatcher"]{--mf-ice:#ddf7ff;--mf-neon:#d5f99b;--mf-deep:#14374a}
+#rideSheet[data-park="mannheim-frost-and-fun-2026"][data-theme="mannheim-frost26-koeniglicher-wellenflug"]{--mf-ice:#e3edff;--mf-neon:#cfb77b;--mf-deep:#283e53}
+#rideSheet[data-park="mannheim-frost-and-fun-2026"][data-theme="mannheim-frost26-mikes-pitstop"]{--mf-ice:#ffdb9f;--mf-neon:#ee6c57;--mf-deep:#403128}
+#rideSheet[data-park="mannheim-frost-and-fun-2026"][data-theme="mannheim-frost26-musik-express"]{--mf-ice:#f9bfe9;--mf-neon:#9ed5ff;--mf-deep:#30223d}
+@media(max-width:560px){
+  #rideSheet[data-park="mannheim-frost-and-fun-2026"] .sheetCard{padding-top:245px!important}
+  #rideSheet[data-park="mannheim-frost-and-fun-2026"] .worldArt{height:300px!important}
+  #rideSheet[data-park="mannheim-frost-and-fun-2026"] #rideTitle{font-size:clamp(24px,6.8vw,36px)!important}
+}

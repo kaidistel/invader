@@ -2105,3 +2105,43 @@ body[data-park="hamburg-winterdom-2026"] .soestPlanLink.mapLabelHitbox:focus-vis
     width:900px;max-width:none;
   }
 }
+
+
+/* Frost & Fun Mannheim 2026: Eisblau, Kupferglanz und beleuchteter Winterjahrmarkt. */
+body[data-park="mannheim-frost-and-fun-2026"]{--accent:#9fe4f9;--accent2:#ffc38a;--line:#8fb6c2}
+body[data-park="mannheim-frost-and-fun-2026"] .parkAtmosphere{
+  background:radial-gradient(ellipse at 18% 15%,#bcecff26,transparent 43%),
+    radial-gradient(ellipse at 86% 60%,#ef985d22,transparent 48%),
+    linear-gradient(155deg,#091722 5%,#112536 57%,#211c29 100%)!important;
+}
+body[data-park="mannheim-frost-and-fun-2026"] .hero{
+  border:1px solid #b8e9f966;
+  background:radial-gradient(ellipse at 75% 0%,#e6faff23,transparent 45%),
+    linear-gradient(135deg,#152e42,#152536 56%,#292330)!important;
+}
+body[data-park="mannheim-frost-and-fun-2026"] .hero:before{
+  background:linear-gradient(180deg,#9eeaff 0 34%,#ffbd72 34% 67%,#eae5eb 67%)!important;
+}
+body[data-park="mannheim-frost-and-fun-2026"] .hero h1{
+  font-family:'Bebas Neue',sans-serif;letter-spacing:.035em;
+  text-shadow:0 4px 14px #06111c,0 0 25px #90dfff55;
+}
+body[data-park="mannheim-frost-and-fun-2026"] .brand b,
+body[data-park="mannheim-frost-and-fun-2026"] .brandDot{color:#aeeafe}
+body[data-park="mannheim-frost-and-fun-2026"] .sectionHead h2{font-family:'DM Serif Display',serif}
+body[data-park="mannheim-frost-and-fun-2026"] .ride{
+  background:linear-gradient(143deg,#142a3c,#252637);
+  border:1px solid #91c3d275!important;
+}
+body[data-park="mannheim-frost-and-fun-2026"] .ride:after{
+  background:linear-gradient(0deg,#071c2dea 0%,#0c2030c9 35%,transparent 100%)!important;
+}
+body[data-park="mannheim-frost-and-fun-2026"] .rideArt{filter:saturate(1.06) contrast(1.08) brightness(.93)}
+body[data-park="mannheim-frost-and-fun-2026"] .ride .zone{color:#ffd19d}
+body[data-park="mannheim-frost-and-fun-2026"] .btn.primary{
+  background:linear-gradient(130deg,#b8edff,#77c9e5)!important;
+  color:#102734!important;border-color:#d0f3ff!important;
+}
+@media(max-width:560px){
+  body[data-park="mannheim-frost-and-fun-2026"] .hero h1{font-size:clamp(35px,11vw,55px)}
+}
