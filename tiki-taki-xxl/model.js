@@ -165,6 +165,136 @@ export function createTikiTaki(scene) {
  // Entrance rails, show loudspeakers and safety fencing.
  for(let i=0;i<18;i++)rod(fixed,[-8.3+i*.98,.45,5.4],[-8.3+i*.98,1.65,5.4],.035,'yellow','FRONT_QUEUE_FENCE_POST');
  for(const y of [1.03,1.63])rod(fixed,[-8.7,y,5.4],[8.7,y,5.4],.045,'yellow','FRONT_QUEUE_FENCE_RAIL');
+
+ // V4 DETAIL PASS — photo-researched visual accents.
+ // Authenticated only to the extent visible in public and user-supplied photos.
+ const v4Art=new THREE.Group();v4Art.name='V4_DECORATIVE_DETAILS';fixed.add(v4Art);
+ const metalPattern=document.createElement('canvas');metalPattern.width=512;metalPattern.height=512;
+ const cpm=metalPattern.getContext('2d');cpm.fillStyle='#aab7b7';cpm.fillRect(0,0,512,512);
+ for(let y=0;y<512;y+=16)for(let x=0;x<512;x+=16){
+  cpm.fillStyle=((x+y)/16)%2===0?'#a8afb2':'#d7dddd';
+  cpm.fillRect(x+2+(Math.floor(y/16)%2)*5,y+3,9,3);
+  cpm.fillStyle='#5e7077';cpm.fillRect(x+4+(Math.floor(y/16)%2)*5,y+8,7,2);
+ }
+ const deckTexture=new THREE.CanvasTexture(metalPattern);deckTexture.wrapS=deckTexture.wrapT=THREE.RepeatWrapping;deckTexture.repeat.set(8,6);deckTexture.colorSpace=THREE.SRGBColorSpace;
+ const deckDetail=add(fixed,new THREE.PlaneGeometry(17.6,12.55),new THREE.MeshStandardMaterial({map:deckTexture,metalness:.45,roughness:.56,side:THREE.DoubleSide}),'V4_PERFORATED_METAL_DECK',[0,.365,0],[-Math.PI/2,0,0]);
+ // Guard-fence replacement with two physical exit openings near the front idol.
+ for(let sx of [-1,1]){
+  for(let j=0;j<8;j++){const x=sx*(3.3+j*.71);
+   rod(fixed,[x,.54,5.85],[x,1.9,5.85],.035,'silver','V4_STAINLESS_FENCE_BAR');
+   for(let y of [1.01,1.73])rod(fixed,[x,y,5.87],[x+sx*.71,y,5.87],.03,'yellow','V4_STAINLESS_FENCE_TIE');
+  }
+ }
+ // Faceted industrial pads on A-frame ends, maintenance bolt clusters and light mounts.
+ for(const z of [-4.6,4.6])for(const side of [-1,1]){
+  const x=side*7.9;
+  for(const dy of [.59,1.01])for(const dx of [-.43,.43]){
+   ball(fixed,.077,x+dx,dy,z+side*.27,'steel','V4_A_FRAME_BASE_ANCHOR_BOLT',12);
+  }
+  for(const t of [.23,.42,.62,.79]){
+   const xx=x*(1-t),yy=.7+(29-.7)*t,zz=z*(1-t)+z*.62*t;
+   block(fixed,.55,.14,.48,xx,yy,zz,'bright','V4_FRAME_BRACE_WELD');
+  }
+ }
+ // Real photo positions show arrays of small, individually controlled RGB lenses.
+ function instancedPixels(p,name,positions,colors,rad){
+   const mesh=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(rad,0),new THREE.MeshBasicMaterial({color:0xffffff}),positions.length);
+   mesh.name=name;const obj=new THREE.Object3D();positions.forEach((xyz,i)=>{obj.position.set(...xyz);obj.updateMatrix();mesh.setMatrixAt(i,obj.matrix);mesh.setColorAt(i,new THREE.Color(colors[i]))});
+   mesh.instanceMatrix.needsUpdate=true;mesh.instanceColor.needsUpdate=true;p.add(mesh);return mesh;
+ }
+ const rgbPalette=[0xff218d,0x00e7ff,0xffb528,0x9b28f8,0xfff165];
+ for(const z of [-4.6,4.6])for(const x of [-7.9,7.9]){
+  const positions=[],colors=[];
+  for(let lane of [-1,1])for(let i=0;i<110;i++){
+   const t=(i+.3)/110;
+   positions.push([x*(1-t)+Math.sign(x)*.33,.66+(29-.66)*t,z*(1-t)+z*.62*t+lane*.42]);
+   colors.push(rgbPalette[(Math.floor(i/17)+(lane>0?1:0))%rgbPalette.length]);
+  }
+  instancedPixels(fixed,'V4_RGB_SUPPORT_STRIP_'+x+'_'+z,positions,colors,.043);
+ }
+ for(const side of [-1,1]){
+  const positions=[],colors=[];
+  for(let i=0;i<156;i++){let t=i/155;positions.push([side*.72,-2.1-23.8*t,.59]);colors.push(rgbPalette[Math.floor(t*5)%5])}
+  instancedPixels(pivot,'V4_RGB_PENDULUM_STRIP_'+side,positions,colors,.042);
+ }
+ // The diagonal pennants are sculpted green/teal tiki badges, with open mouths,
+ // curved eyes and blossom ornaments, not generic anonymous letter blocks.
+ for(const z of [-4.6,4.6])for(const sx of [-1,1]){
+  const x=sx*4.3,y=16.3,side=z>0?1:-1;
+  const badge=new THREE.Group();badge.name='V4_DIAGONAL_TIKI_CARVED_BADGE';badge.position.set(x,y,z+.58);fixed.add(badge);
+  block(badge,1.14,2.42,.23,0,0,0,'wood','BADGE_WOOD_PANEL');
+  ball(badge,.57,0,.08,.24,'green','TIKI_BADGE_FACE');
+  for(const q of [-1,1]){
+   ball(badge,.20,q*.25,.34,.68,'orange','TIKI_BADGE_EYE_SOCKET');
+   ball(badge,.095,q*.25,.32,.84,'black','TIKI_BADGE_IRIS');
+  }
+  ball(badge,.30,0,-.36,.58,'red','TIKI_BADGE_OPEN_MOUTH');
+  ball(badge,.15,0,-.38,.77,'black','TIKI_BADGE_DARK_MOUTH');
+  for(let i=0;i<12;i++){
+   const a=i*2*Math.PI/12;
+   ball(badge,.13,Math.sin(a)*.72,Math.cos(a)*1.04,.35,i%3===0?'magenta':i%3===1?'teal':'orange','BADGE_FLOWER_PETAL');
+  }
+ }
+ // Middle of each row: five bulbs within one compact indicator, padded seat shoulder shells.
+ for(let g=0;g<4;g++){
+  const group=rows[g];
+  const monitor=block(group,.26,.74,1.21,3.60,1.77,0,'coal','V4_INTEGRATED_FIVE_LED_MONITOR');
+  for(let k=0;k<5;k++){
+   const zz=(k-2)*.172;
+   ball(group,.115,3.44,1.50,zz,'steel','V4_LED_CHROME_BEZEL');
+  }
+  for(let j=0;j<5;j++){
+   const n=g*5+j+1,z=(j-2)*1.76;
+   const seat=group.getObjectByName('SEAT_'+String(n).padStart(2,'0'));
+   if(!seat)continue;
+   // Individual headrest side bolsters and structural red seat shells.
+   for(const q of [-1,1]){
+    ball(seat,.24,.48,.86,q*.46,'coal','V4_PADDED_HEADREST_LATERAL');
+    block(seat,.48,.20,.24,-.54,-.84,q*.58,'wine','V4_RED_SEAT_SHELL_FIN');
+    ball(seat,.065,.34,.94,q*.58,'steel','V4_HARNESS_LOCK_PIN');
+   }
+   block(seat,1.21,.19,1.32,-.20,-.95,0,'red','V4_MOLDED_SEAT_UNDERTRAY');
+  }
+  for(const zz of [-3.76,3.76]){
+   rod(group,[1.45,-.16,0],[4.36,.13,zz],.074,'bright','V4_ROTOR_LATTICE_TIE');
+  }
+ }
+ // Ticket booth: colorful uneven floral arch, a jagged volcanic silhouette,
+ // faux bamboo supports and separate sculpted petals.
+ for(let i=0;i<34;i++){
+  const a=Math.PI*(i/33),x=Math.cos(a)*3.73,y=5.32+Math.sin(a)*1.02;
+  for(let p=0;p<5;p++){
+   const phase=p*Math.PI*2/5;
+   const ballFlower=ball(booth,.105,x+Math.cos(phase)*.15,y+Math.sin(phase)*.15,2.13,i%4===0?'orange':i%3===0?'magenta':'green','V4_BOOTH_FLOWER_PETAL');
+   ballFlower.scale.set(1.25,.92,.6);
+  }
+  ball(booth,.075,x,y,2.25,'yellow','V4_BOOTH_HIBISCUS_HEART');
+  ball(booth,.20,x+Math.cos(a)*.21,y-.18,1.9,'green','V4_BOOTH_SCENIC_LEAF');
+ }
+ for(let p=0;p<17;p++){
+  const a=2*Math.PI*p/17;
+  rod(booth,[1.15+Math.cos(a)*.28,8.5,-.75+Math.sin(a)*.28],[1.15+Math.cos(a)*1.55,5.2,-.75+Math.sin(a)*1.30],.058,p%4===0?'magenta':'purple','V4_VOLCANO_IRREGULAR_LAVA_RIDGE');
+ }
+ for(const x of [-3.7,3.7]){
+  for(let y=.8;y<5;y+=.48){
+   ball(booth,.10,x,y,2.14,'wood','V4_BAMBOO_KNOT');
+  }
+ }
+ for(const x of [-2.45,0,2.45]){
+  block(booth,1.92,2.1,.03,x,3.25,2.60,new THREE.MeshStandardMaterial({color:0x18393c,transparent:true,opacity:.42,metalness:.7,roughness:.13}),'V4_TINTED_KIOSK_GLASS');
+  for(const dx of [-.62,.11,.48]){
+   block(booth,.032,1.54,.02,x+dx,3.20,2.63,'silver','V4_KIOSK_GLASS_REFLECTION');
+  }
+ }
+ // Yellow sloped control-cabin behind the carriage: seen in the user's on-platform photograph.
+ const cabin=new THREE.Group();cabin.name='V4_OPERATOR_CABIN';cabin.position.set(3.3,0,-3.5);fixed.add(cabin);
+ block(cabin,4.3,1.23,2.2,0,2.73,0,'yellow','OPERATOR_CABIN_YELLOW_BASE');
+ block(cabin,4.05,1.32,1.76,0,3.55,-.2,'bright','OPERATOR_CABIN_UPPER_SLOPED_PANEL');
+ block(cabin,3.74,.67,.07,0,3.68,.88,'black','OPERATOR_CABIN_BLACK_WINDSCREEN');
+ for(let x of [-1.82,1.82])block(cabin,.10,.83,.10,x,3.7,.93,'darkYellow','OPERATOR_CABIN_WINDOW_EDGE');
+ for(let y of [3.3,4.07])block(cabin,3.8,.11,.10,0,y,.93,'darkYellow','OPERATOR_CABIN_WINDOW_TRANSOM');
+ for(let x of [-1.24,.3,1.30])block(cabin,.05,.5,.015,x,3.67,.98,'steel','OPERATOR_CABIN_REFLECTION');
+
  const axes=new THREE.AxesHelper(5);axes.position.set(0,29,0);axes.visible=false;scene.add(axes);
  return {root,pivot,spinRig,rows,leds,restraintMeshes,seatPositions,axes};
 }
