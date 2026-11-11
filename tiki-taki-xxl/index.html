@@ -54,7 +54,7 @@ label{display:block;margin:9px 0;font-size:12px;color:#c9d8db}label input[type=r
 <div class="row"><span>Onride Sitz</span><select id="onrideSeat"></select></div>
 <div class="row"><span>Simulationsmodus</span><select id="mode"><option value="operator">Operator</option><option value="free">Freie Simulation</option></select></div>
 <div class="row"><span>Modell laden (.glb)</span><input id="glb" type="file" accept=".glb,.gltf" style="max-width:160px;font-size:11px"></div>
-<p class="foot" id="modelInfo">Eigenständig erstelltes, bewegliches 3D-Modell aktiv. Alle 20 Sitze, Bügel, LEDs und die zwei Bewegungsachsen besitzen eigene Modellknoten.</p>
+<p class="foot" id="modelInfo">V3-Rekonstruktion: korrigierte Abmessungen (18 × 13 m), 4 nach innen gerichtete Sitzreihen und vier zentrale 5-LED-Monitore. Für die Fototexturen die bereitgestellte GLB importieren.</p>
 <button id="exportGLB" class="full" style="width:100%;margin-top:10px;background:#a97816;color:#111">⬇ Eigenes Tiki Taki Modell als GLB exportieren</button><h2>04 · Betriebsprotokoll</h2><div id="eventlog"></div>
 <p class="foot">Technische Werte und Fahrprogramme sind plausible <b>Spielparameter</b>, keine verifizierten KMG-Betriebsdaten. Sicherheitsfunktionen sind ausschließlich simuliert. GLB-Dateien mit passenden Rig-Namen ersetzen die gesamte Anlage und werden direkt animiert. Andere Dateien werden wegen inkompatibler Bewegungsachsen abgelehnt.</p>
 </aside></div>
@@ -67,9 +67,9 @@ import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
 import {createTikiTaki} from './model.js';
 const $=id=>document.getElementById(id);
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x87b0bc);scene.fog=new THREE.Fog(0x87b0bc,85,190);
-const camera=new THREE.PerspectiveCamera(52,1,.1,250);camera.position.set(34,18,42);
+const camera=new THREE.PerspectiveCamera(52,1,.1,250);camera.position.set(20,13,30);
 const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;$('viewport').prepend(renderer.domElement);
-const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,13,0);controls.enableDamping=true;controls.maxDistance=100;
+const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,14,0);controls.enableDamping=true;controls.maxDistance=100;
 const ambient=new THREE.HemisphereLight(0xdff6ff,0x4c4e30,2);scene.add(ambient);const sun=new THREE.DirectionalLight(0xfff1c8,2.4);sun.position.set(-35,70,25);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-48;sun.shadow.camera.right=48;sun.shadow.camera.top=50;sun.shadow.camera.bottom=-50;scene.add(sun);
 const mat=(c,metal=.1)=>new THREE.MeshStandardMaterial({color:c,metalness:metal,roughness:.42});
 const yellow=mat(0xffcc13,.65),yellow2=mat(0xe8a70b,.6),red=mat(0xd71b34,.35),black=mat(0x101417,.2),steel=mat(0xc9cbd0,.75),floor=mat(0x7a8482,.25),green=mat(0x14bd65),pink=mat(0xff339d);
@@ -79,7 +79,7 @@ function rod(parent,a,b,r,m){const u=new THREE.Vector3(...a),v=new THREE.Vector3
 const {root:modelRoot,pivot,spinRig,rows,leds,restraintMeshes,seatPositions,axes}=createTikiTaki(scene);
 let activeRoot=modelRoot,activePivot=pivot,activeSpinRig=spinRig,activeRows=rows,activeLeds=leds,activeRestraints=restraintMeshes,activeSeats=null;
 let loadedScene=null;
-const orbitCameraPos=new THREE.Vector3(34,18,42),cameraTarget=new THREE.Vector3(),tempV=new THREE.Vector3(),tempQ=new THREE.Quaternion();
+const orbitCameraPos=new THREE.Vector3(20,13,30),cameraTarget=new THREE.Vector3(),tempV=new THREE.Vector3(),tempQ=new THREE.Quaternion();
 const seatStates=Array(20).fill('OPEN');
 let power=false,enabled=false,mode='operator',state='POWER_OFF',startPermitted=false,emergency=false,angle=0,omega=0,phi=0,spinOmega=0,peak=0,elapsed=0,rideClock=0,targetAngle=70*Math.PI/180,targetRPM=8,phase='idle',camMode='operator',night=false,accum=0,last=performance.now(),imported=null;
 const presets={gentle:{a:42,r:4,duration:65},normal:{a:70,r:8,duration:95},intense:{a:110,r:12,duration:120}};
@@ -158,7 +158,7 @@ phi+=spinOmega*dt;
 if(phase==='positioning'&&Math.abs(spinOmega)<.004){const nearest=Math.round(phi/(Math.PI/2))*Math.PI/2;phi=THREE.MathUtils.damp(phi,nearest,1.7,dt);if(Math.abs(nearest-phi)<.003){phi=nearest;phase='idle';setState('UNLOADING');log('Ladeposition erreicht; Bügel können geöffnet werden')}}
 peak=Math.max(peak,Math.abs(angle));activePivot.rotation.z=angle;activeSpinRig.rotation.y=phi;
 }
-function drawCamera(dt){if(camMode==='operator'){camera.position.lerp(tempV.set(33,10,40),.05);controls.target.lerp(tempV.set(0,17,0),.07)}else if(camMode==='technical'){camera.position.lerp(tempV.set(48,30,1),.05);controls.target.lerp(tempV.set(0,20,0),.06)}else if(camMode==='onride'){const selected=+$('onrideSeat').value;let pos,target;if(activeSeats){const seat=activeSeats[selected];seat.updateWorldMatrix(true,false);pos=seat.localToWorld(new THREE.Vector3(-.32,.50,0));target=seat.localToWorld(new THREE.Vector3(-4,.40,0));}else{const group=activeRows[Math.floor(selected/5)],local=seatPositions[selected];group.updateWorldMatrix(true,false);pos=group.localToWorld(local.clone());target=group.localToWorld(local.clone().add(new THREE.Vector3(-5,.2,0)));}camera.position.lerp(pos,.25);camera.lookAt(target);return}controls.update()}
+function drawCamera(dt){if(camMode==='operator'){camera.position.lerp(tempV.set(20,12,30),.05);controls.target.lerp(tempV.set(0,14,0),.07)}else if(camMode==='technical'){camera.position.lerp(tempV.set(35,20,4),.05);controls.target.lerp(tempV.set(0,14,0),.06)}else if(camMode==='onride'){const selected=+$('onrideSeat').value;let pos,target;if(activeSeats){const seat=activeSeats[selected];seat.updateWorldMatrix(true,false);pos=seat.localToWorld(new THREE.Vector3(-.32,.50,0));target=seat.localToWorld(new THREE.Vector3(-4,.40,0));}else{const group=activeRows[Math.floor(selected/5)],local=seatPositions[selected];group.updateWorldMatrix(true,false);pos=group.localToWorld(local.clone());target=group.localToWorld(local.clone().add(new THREE.Vector3(-5,.2,0)));}camera.position.lerp(pos,.25);camera.lookAt(target);return}controls.update()}
 function render(t){requestAnimationFrame(render);const dt=Math.min((t-last)/1000,.05);last=t;accum+=dt;let n=0;while(accum>=1/120&&n++<8){step(1/120);accum-=1/120}drawCamera(dt);renderer.render(scene,camera);$('angle').textContent=(angle*180/Math.PI).toFixed(1)+'°';$('rpm').textContent=(spinOmega*60/(2*Math.PI)).toFixed(1)+' rpm';$('peak').textContent=(peak*180/Math.PI).toFixed(1)+'°';$('elapsed').textContent=String(Math.floor(elapsed/60)).padStart(2,'0')+':'+String(Math.floor(elapsed%60)).padStart(2,'0');}
 function resize(){const r=$('viewport').getBoundingClientRect();camera.aspect=r.width/r.height;camera.updateProjectionMatrix();renderer.setSize(r.width,r.height)}new ResizeObserver(resize).observe($('viewport'));resize();refreshSafety();requestAnimationFrame(render);log('Referenzmodell initialisiert — 4 × 5 Sitze');
 </script></body></html>
