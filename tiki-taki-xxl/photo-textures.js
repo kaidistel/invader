@@ -872,6 +872,26 @@ function crop(base,x1,y1,x2,y2){
  return t;
 }
 const painted=map=>new THREE.MeshBasicMaterial({map,side:THREE.DoubleSide,depthWrite:true,toneMapped:false});
+// DETAIL 08 / geometric depth under the user's photographic Tiki-mask cutout.
+// Smooth photo-projected relief is intentionally labelled approximate (no depth scan exists).
+function buildTikiMaskRelief(){
+ const geometry=new THREE.PlaneGeometry(3.85,4.15,64,72);
+ const positions=geometry.getAttribute('position');
+ const gaussian=(x,y,cx,cy,wx,wy)=>Math.exp(-Math.pow((x-cx)/wx,2)-Math.pow((y-cy)/wy,2));
+ for(let i=0;i<positions.count;i++){
+  const x=positions.getX(i),y=positions.getY(i);
+  const face=gaussian(x,y,0,.10,1.05,1.35);
+  const leftEye=gaussian(x,y,-.57,.55,.34,.30);
+  const rightEye=gaussian(x,y,.57,.55,.34,.30);
+  const muzzle=gaussian(x,y,0,-.52,.70,.46);
+  const crest=gaussian(x,y,0,1.42,.88,.35);
+  const depth=.07+.36*face+.18*(leftEye+rightEye)+.17*muzzle+.10*crest;
+  positions.setZ(i,depth);
+ }
+ positions.needsUpdate=true;
+ geometry.computeVertexNormals();
+ return geometry;
+}
 export async function applyPhotoMaterials(root){
  const [atlas,statue,roof]=await Promise.all([fromData(ATLAS64),fromData(STATUE64),fromData(ROOF64)]);
  const mural=root.getObjectByName('ACTUAL_THEME_INSPIRED_TROPICAL_MURAL');
@@ -898,7 +918,7 @@ export async function applyPhotoMaterials(root){
   // Hide only decorative low-poly parts; retain base stair structure.
   const preserveRelief=['TIKI_STONE_STAIR','CARVED_WOOD_TIKI_HEAD','WOODEN_IDOL_COLUMN','TIKI_STATUE_SIDE_RIB','TIKI_STATUE_CARVED_SIDE_RELIEF'];
    idol.traverse(o=>{if(o.isMesh&&!preserveRelief.some(name=>o.name.includes(name)))o.visible=false});
-  const photoStatue=new THREE.Mesh(new THREE.PlaneGeometry(3.85,4.15),new THREE.MeshBasicMaterial({map:statue,transparent:true,alphaTest:.08,side:THREE.DoubleSide,depthWrite:false,toneMapped:false}));
+  const photoStatue=new THREE.Mesh(buildTikiMaskRelief(),new THREE.MeshStandardMaterial({map:statue,transparent:true,alphaTest:.08,side:THREE.DoubleSide,depthWrite:true,roughness:.91,metalness:0}));photoStatue.castShadow=true;
   photoStatue.name='AUTHENTIC_TIKI_ENTRANCE_PHOTO_CUTOUT';photoStatue.position.set(0,2.31,1.05);idol.add(photoStatue);
  }
  const cab=root.getObjectByName('V4_OPERATOR_CABIN');
