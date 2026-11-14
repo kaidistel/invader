@@ -2241,7 +2241,7 @@ body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumSection{
   padding:30px clamp(20px,4.2vw,48px) 25px;
   background:
     linear-gradient(102deg,rgba(7,25,53,.94) 0%,rgba(7,23,48,.73) 62%,rgba(9,24,45,.84) 100%),
-    url('https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/2024/ga-berlin-winter-2024_01.jpg') center 44%/cover no-repeat;
+    url('https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/2024/ga-berlin-winter-2024_02.jpg') center 44%/cover no-repeat;
   box-shadow:0 15px 48px #0008;
 }
 .wintertraumLead::before{
