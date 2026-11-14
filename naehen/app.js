@@ -19,7 +19,7 @@
     "taron": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/mystery/taron/2024/cf-winter-taron-2024_02.jpg",
     "fly": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/fly/cf-fly-winter-2021-02.jpg",
     "black-mamba": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/deep-in-africa/black-mamba/cf-winter-black-mamba_05.jpg",
-    "chiapas": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/mexico/tiempo-de-fuego/ga-tiempo-de-fuego_02.jpg",
+    "chiapas": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/mexico/chiapas/ga-winter-chiapas_03.jpg",
     "wellenflug": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/kinder/hm-wintertraum-familie_02.jpg",
     "maus-au-chocolat": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/2024/ga-berlin-winter-2024_01.jpg"
   };
@@ -83,6 +83,10 @@
     const normalizedName = String(name || "").toLowerCase().trim();
     const normalizedId = String(id || "");
     const module = parkModuleFor(parkSlug);
+    // Winter-only closures must not appear as available ride opportunities.
+    // Archived visits remain untouched; summer offers return after the season.
+    if (parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE &&
+        new Set(["river-quest", "wakobato", "woezls-wassertreter"]).has(normalizedId)) return true;
 
     if (module) {
       const excludedIds = new Set(module.exclusions?.ids || []);
