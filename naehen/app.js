@@ -4,14 +4,40 @@
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => Array.from(document.querySelectorAll(s));
   const cfg = window.NAEHEN_CONFIG || {};
+  // This Phantasialand-only winter design switches off after 24 January 2027.
+  function phantasialandLocalDate() {
+    const parts = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Europe/Berlin", day: "2-digit", month: "2-digit", year: "numeric"
+    }).formatToParts(new Date());
+    const part = type => parts.find(item => item.type === type)?.value || "";
+    return part("year") + "-" + part("month") + "-" + part("day");
+  }
+  const WINTERTRAUM_DATE = phantasialandLocalDate();
+  const WINTERTRAUM_ACTIVE = WINTERTRAUM_DATE >= "2026-11-14" && WINTERTRAUM_DATE <= "2027-01-24";
+  const WINTERTRAUM_HERO = "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/magic-symphony/gap-magic-symphony_01.jpg";
+  const WINTERTRAUM_RIDE_ART = {
+    "taron": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/mystery/taron/2024/cf-winter-taron-2024_02.jpg",
+    "fly": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/fly/cf-fly-winter-2021-02.jpg",
+    "black-mamba": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/deep-in-africa/black-mamba/cf-winter-black-mamba_05.jpg",
+    "chiapas": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/mexico/tiempo-de-fuego/ga-tiempo-de-fuego_02.jpg",
+    "wellenflug": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/kinder/hm-wintertraum-familie_02.jpg",
+    "maus-au-chocolat": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/2024/ga-berlin-winter-2024_01.jpg"
+  };
+  function wintertraumRideImage(rideId) {
+    return activeParkSlug === "phantasialand" && WINTERTRAUM_ACTIVE
+      ? (WINTERTRAUM_RIDE_ART[rideId] || "") : "";
+  }
   const PARKS = {
     phantasialand: {
       slug: "phantasialand",
       name: "Phantasialand",
       location: "Brühl · Nordrhein-Westfalen",
       liveDataUrl: "./live.json",
-      cardImage: "./assets/park.webp",
-      cardCopy: "Live-Wartezeiten, Nähprotokoll und deine Phantasialand-Attraktionen.",
+      cardImage: WINTERTRAUM_ACTIVE ? WINTERTRAUM_HERO : "./assets/park.webp",
+      cardImageFallback: "./assets/park.webp",
+      heroImage: WINTERTRAUM_ACTIVE ? WINTERTRAUM_HERO : "./assets/park.webp",
+      heroImageFallbackUrls: ["./assets/park.webp"],
+      cardCopy: WINTERTRAUM_ACTIVE ? "Wintertraum 2026/27 · Lichtermeer, Nachtfahrten und vier große Outdoor-Shows." : "Live-Wartezeiten, Nähprotokoll und deine Phantasialand-Attraktionen.",
       disclaimer: "Kein offizielles Angebot des Phantasialands."
     }
   };
@@ -864,7 +890,7 @@
     if(heading) heading.textContent=category==="fair"?"Kirmessen":"Freizeitparks";
     grid.innerHTML = available.map((park) => {
       const fair = park.kind === "fair";
-      return "<button class=\"parkChoice\" type=\"button\" data-park=\"" + escapeHtml(park.slug) + "\" data-kind=\"" + (fair ? "fair" : "park") + "\">" +
+      return "<button class=\"parkChoice\" type=\"button\" data-park=\"" + escapeHtml(park.slug) + "\" data-kind=\"" + (fair ? "fair" : "park") + "\"" + (park.slug === "phantasialand" && WINTERTRAUM_ACTIVE ? " data-season=\"wintertraum\"" : "") + ">" +
         (park.cardImage
           ? "<img referrerpolicy=\"no-referrer\" class=\"parkChoiceArt\" src=\"" + escapeHtml(park.cardImage) + "\" alt=\"\" loading=\"eager\">"
           : "<img class=\"parkChoiceArt\" alt=\"\" loading=\"eager\" hidden>") +
@@ -955,6 +981,13 @@
     activeParkSlug = parkSlug;
     await loadParkArtManifest(parkSlug);
     document.body.dataset.park = parkSlug;
+    if (parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE) document.body.dataset.season = "wintertraum";
+    else delete document.body.dataset.season;
+    const winterShows = $("#wintertraumSection");
+    if (winterShows) winterShows.hidden = !(parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE);
+    const magicTime = $("#winterMagicTime");
+    if (magicTime) magicTime.textContent = WINTERTRAUM_DATE === "2026-12-31"
+      ? "Silvester · Uhrzeit vor Ort prüfen" : "Regulär ca. 19:50 Uhr";
     if (park.cardImage) {
       const backgrounds = [park.heroImage, ...(park.heroImageFallbackUrls || []), park.cardImage, park.cardImageFallback, ...(park.cardImageFallbackUrls || [])].filter(Boolean);
       const loadBackground = (index) => {
@@ -992,9 +1025,9 @@
 
     const dayWord = visitDayWord(parkSlug);
     const eyebrow = $("#parkDayEyebrow");
-    if (eyebrow) eyebrow.textContent = park.name + " · " + dayWord;
+    if (eyebrow) eyebrow.textContent = park.name + (parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE ? " · WINTERTRAUM 2026/27" : " · " + dayWord);
     const dayIndex = $("#visitDayIndex");
-    if (dayIndex) dayIndex.textContent = "01 / " + (venueIsFair(parkSlug) ? "KIRMESTAG" : "PARKDAY");
+    if (dayIndex) dayIndex.textContent = parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE ? "01 / WINTERTRAUM" : "01 / " + (venueIsFair(parkSlug) ? "KIRMESTAG" : "PARKDAY");
     const archiveTitle = $("#archiveViewTitle");
     if (archiveTitle) archiveTitle.textContent = dayWord + "-Archiv";
     const archiveIntroTitle = $("#archiveIntroTitle");
@@ -2016,7 +2049,7 @@
     const cards = visibleRides.map((ride) => {
       const fav = favorites.includes(ride.id);
       const world = worldForRide(ride.id);
-      const artSrc = world ? (world.artUrl || (world.art ? "./assets/" + world.art + ".webp" : "")) : "";
+      const artSrc = wintertraumRideImage(ride.id) || (world ? (world.artUrl || (world.art ? "./assets/" + world.art + ".webp" : "")) : "");
       const hasLive = hasPublicLive && ride.source === "queue-times";
       const closed = hasLive && !ride.isOpen;
       const unknown = !hasLive || ride.isOpen === null;
@@ -2066,7 +2099,9 @@
     container.querySelectorAll("img.rideArt").forEach((img) => {
       const rideId = img.closest("[data-detail]")?.dataset.detail;
       const currentRide = visibleRides.find(ride => ride.id === rideId);
-      const candidates = [...(currentRide?.imageFallbackUrls || []), ...(rideArtFallback ? [rideArtFallback] : [])];
+      const originalRideArt = worldForRide(rideId);
+      const regularArt = originalRideArt?.artUrl || (originalRideArt?.art ? "./assets/" + originalRideArt.art + ".webp" : "");
+      const candidates = [...(wintertraumRideImage(rideId) && regularArt ? [regularArt] : []), ...(currentRide?.imageFallbackUrls || []), ...(rideArtFallback ? [rideArtFallback] : [])];
       let index = 0;
       const tryNext = () => {
         if (index < candidates.length) img.src = candidates[index++];
@@ -3625,7 +3660,7 @@
     if (!selectedDetailRide) return;
 
     const world = worldForRide(selectedDetailRide.id);
-    const artSrc = world ? (world.artUrl || (world.art ? "./assets/" + world.art + ".webp" : "")) : "";
+    const artSrc = wintertraumRideImage(selectedDetailRide.id) || (world ? (world.artUrl || (world.art ? "./assets/" + world.art + ".webp" : "")) : "");
     const rideSheet = $("#rideSheet");
     const worldArtImage = $("#worldArtImage");
     const worldProp = $("#worldProp");
@@ -3638,7 +3673,8 @@
       worldArtImage.referrerPolicy = "no-referrer";
       if (artSrc) {
         const detailFallback = venueIsFair() ? "" : (activeParkConfig()?.cardImage || "./assets/park-picker-bg.webp");
-        const candidates = [...(selectedDetailRide.imageFallbackUrls || []), ...(detailFallback ? [detailFallback] : [])];
+        const regularArt = world?.artUrl || (world?.art ? "./assets/" + world.art + ".webp" : "");
+        const candidates = [...(wintertraumRideImage(selectedDetailRide.id) && regularArt ? [regularArt] : []), ...(selectedDetailRide.imageFallbackUrls || []), ...(detailFallback ? [detailFallback] : [])];
         let index = 0;
         worldArtImage.onerror = () => {
           if (index < candidates.length) worldArtImage.src = candidates[index++];
