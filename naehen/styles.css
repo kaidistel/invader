@@ -2145,3 +2145,213 @@ body[data-park="mannheim-frost-and-fun-2026"] .btn.primary{
 @media(max-width:560px){
   body[data-park="mannheim-frost-and-fun-2026"] .hero h1{font-size:clamp(35px,11vw,55px)}
 }
+
+
+/* Phantasialand Wintertraum 2026/27 — seasonal, park-scoped, no shared-park overrides. */
+.parkChoice[data-park="phantasialand"][data-season="wintertraum"]{
+  border-color:rgba(245,213,157,.72);
+  background:#101c31;
+  box-shadow:0 16px 50px rgba(4,12,28,.72),0 0 0 1px rgba(244,209,140,.14);
+}
+.parkChoice[data-park="phantasialand"][data-season="wintertraum"] .parkChoiceArt{
+  filter:saturate(1.2) brightness(.92);
+}
+.parkChoice[data-park="phantasialand"][data-season="wintertraum"] .parkChoiceCopy{
+  background:linear-gradient(180deg,rgba(5,13,35,.01) 2%,rgba(6,17,39,.55) 42%,rgba(4,12,28,.97) 100%);
+}
+.parkChoice[data-park="phantasialand"][data-season="wintertraum"]::before{
+  content:"✧  WINTERTRAUM 2026/27";position:absolute;z-index:3;right:14px;top:14px;
+  padding:9px 11px;border:1px solid rgba(250,221,162,.62);border-radius:2px;
+  color:#ffe6ad;background:rgba(8,22,47,.82);
+  font:800 10px 'Barlow Condensed',system-ui,sans-serif;letter-spacing:1.5px;
+  box-shadow:0 7px 22px #01091496;
+}
+body[data-park="phantasialand"][data-season="wintertraum"]{
+  --bg:#091322;--panel:#111f32;--panel2:#1b2c42;--line:#4b657e;
+  --text:#fff9eb;--muted:#cbd7df;--accent:#f5d49c;--accent2:#9cdef6;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .parkAtmosphere{
+  background:
+    radial-gradient(ellipse at 78% 5%,rgba(64,128,199,.25),transparent 36%),
+    linear-gradient(180deg,rgba(5,13,32,.24) 0%,rgba(4,14,35,.82) 47%,#07111f 89%),
+    var(--park-hero-image, url('./assets/park.webp')) center 28%/cover no-repeat;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .hero{
+  background:
+    radial-gradient(circle at 87% 8%,rgba(114,197,245,.2),transparent 35%),
+    linear-gradient(135deg,rgba(13,35,65,.96),rgba(11,24,46,.94));
+  border:1px solid rgba(243,206,142,.64);
+  box-shadow:0 20px 60px #010918a8,inset 0 1px #fff4db24;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .hero:before{
+  background:linear-gradient(180deg,#f4d4a0,#a3dff7,#f4d4a0);
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .hero .eyebrow,
+body[data-park="phantasialand"][data-season="wintertraum"] .heroIndex{
+  color:#ffe3a7;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .hero h1{
+  color:#fff8e9;text-shadow:0 5px 22px #030b1cc0;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .stats{
+  background:rgba(5,16,35,.72);border-top-color:rgba(247,224,175,.25);
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .stat{
+  box-shadow:inset -1px 0 rgba(237,210,162,.16);
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .brand b,
+body[data-park="phantasialand"][data-season="wintertraum"] .brandDot{
+  color:#f8d89d;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .btn.primary{
+  color:#101b2b;background:linear-gradient(160deg,#fff1c8,#edc378);
+  border-color:#fff0c2;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .ride{
+  border-color:rgba(168,202,232,.42);background:#122139;
+  box-shadow:0 14px 32px #01091987,inset 0 1px #f9e5be12;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .rideArt{
+  opacity:.72;filter:saturate(1.14) contrast(1.04);
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .ride:after{
+  background:linear-gradient(0deg,#08182afc 1%,#081b30d9 47%,#06122230 100%);
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .ride .wait{
+  border-color:rgba(244,210,151,.5);background:rgba(8,24,43,.9);
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .ride .zone{color:#d4e6f1;}
+body[data-park="phantasialand"][data-season="wintertraum"] .ride .fav.on{
+  background:#f7d99e;color:#1e2430;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] #rideSheet .sheetCard{
+  border-color:rgba(250,213,151,.52);box-shadow:0 18px 80px #040b1cdb;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] #rideSheet .worldCaption{
+  color:#e5d8c4;
+}
+/* Show area is independent from queue/ride entries. */
+.wintertraumSection[hidden]{display:none!important;}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumSection{
+  display:block;margin:26px 0 31px;color:#fff8e9;
+}
+.wintertraumLead{
+  position:relative;isolation:isolate;overflow:hidden;
+  border:1px solid rgba(252,225,174,.62);border-radius:10px;
+  padding:30px clamp(20px,4.2vw,48px) 25px;
+  background:
+    linear-gradient(102deg,rgba(7,25,53,.94) 0%,rgba(7,23,48,.73) 62%,rgba(9,24,45,.84) 100%),
+    url('https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/2024/ga-berlin-winter-2024_01.jpg') center 44%/cover no-repeat;
+  box-shadow:0 15px 48px #0008;
+}
+.wintertraumLead::before{
+  content:"✦";position:absolute;right:8%;top:-18px;z-index:-1;
+  font:200px Georgia,serif;color:rgba(248,223,177,.08);line-height:1;
+}
+.wintertraumKicker{
+  color:#ffe0a2;letter-spacing:2.5px;font:800 12px 'Barlow Condensed',sans-serif;
+  text-shadow:0 2px 8px #050e1c;
+}
+.wintertraumLead h2{
+  max-width:730px;margin:13px 0 11px;
+  font:normal clamp(34px,6vw,63px)/1.02 Georgia,serif;
+  letter-spacing:-1.8px;text-shadow:0 4px 21px #07111f;
+}
+.wintertraumLead h2 em{
+  color:#f9d9a5;font-style:italic;
+}
+.wintertraumLead>p{
+  max-width:630px;margin:0 0 22px;color:#e5eaf2;
+  font-size:14px;line-height:1.6;text-shadow:0 2px 9px #07111f;
+}
+.wintertraumDates{
+  display:flex;flex-wrap:wrap;gap:7px;
+}
+.wintertraumDates span{
+  display:inline-flex;align-items:center;padding:9px 12px;border:1px solid #efdcbb80;
+  color:#fff1d5;background:#0a1b37c9;border-radius:3px;
+  font:800 11px 'Barlow Condensed',sans-serif;letter-spacing:1.1px;
+}
+.wintertraumShowHeading{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:12px;margin:28px 2px 15px;
+}
+.wintertraumShowHeading>div>span{
+  color:#f6d49d;letter-spacing:2.8px;font:800 10px 'Barlow Condensed',sans-serif;
+}
+.wintertraumShowHeading h3{
+  font:normal clamp(24px,4vw,36px) Georgia,serif;letter-spacing:-.6px;margin:5px 0 0;
+}
+.wintertraumCount{
+  color:#a8cee4;font:800 10px 'Barlow Condensed',sans-serif;letter-spacing:1.5px;
+  white-space:nowrap;
+}
+.wintertraumShows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.wintertraumShow{
+  position:relative;min-width:0;overflow:hidden;
+  background:linear-gradient(180deg,#14263d,#0b1c31);
+  border:1px solid #7892ad70;border-radius:9px;box-shadow:0 13px 34px #0107158a;
+}
+.wintertraumShow--kaiser{--wtShowAccent:#f8dba5}
+.wintertraumShow--tiempo{--wtShowAccent:#ffc392}
+.wintertraumShow--pulse{--wtShowAccent:#b0dbfc}
+.wintertraumShow--magic{--wtShowAccent:#f6d79a;border-color:#ecd0a374}
+.wintertraumShowMedia{
+  position:relative;aspect-ratio:2.25/1;overflow:hidden;background:#172d49;
+}
+.wintertraumShowMedia::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(0deg,#0c2035 0%,transparent 49%);
+  pointer-events:none;
+}
+.wintertraumShowMedia img{
+  display:block;width:100%;height:100%;object-fit:cover;
+  filter:saturate(1.11) contrast(1.04);
+  transition:transform .35s ease;
+}
+.wintertraumShow:hover .wintertraumShowMedia img{transform:scale(1.045)}
+.wintertraumShowBody{padding:19px 20px 20px}
+.wintertraumShowTop{
+  display:flex;justify-content:space-between;gap:8px;
+  font:800 10px 'Barlow Condensed',sans-serif;letter-spacing:1.25px;
+  color:var(--wtShowAccent,#f8dba5);
+}
+.wintertraumShow h4{
+  margin:11px 0 7px;font:normal clamp(23px,3vw,32px)/1.12 Georgia,serif;
+  letter-spacing:-.5px;text-shadow:0 3px 12px #07101f;
+}
+.wintertraumShow h4 em{font-style:italic;color:var(--wtShowAccent,#f8dba5)}
+.wintertraumShowBody>p{margin:0 0 16px;font-size:13px;line-height:1.65;color:#d5e0ea;min-height:43px}
+.wintertraumShowFoot{
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 15px;
+}
+.wintertraumShowFoot span{
+  display:inline-flex;align-items:center;padding:8px 9px;
+  font:700 11px 'Barlow Condensed',sans-serif;letter-spacing:.3px;
+  background:#122c46;border:1px solid #668aa569;color:#e3eef7;border-radius:3px;
+}
+.wintertraumShowFoot .wintertraumShowTime{
+  color:#ffe4b7;border-color:#e5be8061;
+}
+.wintertraumShow a{
+  display:inline-flex;align-items:center;min-height:40px;padding:8px 0;
+  color:var(--wtShowAccent,#f8dba5);font:800 12px 'Barlow Condensed',sans-serif;
+  text-transform:uppercase;letter-spacing:1.2px;text-decoration:underline;
+  text-underline-offset:4px;
+}
+.wintertraumShow a:focus-visible{outline:2px solid #fff2c9;outline-offset:3px}
+.wintertraumNotice{
+  margin:15px 2px 4px;color:#c7d5e4;font-size:11px;line-height:1.75;
+  border-left:2px solid #cfb585;padding:4px 0 4px 13px;
+}
+@media(max-width:720px){
+  .wintertraumShows{grid-template-columns:1fr;gap:15px}
+  .wintertraumLead{padding:26px 19px 22px}
+  .wintertraumShowMedia{aspect-ratio:2.1/1}
+  .wintertraumShowBody{padding:16px 17px 17px}
+  .wintertraumShow h4{font-size:28px}
+  .wintertraumShowHeading h3{font-size:28px}
+}
+@media(prefers-reduced-motion:reduce){
+  .wintertraumShowMedia img{transition:none}
+}
