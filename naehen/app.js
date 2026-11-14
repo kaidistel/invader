@@ -16,12 +16,12 @@
   const WINTERTRAUM_ACTIVE = WINTERTRAUM_DATE >= "2026-11-14" && WINTERTRAUM_DATE <= "2027-01-24";
   const WINTERTRAUM_HERO = "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/magic-symphony/gap-magic-symphony_01.jpg";
   const WINTERTRAUM_RIDE_ART = {
-    "taron": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/mystery/taron/2024/cf-winter-taron-2024_02.jpg",
-    "fly": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/fly/cf-fly-winter-2021-02.jpg",
+    "taron": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/mystery/taron/2023/ga-winter-taron-2023-01.jpg",
+    "fly": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/fly/ga-fly-winter-2021-04.jpg",
     "black-mamba": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/deep-in-africa/black-mamba/cf-winter-black-mamba_05.jpg",
     "chiapas": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/mexico/chiapas/ga-winter-chiapas_03.jpg",
-    "wellenflug": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/kinder/hm-wintertraum-familie_02.jpg",
-    "maus-au-chocolat": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/2024/ga-berlin-winter-2024_01.jpg"
+    "wellenflug": "https://www.phantasialand.de/files/uploads/presse/bilder/wintertraum/ga-phantasialand-wintertraum-berlin-wellenflug_01.jpg",
+    "maus-au-chocolat": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/maus-au-chocolat/gap-maus-au-chocolat-winter_01.jpg"
   };
   function wintertraumRideImage(rideId) {
     return activeParkSlug === "phantasialand" && WINTERTRAUM_ACTIVE
