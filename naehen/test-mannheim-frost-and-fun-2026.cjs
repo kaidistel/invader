@@ -36,7 +36,10 @@ const css=fs.readFileSync(path.join(root,"styles.css"),"utf8");
 const portal=fs.readFileSync(path.join(root,"portals.css"),"utf8");
 assert.ok(app.includes("window.NAEHEN_MANNHEIM_FROST_AND_FUN_2026"));
 assert.ok(html.includes("mannheim-frost-and-fun-2026-config.js?v=157"));
-assert.ok(sw.includes("naehen-v157")&&sw.includes("./mannheim-frost-and-fun-2026-config.js"));
+const appVersion=/app\\.js\\?v=(\\d+)/.exec(html)?.[1];
+assert.ok(appVersion, "Application shell must have a version");
+assert.ok(sw.includes("naehen-v"+appVersion) && sw.includes("./mannheim-frost-and-fun-2026-config.js"),
+  "PWA cache version must follow app.js version, not a hard-coded historic build");
 assert.ok(css.includes('body[data-park="mannheim-frost-and-fun-2026"]'));
 assert.ok(portal.includes('#rideSheet[data-park="mannheim-frost-and-fun-2026"]'));
 console.log("PASS Mannheim Frost & Fun: mapless, 8 rides, 3 official, 5 provisional, prices, art, registration and version");
