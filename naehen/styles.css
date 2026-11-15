@@ -2355,3 +2355,175 @@ body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumSection{
 @media(prefers-reduced-motion:reduce){
   .wintertraumShowMedia img{transition:none}
 }
+
+
+/* Wintertraum design refinement v160: no inherited full-card pseudo badge overlay. */
+.parkChoice[data-park="phantasialand"][data-season="wintertraum"]{
+  min-height:294px;border-radius:12px;
+  border-color:rgba(235,207,150,.5);
+  box-shadow:0 16px 46px #030d20b3,inset 0 1px #fff4d436;
+}
+.parkChoice[data-park="phantasialand"][data-season="wintertraum"]::before{
+  /* Base .parkChoice:before uses inset:0. Explicitly reset all four sides. */
+  inset:auto!important;left:auto!important;bottom:auto!important;
+  right:17px!important;top:16px!important;width:max-content;height:auto;
+  max-width:calc(100% - 34px);
+  border-radius:999px;padding:8px 12px;
+  background:rgba(11,31,55,.87);border:1px solid rgba(248,224,167,.66);
+  color:#ffedd1;letter-spacing:1.1px;line-height:1.1;
+  box-shadow:0 5px 18px #0009;
+  white-space:nowrap;pointer-events:none;
+}
+.parkChoice[data-park="phantasialand"][data-season="wintertraum"]::after{
+  box-shadow:inset 0 0 0 1px #ffffff08;
+  border:1px solid #f4d6a037;
+}
+.parkChoice[data-park="phantasialand"][data-season="wintertraum"] .parkChoiceArt{
+  object-position:center 44%;filter:saturate(1.08) brightness(1);
+  opacity:1;
+}
+.parkChoice[data-park="phantasialand"][data-season="wintertraum"] .parkChoiceCopy{
+  position:relative;isolation:isolate;z-index:1;
+  min-height:294px;padding:82px 22px 21px;
+  background:linear-gradient(180deg,transparent 4%,rgba(4,12,31,.17) 25%,rgba(4,14,31,.84) 67%,#071526 99%);
+}
+.parkChoice[data-park="phantasialand"][data-season="wintertraum"] .parkChoiceMeta{
+  color:#f5d7a8;font-size:10px;letter-spacing:1.1px;
+}
+.parkChoice[data-park="phantasialand"][data-season="wintertraum"] h2{
+  font-size:clamp(30px,7.8vw,44px);line-height:1.03;
+  letter-spacing:-1.3px;text-shadow:0 3px 14px #000e;
+  overflow-wrap:anywhere;
+}
+.parkChoice[data-park="phantasialand"][data-season="wintertraum"] p{
+  color:#e5edf8;max-width:380px;font-size:12px;margin:10px 0 15px;
+}
+.parkChoice[data-park="phantasialand"][data-season="wintertraum"] .parkChoiceOpen{
+  color:#fff0c8;border-top-color:#ffe6a14a;
+}
+@media(max-width:430px){
+  .parkChoice[data-park="phantasialand"][data-season="wintertraum"]{min-height:266px}
+  .parkChoice[data-park="phantasialand"][data-season="wintertraum"] .parkChoiceCopy{
+    min-height:266px;padding:64px 18px 18px;
+  }
+  .parkChoice[data-park="phantasialand"][data-season="wintertraum"]::before{
+    top:12px!important;right:12px!important;font-size:9px;padding:8px 10px;
+  }
+}
+
+/* More clarity in the winter park dashboard. All changes limited to this season/park. */
+body[data-park="phantasialand"][data-season="wintertraum"] .hero{
+  border-radius:11px;
+  background:
+    radial-gradient(circle at 86% 0,rgba(122,186,242,.16),transparent 30%),
+    linear-gradient(125deg,#142d4aed,#09172fe8);
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .hero h1{
+  font-size:clamp(28px,4.8vw,45px);
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .stat{
+  padding:14px 14px 15px;
+  min-width:0;text-align:left;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .stat strong{
+  font-size:clamp(19px,2.4vw,29px);color:#fff4d8;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .stat span{
+  display:block;margin-top:6px;color:#cbdded;font-size:10px;
+  line-height:1.3;text-transform:uppercase;letter-spacing:.65px;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .winterShowStat[hidden]{display:none!important;}
+body[data-park="phantasialand"][data-season="wintertraum"] .winterShowStat{
+  background:linear-gradient(140deg,#163a5e88,#123a5080);
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .winterShowStat strong{color:#f8d899;}
+body[data-park="phantasialand"][data-season="wintertraum"] .ride{
+  border-radius:10px;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .ride h3{
+  font-size:clamp(21px,2.4vw,27px);
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .ride .meta .btn{
+  border-radius:6px;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .rideArt{
+  object-position:50% 42%;opacity:.83;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .ride:after{
+  background:linear-gradient(0deg,#07192dfc 0%,#0b1f33e8 44%,#0a17274b 100%);
+}
+
+/* A clearly separate, AFTER-rides winter show finale with real tracking actions. */
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumSection{
+  margin:46px 0 24px;
+  padding-top:25px;border-top:1px solid rgba(251,219,158,.35);
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumLead{
+  min-height:194px;border-radius:10px;
+  background:linear-gradient(100deg,#07162de8,#081b359c 76%),
+    url("https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/2024/cf-berlin-winter-2024_03.jpg") center 37%/cover;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumLead h2{
+  font-size:clamp(33px,5.3vw,54px);
+}
+.wintertraumShowHeading{
+  align-items:center;
+}
+.wintertraumShowScore{
+  display:grid;grid-template-columns:1fr auto;align-items:center;
+  gap:2px 15px;margin:0 0 16px;
+  padding:16px 20px;background:linear-gradient(110deg,#0f2d4a,#173c5a);
+  border:1px solid rgba(245,217,160,.44);border-radius:10px;
+}
+.wintertraumShowScore>span{
+  font:800 11px 'Barlow Condensed',sans-serif;
+  color:#f8d8a2;letter-spacing:1.7px;
+}
+.wintertraumShowScore strong{
+  grid-row:span 2;grid-column:2;display:block;text-align:right;
+  font:700 clamp(30px,5vw,50px)/1 Georgia,serif;
+  color:#fff7df;
+}
+.wintertraumShowScore small{
+  grid-column:1;display:block;color:#d7e8f2;
+  font-size:13px;letter-spacing:.3px;
+}
+.wintertraumShow{border-radius:10px;transition:border-color .2s;}
+.wintertraumShow:has(.wintertraumRecordBtn.isRecorded){border-color:rgba(230,202,143,.9);}
+.wintertraumShowMedia{aspect-ratio:2.4/1;}
+.wintertraumShowBody>p{min-height:0;}
+.wintertraumShowFoot{margin-bottom:10px;}
+.wintertraumShowActions{
+  display:flex;align-items:center;flex-wrap:wrap;
+  gap:8px 14px;margin:15px 0 8px;
+}
+.wintertraumRecordBtn{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:46px;padding:12px 16px;flex-shrink:0;
+  border-radius:6px;border:1px solid #fff0c7;
+  background:linear-gradient(130deg,#ffeac0,#e6bd77);
+  color:#16263c;font:900 12px 'Barlow Condensed',sans-serif;
+  letter-spacing:1.2px;cursor:pointer;
+  transition:background .15s,transform .15s;
+}
+.wintertraumRecordBtn:hover{background:linear-gradient(130deg,#fff6de,#f3d197);}
+.wintertraumRecordBtn:active{transform:translateY(1px);}
+.wintertraumRecordBtn:focus-visible{outline:3px solid #b8e9fc;outline-offset:3px;}
+.wintertraumRecordBtn:disabled{opacity:.68;cursor:wait;}
+.wintertraumRecordBtn.isRecorded{
+  background:rgba(16,59,70,.85);color:#e1f3e9;
+  border:1px solid #a9d9c1;
+}
+.wintertraumViewedCount{
+  color:#c6d8e4;font:700 12px 'Barlow Condensed',sans-serif;
+  letter-spacing:.3px;
+}
+@media(max-width:650px){
+  body[data-park="phantasialand"][data-season="wintertraum"] .stat{padding:12px 8px 14px;}
+  body[data-park="phantasialand"][data-season="wintertraum"] .stat span{font-size:9px;}
+  body[data-park="phantasialand"][data-season="wintertraum"] .hero .stats{grid-template-columns:repeat(4,minmax(0,1fr));}
+  body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumSection{margin-top:34px;}
+  .wintertraumShowScore{padding:13px 15px;}
+  .wintertraumRecordBtn{width:100%;}
+  .wintertraumViewedCount{width:100%;}
+}
