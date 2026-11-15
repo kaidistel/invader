@@ -2707,6 +2707,7 @@
   async function endParkDay() {
     if (!parkDay) return;
     if (savingFairRide) { toast("Fahrt wird gespeichert. Bitte danach den Kirmestag beenden."); return; }
+    if (savingWinterShow) { toast("Show wird noch gespeichert. Bitte danach den Parktag beenden."); return; }
     if (finishingQueue) {
       toast("Fahrt wird noch gespeichert. Bitte kurz danach erneut beenden.");
       return;
