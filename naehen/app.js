@@ -14,15 +14,28 @@
   }
   const WINTERTRAUM_DATE = phantasialandLocalDate();
   const WINTERTRAUM_ACTIVE = WINTERTRAUM_DATE >= "2026-11-14" && WINTERTRAUM_DATE <= "2027-01-24";
-  const WINTERTRAUM_HERO = "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/magic-symphony/gap-magic-symphony_01.jpg";
+  const WINTERTRAUM_HERO = "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/2025/fh-winter-berlin_01.jpg";
   const WINTERTRAUM_RIDE_ART = {
     "taron": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/mystery/taron/2023/ga-winter-taron-2023-01.jpg",
-    "fly": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/fly/ga-fly-winter-2021-04.jpg",
+    "fly": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/fly/cf-fly-winter-2021-02.jpg",
     "black-mamba": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/deep-in-africa/black-mamba/cf-winter-black-mamba_05.jpg",
-    "chiapas": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/mexico/chiapas/ga-winter-chiapas_03.jpg",
+    "chiapas": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/mexico/ga-winter-mexico_04.jpg",
     "wellenflug": "https://www.phantasialand.de/files/uploads/presse/bilder/wintertraum/ga-phantasialand-wintertraum-berlin-wellenflug_01.jpg",
     "maus-au-chocolat": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/maus-au-chocolat/gap-maus-au-chocolat-winter_01.jpg"
   };
+  const WINTERTRAUM_SHOWS = Object.freeze({
+    "kaiserplatz-illumination": "Kaiserplatz Illumination",
+    "tiempo-de-fuego": "Tiempo de Fuego",
+    "pulse-of-rookburgh": "Pulse of Rookburgh",
+    "magic-symphony": "Magic Symphony"
+  });
+  function isShowSession(session) {
+    return String(session?.rideId || "").startsWith("wintershow-");
+  }
+  function winterShowCount(sourceSessions) {
+    return (sourceSessions || []).filter(item => item.status === "ridden" && isShowSession(item)).length;
+  }
+
   function wintertraumRideImage(rideId) {
     return activeParkSlug === "phantasialand" && WINTERTRAUM_ACTIVE
       ? (WINTERTRAUM_RIDE_ART[rideId] || "") : "";
@@ -37,7 +50,7 @@
       cardImageFallback: "./assets/park.webp",
       heroImage: WINTERTRAUM_ACTIVE ? WINTERTRAUM_HERO : "./assets/park.webp",
       heroImageFallbackUrls: ["./assets/park.webp"],
-      cardCopy: WINTERTRAUM_ACTIVE ? "Wintertraum 2026/27 · Lichtermeer, Nachtfahrten und vier große Outdoor-Shows." : "Live-Wartezeiten, Nähprotokoll und deine Phantasialand-Attraktionen.",
+      cardCopy: WINTERTRAUM_ACTIVE ? "Winternächte, Nachtfahrten & große Shows. Dein Wintertraum wartet." : "Live-Wartezeiten, Nähprotokoll und deine Phantasialand-Attraktionen.",
       disclaimer: "Kein offizielles Angebot des Phantasialands."
     }
   };
@@ -494,7 +507,7 @@
   let active = store.get("naehen:active", null);
   let favorites = store.get("naehen:favorites", ["taron", "fly", "black-mamba"]);
   let favoriteSettings = store.get("naehen:favoriteSettings", {});
-  let totalRideCount = store.get("naehen:totalRideCount", sessions.filter((s) => s.status === "ridden").length);
+  let totalRideCount = store.get("naehen:totalRideCount", sessions.filter((s) => s.status === "ridden" && !isShowSession(s)).length);
   let srReportsLocal = store.get("naehen:srReports", []);
   let parkArchive = [];
   let globalArchiveEntries = [];
@@ -506,6 +519,7 @@
   const pendingQueueStarts = new Map();
   let finishingQueue = false;
   let savingFairRide = false;
+  let savingWinterShow = false;
 
   function attractionFontConfig(rideId, parkSlug = activeParkSlug || "phantasialand") {
     const module = parkModuleFor(parkSlug);
@@ -809,7 +823,7 @@
 
     totalRideCount = store.get(
       parkStoreKey("naehen:totalRideCount", parkSlug),
-      sessions.filter((session) => session.status === "ridden").length
+      sessions.filter((session) => session.status === "ridden" && !isShowSession(session)).length
     );
   }
 
@@ -1441,7 +1455,8 @@
       .from("queue_sessions")
       .select("id", { count: "exact", head: true })
       .eq("user_id", currentUserId())
-      .eq("status", "ridden");
+      .eq("status", "ridden")
+      .not("ride_id", "like", "wintershow-%");
 
     if (!countResult.error && typeof countResult.count === "number") totalRideCount = countResult.count;
 
@@ -1704,6 +1719,7 @@
     renderParkDay();
     renderRides();
     renderStats();
+    renderWinterShowStatus();
     renderLog();
     renderParkArchive();
     renderProfile();
@@ -2184,7 +2200,8 @@
 
   function buildDayFacts(day, sourceSessions, parkSlug = activeParkSlug || day?.park_slug || "phantasialand") {
     const allSessions = (sourceSessions || []).map((session) => localizeStoredSession(session, parkSlug));
-    const ridden = allSessions.filter((session) => session.status === "ridden");
+    const ridden = allSessions.filter((session) => session.status === "ridden" && !isShowSession(session));
+    const shows = winterShowCount(allSessions);
     const aborted = allSessions.filter((session) => session.status === "aborted");
     const queueDurations = ridden
       .map((session) => Number(session.duration))
@@ -2228,6 +2245,9 @@
     return {
       parkSlug: parkSlug,
       rides: ridden.length,
+      shows: shows,
+      experiences: ridden.length + shows,
+      uniqueShows: new Set(allSessions.filter(session => session.status === "ridden" && isShowSession(session)).map(session => session.rideId)).size,
       aborted: aborted.length,
       uniqueRides: uniqueRideIds.size,
       rerides: Math.max(0, ridden.length - uniqueRideIds.size),
@@ -2723,8 +2743,13 @@
   }
 
   function renderStats() {
-    const ridden = sessions.filter((s) => s.status === "ridden");
+    const ridden = sessions.filter((item) => item.status === "ridden" && !isShowSession(item));
+    const isWinter = activeParkSlug === "phantasialand" && WINTERTRAUM_ACTIVE;
     $("#ridesToday").textContent = ridden.length + "×";
+    const showStat = $("#winterShowStat");
+    if (showStat) showStat.hidden = !isWinter;
+    if ($("#ridesTodayLabel")) $("#ridesTodayLabel").textContent = isWinter ? "Rides" : "genäht";
+    if ($("#showsToday")) $("#showsToday").textContent = winterShowCount(sessions) + "×";
     if (venueIsFair()) {
       const money = fairMoneySummary(sessions);
       $("#queueToday").textContent = formatEuro(money.total);
@@ -2737,6 +2762,71 @@
     $("#totalRides").textContent = totalRideCount;
   }
 
+  // Show visits use the existing park-day/session archive; no artificial queue timer.
+  // The ride_id prefix distinguishes shows in cloud snapshots and archived days.
+  function renderWinterShowStatus() {
+    if (activeParkSlug !== "phantasialand" || !WINTERTRAUM_ACTIVE) return;
+    const ridesDone = sessions.filter(row => row.status === "ridden" && !isShowSession(row)).length;
+    const showsDone = winterShowCount(sessions);
+    const total = $("#winterExperienceTotal");
+    const breakdown = $("#winterExperienceBreakdown");
+    if (total) total.textContent = String(ridesDone + showsDone);
+    if (breakdown) breakdown.textContent = ridesDone + " Rides + " + showsDone + " Shows";
+    document.querySelectorAll("[data-record-winter-show]").forEach(button => {
+      const id = button.dataset.recordWinterShow;
+      const count = sessions.filter(item => item.status === "ridden" && item.rideId === "wintershow-" + id).length;
+      button.classList.toggle("isRecorded", count > 0);
+      button.textContent = count ? "✓ NOCHMAL EINTRAGEN" : "✓ SHOW EINTRAGEN";
+      button.disabled = savingWinterShow;
+      const caption = button.closest(".wintertraumShow")?.querySelector("[data-winter-show-count]");
+      if (caption) caption.textContent = count ? count + "× gesehen · gespeichert" : "Noch nicht eingetragen";
+    });
+  }
+
+  async function recordWinterShow(showId) {
+    if (activeParkSlug !== "phantasialand" || !WINTERTRAUM_ACTIVE ||
+        !Object.hasOwn(WINTERTRAUM_SHOWS, showId) || savingWinterShow) return;
+    if (!parkDay) {
+      toast("🧵 Bitte zuerst deinen Parktag starten, dann die Show eintragen.");
+      $("#parkDayBtn")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    savingWinterShow = true;
+    const now = Date.now();
+    const session = {
+      id: createId(),
+      rideId: "wintershow-" + showId,
+      rideName: WINTERTRAUM_SHOWS[showId],
+      parkSlug: activeParkSlug,
+      type: "regular",  // compatible with queue_sessions database constraint
+      posted: null,
+      priceEuro: null,
+      startedAt: now,
+      endedAt: now,
+      duration: null,
+      status: "ridden",
+      parkDayId: parkDay.id,
+      synced: false
+    };
+    sessions = [session, ...sessions];
+    persistLocalState();
+    renderAll();
+    try {
+      if (supa && currentUserId()) {
+        await saveFinishedToCloud(session, currentUserId());
+        session.synced = true;
+        persistLocalState();
+        toast("✨ " + session.rideName + " · Show im Parktag gespeichert!");
+      } else toast("✨ " + session.rideName + " · Show lokal gespeichert!");
+    } catch (error) {
+      console.warn("Wintershow lokal gesichert, Cloud-Sync folgt", error);
+      toast("✨ Show lokal gespeichert. Cloud-Sync wird später erneut versucht.");
+    } finally {
+      savingWinterShow = false;
+      renderWinterShowStatus();
+    }
+  }
+
   function renderLog() {
     const container = $("#log");
     if (!container) return;
@@ -2745,18 +2835,18 @@
       return;
     }
     container.innerHTML = sessions.slice().sort((a,b) => b.startedAt - a.startedAt).map(session => {
-      const duration = venueIsFair(session.parkSlug || activeParkSlug)
+      const duration = isShowSession(session) ? "Gesehen" : venueIsFair(session.parkSlug || activeParkSlug)
         ? (session.status === "ridden" && session.priceEuro !== null && session.priceEuro !== undefined
           ? formatEuro(session.priceEuro) : "–")
         : (session.duration === null || session.duration === undefined ? "läuft" : minutesRounded(session.duration) + " min");
-      const state = session.status === "ridden" ? "🧵 genäht" : session.status === "aborted" ? "💀 vernäht" : "⏱ läuft";
+      const state = isShowSession(session) ? "✨ Show gesehen" : session.status === "ridden" ? "🧵 genäht" : session.status === "aborted" ? "💀 vernäht" : "⏱ läuft";
       const operator = operatorForSession(session, session.parkSlug || activeParkSlug);
       const ticketNote = fairTicketNote(session);
       const deletable = !!parkDay && ["ridden","aborted"].includes(session.status) && (!active || String(active.id) !== String(session.id));
       return "<div class=\"logItem\"><div class=\"logEntryInfo\"><b>" + escapeHtml(session.rideName) + "</b>" +
         (operator ? "<small class=\"logOperator\">Schausteller: " + escapeHtml(operator) + "</small>" : "") +
         (ticketNote ? "<small>" + escapeHtml(ticketNote) + "</small>" : "") +
-        "<small>" + (venueIsFair(session.parkSlug || activeParkSlug) ? "Fahrt" : (session.type === "single" ? "👤 Single Rider" : "Regular")) + " · " +
+        "<small>" + (isShowSession(session) ? "✨ Wintershow" : venueIsFair(session.parkSlug || activeParkSlug) ? "Fahrt" : (session.type === "single" ? "👤 Single Rider" : "Regular")) + " · " +
         new Date(session.startedAt).toLocaleTimeString("de-DE", {hour:"2-digit",minute:"2-digit"}) +
         "</small></div><div class=\"logEntryActions\"><b>" + escapeHtml(duration) + "</b><small>" +
         escapeHtml(state) + "</small>" + (deletable ? "<button type=\"button\" class=\"logDeleteBtn\" data-delete-log-id=\"" + escapeHtml(String(session.id)) + "\" aria-label=\"Eintrag " + escapeHtml(session.rideName) + " löschen\">🗑 Löschen</button>" : "") +
@@ -2774,7 +2864,7 @@
       toast("💶 Erst die Kombiticket-Einlösung löschen, danach den Kauf.");
       return;
     }
-    if (!window.confirm('Eintrag „' + session.rideName + '“ wirklich löschen? Diese Fahrt wird aus dem laufenden Tag entfernt.')) return;
+    if (!window.confirm('Eintrag „' + session.rideName + '“ wirklich löschen? Er wird aus dem laufenden Parktag entfernt.')) return;
     const button = Array.from(document.querySelectorAll("[data-delete-log-id]")).find(el => el.dataset.deleteLogId === String(sessionId));
     if (button) button.disabled = true;
     if (supa && currentUserId() && !String(session.id).startsWith("local-")) {
@@ -2787,7 +2877,7 @@
       }
     }
     sessions = sessions.filter(item => String(item.id) !== String(sessionId));
-    if (session.status === "ridden") totalRideCount = Math.max(0, totalRideCount - 1);
+    if (session.status === "ridden" && !isShowSession(session)) totalRideCount = Math.max(0, totalRideCount - 1);
     persistLocalState();
     renderAll();
     toast("🗑 Eintrag gelöscht.");
@@ -4239,6 +4329,13 @@
       }
     });
 
+    $("#wintertraumSection")?.addEventListener("click", event => {
+      const button = event.target.closest("[data-record-winter-show]");
+      if (button) {
+        event.preventDefault();
+        void recordWinterShow(button.dataset.recordWinterShow);
+      }
+    });
     $("#rideSearch").addEventListener("input", e => { rideSearch = e.target.value.trim().toLowerCase(); renderRides(); });
     $("#favoriteFilter").addEventListener("click", e => { onlyFavorites = !onlyFavorites; e.currentTarget.setAttribute("aria-pressed", onlyFavorites); renderRides(); });
     $("#queueBar").addEventListener("keydown", e => { if(e.key === "Enter" || e.key === " ") { e.preventDefault(); openActive(); } });
