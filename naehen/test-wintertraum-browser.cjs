@@ -49,6 +49,10 @@ function card(id,title,image,wait,zone){
       ticketBg:getComputedStyle(cards[0].querySelector(".rideMain")).backgroundImage,
       ticketInk:getComputedStyle(cards[0].querySelector("h3")).color,
       plannerBg:getComputedStyle(document.querySelector(".nightPlanner")).backgroundColor,
+      ticketPanelColor:getComputedStyle(cards[0].querySelector(".rideMain")).backgroundColor,
+      cardActionColor:getComputedStyle(cards[0].querySelector(".wtRideActions .btn.secondary")).color,
+      mediaAnimation:getComputedStyle(document.querySelector(".nightPlanner"),"::before").animationName,
+      heroAnimation:getComputedStyle(document.querySelector(".heroLine")).animationName,
       favorites:cards.map(c=>rect(c.querySelector(".fav"))),
       images:[...document.querySelectorAll("#rides .rideArt")].map(i=>({naturalWidth:i.naturalWidth})),
       columns:getComputedStyle(document.querySelector("#rides")).gridTemplateColumns};
@@ -81,7 +85,10 @@ function card(id,title,image,wait,zone){
      assert.ok(buttons.every(x=>x.x>=c.x-2&&x.right<=c.right+2),width+"px buttons outside card");
    }
    assert.ok(data.ticketBg.includes("linear-gradient"),width+"px winter ticket surface missing");
-   assert.ok(data.ticketInk.includes("20, 44, 65")||data.ticketInk.includes("20, 44, 65"),width+"px ride title should be dark ink on paper, not white on photo: "+data.ticketInk);
+   assert.equal(data.ticketInk,"rgb(249, 237, 218)",width+"px ride title must be ivory on dark ticket: "+data.ticketInk);
+   assert.equal(data.heroAnimation,"none",width+"px reduced-motion hero should not animate");
+   assert.equal(data.mediaAnimation,"none",width+"px reduced-motion photo should not animate");
+   assert.equal(data.cardActionColor,"rgb(20, 39, 59)",width+"px gold button must retain dark contrast");
    for(let i=0;i<data.favorites.length;i++){
      assert.ok(data.favorites[i].y<data.cards[i].y+90,width+"px favorite must stay on the photo corner");
    }
