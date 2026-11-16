@@ -56,6 +56,11 @@ function card(id,title,image,wait,zone){
       heroFont:getComputedStyle(document.querySelector("#homeView>.hero h1")).fontFamily,
       rideFont:getComputedStyle(cards[0].querySelector("h3")).fontFamily,
       rideButtonFont:getComputedStyle(cards[0].querySelector(".wtRideActions .btn")).fontFamily,
+      zoneFont:getComputedStyle(cards[0].querySelector(".zone")).fontFamily,
+      waitFont:getComputedStyle(cards[0].querySelector(".wait strong")).fontFamily,
+      statFont:getComputedStyle(document.querySelector(".hero .stat strong")).fontFamily,
+      previewFont:getComputedStyle(document.querySelector(".npr-preview")).fontFamily,
+      plannerButtonFont:getComputedStyle(document.querySelector("#nightPlannerOpen")).fontFamily,
       plannerTitleFont:getComputedStyle(document.querySelector(".npr-heading h2")).fontFamily,
       favorites:cards.map(c=>rect(c.querySelector(".fav"))),
       images:[...document.querySelectorAll("#rides .rideArt")].map(i=>({naturalWidth:i.naturalWidth})),
@@ -90,8 +95,10 @@ function card(id,title,image,wait,zone){
    }
    assert.ok(data.ticketBg.includes("linear-gradient"),width+"px winter ticket surface missing");
    assert.equal(data.ticketInk,"rgb(249, 237, 218)",width+"px ride title must be ivory on dark ticket: "+data.ticketInk);
-   for(const f of ["heroFont","rideFont","rideButtonFont","plannerTitleFont"])
-     assert.ok(data[f].includes("Berkshire Swash"),width+"px inconsistent Wintertraum typography: "+f+" / "+data[f]);
+   for(const f of ["heroFont","rideFont","plannerTitleFont"])
+     assert.ok(data[f].includes("Berkshire Swash"),width+"px missing display font: "+f+" / "+data[f]);
+   for(const f of ["rideButtonFont","zoneFont","waitFont","statFont","previewFont","plannerButtonFont"])
+     assert.ok(data[f].includes("Fraunces"),width+"px small text should use Fraunces: "+f+" / "+data[f]);
    assert.equal(data.heroAnimation,"none",width+"px reduced-motion hero should not animate");
    assert.equal(data.mediaAnimation,"none",width+"px reduced-motion photo should not animate");
    assert.equal(data.cardActionColor,"rgb(20, 39, 59)",width+"px gold button must retain dark contrast");
