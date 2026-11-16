@@ -19,6 +19,7 @@
   <link href="https://fonts.cdnfonts.com/css/old-london" rel="stylesheet">
   <link href="https://fonts2u.com/download/steampunk-machinery-fon-regular.font-face" rel="stylesheet">
   <link rel="stylesheet" href="./portals.css?v=160">
+  <link rel="stylesheet" href="./night-planner.css?v=161">
   <style id="phl-retired-dioramas">#rideSheet[data-park="phantasialand"] .ride3d{display:none!important;visibility:hidden!important}</style>
   <title>NÄHEN · Parkday Companion</title>
 </head>
@@ -153,6 +154,18 @@
       </div>
 
 
+      <section class="nightPlanner" id="nightPlanner" aria-labelledby="nightPlannerTitle" hidden>
+        <div class="npr-heading">
+          <div><div class="npr-overline">Wintertraum · After Dark</div>
+            <h2 id="nightPlannerTitle">Die letzten drei Stunden.</h2>
+            <p>Fahrten und Shows zu einem realistischen Abendplan verbinden.</p></div>
+          <span class="npr-moon" aria-hidden="true">☾</span>
+        </div>
+        <div class="npr-preview" id="nightPlannerPreview" aria-live="polite">Dein Abend wird geplant.</div>
+        <button class="npr-button" id="nightPlannerOpen" type="button">Nachtplan bearbeiten</button>
+        <small class="npr-subtext">Mit Live-Queue, Showzeiten vor Ort, Fußwegen und optionalem Quick Pass.</small>
+      </section>
+
       <section class="venueSpecialMap hidden" id="venueSpecialMap" aria-labelledby="venueMapTitle">
         <div class="venueMapHead">
           <div>
@@ -178,12 +191,12 @@
       <section class="wintertraumSection" id="wintertraumSection" aria-labelledby="wintertraumTitle" hidden>
         <header class="wintertraumLead">
           <div class="wintertraumKicker">✧ PHANTASIALAND · WINTERTRAUM 2026/27</div>
-          <h2 id="wintertraumTitle">Nächte voller <em>Magie.</em></h2>
-          <p>Dein Wintertraum-Finale: Vier große Outdoor-Shows sammeln und den Tag komplett machen.</p>
+          <h2 id="wintertraumTitle">Winterabende <em>erleben.</em></h2>
+          <p>Vier Outdoor-Shows, ihre Schauplätze und dein persönlicher Show-Count.</p>
           <div class="wintertraumDates"><span>❄ 14. NOV 2026 – 24. JAN 2027</span><span>◷ REGULÄR 11:00–20:00 UHR</span></div>
         </header>
-        <div class="wintertraumShowHeading"><div><span>LIGHTS OF MEMORIES</span><h3>Die vier Wintershows</h3></div><span class="wintertraumCount">04 OUTDOOR-SHOWS</span></div>
-        <div class="wintertraumShowScore"><span>✦ DEIN WINTERTRAUM-COUNT</span><strong id="winterExperienceTotal">0</strong><small id="winterExperienceBreakdown">0 Rides + 0 Shows</small></div>
+        <div class="wintertraumShowHeading"><div><span>SHOWS &amp; ZEITEN</span><h3>Vier Abendshows</h3></div><span class="wintertraumCount">04 OUTDOOR-SHOWS</span></div>
+        <div class="wintertraumShowScore"><span>DEIN WINTERTRAUM-COUNT</span><strong id="winterExperienceTotal">0</strong><small id="winterExperienceBreakdown">0 Rides + 0 Shows</small></div>
         <div class="wintertraumShows">
           <article class="wintertraumShow wintertraumShow--kaiser">
             <div class="wintertraumShowMedia"><img src="https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/2024/ga-berlin-winter-2024_02.jpg" alt="Festlich beleuchtete Berliner Themenwelt im Wintertraum" loading="lazy" referrerpolicy="no-referrer"></div>
@@ -369,7 +382,49 @@
       <div class="message" id="rideDetailStatus"></div>
       <div id="rideExtraFacts" class="rideExtraFacts hidden"></div>
       <div id="srCommunity"></div>
+      <div class="npr-quick-detail" id="rideQuickPass" hidden></div>
       <button class="btn primary full" id="rideQueueBtn">🧵 ANSTELLEN</button>
+    </div>
+  </section>
+
+  <section class="sheet" id="nightPlannerSheet" role="dialog" aria-modal="true" aria-labelledby="nightPlannerSheetTitle">
+    <div class="sheetCard">
+      <button aria-label="Nachtplan schließen" class="close" type="button" data-close="nightPlannerSheet">✕</button>
+      <header class="npr-sheet-header">
+        <span class="npr-overline">NÄHEN · NIGHT RIDES</span>
+        <h2 id="nightPlannerSheetTitle">Dein Abend. Dein Plan.</h2>
+        <p>Wähle Attraktionen und Shows. Der Ablauf hält Showzeiten frei und berechnet Wege, aktuelle Wartezeiten und je 5 Minuten für eine Fahrt.</p>
+      </header>
+      <div class="npr-fields">
+        <label class="npr-field">Besuchstag<input id="nightPlannerDate" type="date" min="2026-11-14" max="2027-01-24"></label>
+        <label class="npr-field">Start<input id="nightPlannerStart" type="time" value="17:00"></label>
+        <label class="npr-field">Ende<input id="nightPlannerEnd" type="time" value="20:00"></label>
+        <label class="npr-field">Startbereich
+          <select id="nightPlannerOrigin"><option value="">Nicht festgelegt</option><option value="Berlin">Berlin / Kaiserplatz</option><option value="Mystery">Klugheim / Mystery</option><option value="Rookburgh">Rookburgh</option><option value="Mexico">Mexico</option><option value="Fantasy">Fantasy</option><option value="Deep in Africa">Deep in Africa</option><option value="China Town">China Town</option></select>
+        </label>
+        <label class="npr-field">Fußweg zwischen Bereichen
+          <select id="nightPlannerWalk"><option value="5">5 Minuten</option><option value="7">7 Minuten</option><option value="8" selected>8 Minuten</option><option value="10">10 Minuten</option></select>
+        </label>
+        <label class="npr-field">Quick-Pass-Restwartezeit
+          <input id="nightPlannerQuickWait" type="number" min="0" max="60" step="5" value="15">
+          <small>Schätzwert, keine offizielle Angabe.</small>
+        </label>
+        <label class="npr-field">Zeitreserve
+          <select id="nightPlannerReserve"><option value="0">Ohne Reserve</option><option value="5" selected>5 Minuten</option><option value="10">10 Minuten</option></select>
+        </label>
+      </div>
+      <div class="npr-section-bar">
+        <h3>Erlebnisse auswählen</h3>
+        <div class="npr-tools">
+          <button class="npr-small-action" id="nightPlannerUseNow" type="button">Ab jetzt planen</button>
+          <button class="npr-small-action" id="nightPlannerReset" type="button">Zurücksetzen</button>
+        </div>
+      </div>
+      <div id="nightPlannerChoices"></div>
+      <p class="npr-source">Showzeiten sind tagesaktuell: <a href="https://www.phantasialand.de/de/themenpark/wintertraum/wintershows/" target="_blank" rel="noopener noreferrer">offizielle Show-Übersicht ↗</a>. Für Quick Pass: <a href="https://shop.phantasialand.de/de/quick-pass" target="_blank" rel="noopener noreferrer">offizieller Shop ↗</a>. Verkauf, Verfügbarkeit und Restwartezeit können abweichen.</p>
+      <div class="npr-section-bar"><h3>Dein Nachtplan</h3><span class="npr-overline">Automatisch berechnet</span></div>
+      <div id="nightPlannerResult" aria-live="polite"></div>
+      <p class="npr-source">Die Wege sind Pauschalen, keine Navigation. Warteschlangen können sich ändern oder vor Parkschluss schließen. Show-Einlass, Witterung und die Informationen vor Ort haben immer Vorrang.</p>
     </div>
   </section>
 
@@ -482,6 +537,8 @@
   <script defer src="./koeln-deutz-herbstvolksfest-2026-config.js?v=154"></script>
   <script defer src="./osnabrueck-herbstjahrmarkt-2026-config.js?v=154"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script defer src="./app.js?v=160"></script>
+  <script defer src="./night-planner-core.js?v=161"></script>
+  <script defer src="./night-planner.js?v=161"></script>
+  <script defer src="./app.js?v=161"></script>
 </body>
 </html>
