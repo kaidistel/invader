@@ -1,32 +1,33 @@
 "use strict";
-// Wintertraum is a seasonal skin for the existing park flow, NOT another attraction catalogue.
-const assert=require("node:assert/strict");
-const fs=require("node:fs");
-const path=require("node:path");
-const root=__dirname,read=name=>fs.readFileSync(path.join(root,name),"utf8");
-const html=read("index.html"),app=read("app.js"),css=read("wintertraum-experience.css"),sw=read("sw.js");
-for(const id of ["homeView","nightPlanner","rides","wintertraumSection","parkDayBtn","nightPlannerOpen"])
-  assert.ok(html.includes('id="'+id+'"'),"Missing existing park UI: "+id);
-assert.ok(!html.includes('id="wtOverture"')&&!html.includes('id="wtNightworlds"'),"No duplicate seasonal sections");
-assert.ok(!app.includes('$("#wtNightworlds")'),"No obsolete tile handler");
-const hero=html.indexOf('class="hero"'),planner=html.indexOf('id="nightPlanner"'),rides=html.indexOf('id="rides"'),shows=html.indexOf('id="wintertraumSection"');
-assert.ok(hero>0&&hero<planner&&planner<rides&&rides<shows,"Preserve hero → planner → rides → shows order");
-assert.ok(app.includes('winterShows.hidden = !(parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE)'),"Shows must be seasonal");
-assert.ok(app.includes('const isWinterRideCard = activeParkSlug === "phantasialand" && WINTERTRAUM_ACTIVE'),"Ride layout must be winter-only");
-assert.ok(app.includes('wtRideActions')&&css.includes('#rides .ride .wtRideActions'),"Seasonal ride buttons should align");
-assert.ok(css.includes('grid-template-columns:repeat(2,minmax(0,1fr))'),"Two evenly aligned ride buttons");
-assert.ok(css.includes('justify-content:flex-end'),"Large ride content should align to bottom");
-assert.ok(css.includes('min-height:clamp(445px,49vw,585px)'),"Winter hero must feature an expansive photographic masthead");
-assert.ok(css.includes('url("./assets/wintertraum-berlin-original.jpg")'),"Seasonal art must use the original Berlin photograph");
-assert.ok(css.includes('position:relative!important;z-index:3!important'),"Ride text and controls must sit above the photo gradient");
-assert.ok(html.includes('wintertraum-experience.css?v=166'),"Visual assets require updated version");
-assert.ok(sw.includes("naehen-v166")&&sw.includes("'./wintertraum-experience.css'"),"PWA must update design stylesheet");
-for(const name of ["wintertraum-berlin-original.jpg","wintertraum-taron-original.jpg","wintertraum-fly-original.jpg"]){
- const file=path.join(root,"assets",name),bytes=fs.readFileSync(file);
- assert.ok(bytes.length>400000&&bytes[0]===0xff&&bytes[1]===0xd8,"Keep original Phantasialand photo: "+name);
+// Wintertraum Atelier: maintain park app structure while completely reskinning its components.
+const assert=require("node:assert/strict"),fs=require("node:fs"),path=require("node:path");
+const root=__dirname,read=n=>fs.readFileSync(path.join(root,n),"utf8");
+const html=read("index.html"),app=read("app.js"),css=read("wintertraum-atelier.css"),sw=read("sw.js");
+for(const id of ["homeView","nightPlanner","rides","wintertraumSection","parkDayBtn","nightPlannerOpen","winterExperienceTotal"])
+ assert.ok(html.includes('id="'+id+'"'),"Original app component missing "+id);
+assert.ok(!html.includes('id="wtOverture"')&&!html.includes('id="wtNightworlds"'),"No duplicate seasonal content sections");
+assert.ok(html.indexOf('class="hero"') < html.indexOf('id="nightPlanner"') &&
+  html.indexOf('id="nightPlanner"') < html.indexOf('id="rides"') &&
+  html.indexOf('id="rides"') < html.indexOf('id="wintertraumSection"'),"Preserve original order");
+assert.ok(app.includes('WINTERTRAUM_ACTIVE')&&app.includes('wtRideActions'),"Retain conditional winter mode and ride logging");
+assert.ok(app.includes('isWinterRideCard ? favoriteButton : ""'),"Winter favorite must be on ticket, not inside details");
+assert.ok(app.includes('winterShows.hidden = !(parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE)'),"Winter show isolation");
+assert.ok(html.includes('wintertraum-atelier.css?v=167'),"New design stylesheet must be used");
+assert.ok(!html.includes('wintertraum-experience.css'),"Old skin must not layer over new one");
+assert.ok(sw.includes("naehen-v167")&&sw.includes("'./wintertraum-atelier.css'"),"PWA must precache newest skin");
+for(const attr of ["ridesToday","showsToday","queueToday","srToday"])assert.ok(html.includes('id="'+attr+'"'),"Stat values intact");
+assert.equal((html.match(/data-wt-symbol=/g)||[]).length,4,"Four editorial stat ornaments");
+for(const photo of ["wintertraum-berlin-original.jpg","wintertraum-taron-original.jpg","wintertraum-fly-original.jpg"]){
+ const buf=fs.readFileSync(path.join(root,"assets",photo));
+ assert.ok(buf.length>400000 && buf[0]===0xff&&buf[1]===0xd8,"Authentic photo missing "+photo);
 }
-assert.ok(css.includes('@media(max-width:650px)')&&css.includes('@media(max-width:390px)')&&css.includes('@media(min-width:1500px)'),"Mobile, small phone and wide desktop layouts required");
-assert.ok(!css.includes('.wtWorldGrid')&&!css.includes('.wtOverture'),"Unused structures removed from CSS");
-assert.ok(css.includes('body[data-park="phantasialand"][data-season="wintertraum"]'),"Winter skin stays park-scoped");
-assert.ok(html.indexOf('night-planner.css?v=166')<html.indexOf('wintertraum-experience.css?v=166'),"Seasonal CSS last");
-console.log("PASS Wintertraum: original page flow, aligned large rides, seasonal photos, responsive UI and cache");
+for(const token of ["--winter-cream","#homeView>.hero .stat","#rides .ride .rideMain","#rides .ride .wtRideActions",
+ ".wintertraumShowBody","#nightPlannerSheet .sheetCard",".nav button.active"]){
+ assert.ok(css.includes(token),"Missing redesigned component "+token);
+}
+assert.ok(css.includes("linear-gradient(140deg,#f8f0e1,#e9ddc9)"),"Attraction bottom cards must be editorial parchment");
+assert.ok(css.includes("background:#f2e9d9"),"Night planner must use warm winter ticket style");
+assert.ok(css.includes("@media(max-width:390px)")&&css.includes("@media(max-width:650px)"),"Responsive breakpoints");
+assert.ok(css.includes('body[data-park="phantasialand"][data-season="wintertraum"]'),"Theme must be park+season scoped");
+assert.ok(html.indexOf('night-planner.css?v=167')<html.indexOf('wintertraum-atelier.css?v=167'),"Latest skin must load last");
+console.log("PASS Wintertraum Atelier: original UX, original photos, component redesign, PWA and season isolation");
