@@ -1,0 +1,270 @@
+/* NÄHEN / Wintertraum 2026–27: quiet editorial palette, no artificial glow. */
+body[data-park="phantasialand"][data-season="wintertraum"]{
+  --bg:#0d131b;--panel:#17212b;--panel2:#202e3a;--line:#344450;
+  --text:#f5f2ea;--muted:#b8c4cb;--accent:#e4c99c;--accent2:#d2d8db;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .parkAtmosphere{
+ background:linear-gradient(180deg,rgba(11,20,29,.55),rgba(10,17,25,.94) 57%,#0d131b 92%),
+ var(--park-hero-image,url('./assets/park.webp')) center 20%/cover no-repeat;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .hero{
+ background:#182633;border:1px solid #46515c;border-radius:12px;box-shadow:none;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .hero:before{background:#bfa77f;}
+body[data-park="phantasialand"][data-season="wintertraum"] .hero h1{
+ color:#f6f1e9;text-shadow:none;letter-spacing:-.5px;font-weight:800;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .hero .eyebrow,
+body[data-park="phantasialand"][data-season="wintertraum"] .heroIndex{color:#cbb999;letter-spacing:1px;}
+body[data-park="phantasialand"][data-season="wintertraum"] .stats{
+ background:#111c25;border-top:1px solid #2d3b47;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .stat{
+ background:#1b2834;border:1px solid #30404d;box-shadow:none;border-radius:7px;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .stat strong{color:#f0ede5;}
+body[data-park="phantasialand"][data-season="wintertraum"] .stat span{color:#bac4c9;}
+body[data-park="phantasialand"][data-season="wintertraum"] .winterShowStat{background:#1b2834;}
+body[data-park="phantasialand"][data-season="wintertraum"] .winterShowStat strong{color:#e5c998;}
+body[data-park="phantasialand"][data-season="wintertraum"] .brand b,
+body[data-park="phantasialand"][data-season="wintertraum"] .brandDot{color:#dbc29b;}
+body[data-park="phantasialand"][data-season="wintertraum"] .btn.primary{
+ color:#19212a;background:#dcc498;border:1px solid #dcc498;box-shadow:none;border-radius:8px;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .ride{
+ border:1px solid #40505b;border-radius:9px;background:#192836;box-shadow:none;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .ride:after{
+ background:linear-gradient(0deg,rgba(14,25,36,.96),rgba(14,25,36,.82) 45%,rgba(14,25,36,.24));
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .rideArt{opacity:.8;filter:saturate(.86);}
+body[data-park="phantasialand"][data-season="wintertraum"] .ride .wait{
+ background:#11202d;border-color:#526270;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .ride .zone{color:#bec9d2;}
+body[data-park="phantasialand"][data-season="wintertraum"] .ride .fav.on{background:#dbc49e;color:#18212a;}
+body[data-park="phantasialand"][data-season="wintertraum"] #rideSheet .sheetCard{
+ border-color:#526270;box-shadow:0 20px 60px #0009;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumSection{
+ margin:38px 0 28px;padding-top:22px;border-top:1px solid #465361;color:#f5f2e9;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumLead{
+ min-height:0;padding:25px 22px 22px;border:1px solid #4e5863;border-radius:10px;
+ box-shadow:none;
+ background:linear-gradient(90deg,rgba(13,22,33,.89),rgba(13,22,33,.65)),
+ url("https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/2024/cf-berlin-winter-2024_03.jpg") center 42%/cover;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumLead::before{display:none;}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumKicker{
+ font:700 11px/1.4 system-ui,sans-serif;letter-spacing:1.4px;color:#e2c99d;text-shadow:none;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumLead h2{
+ font:500 clamp(27px,5vw,40px)/1.17 Georgia,serif;letter-spacing:-.8px;
+ text-shadow:none;margin:10px 0 9px;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumLead h2 em{
+ color:#efe6d8;font-style:normal;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumLead>p{
+ max-width:460px;color:#e0e2e2;font-size:13px;text-shadow:none;margin:0 0 16px;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumDates span{
+ background:rgba(15,25,35,.83);border:1px solid #57616a;border-radius:4px;
+ color:#e9e2d6;letter-spacing:.4px;font:600 11px system-ui,sans-serif;padding:7px 9px;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShowHeading{margin:24px 0 13px;}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShowHeading>div>span{
+ font:700 10px system-ui,sans-serif;letter-spacing:1px;color:#c9b58f;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShowHeading h3{
+ font:500 clamp(21px,4vw,28px) Georgia,serif;letter-spacing:-.4px;margin:5px 0 0;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumCount{color:#acbdc7;font:600 10px system-ui,sans-serif;letter-spacing:.5px;}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShowScore{
+ padding:12px 15px;margin-bottom:13px;background:#172632;border:1px solid #3a4c59;
+ border-radius:8px;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShowScore>span{
+ color:#d3bf9e;font:700 10px system-ui,sans-serif;letter-spacing:.6px;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShowScore strong{
+ font:500 33px/1.1 Georgia,serif;color:#f4f0e7;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShowScore small{
+ font-size:12px;color:#becbd1;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShows{gap:12px;}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShow{
+ border:1px solid #41525d;border-radius:9px;background:#172633;box-shadow:none;transition:none;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShow--magic{border-color:#766a54;}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShowMedia{aspect-ratio:2.5/1;background:#263a47;}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShowMedia::after{
+ background:linear-gradient(0deg,#172633,transparent 70%);
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShowMedia img{
+ filter:saturate(.86) brightness(.92);transition:none;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShow:hover .wintertraumShowMedia img{transform:none;}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShowBody{padding:15px 16px 17px;}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShowTop{
+ color:#c3cfd5;font:600 10px/1.3 system-ui,sans-serif;letter-spacing:.65px;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShow h4{
+ margin:9px 0 7px;font:500 clamp(22px,3vw,26px)/1.17 Georgia,serif;
+ color:#f5f1e9;text-shadow:none;letter-spacing:-.5px;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShow h4 em{
+ color:inherit;font-style:normal;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShowBody>p{
+ font:400 12px/1.55 system-ui,sans-serif;color:#c6d1d7;margin-bottom:13px;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShowFoot{gap:7px;}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShowFoot span{
+ padding:6px 8px;background:#1e303e;border:1px solid #3f5261;border-radius:4px;
+ color:#cbd7db;font:600 10px/1.3 system-ui,sans-serif;letter-spacing:0;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShowFoot .wintertraumShowTime{color:#e2d0b1;border-color:#605640;}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumRecordBtn{
+ border-radius:6px;border:1px solid #d3bd92;background:#d3bd92;color:#17232d;
+ box-shadow:none;font:700 11px system-ui,sans-serif;letter-spacing:.25px;min-height:42px;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumRecordBtn:hover{background:#e3cea7;}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumRecordBtn.isRecorded{
+ border-color:#456257;background:#1c3835;color:#e2eee7;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumViewedCount{
+ font:500 11px system-ui,sans-serif;color:#b6c6cd;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShow a{
+ color:#d9be8d;font:650 11px system-ui,sans-serif;letter-spacing:.2px;text-transform:none;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumNotice{
+ border-left:2px solid #79684e;color:#acbac3;font:400 11px/1.6 system-ui,sans-serif;
+}
+
+/* Night Ride planner – compact daily card */
+.nightPlanner[hidden]{display:none!important;}
+.nightPlanner{
+ margin:16px 0 24px;padding:19px 18px;border-radius:11px;
+ border:1px solid #6b6358;background:#18242f;color:#f5f1e8;
+}
+.npr-overline{color:#d6bfa0;font:700 10px system-ui,sans-serif;letter-spacing:1.45px;text-transform:uppercase;}
+.npr-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.npr-heading h2{margin:7px 0 5px;font:500 26px/1.14 Georgia,serif;letter-spacing:-.6px;}
+.npr-heading p{margin:0;color:#bbc8cd;font:400 12px/1.5 system-ui,sans-serif;}
+.npr-moon{font:30px Georgia,serif;color:#d5bc94;opacity:.85;}
+.npr-preview{display:flex;align-items:center;flex-wrap:wrap;gap:8px 13px;padding:14px 0 13px;color:#d7dce0;font:500 12px/1.35 system-ui,sans-serif;}
+.npr-preview-count{font-weight:700;color:#f4f1e8;}
+.npr-preview-next{color:#d1dae0;}
+.npr-preview-alert{color:#e4c08a;}
+.npr-button{
+ border:1px solid #d9c39d;background:#d9c39d;color:#17232d;border-radius:6px;
+ padding:11px 14px;font:700 12px system-ui,sans-serif;cursor:pointer;min-height:44px;
+}
+.npr-button:hover{background:#f0d8ad;}
+.npr-button:focus-visible,.npr-inline-button:focus-visible{outline:3px solid #fff;outline-offset:3px;}
+.nightPlanner .npr-button{width:100%;}
+.npr-subtext{display:block;margin-top:9px;color:#a5b4bd;font:400 10px/1.55 system-ui,sans-serif;}
+#nightPlannerSheet{background:#060d16e6;backdrop-filter:blur(5px);}
+#nightPlannerSheet .sheetCard{
+ background:#141e28;color:#f5f1e9;border:1px solid #475460;border-radius:17px 17px 0 0;
+ max-width:820px;width:min(100%,820px);max-height:95dvh;padding:23px clamp(16px,3vw,28px) calc(26px + env(safe-area-inset-bottom));
+ box-shadow:0 -12px 45px #000a;
+}
+#nightPlannerSheet .close{background:#243341;border:1px solid #4a5d6b;color:#f5f0e7;border-radius:7px;}
+.npr-sheet-header{padding:1px 50px 14px 0;border-bottom:1px solid #364753;}
+#nightPlannerSheet .npr-sheet-header h2{margin:6px 0 7px;font:500 clamp(28px,5vw,39px)/1.12 Georgia,serif;letter-spacing:-.9px;}
+.npr-sheet-header>p{margin:0!important;color:#bac8ce;font:400 12px/1.55 system-ui,sans-serif;}
+.npr-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 13px;padding:17px 0 13px;}
+.npr-field{display:flex;flex-direction:column;gap:6px;min-width:0;color:#bfced5;font:600 11px system-ui,sans-serif;}
+.npr-field input,.npr-field select{
+ width:100%;min-width:0;padding:11px 10px;min-height:44px;border:1px solid #465965;
+ border-radius:6px;background:#1e2d3a;color:#f1eee7;font:600 13px system-ui,sans-serif;color-scheme:dark;
+}
+.npr-field input:focus,.npr-field select:focus,.npr-option input:focus-visible{outline:2px solid #dfcb9d;outline-offset:2px;}
+.npr-field small{font-size:10px;color:#a5b8c0;font-weight:400;line-height:1.4;}
+.npr-section-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid #354550;padding:15px 0 12px;}
+.npr-section-bar h3{margin:0;font:500 22px Georgia,serif;}
+.npr-tools{display:flex;gap:6px;flex-wrap:wrap;}
+.npr-small-action{
+ border:1px solid #51616e;background:#1e2d38;border-radius:6px;color:#e6e3da;
+ min-height:36px;padding:7px 9px;font:600 11px system-ui,sans-serif;cursor:pointer;
+}
+.npr-small-action:hover{background:#30404e;}
+.npr-group-title{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:8px 0 10px;}
+.npr-group-title h3{margin:0;font:600 16px system-ui,sans-serif;}
+.npr-group-title span{font:400 10px system-ui,sans-serif;color:#a9bbc4;}
+.npr-option-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:18px;}
+.npr-option{min-width:0;padding:11px 12px 12px;border:1px solid #3c4e5a;border-radius:8px;background:#1a2935;}
+.npr-option.is-picked{border-color:#ae9674;background:#24313b;}
+.npr-option-row{display:flex;align-items:flex-start;gap:9px;}
+.npr-option-title{display:flex;gap:10px;align-items:flex-start;min-width:0;cursor:pointer;}
+.npr-option-title input{margin:4px 0 0;flex-shrink:0;accent-color:#d4bb8f;width:17px;height:17px;}
+.npr-option-title span{min-width:0;}
+.npr-option-title strong{display:block;font:650 12px/1.4 system-ui,sans-serif;color:#f1eee8;}
+.npr-option-title small{display:block;margin:4px 0 0;font:400 11px/1.4 system-ui,sans-serif;color:#b5c3cb;}
+.npr-option-input{display:flex;flex-direction:column;gap:6px;margin-top:10px;padding-left:27px;
+ color:#b7c5ca;font:500 10px system-ui,sans-serif;}
+.npr-option-input input{width:min(100%,178px);min-height:37px;border-radius:5px;
+ border:1px solid #56646d;background:#111e28;color:#f5f1ea;padding:7px 9px;font-size:13px;color-scheme:dark;}
+.npr-clarify{display:block;padding-left:27px;margin-top:6px;font:400 10px/1.5 system-ui,sans-serif;color:#9eafb7;}
+.npr-quick-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:11px 0 0;padding-left:27px;}
+.npr-quick-row label{display:flex;align-items:center;gap:6px;font:500 11px system-ui,sans-serif;color:#e2e0d9;cursor:pointer;}
+.npr-quick-row input{width:15px;height:15px;accent-color:#d3bd91;}
+.npr-quick-row a{color:#e1ca9e;font:600 11px system-ui,sans-serif;text-underline-offset:3px;}
+.npr-source{color:#a9b8c1;font:400 11px/1.65 system-ui,sans-serif;margin:0 0 16px;}
+.npr-source a{color:#dbc39b;text-underline-offset:3px;}
+.npr-plan-summary{display:flex;justify-content:space-between;gap:10px;align-items:center;
+ background:#233340;border:1px solid #44535e;border-radius:7px;padding:12px;
+ font:600 12px system-ui,sans-serif;color:#dce3e5;margin-bottom:12px;}
+.npr-plan-summary strong{font-size:14px;color:#f2ebdb;}
+.npr-timeline{list-style:none;margin:0;padding:0;border-left:1px solid #5b6b74;}
+.npr-timeline-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 10px;
+ margin:0 0 0 14px;padding:3px 0 17px 12px;position:relative;}
+.npr-timeline-item:before{content:"";position:absolute;left:-19px;top:9px;width:8px;height:8px;border-radius:50%;background:#d9c196;border:2px solid #141e28;}
+.npr-timeline-clock{grid-column:1/-1;color:#d2bd97;font:700 11px system-ui,sans-serif;letter-spacing:.2px;}
+.npr-timeline-info strong{display:block;color:#f6f2ea;font:650 14px/1.4 system-ui,sans-serif;}
+.npr-timeline-info small{display:block;color:#aebfc7;font:400 11px/1.6 system-ui,sans-serif;}
+.npr-inline-button{align-self:center;padding:8px 10px;min-height:35px;border:1px solid #67717a;
+ border-radius:5px;background:#273643;color:#f2eee6;font:600 10px system-ui,sans-serif;cursor:pointer;}
+.npr-inline-button:hover{background:#384957;}
+.npr-done{color:#bcd2c3;font-size:12px!important;}
+.npr-unplanned{padding:12px 13px;border:1px solid #665546;border-radius:7px;background:#282821;margin:12px 0;}
+.npr-unplanned h3{margin:0 0 8px;font:700 12px system-ui,sans-serif;color:#f3d0aa;}
+.npr-unplanned ul{list-style:none;padding:0;margin:0;}
+.npr-unplanned li{display:flex;flex-direction:column;gap:3px;margin:8px 0;}
+.npr-unplanned strong{font:650 12px system-ui,sans-serif;color:#e9e3dc;}
+.npr-unplanned small{font:400 11px/1.45 system-ui,sans-serif;color:#c9beb3;}
+.npr-warnings{margin:12px 0;border-top:1px solid #344957;padding-top:8px;}
+.npr-warnings p{margin:4px 0;color:#aebbc2;font:400 11px/1.5 system-ui,sans-serif;}
+.npr-error{color:#f3c6a0!important;background:#302720;border:1px solid #806245;padding:12px;border-radius:6px;}
+.npr-empty{padding:12px;border:1px dashed #4b5e6a;border-radius:6px;color:#c6cfd2;font-size:12px!important;}
+.npr-quick-detail{margin:17px 0 4px;padding:15px;border:1px solid #6c614c;border-radius:8px;background:#24303a;color:#f1ede3;}
+.npr-quick-detail[hidden]{display:none!important;}
+.npr-detail-label{font:700 10px system-ui,sans-serif;letter-spacing:1px;color:#d6c4a5;}
+.npr-quick-detail p{color:#f1ede3!important;font:650 14px system-ui,sans-serif!important;margin:7px 0!important;}
+.npr-detail-link{display:inline-flex;padding:9px 10px;min-height:42px;align-items:center;border:1px solid #d4bc92;
+ border-radius:6px;background:#d4bc92;color:#182330;font:700 11px system-ui,sans-serif;text-decoration:none;}
+.npr-quick-detail small{display:block;margin-top:9px;color:#bac8ce;font:400 10px/1.5 system-ui,sans-serif;}
+@media(min-width:800px){
+ #nightPlannerSheet{align-items:center;padding:24px;}
+ #nightPlannerSheet .sheetCard{border-radius:14px;max-height:min(90dvh,960px);}
+}
+@media(max-width:650px){
+ body[data-park="phantasialand"][data-season="wintertraum"] .hero{border-radius:9px;}
+ body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumLead{padding:21px 17px;}
+ body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShows{gap:10px;}
+ body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumRecordBtn{width:100%;}
+ .npr-option-grid{grid-template-columns:1fr;}
+ .npr-fields{gap:10px;}
+ .npr-sheet-header>p{font-size:11px;}
+ .npr-heading h2{font-size:24px;}
+ .npr-inline-button{padding:8px 9px;font-size:10px;}
+ .npr-timeline-item{grid-template-columns:minmax(0,1fr) auto;}
+}
+@media(prefers-reduced-motion:reduce){
+ #nightPlannerSheet .sheetCard{animation:none;}
+}
