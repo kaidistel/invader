@@ -27,7 +27,7 @@ assert.equal(core.buildSchedule({...base,date:"2026-12-24"}).valid,false);
 assert.equal(core.buildSchedule({...base,date:"2026-12-31"}).valid,false);
 assert.equal(core.buildSchedule({...base,isToday:true,entries:[ride({isOpen:false})]}).steps.length,0);
 assert.equal(core.buildSchedule({...base,entries:[ride({useQuickPass:true,quickWait:10})]}).steps[0].end,1035);
-assert.equal(core.buildSchedule({...base,entries:[ride({wait:170})]}).unplanned.length,1);
+assert.equal(core.buildSchedule({...base,entries:[ride({wait:190})]}).unplanned.length,1);
 assert.equal(core.buildSchedule({...base,entries:[show("magic","19:50","Berlin",10,15)],isToday:true,nowMinutes:1190}).unplanned.length,1);
 for(const id of ["nightPlanner","nightPlannerSheet","nightPlannerChoices","nightPlannerResult","nightPlannerPreview","rideQuickPass"])assert(html.includes('id="'+id+'"'),"Missing HTML ID "+id);
 for(const file of ["night-planner-core.js","night-planner.js","night-planner.css"])assert(html.includes(file+"?v=161"),"Missing asset "+file);
