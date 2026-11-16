@@ -49,6 +49,20 @@ function card(id,title,image,wait,zone){
       images:[...document.querySelectorAll("#rides .rideArt")].map(i=>({naturalWidth:i.naturalWidth})),
       columns:getComputedStyle(document.querySelector("#rides")).gridTemplateColumns};
    });
+
+   if(data.docWidth>width+3){
+    const offenders=await page.evaluate(()=>{
+      return [...document.querySelectorAll("*")].map(el=>{
+        const r=el.getBoundingClientRect(),st=getComputedStyle(el);
+        return {tag:el.tagName.toLowerCase(),id:el.id,classes:String(el.className||"").slice(0,90),
+          left:Math.round(r.left),right:Math.round(r.right),width:Math.round(r.width),
+          display:st.display,position:st.position,overflowX:st.overflowX,scrollWidth:el.scrollWidth};
+      }).filter(x=>x.display!=="none"&&x.position!=="fixed"&&(x.right>window.innerWidth+5||x.left< -5))
+      .sort((a,b)=>b.right-a.right).slice(0,18);
+    });
+    console.log("RESPONSIVE OVERFLOW "+width+"px:",JSON.stringify(offenders,null,2));
+    await page.screenshot({path:path.join(qaDir,"overflow-"+width+"px.png"),fullPage:true,animations:"disabled"});
+   }
    assert.ok(data.docWidth<=width+3,width+"px viewport horizontal overflow: "+data.docWidth);
    assert.ok(data.hero.width>width*.78&&data.hero.height>390,width+"px hero not prominent");
    assert.ok(data.heroBg.includes("wintertraum-berlin-original.jpg"),width+"px Berlin image absent");
