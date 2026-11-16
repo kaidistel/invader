@@ -7,7 +7,7 @@ body[data-park="phantasialand"][data-season="wintertraum"] {
   --text:#f8f2e5; --muted:#c8d6df; --accent:#e7bd76; --accent2:#bde3ee;
   --winter-ink:#f4ecdd; --winter-cream:#f0dbc0; --winter-paper:#112a40;
   --winter-gold:#e4bc79; --winter-blue:#162e43; --winter-border:#dac5a0;
-  --winter-font:"Fraunces",Georgia,serif;
+  --winter-font:"Inter",Arial,system-ui,sans-serif;
   --winter-display:"Berkshire Swash",Georgia,serif;
   --winter-serif:var(--winter-display);
   font-family:var(--winter-font);
@@ -780,7 +780,7 @@ body[data-park="phantasialand"][data-season="wintertraum"] #rides .ride .wtRideA
 
 
 /* TYPOGRAPHY PAIRING · big magical titles / comfortable small text.
-   Berkshire Swash for names and major headings, Fraunces for everything
+   Berkshire Swash for names and major headings, Inter for everything
    read quickly during a visit: queues, descriptions, buttons and navigation. */
 body[data-park="phantasialand"][data-season="wintertraum"]
   :is(.app,.topbar,.hero,.nightPlanner,.sectionHead,.rideTools,#rides,.ride,
@@ -847,4 +847,29 @@ body[data-park="phantasialand"][data-season="wintertraum"]
   body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumLead h2{font-size:clamp(38px,10vw,52px)}
   body[data-park="phantasialand"][data-season="wintertraum"] .npr-heading h2{font-size:clamp(38px,11vw,45px)}
   body[data-park="phantasialand"][data-season="wintertraum"] #rides .ride .wtRideActions .btn{font-size:11px!important}
+}
+
+/* Legibility comes first: no decorative typography in compact utility UI. */
+body[data-park="phantasialand"][data-season="wintertraum"]
+  :is(.topbar .mini,.hero .eyebrow,.heroIndex,.npr-overline,.npr-preview,
+      .npr-subtext,.rideTools,.rideTools input,.rideTools button,
+      .ride .zone,.ride .meta,.ride .meta .trend,.ride .wait,.ride .wait small,
+      .wintertraumKicker,.wintertraumShowTop,.wintertraumShowFoot,
+      .wintertraumShowBody>p,.wintertraumShowScore>span,
+      .wintertraumViewedCount,.wintertraumCount,.wintertraumDates,
+      .nav,.nav button,#nightPlannerSheet .npr-field,
+      #nightPlannerSheet .npr-source,#nightPlannerSheet .npr-option,
+      #nightPlannerSheet .npr-timeline-info,.queueBar){
+  font-family:var(--winter-font)!important;
+}
+body[data-park="phantasialand"][data-season="wintertraum"]
+  :is(#parkDayBtn,#nightPlannerOpen,.wintertraumRecordBtn,
+      #rides .ride .wtRideActions .btn,#nightPlannerSheet button){
+  font-family:var(--winter-font)!important;
+  font-weight:700!important;
+}
+body[data-park="phantasialand"][data-season="wintertraum"]
+  :is(.ride>.wait strong,.hero .stat strong,.wintertraumShowScore strong){
+  font-family:var(--winter-font)!important;
+  font-weight:750!important;
 }
