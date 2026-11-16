@@ -1006,11 +1006,8 @@
     document.body.dataset.park = parkSlug;
     if (parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE) document.body.dataset.season = "wintertraum";
     else delete document.body.dataset.season;
-    const isWinterExperience = parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE;
-    for (const seasonalId of ["wtOverture", "wtNightworlds", "wintertraumSection"]) {
-      const section = document.getElementById(seasonalId);
-      if (section) section.hidden = !isWinterExperience;
-    }
+    const winterShows = $("#wintertraumSection");
+    if (winterShows) winterShows.hidden = !(parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE);
     const magicTime = $("#winterMagicTime");
     if (magicTime) magicTime.textContent = WINTERTRAUM_DATE === "2026-12-31"
       ? "Silvester · Uhrzeit vor Ort prüfen" : "Regulär ca. 19:50 Uhr";
@@ -1053,7 +1050,7 @@
     const eyebrow = $("#parkDayEyebrow");
     if (eyebrow) eyebrow.textContent = park.name + (parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE ? " · WINTERTRAUM 2026/27" : " · " + dayWord);
     const dayIndex = $("#visitDayIndex");
-    if (dayIndex) dayIndex.textContent = parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE ? "01 / WINTERTRAUM" : "01 / " + (venueIsFair(parkSlug) ? "KIRMESTAG" : "PARKDAY");
+    if (dayIndex) dayIndex.textContent = parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE ? "WINTERTRAUM · DEIN PARKTAG" : "01 / " + (venueIsFair(parkSlug) ? "KIRMESTAG" : "PARKDAY");
     const archiveTitle = $("#archiveViewTitle");
     if (archiveTitle) archiveTitle.textContent = dayWord + "-Archiv";
     const archiveIntroTitle = $("#archiveIntroTitle");
@@ -2107,6 +2104,7 @@
         ? "Schausteller: " + ride.operator + " · " + ride.zone
         : ride.zone;
       const queueDisabled = closed ? " disabled" : "";
+      const isWinterRideCard = activeParkSlug === "phantasialand" && WINTERTRAUM_ACTIVE;
     const queueLabel = fair ? "FAHRT EINTRAGEN" : (closed ? "ZU" : "ANSTELLEN");
 
       return "<article class=\"ride\" data-park=\"" + escapeHtml(activeParkSlug || "phantasialand") + "\" data-world=\"" + escapeHtml(ride.id) + "\" data-detail=\"" + escapeHtml(ride.id) + "\">" +
@@ -2118,8 +2116,10 @@
           "</div>" +
           "<div class=\"meta\">" + newBadge + priceBadge + sr +
             (hasPublicLive ? "<span class=\"trend " + ride.trend + "\">" + escapeHtml(trendText) + "</span><span>·</span>" : "") +
+            (isWinterRideCard ? "<div class=\"wtRideActions\">" : "") +
             "<button class=\"btn secondary\" style=\"padding:7px 10px;font-size:11px\" data-queue=\"" + ride.id + "\"" + queueDisabled + ">" + queueLabel + "</button>" +
             "<button class=\"btn ghost\" style=\"padding:7px 4px;font-size:11px\" data-detail-btn=\"" + ride.id + "\">DETAILS</button>" +
+            (isWinterRideCard ? "</div>" : "") +
           "</div>" +
           (fair ? fairRideSpecPreview(ride) : "") +
         "</div>" +
@@ -4288,12 +4288,6 @@
   });
 
   function bindStaticEvents() {
-    // The seasonal photo essays open the existing attraction detail, never a duplicate screen.
-    $("#wtNightworlds")?.addEventListener("click", (event) => {
-      const tile = event.target.closest("[data-winter-detail]");
-      if (!tile || activeParkSlug !== "phantasialand" || !WINTERTRAUM_ACTIVE) return;
-      void openRideDetail(tile.dataset.winterDetail);
-    });
     window.NAEHEN_NIGHT_PLANNER?.init({
       onOpen: () => openSheet("nightPlannerSheet"),
       onQueue: (rideId) => {
