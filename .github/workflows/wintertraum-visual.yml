@@ -1,0 +1,33 @@
+name: Wintertraum responsive visual QA
+on:
+  push:
+    paths:
+      - 'naehen/wintertraum-experience.css'
+      - 'naehen/test-wintertraum-browser.cjs'
+      - 'naehen/index.html'
+      - '.github/workflows/wintertraum-visual.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  responsive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install browser test runner
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Verify mobile, tablet and desktop layout with Chromium
+        run: node naehen/test-wintertraum-browser.cjs
+      - name: Publish six viewport screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wintertraum-responsive-screenshots
+          path: naehen/.wintertraum-responsive-qa/*.png
+          if-no-files-found: ignore
+          retention-days: 14
