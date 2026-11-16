@@ -2,7 +2,7 @@ name: Wintertraum responsive visual QA
 on:
   push:
     paths:
-      - 'naehen/wintertraum-experience.css'
+      - 'naehen/wintertraum-atelier.css'
       - 'naehen/test-wintertraum-browser.cjs'
       - 'naehen/index.html'
       - '.github/workflows/wintertraum-visual.yml'
