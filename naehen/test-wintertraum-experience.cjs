@@ -37,7 +37,8 @@ assert.ok(css.includes('--winter-display:"Berkshire Swash",Georgia,serif'),"Disp
 assert.ok(css.includes('--winter-font:"Inter",Arial,system-ui,sans-serif'),"Small UI must use original clear Inter");
 assert.ok(css.includes('font-family:var(--winter-display)!important'),"Ride names must retain Berkshire despite theme overrides");
 assert.ok(css.includes('font-family:var(--winter-font)!important'),"Controls and labels must use Fraunces");
-assert.ok(!css.includes('system-ui,sans-serif'),"Seasonal font choices should remain consistent");
+assert.ok(!css.includes('--winter-font:"Fraunces"'),"The previous decorative body font must not override Inter");
+assert.ok(css.includes('--winter-font:"Inter",Arial,system-ui,sans-serif;'),"Readable sans-serif fallback must remain available");
 assert.ok(css.includes("@media(max-width:390px)")&&css.includes("@media(max-width:650px)"),"Responsive breakpoints");
 assert.ok(css.includes('body[data-park="phantasialand"][data-season="wintertraum"]'),"Theme must be park+season scoped");
 assert.ok(html.indexOf('night-planner.css?v=172')<html.indexOf('wintertraum-atelier.css?v=172'),"Latest skin must load last");
