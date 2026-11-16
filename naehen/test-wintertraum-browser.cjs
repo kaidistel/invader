@@ -11,8 +11,8 @@ fs.writeFileSync(fixture,html);
 function card(id,title,image,wait,zone){
  return '<article class="ride" data-park="phantasialand" data-world="'+id+'" data-detail="'+id+'">'+
  '<img class="rideArt" src="'+image+'" alt="">'+
- '<div class="rideMain"><div class="rideTop"><button class="fav" aria-label="Favorit">★</button>'+
- '<div><h3>'+title+'</h3><div class="zone">'+zone+'</div></div></div>'+
+ '<button class="fav" aria-label="Favorit">★</button>'+
+ '<div class="rideMain"><div class="rideTop"><div><h3>'+title+'</h3><div class="zone">'+zone+'</div></div></div>'+
  '<div class="meta"><span class="trend">→ stabil</span><div class="wtRideActions">'+
  '<button class="btn secondary" data-queue="'+id+'">ANSTELLEN</button>'+
  '<button class="btn ghost" data-detail-btn="'+id+'">DETAILS</button></div></div></div>'+
@@ -46,6 +46,10 @@ function card(id,title,image,wait,zone){
       hero:rect(hero),heroBg:getComputedStyle(hero).backgroundImage,
       planner:rect(document.querySelector("#nightPlanner")),
       cards:cards.map(rect),btns:cards.map(c=>[...c.querySelectorAll(".wtRideActions .btn")].map(rect)),
+      ticketBg:getComputedStyle(cards[0].querySelector(".rideMain")).backgroundImage,
+      ticketInk:getComputedStyle(cards[0].querySelector("h3")).color,
+      plannerBg:getComputedStyle(document.querySelector(".nightPlanner")).backgroundColor,
+      favorites:cards.map(c=>rect(c.querySelector(".fav"))),
       images:[...document.querySelectorAll("#rides .rideArt")].map(i=>({naturalWidth:i.naturalWidth})),
       columns:getComputedStyle(document.querySelector("#rides")).gridTemplateColumns};
    });
@@ -75,6 +79,11 @@ function card(id,title,image,wait,zone){
      assert.ok(buttons.every(x=>x.width>=65&&x.height>=43),width+"px tiny buttons");
      assert.ok(buttons[0].right<=buttons[1].x+2,width+"px buttons overlap");
      assert.ok(buttons.every(x=>x.x>=c.x-2&&x.right<=c.right+2),width+"px buttons outside card");
+   }
+   assert.ok(data.ticketBg.includes("linear-gradient"),width+"px winter ticket surface missing");
+   assert.ok(data.ticketInk.includes("20, 44, 65")||data.ticketInk.includes("20, 44, 65"),width+"px ride title should be dark ink on paper, not white on photo: "+data.ticketInk);
+   for(let i=0;i<data.favorites.length;i++){
+     assert.ok(data.favorites[i].top<data.cards[i].y+90,width+"px favorite must stay on the photo corner");
    }
    assert.ok(data.images.every(i=>i.naturalWidth>0),width+"px original photos not rendered");
    await page.screenshot({path:path.join(qaDir,"wintertraum-"+width+"px.png"),fullPage:true,animations:"disabled"});
