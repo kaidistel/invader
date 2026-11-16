@@ -14,10 +14,10 @@
   }
   const WINTERTRAUM_DATE = phantasialandLocalDate();
   const WINTERTRAUM_ACTIVE = WINTERTRAUM_DATE >= "2026-11-14" && WINTERTRAUM_DATE <= "2027-01-24";
-  const WINTERTRAUM_HERO = "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/2025/fh-winter-berlin_01.jpg";
+  const WINTERTRAUM_HERO = "./assets/wintertraum-berlin-original.jpg";
   const WINTERTRAUM_RIDE_ART = {
-    "taron": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/mystery/taron/2024/cf-winter-taron-2024_01.jpg",
-    "fly": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/fly/cf-fly-winter-2021-02.jpg",
+    "taron": "./assets/wintertraum-taron-original.jpg",
+    "fly": "./assets/wintertraum-fly-original.jpg",
     "black-mamba": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/deep-in-africa/black-mamba/cf-winter-black-mamba_05.jpg",
     "mystery-castle": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/mystery/mystery-castle/mobile/hm-winter-mystery-castle_03.jpg",
     "chiapas": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/mexico/ga-winter-mexico_04.jpg",
@@ -52,7 +52,7 @@
       heroImage: WINTERTRAUM_ACTIVE ? WINTERTRAUM_HERO : "./assets/park.webp",
       heroImageFallbackUrls: ["./assets/park.webp"],
       cardCopy: WINTERTRAUM_ACTIVE ? "Winternächte, Nachtfahrten & große Shows. Dein Wintertraum wartet." : "Live-Wartezeiten, Nähprotokoll und deine Phantasialand-Attraktionen.",
-      disclaimer: "Kein offizielles Angebot des Phantasialands."
+      disclaimer: WINTERTRAUM_ACTIVE ? "Kein offizielles Angebot des Phantasialands. Fotos: © Phantasialand." : "Kein offizielles Angebot des Phantasialands."
     }
   };
   const EXTERNAL_PARK_MODULES = [
