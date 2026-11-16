@@ -2105,13 +2105,15 @@
         : ride.zone;
       const queueDisabled = closed ? " disabled" : "";
       const isWinterRideCard = activeParkSlug === "phantasialand" && WINTERTRAUM_ACTIVE;
+      const favoriteButton = "<button class=\"fav " + (fav ? "on" : "") + "\" data-fav=\"" + ride.id + "\" aria-label=\"Favorit für " + escapeHtml(ride.name) + "\" aria-pressed=\"" + fav + "\">★</button>";
     const queueLabel = fair ? "FAHRT EINTRAGEN" : (closed ? "ZU" : "ANSTELLEN");
 
       return "<article class=\"ride\" data-park=\"" + escapeHtml(activeParkSlug || "phantasialand") + "\" data-world=\"" + escapeHtml(ride.id) + "\" data-detail=\"" + escapeHtml(ride.id) + "\">" +
         (artSrc ? "<img referrerpolicy=\"no-referrer\" class=\"rideArt\" src=\"" + escapeHtml(artSrc) + "\" alt=\"\" loading=\"lazy\" decoding=\"async\">" : "") +
+        (isWinterRideCard ? favoriteButton : "") +
         "<div class=\"rideMain\">" +
           "<div class=\"rideTop\">" +
-            "<button class=\"fav " + (fav ? "on" : "") + "\" data-fav=\"" + ride.id + "\" aria-label=\"Favorit für " + escapeHtml(ride.name) + "\" aria-pressed=\"" + fav + "\">★</button>" +
+            (isWinterRideCard ? "" : favoriteButton) +
             "<div><h3>" + escapeHtml(ride.name) + "</h3><div class=\"zone\">" + escapeHtml(operatorLine + updated) + "</div></div>" +
           "</div>" +
           "<div class=\"meta\">" + newBadge + priceBadge + sr +
