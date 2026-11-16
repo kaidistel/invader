@@ -1006,8 +1006,11 @@
     document.body.dataset.park = parkSlug;
     if (parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE) document.body.dataset.season = "wintertraum";
     else delete document.body.dataset.season;
-    const winterShows = $("#wintertraumSection");
-    if (winterShows) winterShows.hidden = !(parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE);
+    const isWinterExperience = parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE;
+    for (const seasonalId of ["wtOverture", "wtNightworlds", "wintertraumSection"]) {
+      const section = document.getElementById(seasonalId);
+      if (section) section.hidden = !isWinterExperience;
+    }
     const magicTime = $("#winterMagicTime");
     if (magicTime) magicTime.textContent = WINTERTRAUM_DATE === "2026-12-31"
       ? "Silvester · Uhrzeit vor Ort prüfen" : "Regulär ca. 19:50 Uhr";
@@ -4285,6 +4288,12 @@
   });
 
   function bindStaticEvents() {
+    // The seasonal photo essays open the existing attraction detail, never a duplicate screen.
+    $("#wtNightworlds")?.addEventListener("click", (event) => {
+      const tile = event.target.closest("[data-winter-detail]");
+      if (!tile || activeParkSlug !== "phantasialand" || !WINTERTRAUM_ACTIVE) return;
+      void openRideDetail(tile.dataset.winterDetail);
+    });
     window.NAEHEN_NIGHT_PLANNER?.init({
       onOpen: () => openSheet("nightPlannerSheet"),
       onQueue: (rideId) => {
