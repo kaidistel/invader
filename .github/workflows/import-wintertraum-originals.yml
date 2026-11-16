@@ -1,0 +1,76 @@
+name: Import original Wintertraum photos
+
+on:
+  push:
+    paths:
+      - .github/workflows/import-wintertraum-originals.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import-photos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch exact original photographs from Phantasialand press archives
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib, io, os, pathlib, urllib.request, urllib.parse, zipfile
+          assets = pathlib.Path('naehen/assets')
+          assets.mkdir(parents=True, exist_ok=True)
+          photos = [
+              ('wintertraum-taron-original.jpg', 'wintertraum', 'phantasialand-wintertraum-taron_03',
+               '438caf8f9380ea978d5a83660de0150160313da3114e965dd24daa54394c3310'),
+              ('wintertraum-fly-original.jpg', 'themenwelten', 'phantasialand-themenwelt-rookburgh_03',
+               'dd0bb50526316d79138f445efb1a2665b56de58343a4e21db6e0d1af4ebf2a9a'),
+              ('wintertraum-berlin-original.jpg', 'wintertraum', 'phantasialand-wintertraum-berlin_03',
+               'a0eeb53e81ccc29bd98f01b11261dadc870434ef1f0c9915b8e1e81ea537e6a1'),
+          ]
+          for output, group, original, expected_hash in photos:
+              archive_name = f'{original}.zip'
+              asset_path = f'files/uploads/presse/bilder/{group}/{archive_name}'
+              source_urls = [
+                  'https://static.phlcdn.de/' + asset_path,
+                  'https://www.phantasialand.de/de/presse/bildmaterial/?' +
+                      urllib.parse.urlencode({'file':asset_path}),
+              ]
+              data = None
+              errors = []
+              for url in source_urls:
+                  try:
+                      req = urllib.request.Request(url, headers={'User-Agent':'Mozilla/5.0 (compatible; NAEHEN photo asset import)','Referer':'https://www.phantasialand.de/de/presse/bildmaterial/'})
+                      with urllib.request.urlopen(req, timeout=35) as response:
+                          content = response.read(30000000)
+                      with zipfile.ZipFile(io.BytesIO(content)) as z:
+                          candidates = [n for n in z.namelist() if pathlib.Path(n).name.lower() == original.lower() + '.jpg']
+                          if not candidates:
+                              candidates = [n for n in z.namelist() if n.lower().endswith(('.jpg','.jpeg'))]
+                          if len(candidates) != 1:
+                              raise ValueError('Unexpected JPEG entries: ' + str(candidates))
+                          data = z.read(candidates[0])
+                      break
+                  except Exception as exc:
+                      errors.append(str(exc))
+              if data is None:
+                  raise RuntimeError(f'{archive_name}: official original could not be downloaded: {errors}')
+              signature = hashlib.sha256(data).hexdigest()
+              print(output, 'bytes=', len(data), 'sha256=', signature, 'exact_uploaded_match=', signature == expected_hash)
+              if signature != expected_hash:
+                  raise ValueError('The press archive is NOT byte-identical to the user-uploaded original: ' + output)
+              if not data.startswith(b'\xff\xd8\xff'):
+                  raise ValueError(output + ' is not JPEG')
+              (assets / output).write_bytes(data)
+          PY
+      - name: Commit unchanged original photographs
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add naehen/assets/wintertraum-taron-original.jpg naehen/assets/wintertraum-fly-original.jpg naehen/assets/wintertraum-berlin-original.jpg
+          if ! git diff --cached --quiet; then
+            git commit -m "assets(naehen): add original Phantasialand winter photos unchanged"
+            git push
+          fi
