@@ -28,6 +28,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: wintertraum-responsive-screenshots
-          path: naehen/.wintertraum-responsive-qa/*.png
+          path: naehen/wintertraum-responsive-qa/*.png
           if-no-files-found: ignore
           retention-days: 14
