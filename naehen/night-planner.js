@@ -94,7 +94,7 @@ function renderQuickPass(rideId){
 function renderChoices(force){
  const root=$("nightPlannerChoices");
  if(!root||!state)return;
- const rides=getRides(),signature=rides.map(r=>r.id).join("|");
+ const rides=getRides(),signature=rides.map(r=>{const d=rideData(r);return [r.id,d.hasLive,d.wait,d.isOpen].join(":");}).join("|");
  if(!force&&signature===choiceSignature)return;
  if(!force&&root.contains(document.activeElement))return;
  choiceSignature=signature;
@@ -134,10 +134,11 @@ function renderPlan(){
     (s.walk?s.walk+" Min. Weg · ":"")+(s.useQuickPass?"Quick Pass · ":"")+(s.hasLive&&!s.useQuickPass?"Live-Queue ":"geschätzte Queue ")+s.queue+" Min. + 5 Min. Fahrt";
    const button=s.kind==="ride"?'<button class="npr-inline-button" data-npr-queue="'+esc(s.id)+'" type="button">Anstellen</button>':
     '<button class="npr-inline-button" data-npr-record="'+esc(s.id)+'" type="button">Show eintragen</button>';
-   return '<li class="npr-timeline-item"><div class="npr-timeline-clock">'+esc(time)+'</div><div class="npr-timeline-info"><strong>'+esc(s.name)+'</strong><small>'+esc(description)+'</small></div>'+button+'</li>';
+   const controls='<div class="npr-timeline-actions">'+button+'<button class="npr-inline-button npr-done-button" type="button" data-npr-done="'+esc(s.id)+'" title="Nur im Nachtplan abhaken, kein Ride-Log">Abhaken</button></div>';
+   return '<li class="npr-timeline-item"><div class="npr-timeline-clock">'+esc(time)+'</div><div class="npr-timeline-info"><strong>'+esc(s.name)+'</strong><small>'+esc(description)+'</small></div>'+controls+'</li>';
   }).join("");
   const missed=plan.unplanned.map(x=>'<li><strong>'+esc(x.name)+'</strong><small>'+esc(x.reason)+'</small></li>').join("");
-  const doneHtml=plan.done.length?'<p class="npr-done"><span aria-hidden="true">✓</span> '+plan.done.length+' bereits erledigt oder abgehakt</p>':"";
+  const doneHtml=plan.done.length?'<p class="npr-done"><span aria-hidden="true">✓</span> '+plan.done.length+' bereits gefahren / gesehen oder im Plan abgehakt</p>':"";
   const warnings=plan.warnings.map(x=>'<p>'+esc(x)+'</p>').join("");
   result.innerHTML='<div class="npr-plan-summary"><span>'+inPlan+' geplant · '+done+' erledigt</span><strong>'+fmt(C.parseTime(state.start))+' – '+fmt(C.parseTime(state.end))+'</strong></div>'+
    (timeline?'<ol class="npr-timeline">'+timeline+'</ol>':'<p class="npr-empty">Noch kein Erlebnis im Zeitfenster eingeplant.</p>')+
@@ -178,6 +179,8 @@ function onActionClick(e){
  if(queue){api?.onQueue?.(queue.dataset.nprQueue);return;}
  const record=e.target.closest("[data-npr-record]");
  if(record){api?.onShow?.(record.dataset.nprRecord);return;}
+ const done=e.target.closest("[data-npr-done]");
+ if(done){state.done[done.dataset.nprDone]=true;save();renderPlan();return;}
 }
 function init(callbacks){
  if(initialized)return;
