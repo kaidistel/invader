@@ -53,6 +53,10 @@ function card(id,title,image,wait,zone){
       cardActionColor:getComputedStyle(cards[0].querySelector(".wtRideActions .btn.secondary")).color,
       mediaAnimation:getComputedStyle(document.querySelector(".nightPlanner"),"::before").animationName,
       heroAnimation:getComputedStyle(document.querySelector(".heroLine")).animationName,
+      heroFont:getComputedStyle(document.querySelector("#homeView>.hero h1")).fontFamily,
+      rideFont:getComputedStyle(cards[0].querySelector("h3")).fontFamily,
+      rideButtonFont:getComputedStyle(cards[0].querySelector(".wtRideActions .btn")).fontFamily,
+      plannerTitleFont:getComputedStyle(document.querySelector(".npr-heading h2")).fontFamily,
       favorites:cards.map(c=>rect(c.querySelector(".fav"))),
       images:[...document.querySelectorAll("#rides .rideArt")].map(i=>({naturalWidth:i.naturalWidth})),
       columns:getComputedStyle(document.querySelector("#rides")).gridTemplateColumns};
@@ -86,6 +90,8 @@ function card(id,title,image,wait,zone){
    }
    assert.ok(data.ticketBg.includes("linear-gradient"),width+"px winter ticket surface missing");
    assert.equal(data.ticketInk,"rgb(249, 237, 218)",width+"px ride title must be ivory on dark ticket: "+data.ticketInk);
+   for(const f of ["heroFont","rideFont","rideButtonFont","plannerTitleFont"])
+     assert.ok(data[f].includes("Fraunces"),width+"px inconsistent Wintertraum typography: "+f+" / "+data[f]);
    assert.equal(data.heroAnimation,"none",width+"px reduced-motion hero should not animate");
    assert.equal(data.mediaAnimation,"none",width+"px reduced-motion photo should not animate");
    assert.equal(data.cardActionColor,"rgb(20, 39, 59)",width+"px gold button must retain dark contrast");
