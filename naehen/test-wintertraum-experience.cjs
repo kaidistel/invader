@@ -12,9 +12,9 @@ assert.ok(html.indexOf('class="hero"') < html.indexOf('id="nightPlanner"') &&
 assert.ok(app.includes('WINTERTRAUM_ACTIVE')&&app.includes('wtRideActions'),"Retain conditional winter mode and ride logging");
 assert.ok(app.includes('isWinterRideCard ? favoriteButton : ""'),"Winter favorite must be on ticket, not inside details");
 assert.ok(app.includes('winterShows.hidden = !(parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE)'),"Winter show isolation");
-assert.ok(html.includes('wintertraum-atelier.css?v=172'),"New design stylesheet must be used");
+assert.ok(html.includes('wintertraum-atelier.css?v=173'),"New design stylesheet must be used");
 assert.ok(!html.includes('wintertraum-experience.css'),"Old skin must not layer over new one");
-assert.ok(sw.includes("naehen-v172")&&sw.includes("'./wintertraum-atelier.css'"),"PWA must precache newest skin");
+assert.ok(sw.includes("naehen-v173")&&sw.includes("'./wintertraum-atelier.css'"),"PWA must precache newest skin");
 for(const attr of ["ridesToday","showsToday","queueToday","srToday"])assert.ok(html.includes('id="'+attr+'"'),"Stat values intact");
 assert.equal((html.match(/data-wt-symbol=/g)||[]).length,4,"Four editorial stat ornaments");
 for(const photo of ["wintertraum-berlin-original.jpg","wintertraum-taron-original.jpg","wintertraum-fly-original.jpg"]){
@@ -32,6 +32,9 @@ for(const keyframe of ["wt-arrival","wt-photo-breathe","wt-warm-glint","wt-butto
   assert.ok(css.includes("@keyframes "+keyframe),"Missing winter animation "+keyframe);
 assert.ok(css.includes("@media(prefers-reduced-motion:reduce)")&&css.includes("animation:none!important"),"Reduced motion must disable continuous effects");
 assert.ok(!css.includes("background:#f2e9d9"),"Light cream ticket panels must be removed");
+assert.ok(css.includes('url("./assets/wintertraum-taron-original.jpg") center 43%/cover no-repeat'),"Night planner photo must remain original");
+assert.ok(css.includes('.nightPlanner::before,')&&css.includes('content:none!important;display:none!important'),"Night planner ticket pseudo elements must be disabled");
+assert.ok(!css.includes("border-left:2px dashed"),"No perforated ticket separator in night planner");
 assert.ok(html.includes("family=Berkshire+Swash")&&html.includes("family=Inter:wght@"),"Both seasonal font families must load");
 assert.ok(css.includes('--winter-display:"Berkshire Swash",Georgia,serif'),"Display headlines use Berkshire Swash");
 assert.ok(css.includes('--winter-font:"Inter",Arial,system-ui,sans-serif'),"Small UI must use original clear Inter");
@@ -41,5 +44,5 @@ assert.ok(!css.includes('--winter-font:"Fraunces"'),"The previous decorative bod
 assert.ok(css.includes('--winter-font:"Inter",Arial,system-ui,sans-serif;'),"Readable sans-serif fallback must remain available");
 assert.ok(css.includes("@media(max-width:390px)")&&css.includes("@media(max-width:650px)"),"Responsive breakpoints");
 assert.ok(css.includes('body[data-park="phantasialand"][data-season="wintertraum"]'),"Theme must be park+season scoped");
-assert.ok(html.indexOf('night-planner.css?v=172')<html.indexOf('wintertraum-atelier.css?v=172'),"Latest skin must load last");
+assert.ok(html.indexOf('night-planner.css?v=173')<html.indexOf('wintertraum-atelier.css?v=173'),"Latest skin must load last");
 console.log("PASS Wintertraum Atelier: original UX, original photos, component redesign, PWA and season isolation");
