@@ -2094,7 +2094,7 @@
       const arrow = ride.trend === "down" ? "↓" : ride.trend === "up" ? "↑" : "→";
       const trendText = !hasLive ? "warte auf Live-Daten" : closed ? "aktuell geschlossen" : ride.delta ? arrow + " " + Math.abs(ride.delta) + " min" : "→ stabil";
       const updated = hasPublicLive && ride.lastUpdated ? " · Stand " + new Date(ride.lastUpdated).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }) : "";
-      const sr = ride.singleRider ? "<span>👤 SR</span><span>·</span>" : "";
+      const sr = ride.singleRider ? "<span class=\"rideSrLabel\">👤 SR</span><span class=\"rideMetaDivider\">·</span>" : "";
       const newBadge = ride.new2026 ? "<span class=\"rideBadgeNew\">✦ NEU 2026</span>" : "";
       const fair = venueIsFair();
       const combo = fairComboForRide(ride.id);
@@ -2115,7 +2115,7 @@
             "<div><h3>" + escapeHtml(ride.name) + "</h3><div class=\"zone\">" + escapeHtml(operatorLine + updated) + "</div></div>" +
           "</div>" +
           "<div class=\"meta\">" + newBadge + priceBadge + sr +
-            (hasPublicLive ? "<span class=\"trend " + ride.trend + "\">" + escapeHtml(trendText) + "</span><span>·</span>" : "") +
+            (hasPublicLive ? "<span class=\"trend " + ride.trend + "\">" + escapeHtml(trendText) + "</span><span class=\"rideMetaDivider\">·</span>" : "") +
             (isWinterRideCard ? "<div class=\"wtRideActions\">" : "") +
             "<button class=\"btn secondary\" style=\"padding:7px 10px;font-size:11px\" data-queue=\"" + ride.id + "\"" + queueDisabled + ">" + queueLabel + "</button>" +
             "<button class=\"btn ghost\" style=\"padding:7px 4px;font-size:11px\" data-detail-btn=\"" + ride.id + "\">DETAILS</button>" +
