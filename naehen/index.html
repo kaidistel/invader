@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="NÄHEN">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=166">
+  <link rel="stylesheet" href="./styles.css?v=167">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,9 +19,9 @@
   <link href="https://fonts.cdnfonts.com/css/gang-of-three" rel="stylesheet">
   <link href="https://fonts.cdnfonts.com/css/old-london" rel="stylesheet">
   <link href="https://fonts2u.com/download/steampunk-machinery-fon-regular.font-face" rel="stylesheet">
-  <link rel="stylesheet" href="./portals.css?v=166">
-  <link rel="stylesheet" href="./night-planner.css?v=166">
-  <link rel="stylesheet" href="./wintertraum-experience.css?v=166">
+  <link rel="stylesheet" href="./portals.css?v=167">
+  <link rel="stylesheet" href="./night-planner.css?v=167">
+  <link rel="stylesheet" href="./wintertraum-atelier.css?v=167">
   <style id="phl-retired-dioramas">#rideSheet[data-park="phantasialand"] .ride3d{display:none!important;visibility:hidden!important}</style>
   <title>NÄHEN · Parkday Companion</title>
 </head>
@@ -148,10 +148,10 @@
           <button class="btn primary compact" id="parkDayBtn">PARKTAG STARTEN</button>
         </div>
         <div class="stats">
-          <div class="stat"><strong id="ridesToday">0×</strong><span id="ridesTodayLabel">genäht</span></div>
-          <div class="stat winterShowStat" id="winterShowStat" hidden><strong id="showsToday">0×</strong><span>Shows</span></div>
-          <div class="stat"><strong id="queueToday">0m</strong><span id="queueTodayLabel">echte Queue</span></div>
-          <div class="stat"><strong id="srToday">0×</strong><span id="srTodayLabel">Single Rider</span></div>
+          <div class="stat" data-wt-symbol="✦"><strong id="ridesToday">0×</strong><span id="ridesTodayLabel">genäht</span></div>
+          <div class="stat winterShowStat" id="winterShowStat" hidden data-wt-symbol="❄"><strong id="showsToday">0×</strong><span>Shows</span></div>
+          <div class="stat" data-wt-symbol="◷"><strong id="queueToday">0m</strong><span id="queueTodayLabel">echte Queue</span></div>
+          <div class="stat" data-wt-symbol="◇"><strong id="srToday">0×</strong><span id="srTodayLabel">Single Rider</span></div>
         </div>
       </div>
 
@@ -541,6 +541,6 @@
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script defer src="./night-planner-core.js?v=161"></script>
   <script defer src="./night-planner.js?v=161"></script>
-  <script defer src="./app.js?v=166"></script>
+  <script defer src="./app.js?v=167"></script>
 </body>
 </html>
