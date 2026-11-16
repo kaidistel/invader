@@ -31,11 +31,11 @@ assert.equal(core.buildSchedule({...base,entries:[ride({wait:190})]}).unplanned.
 assert.equal(core.buildSchedule({...base,entries:[show("magic","19:50","Berlin",10,15)],isToday:true,nowMinutes:1190}).unplanned.length,1);
 for(const id of ["nightPlanner","nightPlannerSheet","nightPlannerChoices","nightPlannerResult","nightPlannerPreview","rideQuickPass"])assert(html.includes('id="'+id+'"'),"Missing HTML ID "+id);
 for(const file of ["night-planner-core.js","night-planner.js"])assert(html.includes(file+"?v=161"),"Missing asset "+file);
-assert(html.includes("night-planner.css?v=163"),"Missing updated winter stylesheet");
+assert(html.includes("night-planner.css?v=164"),"Missing updated winter stylesheet");
 assert(app.includes("NAEHEN_NIGHT_PLANNER?.init"),"App init missing");
 assert(app.includes("refreshNightPlanner();"),"Live update missing");
 assert(app.includes("ice[\\s-]*skate"),"Skate hire not filtered");
-assert(sw.includes("naehen-v163")&&sw.includes("'./night-planner-core.js'"),"Old cache");
+assert(sw.includes("naehen-v164")&&sw.includes("'./night-planner-core.js'"),"Old cache");
 assert(ui.includes("data-npr-quick")&&ui.includes("data-npr-showtime"),"Missing planner inputs");
 assert(css.includes(".npr-option-grid")&&css.includes(".wintertraumLead"),"Missing planner styles");
 console.log("PASS Night Ride Planner: scheduled shows, queue, walking, Quick Pass, closures, inputs, cache");
