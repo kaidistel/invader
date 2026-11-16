@@ -7,7 +7,7 @@ body[data-park="phantasialand"][data-season="wintertraum"] {
   --text:#f8f2e5; --muted:#c8d6df; --accent:#e7bd76; --accent2:#bde3ee;
   --winter-ink:#f4ecdd; --winter-cream:#f0dbc0; --winter-paper:#112a40;
   --winter-gold:#e4bc79; --winter-blue:#162e43; --winter-border:#dac5a0;
-  --winter-font:"Fraunces",Georgia,serif;
+  --winter-font:"Berkshire Swash",Georgia,serif;
   --winter-serif:var(--winter-font);
   font-family:var(--winter-font);
   font-optical-sizing:auto;
@@ -832,4 +832,47 @@ body[data-park="phantasialand"][data-season="wintertraum"]
   body[data-park="phantasialand"][data-season="wintertraum"] #homeView>.hero h1{font-size:clamp(44px,12vw,52px)}
   body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumLead h2{font-size:clamp(38px,10vw,52px)}
   body[data-park="phantasialand"][data-season="wintertraum"] .npr-heading h2{font-size:clamp(38px,11vw,45px)}
+}
+
+
+/* Berkshire Swash has one authentic 400-weight face.
+   Avoid browser-generated fake bold strokes; use scale and contrast instead. */
+body[data-park="phantasialand"][data-season="wintertraum"] 
+  :is(.brand,.hero h1,.sectionHead h2,.npr-heading h2,.wintertraumShowHeading h3,
+      .wintertraumLead h2,.wintertraumShow h4,.wintertraumShowScore strong,
+      .hero .stat strong){
+  font-family:var(--winter-font)!important;
+  font-weight:400!important;
+  letter-spacing:0;
+  line-height:1.14;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] #rides .ride h3,
+body[data-park="phantasialand"][data-season="wintertraum"] #rideSheet #rideTitle{
+  font-weight:400!important;
+  letter-spacing:0!important;
+  line-height:1.17!important;
+}
+body[data-park="phantasialand"][data-season="wintertraum"]
+  :is(.wtRideActions .btn,.wintertraumRecordBtn,.nav button,#nightPlannerOpen,#parkDayBtn){
+  font-weight:400!important;
+  font-size:max(12px,1em);
+  line-height:1.3;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] #rides .ride .wtRideActions .btn{
+  font-size:13px!important;
+  font-weight:400!important;
+  letter-spacing:0!important;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] .wait strong{
+  font-weight:400!important;
+}
+body[data-park="phantasialand"][data-season="wintertraum"]
+  :is(.ride .zone,.wintertraumShowTop,.wintertraumShowFoot,.wintertraumViewedCount,.npr-subtext){
+  font-weight:400;
+  font-size:max(12px,1em);
+}
+@media(max-width:390px){
+  body[data-park="phantasialand"][data-season="wintertraum"] #rides .ride .wtRideActions .btn{
+    font-size:12px!important;
+  }
 }
