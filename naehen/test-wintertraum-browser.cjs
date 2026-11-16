@@ -2,7 +2,7 @@
 // Real responsive browser test. Uses original local JPG files, not mocks for imagery.
 const fs=require("node:fs"),path=require("node:path"),assert=require("node:assert/strict");
 const {chromium}=require("playwright");
-const root=__dirname,qaDir=path.join(root,".wintertraum-responsive-qa");
+const root=__dirname,qaDir=path.join(root,"wintertraum-responsive-qa");
 fs.mkdirSync(qaDir,{recursive:true});
 const fixture=path.join(root,".wintertraum-responsive-fixture.html");
 let html=fs.readFileSync(path.join(root,"index.html"),"utf8");
