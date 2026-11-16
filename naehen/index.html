@@ -11,6 +11,7 @@
   <link rel="icon" href="./icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./styles.css?v=163">
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Staatliches&family=Stardos+Stencil:wght@400;700&family=Bangers&family=Bebas+Neue&family=Cinzel+Decorative:wght@400;700&family=Graduate&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Black+Ops+One&family=Bungee&family=Bungee+Shade&family=Chango&family=Creepster&family=Diplomata+SC&family=Ewert&family=Fascinate+Inline&family=Faster+One&family=Limelight&family=Metal+Mania&family=Monoton&family=Nosifer&family=Pirata+One&family=Poiret+One&family=Rubik+Glitch&family=Rye&family=Special+Elite&family=Trade+Winds&family=UnifrakturCook:wght@700&family=Wallpoet&family=Zen+Tokyo+Zoo&display=swap" rel="stylesheet">
@@ -20,6 +21,7 @@
   <link href="https://fonts2u.com/download/steampunk-machinery-fon-regular.font-face" rel="stylesheet">
   <link rel="stylesheet" href="./portals.css?v=163">
   <link rel="stylesheet" href="./night-planner.css?v=163">
+  <link rel="stylesheet" href="./wintertraum-experience.css?v=164">
   <style id="phl-retired-dioramas">#rideSheet[data-park="phantasialand"] .ride3d{display:none!important;visibility:hidden!important}</style>
   <title>NÄHEN · Parkday Companion</title>
 </head>
@@ -137,6 +139,30 @@
     </header>
 
     <section id="homeView">
+      <!-- Seasonal Wintertraum editorial entrance. Only active inside Phantasialand Wintertraum. -->
+      <section class="wtOverture" id="wtOverture" aria-labelledby="wtOvertureTitle" hidden>
+        <div class="wtOvertureImage" aria-hidden="true"></div>
+        <div class="wtOvertureContent">
+          <div class="wtOvertureTop">
+            <span class="wtOvertureSignature">PHANTASIALAND <span aria-hidden="true">·</span> WINTERTRAUM</span>
+            <span class="wtOvertureEdition">SAISON 2026 / 27</span>
+          </div>
+          <div class="wtOvertureStory">
+            <span class="wtOvertureEyebrow"><span class="wtOvertureSpark" aria-hidden="true">✦</span> EIN ABEND VOLLER LICHT</span>
+            <h1 id="wtOvertureTitle">Ein Winter.<br><em>Tausend Lichter.</em></h1>
+            <p>Wenn Berlin zu leuchten beginnt und Achterbahnen durch die Dunkelheit rauschen, wird aus einem Parktag ein Wintertraum.</p>
+            <div class="wtOvertureActions">
+              <a class="wtPrimaryLink" href="#nightPlanner">Nachtfahrten planen <span aria-hidden="true">↗</span></a>
+              <a class="wtSecondaryLink" href="#rides">Attraktionen entdecken <span aria-hidden="true">↓</span></a>
+            </div>
+          </div>
+          <div class="wtOvertureFooter">
+            <span>14. NOVEMBER 2026 — 24. JANUAR 2027</span>
+            <span>LICHTERWELTEN <span aria-hidden="true">·</span> NACHTFAHRTEN <span aria-hidden="true">·</span> SHOWS</span>
+          </div>
+        </div>
+      </section>
+
       <div class="hero"><div class="heroIndex" id="visitDayIndex" aria-hidden="true">01 / PARKDAY</div>
         <div class="heroLine">
           <div>
@@ -156,14 +182,35 @@
 
       <section class="nightPlanner" id="nightPlanner" aria-labelledby="nightPlannerTitle" hidden>
         <div class="npr-heading">
-          <div><div class="npr-overline">Wintertraum · After Dark</div>
-            <h2 id="nightPlannerTitle">Die letzten drei Stunden.</h2>
-            <p>Fahrten und Shows zu einem realistischen Abendplan verbinden.</p></div>
+          <div><div class="npr-overline">NACHTFAHRTEN · DEIN ZEITPLAN</div>
+            <h2 id="nightPlannerTitle">Die Nacht gehört dir.</h2>
+            <p>Dein Wintertraum-Finale – geplant mit Wegen, Wartezeiten und Shows.</p></div>
           <span class="npr-moon" aria-hidden="true">☾</span>
         </div>
         <div class="npr-preview" id="nightPlannerPreview" aria-live="polite">Dein Abend wird geplant.</div>
-        <button class="npr-button" id="nightPlannerOpen" type="button">Nachtplan bearbeiten</button>
-        <small class="npr-subtext">Mit Live-Queue, Showzeiten vor Ort, Fußwegen und optionalem Quick Pass.</small>
+        <button class="npr-button" id="nightPlannerOpen" type="button">Meinen Abend planen <span aria-hidden="true">↗</span></button>
+        <small class="npr-subtext">Live-Queues, 5–10 Minuten Fußwege und Quick Pass – damit mehr Zeit fürs Erleben bleibt.</small>
+      </section>
+
+      <section class="wtNightworlds" id="wtNightworlds" aria-labelledby="wtNightworldsTitle" hidden>
+        <div class="wtChapter">
+          <span class="wtChapterIndex">01 / NACHTFAHRTEN</span>
+          <div class="wtChapterLine">
+            <h2 id="wtNightworldsTitle">Wenn die Welten <em>leuchten.</em></h2>
+            <p>Dieselben Achterbahnen. Ein völlig anderes Gefühl im Dunkeln.</p>
+          </div>
+        </div>
+        <div class="wtWorldGrid">
+          <button class="wtWorld wtWorld--taron" type="button" data-winter-detail="taron" aria-label="Taron im Wintertraum entdecken">
+            <img src="./assets/wintertraum-taron-original.jpg" alt="" loading="lazy" decoding="async">
+            <span class="wtWorldOverlay"><span class="wtWorldCaption">KLUGHEIM · MYSTERY</span><strong>Taron</strong><span class="wtWorldLink">Nachtfahrt entdecken <span aria-hidden="true">↗</span></span></span>
+          </button>
+          <button class="wtWorld wtWorld--fly" type="button" data-winter-detail="fly" aria-label="F.L.Y. im Wintertraum entdecken">
+            <img src="./assets/wintertraum-fly-original.jpg" alt="" loading="lazy" decoding="async">
+            <span class="wtWorldOverlay"><span class="wtWorldCaption">ROOKBURGH · BERLIN</span><strong>F.L.Y.</strong><span class="wtWorldLink">Nachtfahrt entdecken <span aria-hidden="true">↗</span></span></span>
+          </button>
+        </div>
+        <p class="wtWorldCredit">Originalfotografien: © Phantasialand</p>
       </section>
 
       <section class="venueSpecialMap hidden" id="venueSpecialMap" aria-labelledby="venueMapTitle">
@@ -190,12 +237,12 @@
       <!-- Phantasialand-only Wintertraum shows: tracked separately from rides and queue times. -->
       <section class="wintertraumSection" id="wintertraumSection" aria-labelledby="wintertraumTitle" hidden>
         <header class="wintertraumLead">
-          <div class="wintertraumKicker">✧ PHANTASIALAND · WINTERTRAUM 2026/27</div>
-          <h2 id="wintertraumTitle">Winterabende <em>erleben.</em></h2>
-          <p>Vier Outdoor-Shows, ihre Schauplätze und dein persönlicher Show-Count.</p>
+          <div class="wintertraumKicker">WINTERTRAUM · DAS GRANDE FINALE</div>
+          <h2 id="wintertraumTitle">Die Nacht hat <em>ihren Zauber.</em></h2>
+          <p>Von den ersten Lichtern in Berlin bis zum großen Finale: vier Momente, die bleiben.</p>
           <div class="wintertraumDates"><span>❄ 14. NOV 2026 – 24. JAN 2027</span><span>◷ REGULÄR 11:00–20:00 UHR</span></div>
         </header>
-        <div class="wintertraumShowHeading"><div><span>SHOWS &amp; ZEITEN</span><h3>Vier Abendshows</h3></div><span class="wintertraumCount">04 OUTDOOR-SHOWS</span></div>
+        <div class="wintertraumShowHeading"><div><span>02 / LICHT &amp; MUSIK</span><h3>Die großen Wintershows</h3></div><span class="wintertraumCount">VIER OUTDOOR-ERLEBNISSE</span></div>
         <div class="wintertraumShowScore"><span>DEIN WINTERTRAUM-COUNT</span><strong id="winterExperienceTotal">0</strong><small id="winterExperienceBreakdown">0 Rides + 0 Shows</small></div>
         <div class="wintertraumShows">
           <article class="wintertraumShow wintertraumShow--kaiser">
