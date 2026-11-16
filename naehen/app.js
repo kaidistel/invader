@@ -22,7 +22,8 @@
     "mystery-castle": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/mystery/mystery-castle/mobile/hm-winter-mystery-castle_03.jpg",
     "chiapas": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/mexico/ga-winter-mexico_04.jpg",
     "wellenflug": "https://www.phantasialand.de/files/uploads/presse/bilder/wintertraum/ga-phantasialand-wintertraum-berlin-wellenflug_01.jpg",
-    "maus-au-chocolat": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/maus-au-chocolat/gap-maus-au-chocolat-winter_01.jpg"
+    "maus-au-chocolat": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/maus-au-chocolat/gap-maus-au-chocolat-winter_01.jpg",
+    "berliner-eislaufen": "./assets/berliner-eislaufen-original.jpg"
   };
   const WINTERTRAUM_SHOWS = Object.freeze({
     "kaiserplatz-illumination": "Kaiserplatz Illumination",
@@ -182,6 +183,7 @@
     { id: "winjas-force", name: "Winja’s Force", zone: "Fantasy" },
     { id: "geister-rikscha", name: "Geister Rikscha", zone: "China Town" },
     { id: "maus-au-chocolat", name: "Maus au Chocolat", zone: "Berlin" },
+    ...(WINTERTRAUM_ACTIVE ? [{ id: "berliner-eislaufen", name: "Berliner Eislaufen", zone: "Berlin" }] : []),
     { id: "crazy-bats", name: "Crazy Bats", zone: "Fantasy" },
     { id: "die-3-mausketiere", name: "Die 3 Mausketiere", zone: "Berlin" },
     { id: "deep-in-africa-adventure-trail", name: "Deep in Africa – Adventure Trail", zone: "Deep in Africa" },
