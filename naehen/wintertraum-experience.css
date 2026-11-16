@@ -126,6 +126,7 @@ body[data-park="phantasialand"][data-season="wintertraum"] #homeView>.hero .wint
 
 /* Night planner feels like an invitation; same actual controls underneath. */
 body[data-park="phantasialand"][data-season="wintertraum"] .nightPlanner{
+  position:relative;isolation:isolate;overflow:hidden;
   display:grid;grid-template-columns:minmax(0,1fr) minmax(0,41%);
   grid-template-rows:auto auto auto auto;
   gap:0 clamp(18px,3vw,30px);
