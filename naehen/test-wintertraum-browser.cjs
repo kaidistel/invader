@@ -98,7 +98,7 @@ function card(id,title,image,wait,zone){
    for(const f of ["heroFont","rideFont","plannerTitleFont"])
      assert.ok(data[f].includes("Berkshire Swash"),width+"px missing display font: "+f+" / "+data[f]);
    for(const f of ["rideButtonFont","zoneFont","waitFont","statFont","previewFont","plannerButtonFont"])
-     assert.ok(data[f].includes("Fraunces"),width+"px small text should use Fraunces: "+f+" / "+data[f]);
+     assert.ok(data[f].includes("Inter"),width+"px compact utility text should use clear Inter: "+f+" / "+data[f]);
    assert.equal(data.heroAnimation,"none",width+"px reduced-motion hero should not animate");
    assert.equal(data.mediaAnimation,"none",width+"px reduced-motion photo should not animate");
    assert.equal(data.cardActionColor,"rgb(20, 39, 59)",width+"px gold button must retain dark contrast");
