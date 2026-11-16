@@ -45,6 +45,8 @@ function card(id,title,image,wait,zone){
      return {viewport:window.innerWidth,docWidth:document.documentElement.scrollWidth,
       hero:rect(hero),heroBg:getComputedStyle(hero).backgroundImage,
       planner:rect(document.querySelector("#nightPlanner")),
+      plannerImage:getComputedStyle(document.querySelector("#nightPlanner")).backgroundImage,
+      plannerAfterContent:getComputedStyle(document.querySelector("#nightPlanner"),"::after").content,
       cards:cards.map(rect),btns:cards.map(c=>[...c.querySelectorAll(".wtRideActions .btn")].map(rect)),
       ticketBg:getComputedStyle(cards[0].querySelector(".rideMain")).backgroundImage,
       ticketInk:getComputedStyle(cards[0].querySelector("h3")).color,
@@ -84,6 +86,8 @@ function card(id,title,image,wait,zone){
    assert.ok(data.hero.width>width*.78&&data.hero.height>390,width+"px hero not prominent");
    assert.ok(data.heroBg.includes("wintertraum-berlin-original.jpg"),width+"px Berlin image absent");
    assert.ok(data.planner.width>width*.78,width+"px planner width wrong");
+   assert.ok(data.plannerImage.includes("wintertraum-taron-original.jpg"),width+"px original Taron picture must be integrated in planner background");
+   assert.equal(data.plannerAfterContent,"none",width+"px evening planner should no longer have a tear-off ticket divider");
    assert.equal(data.cards.length,2);
    for(let i=0;i<data.cards.length;i++){
      const c=data.cards[i],buttons=data.btns[i];
