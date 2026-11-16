@@ -91,7 +91,7 @@ function card(id,title,image,wait,zone){
    assert.ok(data.ticketBg.includes("linear-gradient"),width+"px winter ticket surface missing");
    assert.equal(data.ticketInk,"rgb(249, 237, 218)",width+"px ride title must be ivory on dark ticket: "+data.ticketInk);
    for(const f of ["heroFont","rideFont","rideButtonFont","plannerTitleFont"])
-     assert.ok(data[f].includes("Fraunces"),width+"px inconsistent Wintertraum typography: "+f+" / "+data[f]);
+     assert.ok(data[f].includes("Berkshire Swash"),width+"px inconsistent Wintertraum typography: "+f+" / "+data[f]);
    assert.equal(data.heroAnimation,"none",width+"px reduced-motion hero should not animate");
    assert.equal(data.mediaAnimation,"none",width+"px reduced-motion photo should not animate");
    assert.equal(data.cardActionColor,"rgb(20, 39, 59)",width+"px gold button must retain dark contrast");
