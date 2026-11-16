@@ -656,6 +656,7 @@ body[data-park="phantasialand"][data-season="wintertraum"] #nightPlannerSheet .n
     align-items:flex-start;
   }
   body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShowHeading h3{font-size:51px}
+  body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumCount{display:none}
   body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShowBody{padding:19px}
   body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumShow h4{font-size:44px}
   body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumRecordBtn{width:100%}
