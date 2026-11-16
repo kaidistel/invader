@@ -83,7 +83,7 @@ function card(id,title,image,wait,zone){
    assert.ok(data.ticketBg.includes("linear-gradient"),width+"px winter ticket surface missing");
    assert.ok(data.ticketInk.includes("20, 44, 65")||data.ticketInk.includes("20, 44, 65"),width+"px ride title should be dark ink on paper, not white on photo: "+data.ticketInk);
    for(let i=0;i<data.favorites.length;i++){
-     assert.ok(data.favorites[i].top<data.cards[i].y+90,width+"px favorite must stay on the photo corner");
+     assert.ok(data.favorites[i].y<data.cards[i].y+90,width+"px favorite must stay on the photo corner");
    }
    assert.ok(data.images.every(i=>i.naturalWidth>0),width+"px original photos not rendered");
    await page.screenshot({path:path.join(qaDir,"wintertraum-"+width+"px.png"),fullPage:true,animations:"disabled"});
