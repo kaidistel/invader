@@ -44,5 +44,5 @@ const iceImage = fs.readFileSync(path.join(root, "assets/berliner-eislaufen-orig
 assert.ok(iceImage.length > 100000 && iceImage[0] === 0xff && iceImage[1] === 0xd8, "Official Berliner Eislaufen photo must be an actual committed JPEG");
 assert.ok(app.includes('"berliner-eislaufen": "./assets/berliner-eislaufen-original.jpg"'), "Seasonal ice rink photo mapping missing");
 assert.ok(app.includes('{ id: "berliner-eislaufen", name: "Berliner Eislaufen", zone: "Berlin" }'), "Berliner Eislaufen must be listed as seasonal experience");
-assert.ok(app.includes('ice[\\\\s-]*skate'), "Ice Skate Hire rental listing must remain excluded");
+assert.ok(app.includes('ice[\\s-]*skate'), "Ice Skate Hire rental listing must remain excluded");
 console.log("PASS Phantasialand Wintertraum: four recordable bottom shows, tracked visits, count, archive, overlays, version");
