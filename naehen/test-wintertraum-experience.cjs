@@ -26,7 +26,7 @@ for(const token of ["--winter-cream","#homeView>.hero .stat","#rides .ride .ride
  assert.ok(css.includes(token),"Missing redesigned component "+token);
 }
 assert.ok(css.includes("linear-gradient(145deg,#19374c,#0d2438 76%,#0a1c30)"),"Attraction ticket must have dark blue information section");
-assert.ok(css.includes("background:linear-gradient(140deg,#163047,#091c30 82%)"),"Night planner must be midnight blue");
+assert.ok(css.includes("linear-gradient(90deg,rgba(6,20,36,.98)") && css.includes('url("./assets/wintertraum-taron-original.jpg") center 43%/cover no-repeat'),"Night planner must use a unified dark photo background");
 assert.ok(css.includes("color:#f9edda"),"Ride title must be high-contrast warm ivory");
 for(const keyframe of ["wt-arrival","wt-photo-breathe","wt-warm-glint","wt-button-light"])
   assert.ok(css.includes("@keyframes "+keyframe),"Missing winter animation "+keyframe);
