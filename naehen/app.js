@@ -1753,6 +1753,13 @@
       headline.textContent = sessions.length ? "Letzte Nähbilanz steht." : "Heute wird genäht.";
       $("#logDayLabel").textContent = sessions.length ? "LETZTER " + dayWord : "NOCH NICHT GESTARTET";
     }
+    if (activeParkSlug === "phantasialand" && WINTERTRAUM_ACTIVE) {
+      const subtitle = $("#parkDayEyebrow");
+      if (subtitle) subtitle.textContent = "PHANTASIALAND · WINTERTRAUM";
+      headline.textContent = parkDay
+        ? "Wintertraum seit " + new Date(parkDay.started_at || parkDay.startedAt || Date.now()).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })
+        : "Dein Wintertraum.";
+    }
   }
 
   function manualFairPrice(priceKey) {
