@@ -97,6 +97,8 @@
     const normalizedName = String(name || "").toLowerCase().trim();
     const normalizedId = String(id || "");
     const module = parkModuleFor(parkSlug);
+    // "Ice Skate Hire" is a rental listing, not an attraction.
+    if (parkSlug === "phantasialand" && /ice[\s-]*skate[\s-]*(?:hire|rental)|schlittschuh[\s-]*(?:verleih|ausleihe)|eislaufschuhverleih/i.test(normalizedName + " " + normalizedId)) return true;
     // Winter-only closures must not appear as available ride opportunities.
     // Archived visits remain untouched; summer offers return after the season.
     if (parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE &&
@@ -2034,7 +2036,18 @@
         '">' + escapeHtml(label) + ' <span>' + count + '</span></button>';
     }).join('');
   }
+  function refreshNightPlanner() {
+    window.NAEHEN_NIGHT_PLANNER?.refresh({
+      parkSlug: activeParkSlug,
+      winter: WINTERTRAUM_ACTIVE,
+      rides: rides,
+      sessions: sessions,
+      parkDay: parkDay
+    });
+  }
+
   function renderRides() {
+    refreshNightPlanner();
     const container = $("#rides");
     if (!container) return;
 
@@ -3759,6 +3772,7 @@
   async function openRideDetail(rideId) {
     selectedDetailRide = rides.find((ride) => ride.id === rideId) || fallbackRidesFor().find((ride) => ride.id === rideId);
     if (!selectedDetailRide) return;
+    window.NAEHEN_NIGHT_PLANNER?.renderQuickPass(selectedDetailRide.id);
 
     const world = worldForRide(selectedDetailRide.id);
     const artSrc = wintertraumRideImage(selectedDetailRide.id) || (world ? (world.artUrl || (world.art ? "./assets/" + world.art + ".webp" : "")) : "");
@@ -4269,6 +4283,25 @@
   });
 
   function bindStaticEvents() {
+    window.NAEHEN_NIGHT_PLANNER?.init({
+      onOpen: () => openSheet("nightPlannerSheet"),
+      onQueue: (rideId) => {
+        if (!parkDay) {
+          toast("Starte zuerst deinen Parktag, um den Queue-Timer zu nutzen.");
+          return;
+        }
+        closeSheet("nightPlannerSheet");
+        openQueue(rideId);
+      },
+      onShow: (showId) => {
+        if (!parkDay) {
+          toast("Starte zuerst deinen Parktag, um eine Show einzutragen.");
+          return;
+        }
+        closeSheet("nightPlannerSheet");
+        void recordWinterShow(showId);
+      }
+    });
     $("#announcementRefresh")?.addEventListener("click", () => loadAnnouncementInbox());
     $("#announcementReloadRecipients")?.addEventListener("click", () => loadAnnouncementRecipients());
     $("#adminActivityRefresh")?.addEventListener("click", () => loadAdminActivity());
