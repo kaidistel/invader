@@ -53,7 +53,7 @@ body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumLead{
  min-height:0;padding:25px 22px 22px;border:1px solid #4e5863;border-radius:10px;
  box-shadow:none;
  background:linear-gradient(90deg,rgba(13,22,33,.89),rgba(13,22,33,.65)),
- url("https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/2024/cf-berlin-winter-2024_03.jpg") center 42%/cover;
+ url("./assets/wintertraum-berlin-original.jpg") center 42%/cover;
 }
 body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumLead::before{display:none;}
 body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumKicker{
