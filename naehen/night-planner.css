@@ -231,6 +231,9 @@ body[data-park="phantasialand"][data-season="wintertraum"] .wintertraumNotice{
 .npr-inline-button{align-self:center;padding:8px 10px;min-height:35px;border:1px solid #67717a;
  border-radius:5px;background:#273643;color:#f2eee6;font:600 10px system-ui,sans-serif;cursor:pointer;}
 .npr-inline-button:hover{background:#384957;}
+.npr-timeline-actions{display:flex;flex-direction:column;align-items:stretch;gap:5px;justify-content:center;min-width:90px;}
+.npr-done-button{background:transparent;border-color:#465b68;color:#bdc9cb;min-height:31px;}
+.npr-done-button:hover{background:#30404c;color:#f3f0e9;}
 .npr-done{color:#bcd2c3;font-size:12px!important;}
 .npr-unplanned{padding:12px 13px;border:1px solid #665546;border-radius:7px;background:#282821;margin:12px 0;}
 .npr-unplanned h3{margin:0 0 8px;font:700 12px system-ui,sans-serif;color:#f3d0aa;}
