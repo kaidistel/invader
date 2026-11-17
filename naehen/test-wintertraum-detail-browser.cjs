@@ -54,6 +54,10 @@ cases.push({width:375,ride:"fly"},{width:1024,ride:"fly"});
       artWidth:sel("#worldArtImage").naturalWidth,artHeight:sel("#worldArtImage").naturalHeight,
       cardBackground:getComputedStyle(c).backgroundImage,
       titleFont:getComputedStyle(sel("#rideTitle")).fontFamily,
+      titleFill:getComputedStyle(sel("#rideTitle")).webkitTextFillColor,
+      titleClip:getComputedStyle(sel("#rideTitle")).clipPath,
+      titleBefore:getComputedStyle(sel("#rideTitle"),"::before").content,
+      factsBg:getComputedStyle(sel("#rideExtraFacts")).backgroundColor,
       infoFont:getComputedStyle(sel("#rideDetailStatus")).fontFamily,
       waitFont:getComputedStyle(sel("#rideDetailWait")).fontFamily,
       buttonFont:getComputedStyle(sel("#rideQueueBtn")).fontFamily,
@@ -76,6 +80,11 @@ cases.push({width:375,ride:"fly"},{width:1024,ride:"fly"});
    assert.ok(data.infoFont.includes("Inter")&&data.waitFont.includes("Inter")&&data.buttonFont.includes("Inter"),p+" body UI must use readable Inter");
    assert.ok(data.title.y>=data.sheet.y+120,p+" title is hidden behind photo");
    assert.ok(data.close.x>=data.sheet.x&&data.close.right<=data.sheet.right+2,p+" close button outside sheet");
+   assert.ok(data.close.y>=data.sheet.y&&data.close.y<=data.sheet.y+70,p+" close button must be at top of photo: "+data.close.y);
+   assert.equal(data.titleFill,"rgb(255, 242, 221)",p+" title should not inherit invisible steampunk text fill: "+data.titleFill);
+   assert.equal(data.titleClip,"none",p+" no old jagged title clipping");
+   assert.equal(data.titleBefore,"none",p+" no summer-only title ornament pseudo element");
+   assert.ok(data.factsBg==="rgba(0, 0, 0, 0)"||data.factsBg==="transparent",p+" tech facts wrapper should be clean: "+data.factsBg);
    assert.ok(data.buttonHeight>=44,p+" queue action too small");
    assert.ok(data.cardBackground.includes("linear-gradient"),p+" missing winter sheet background");
    assert.ok(data.waitBg.includes("linear-gradient"),p+" missing highlighted wait information");
