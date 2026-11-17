@@ -37,13 +37,20 @@
     !app.classList.contains("hidden");
 
   const winterDetailOpen = () =>
-    !!document.querySelector("#rideSheet.show, #nightPlannerSheet.show");
+    !!document.querySelector(
+      '#rideSheet.show, #nightPlannerSheet.show, ' +
+      '#recapSheet.show[data-wintertraum="true"], ' +
+      '#archiveDetailSheet.show[data-wintertraum="true"]'
+    );
 
-  // A ride or evening-plan sheet is part of the winter experience.
-  // Pause for account/settings dialogs, the install gate and unrelated overlays.
+  // Ride, planner, Wintertraum recap and seasonal archive all belong to
+  // the winter experience. Nonseasonal account/settings sheets still pause snow.
   const modalBlocksSnow = () =>
-    !!document.querySelector(".gate.show,.auth.show,.sheet.show:not(#rideSheet):not(#nightPlannerSheet)") ||
-    (document.body.classList.contains("modalOpen") && !winterDetailOpen());
+    !!document.querySelector(
+      '.gate.show,.auth.show,.sheet.show:not(#rideSheet):not(#nightPlannerSheet)' +
+      ':not(#recapSheet[data-wintertraum="true"])' +
+      ':not(#archiveDetailSheet[data-wintertraum="true"])'
+    ) || (document.body.classList.contains("modalOpen") && !winterDetailOpen());
 
   const shouldAnimate = () => winterParkVisible() && enabled &&
     !motion.matches && !document.hidden && !modalBlocksSnow();
