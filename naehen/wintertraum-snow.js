@@ -1,4 +1,4 @@
-/* NÄHEN Wintertraum — light, opt-in-controllable atmospheric snow.
+/* NÄHEN Wintertraum — slightly richer, opt-in-controllable atmospheric snow.
    Single transparent canvas, no library, no DOM elements per snowflake.
    Automatically pauses when off-screen, hidden, in a modal or reduced motion. */
 (() => {
@@ -44,10 +44,10 @@
   const random = (min, max) => min + Math.random() * (max - min);
 
   function makeFlake(enterFromTop = false) {
-    const size = random(.8, 2.45);
+    const size = random(.95, 2.7);
     return {
       x: random(0, width), y: enterFromTop ? random(-height * .3, -3) : random(0, height),
-      radius: size, opacity: random(.24, .66), fall: random(13, 31) * (2.2 / (size + .7)),
+      radius: size, opacity: random(.30, .72), fall: random(13, 31) * (2.2 / (size + .7)),
       sway: random(.7, 5), phase: random(0, Math.PI * 2), drift: random(-2.5, 1.5)
     };
   }
@@ -66,8 +66,8 @@
     canvas.height = Math.round(height * ratio);
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
 
-    // ~22 flakes on a typical phone, max 68 on large desktop monitors.
-    const count = Math.min(68, Math.max(16, Math.round((width * height) / 15000)));
+    // Around 27-30 flakes on a typical phone, max 80 on large desktop monitors.
+    const count = Math.min(80, Math.max(18, Math.round((width * height) / 12500)));
     if (!flakes.length) {
       flakes = Array.from({ length: count }, () => makeFlake());
     } else {
