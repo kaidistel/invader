@@ -2584,8 +2584,14 @@
     const parkSlug = day?.park_slug || activeParkSlug || "phantasialand";
     const parkName = PARKS[parkSlug]?.name || "Park";
     const dayWord = visitDayWord(parkSlug);
+    const winterDay = isWintertraumDay(day, parkSlug);
+    const archiveSheet = $("#archiveDetailSheet");
+    if (archiveSheet) {
+      if (winterDay) archiveSheet.dataset.wintertraum = "true";
+      else delete archiveSheet.dataset.wintertraum;
+    }
     const archiveEyebrow = $("#archiveDetailEyebrow");
-    if (archiveEyebrow) archiveEyebrow.textContent = "Gespeicherter " + dayWord;
+    if (archiveEyebrow) archiveEyebrow.textContent = winterDay ? "WINTERTRAUM · DEIN ARCHIV" : "Gespeicherter " + dayWord;
     const supportsPostedWait = PARKS[parkSlug]?.supportsPostedWait !== false;
     const fact = buildDayFacts(day, entry.sessions, parkSlug);
     const detail = $("#archiveDetailContent");
@@ -2654,6 +2660,9 @@
       : "<div class=\"empty\">Keine Fahrten für diesen Tag gespeichert.</div>";
 
     detail.innerHTML =
+      (winterDay ? '<div class="wtArchiveIntro"><span>WINTERTRAUM 2026/27 · DEINE ERINNERUNGEN</span>' +
+        '<h3>Ein Wintertag für immer.</h3><strong>' + fact.experiences + ' Erlebnisse</strong>' +
+        '<small>' + fact.rides + ' Rides + ' + fact.shows + ' Shows</small></div>' : "") +
       "<div class=\"archiveHeroFacts\">" +
         recapStat(fact.rides + "×", "genäht") +
         recapStat(fact.shows ? fact.shows + "×" : fact.uniqueRides, fact.shows ? "Shows gesehen" : "verschiedene Rides") +
@@ -4181,6 +4190,91 @@
       "<div class=\"recapBox\"><b>💾 Kirmestag archiviert</b><p>Fahrten und Preise sind gespeichert. Keine künstlichen Queue-Zeiten.</p></div>";
   }
 
+  // A completed Wintertraum visit retains its seasonal styling in the archive,
+  // even after the 2026/27 event ends. Never winter-style a different park/day.
+  function isWintertraumDay(day, parkSlug) {
+    if (parkSlug !== "phantasialand") return false;
+    const instant = new Date(day?.started_at || day?.startedAt || "");
+    if (!Number.isFinite(instant.getTime())) return false;
+    const dateParts = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Europe/Berlin", day: "2-digit", month: "2-digit", year: "numeric"
+    }).formatToParts(instant);
+    const part = name => dateParts.find(item => item.type === name)?.value || "";
+    const dayKey = part("year") + "-" + part("month") + "-" + part("day");
+    return dayKey >= "2026-11-14" && dayKey <= "2027-01-24";
+  }
+
+  function winterRecapHtml(fact, sourceSessions, day) {
+    const moments = (sourceSessions || [])
+      .map(session => localizeStoredSession(session, "phantasialand"))
+      .filter(session => session.status === "ridden")
+      .sort((a, b) => Number(a.startedAt || 0) - Number(b.startedAt || 0));
+    const shown = moments.slice(0, 9);
+    const momentRows = shown.map(session => {
+      const show = isShowSession(session);
+      const title = escapeHtml(session.rideName || "Erlebnis");
+      const time = escapeHtml(rideTimeLabel(session));
+      const description = show ? "Wintershow" :
+        (session.type === "single" ? "Single Rider" : "Attraktion");
+      const queue = show ? "✓ Gesehen" :
+        (Number.isFinite(Number(session.duration)) && session.duration !== null && session.duration !== undefined
+          ? minutesRounded(session.duration) + " min Queue" : "Fahrt eingetragen");
+      return '<div class="wtRecapMoment"><span class="wtRecapMomentIcon" aria-hidden="true">' +
+        (show ? "✦" : "❄") + '</span><div><strong>' + title +
+        '</strong><small>' + time + ' · ' + escapeHtml(description) +
+        '</small></div><span class="wtRecapMomentEnd">' + escapeHtml(queue) + "</span></div>";
+    }).join("");
+    const extra = moments.length - shown.length;
+    return '<section class="wtRecapHero" aria-labelledby="winterRecapTitle">' +
+        '<div class="wtRecapOverline">PHANTASIALAND · WINTERTRAUM 2026/27</div>' +
+        '<h3 id="winterRecapTitle">Dein Wintertraum.<em>Festgehalten.</em></h3>' +
+        '<div class="wtRecapDate">' + escapeHtml(parkDayDateLabel(day)) + '</div>' +
+        '<div class="wtRecapTotal"><span>DEIN ERLEBNIS-COUNT</span>' +
+        '<strong>' + fact.experiences + '</strong>' +
+        '<small>' + fact.rides + ' Rides <i>+</i> ' + fact.shows + ' Shows</small></div>' +
+      '</section>' +
+      '<div class="wtRecapMetrics" aria-label="Dein Wintertraum in Zahlen">' +
+        recapStat(fact.rides + "×", "Fahrten") +
+        recapStat(fact.shows + "×", "Shows gesehen") +
+        recapStat(formatDurationHuman(fact.parkMs), "Zeit im Park") +
+        recapStat(formatDurationHuman(fact.queueMs), "Echte Queue") +
+      '</div>' +
+      '<section class="wtRecapChapter"><div class="wtRecapChapterHead"><span>01 / DEINE MOMENTE</span>' +
+        '<h4>Ein Abend voller Erinnerungen.</h4></div>' +
+        '<div class="wtRecapTimeline">' +
+          (momentRows || '<div class="wtRecapEmpty">Noch keine Fahrten oder Shows eingetragen.</div>') +
+          (extra > 0 ? '<p class="wtRecapMore">+ ' + extra + ' weitere gespeicherte Erlebnisse</p>' : '') +
+        '</div></section>' +
+      '<section class="wtRecapChapter wtRecapChapter--numbers"><div class="wtRecapChapterHead">' +
+        '<span>02 / DEINE BILANZ</span><h4>Dein Tag in Zahlen.</h4></div>' +
+        '<div class="wtRecapHighlights">' +
+          '<div><span>🏆 Meistgenäht</span><strong>' +
+            escapeHtml(fact.topRide ? fact.topRide.name + " ×" + fact.topRide.count : "–") + '</strong></div>' +
+          '<div><span>🐌 Längste Queue</span><strong>' +
+            escapeHtml(fact.longest ? fact.longest.rideName + " · " + minutesRounded(fact.longest.duration) + " min" : "–") +
+            '</strong></div>' +
+          '<div><span>⚡ Kürzeste Queue</span><strong>' +
+            escapeHtml(fact.shortest ? fact.shortest.rideName + " · " + minutesRounded(fact.shortest.duration) + " min" : "–") +
+            '</strong></div>' +
+        '</div>' +
+        '<div class="nerdRecap wtRecapNerd"><div class="wtRecapNerdTitle">NERD-MODUS · DEINE STATISTIKEN</div>' +
+          '<div class="nerdGrid">' +
+            recapStat(fact.uniqueRides, "Verschiedene Rides") +
+            recapStat(fact.uniqueShows, "Verschiedene Shows") +
+            recapStat(minutesRounded(fact.avgQueueMs) + "m", "Ø Queue") +
+            recapStat(minutesRounded(fact.medianQueueMs) + "m", "Median") +
+            recapStat(Math.round(fact.queueShare * 100) + "%", "Zeit in Queue") +
+            recapStat(fact.ridesPerHour ? fact.ridesPerHour.toFixed(2) : "0", "Fahrten / Std.") +
+            recapStat(Math.round(fact.singleShare * 100) + "%", "Single Rider") +
+            recapStat(fact.rerides + "×", "Rerides") +
+            recapStat(fact.hundredPlusCount + "×", "100+ km/h") +
+            recapStat(fact.topSpeed ? fact.topSpeed + " km/h" : "–", "Top-Speed") +
+          '</div><p>Tempo-Angaben nur bei Attraktionen mit hinterlegten Daten.</p>' +
+        '</div>' +
+      '</section>' +
+      '<p class="wtRecapSaved">✦ Dein Wintertraum ist im NÄHEN-Archiv gespeichert.</p>';
+  }
+
   function renderRecap(sourceSessions, sourceDay = parkDay) {
     const day = sourceDay || {
       park_slug: activeParkSlug || "phantasialand",
@@ -4188,6 +4282,14 @@
       ended_at: new Date().toISOString()
     };
     const dayParkSlug = day.park_slug || activeParkSlug || "phantasialand";
+    const winterDay = isWintertraumDay(day, dayParkSlug);
+    const recapSheet = $("#recapSheet");
+    if (recapSheet) {
+      if (winterDay) recapSheet.dataset.wintertraum = "true";
+      else delete recapSheet.dataset.wintertraum;
+    }
+    const recapEyebrow = $("#recapDayEyebrow");
+    if (recapEyebrow) recapEyebrow.textContent = winterDay ? "WINTERTRAUM · PARKTAG ABGESCHLOSSEN" : visitDayWord(dayParkSlug) + " abgeschlossen";
     if (venueIsFair(dayParkSlug)) {
       $("#recapContent").innerHTML = fairDailyRecap(sourceSessions, day);
       return;
@@ -4195,6 +4297,10 @@
     const dayWord = visitDayWord(dayParkSlug);
     const supportsPostedWait = PARKS[dayParkSlug]?.supportsPostedWait !== false;
     const fact = buildDayFacts(day, sourceSessions, dayParkSlug);
+    if (winterDay) {
+      $("#recapContent").innerHTML = winterRecapHtml(fact, sourceSessions, day);
+      return;
+    }
     const comparisonText = fact.postedComparableCount
       ? (fact.savedMinutes >= 0
         ? fact.savedMinutes + " Minuten weniger gewartet."
