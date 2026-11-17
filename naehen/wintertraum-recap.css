@@ -1,0 +1,332 @@
+/* NÄHEN · Wintertraum 2026/27 · Completed-day recap + archive detail
+ * Separate from normal park/fair recaps. Only mounted for dated Wintertraum visits.
+ * Original Berlin photo, clear Inter statistics, Berkshire Swash headline.
+ */
+
+#recapSheet[data-wintertraum="true"],
+#archiveDetailSheet[data-wintertraum="true"]{
+  align-items:center;justify-content:center;
+  padding:clamp(8px,2vw,24px);
+  background:rgba(4,11,25,.86);
+  backdrop-filter:blur(10px);
+}
+
+#recapSheet[data-wintertraum="true"] .sheetCard,
+#archiveDetailSheet[data-wintertraum="true"] .sheetCard{
+  --line:rgba(210,186,145,.32);
+  --muted:#c0d3de;
+  --text:#fbf2e4;
+  --accent:#e7c58f;
+  position:relative;
+  width:min(100%,730px);max-height:94dvh;
+  min-height:0;overflow-x:hidden;overflow-y:auto;
+  padding:15px clamp(13px,2.4vw,22px) calc(22px + env(safe-area-inset-bottom));
+  background:linear-gradient(155deg,#142e46 0%,#0d2237 47%,#0a1c2e 100%);
+  border:1px solid rgba(234,205,154,.7);border-radius:18px;
+  box-shadow:0 24px 80px rgba(0,0,0,.59),inset 0 1px rgba(255,237,207,.08);
+  color:#f9f0e2;
+  font-family:var(--winter-font,Inter,Arial,sans-serif);
+  scrollbar-color:#c6a876 #10283d;
+}
+#recapSheet[data-wintertraum="true"] .close,
+#archiveDetailSheet[data-wintertraum="true"] .close{
+  position:sticky;top:0;right:0;float:right;z-index:5;
+  display:grid;place-items:center;
+  margin:3px 3px -48px 0;
+  width:44px;height:44px;min-width:44px;
+  border-radius:50%;border:1px solid rgba(248,220,170,.73);
+  background:rgba(8,25,43,.90);color:#fff4e1;
+  backdrop-filter:blur(8px);box-shadow:0 5px 20px rgba(0,0,0,.32);
+}
+#recapSheet[data-wintertraum="true"] #recapDayEyebrow{
+  position:relative;z-index:1;width:fit-content;
+  margin:4px 55px 10px 2px;padding:7px 0;
+  color:#ebcb91;font:700 10px/1.5 var(--winter-font,Inter,sans-serif);
+  letter-spacing:1.2px;border-bottom:1px solid rgba(229,198,139,.55);
+}
+#recapSheet[data-wintertraum="true"] .sheetCard>h2{display:none}
+#recapSheet[data-wintertraum="true"] #recapContent{display:grid;gap:16px}
+#recapSheet[data-wintertraum="true"] .wtRecapHero{
+  position:relative;overflow:hidden;isolation:isolate;
+  display:flex;flex-direction:column;align-items:start;
+  min-height:340px;padding:clamp(23px,4vw,36px);
+  border:1px solid rgba(241,210,160,.74);border-radius:12px;
+  background:
+    linear-gradient(90deg,rgba(7,21,36,.95) 0%,rgba(9,28,46,.76) 54%,rgba(5,17,31,.20) 100%),
+    linear-gradient(0deg,rgba(6,21,37,.90),transparent 72%),
+    url("./assets/wintertraum-berlin-original.jpg") center 43%/cover no-repeat;
+  box-shadow:inset 0 1px rgba(255,246,223,.1);
+}
+#recapSheet[data-wintertraum="true"] .wtRecapHero::before{
+  content:"";position:absolute;inset:10px;z-index:-1;
+  border:1px solid rgba(246,218,175,.26);border-radius:7px;pointer-events:none;
+}
+#recapSheet[data-wintertraum="true"] .wtRecapOverline{
+  max-width:calc(100% - 12px);
+  color:#f4d6a0;font:800 10px/1.6 var(--winter-font,Inter,sans-serif);
+  letter-spacing:1.6px;text-transform:uppercase;
+}
+#recapSheet[data-wintertraum="true"] .wtRecapHero h3{
+  max-width:470px;margin:20px 0 9px;
+  color:#fff3df;font:400 clamp(36px,5.8vw,57px)/1.09 var(--winter-display,"Berkshire Swash",Georgia,serif);
+  letter-spacing:0;text-shadow:0 4px 20px rgba(0,0,0,.45);
+}
+#recapSheet[data-wintertraum="true"] .wtRecapHero h3 em{
+  display:block;margin-top:2px;font:inherit;color:#f4d1a1;
+}
+#recapSheet[data-wintertraum="true"] .wtRecapDate{
+  color:#d6e2e8;font:600 12px/1.5 var(--winter-font,Inter,sans-serif);
+}
+#recapSheet[data-wintertraum="true"] .wtRecapTotal{
+  display:flex;align-items:center;gap:13px;flex-wrap:wrap;
+  margin:auto 0 0;padding-top:23px;
+}
+#recapSheet[data-wintertraum="true"] .wtRecapTotal>span{
+  max-width:105px;color:#edcc92;font:800 10px/1.45 var(--winter-font,Inter,sans-serif);
+  letter-spacing:1px;
+}
+#recapSheet[data-wintertraum="true"] .wtRecapTotal>strong{
+  color:#fff4dc;font:700 clamp(51px,7vw,76px)/1 var(--winter-font,Inter,sans-serif);
+  letter-spacing:-3px;font-variant-numeric:tabular-nums;
+}
+#recapSheet[data-wintertraum="true"] .wtRecapTotal>small{
+  align-self:center;color:#f0e4d2;font:700 12px/1.4 var(--winter-font,Inter,sans-serif);
+}
+#recapSheet[data-wintertraum="true"] .wtRecapTotal i{font-style:normal;color:#e8c289}
+#recapSheet[data-wintertraum="true"] .wtRecapMetrics{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;
+}
+#recapSheet[data-wintertraum="true"] .wtRecapMetrics .recapStat,
+#recapSheet[data-wintertraum="true"] .wtRecapNerd .recapStat,
+#archiveDetailSheet[data-wintertraum="true"] :is(.archiveHeroFacts,.nerdGrid) .recapStat{
+  display:flex;flex-direction:column;gap:6px;min-width:0;
+  padding:15px 12px;border:1px solid rgba(119,154,178,.37);
+  border-radius:9px;background:rgba(26,53,74,.77);
+}
+#recapSheet[data-wintertraum="true"] .recapStat b,
+#archiveDetailSheet[data-wintertraum="true"] .recapStat b{
+  display:block;overflow-wrap:anywhere;
+  font:750 clamp(19px,3.5vw,28px)/1.1 var(--winter-font,Inter,sans-serif);
+  letter-spacing:-.7px;color:#f5d59c;
+  font-variant-numeric:tabular-nums;
+}
+#recapSheet[data-wintertraum="true"] .recapStat .mini,
+#archiveDetailSheet[data-wintertraum="true"] .recapStat .mini{
+  color:#cedbe1;font:600 10px/1.4 var(--winter-font,Inter,sans-serif);
+}
+#recapSheet[data-wintertraum="true"] .wtRecapChapter{
+  padding:clamp(17px,3.2vw,25px);
+  border:1px solid rgba(200,177,135,.42);border-radius:11px;
+  background:linear-gradient(155deg,rgba(19,45,66,.94),rgba(10,29,46,.93));
+}
+#recapSheet[data-wintertraum="true"] .wtRecapChapterHead>span{
+  color:#e8c58c;font:800 10px/1.5 var(--winter-font,Inter,sans-serif);
+  letter-spacing:1.2px;
+}
+#recapSheet[data-wintertraum="true"] .wtRecapChapterHead h4{
+  margin:8px 0 18px;color:#fff2dc;
+  font:400 clamp(24px,4vw,32px)/1.2 var(--winter-display,"Berkshire Swash",Georgia,serif);
+}
+#recapSheet[data-wintertraum="true"] .wtRecapTimeline{
+  position:relative;display:grid;gap:0;
+}
+#recapSheet[data-wintertraum="true"] .wtRecapMoment{
+  display:grid;grid-template-columns:31px minmax(0,1fr) auto;gap:12px;
+  align-items:center;padding:11px 0;border-bottom:1px solid rgba(161,183,195,.19);
+}
+#recapSheet[data-wintertraum="true"] .wtRecapMomentIcon{
+  display:grid;place-items:center;width:29px;height:29px;
+  border:1px solid rgba(230,201,154,.53);border-radius:50%;
+  color:#f6d8ac;background:rgba(37,65,79,.65);font-size:15px;
+}
+#recapSheet[data-wintertraum="true"] .wtRecapMoment strong{
+  display:block;overflow-wrap:anywhere;color:#fff0df;
+  font:700 13px/1.35 var(--winter-font,Inter,sans-serif);
+}
+#recapSheet[data-wintertraum="true"] .wtRecapMoment small{
+  display:block;margin-top:4px;color:#b8cbd5;
+  font:500 10px/1.4 var(--winter-font,Inter,sans-serif);
+}
+#recapSheet[data-wintertraum="true"] .wtRecapMomentEnd{
+  color:#e8cba1;text-align:right;
+  font:650 11px/1.3 var(--winter-font,Inter,sans-serif);
+  white-space:nowrap;
+}
+#recapSheet[data-wintertraum="true"] :is(.wtRecapEmpty,.wtRecapMore){
+  color:#cfdee3;font:500 12px/1.5 var(--winter-font,Inter,sans-serif);
+  margin:10px 0;
+}
+#recapSheet[data-wintertraum="true"] .wtRecapHighlights{
+  display:grid;gap:1px;border:1px solid rgba(126,157,176,.36);
+  background:rgba(140,175,191,.25);border-radius:8px;overflow:hidden;
+}
+#recapSheet[data-wintertraum="true"] .wtRecapHighlights>div{
+  display:grid;grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr);
+  gap:13px;align-items:center;padding:13px;background:#132f46;
+}
+#recapSheet[data-wintertraum="true"] .wtRecapHighlights span{
+  color:#d8c19a;font:700 11px/1.4 var(--winter-font,Inter,sans-serif);
+}
+#recapSheet[data-wintertraum="true"] .wtRecapHighlights strong{
+  color:#f5ece0;text-align:right;overflow-wrap:anywhere;
+  font:700 12px/1.5 var(--winter-font,Inter,sans-serif);
+}
+#recapSheet[data-wintertraum="true"] .wtRecapNerd{
+  margin-top:18px;padding-top:19px;border-top:1px solid rgba(230,196,143,.35);
+}
+#recapSheet[data-wintertraum="true"] .wtRecapNerdTitle{
+  margin-bottom:12px;color:#e9c78d;
+  font:800 10px/1.4 var(--winter-font,Inter,sans-serif);letter-spacing:1.3px;
+}
+#recapSheet[data-wintertraum="true"] .wtRecapNerd .nerdGrid{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;
+}
+#recapSheet[data-wintertraum="true"] .wtRecapNerd p{
+  margin:11px 0 0;color:#bfd0d9;font:500 11px/1.6 var(--winter-font,Inter,sans-serif);
+}
+#recapSheet[data-wintertraum="true"] .wtRecapSaved{
+  margin:1px 0 0;padding:0 7px;color:#d9c49d;
+  font:600 11px/1.5 var(--winter-font,Inter,sans-serif);text-align:center;
+}
+#recapSheet[data-wintertraum="true"] [data-close="recapSheet"].btn{
+  display:block;width:100%;min-height:48px;margin:1px 0 0;padding:12px 18px;
+  border:1px solid #ffe2ac;border-radius:9px;
+  background:#e9c58a;color:#122739;box-shadow:none;
+  font:800 12px/1.35 var(--winter-font,Inter,sans-serif);
+  letter-spacing:.6px;
+}
+/* Archived Wintertraum days retain their atmosphere beyond 24 January 2027. */
+#archiveDetailSheet[data-wintertraum="true"] #archiveDetailEyebrow{
+  margin:5px 54px 10px 2px;color:#e8c994;
+  font:800 10px/1.4 var(--winter-font,Inter,sans-serif);letter-spacing:1.2px;
+}
+#archiveDetailSheet[data-wintertraum="true"] #archiveDetailTitle{
+  margin:0 0 10px;color:#fff1d9;
+  font:400 clamp(32px,5vw,47px)/1.15 var(--winter-display,"Berkshire Swash",Georgia,serif);
+}
+#archiveDetailSheet[data-wintertraum="true"] #archiveDetailMeta{
+  color:#cbdde5;font:600 12px/1.5 var(--winter-font,Inter,sans-serif);
+}
+#archiveDetailSheet[data-wintertraum="true"] .wtArchiveIntro{
+  display:flex;flex-direction:column;align-items:start;
+  min-height:265px;margin:8px 0 16px;padding:25px;
+  border:1px solid rgba(236,204,151,.65);border-radius:10px;
+  background:
+    linear-gradient(90deg,rgba(6,23,39,.94),rgba(9,29,48,.55) 64%,rgba(6,19,34,.24)),
+    url("./assets/wintertraum-berlin-original.jpg") center 43%/cover no-repeat;
+}
+#archiveDetailSheet[data-wintertraum="true"] .wtArchiveIntro span{
+  color:#edcf9c;font:800 10px/1.6 var(--winter-font,Inter,sans-serif);letter-spacing:1px;
+}
+#archiveDetailSheet[data-wintertraum="true"] .wtArchiveIntro h3{
+  margin:16px 0 auto;color:#fff3df;
+  font:400 clamp(29px,5vw,42px)/1.1 var(--winter-display,"Berkshire Swash",Georgia,serif);
+  text-shadow:0 3px 15px #0009;
+}
+#archiveDetailSheet[data-wintertraum="true"] .wtArchiveIntro strong{
+  display:block;margin-top:18px;color:#f9d8a4;
+  font:800 22px/1.2 var(--winter-font,Inter,sans-serif);
+}
+#archiveDetailSheet[data-wintertraum="true"] .wtArchiveIntro small{
+  display:block;margin-top:5px;color:#e2ebee;
+  font:600 11px/1.3 var(--winter-font,Inter,sans-serif);
+}
+#archiveDetailSheet[data-wintertraum="true"] .archiveHeroFacts,
+#archiveDetailSheet[data-wintertraum="true"] .nerdGrid{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;
+}
+#archiveDetailSheet[data-wintertraum="true"] .nerdSection{
+  margin-top:15px;padding:18px;border-radius:10px;
+  border:1px solid rgba(199,171,131,.42);
+  background:rgba(18,44,65,.84);
+}
+#archiveDetailSheet[data-wintertraum="true"] .nerdTitle{
+  color:#edce9a;font-family:var(--winter-font,Inter,sans-serif);
+}
+#archiveDetailSheet[data-wintertraum="true"] .nerdDataNote{
+  margin-top:11px;color:#c5d5da;font-family:var(--winter-font,Inter,sans-serif);
+}
+#archiveDetailSheet[data-wintertraum="true"] .archiveFactList{
+  gap:1px;border:1px solid rgba(157,183,193,.35);
+  background:rgba(157,183,193,.35);border-radius:8px;overflow:hidden;
+}
+#archiveDetailSheet[data-wintertraum="true"] .archiveFactList>div{
+  background:#132e45;gap:12px;
+}
+#archiveDetailSheet[data-wintertraum="true"] .archiveFactList span{
+  color:#e2c89d;font-family:var(--winter-font,Inter,sans-serif);
+}
+#archiveDetailSheet[data-wintertraum="true"] .archiveFactList b{
+  color:#fff0df;font-family:var(--winter-font,Inter,sans-serif);
+}
+#archiveDetailSheet[data-wintertraum="true"] .archiveTimelineHead h2{
+  font:400 30px var(--winter-display,"Berkshire Swash",Georgia,serif);
+  color:#fff0dd;
+}
+#archiveDetailSheet[data-wintertraum="true"] .archiveTimeline,
+#archiveDetailSheet[data-wintertraum="true"] .archiveRideRow{
+  border-color:rgba(181,196,202,.28);
+}
+#archiveDetailSheet[data-wintertraum="true"] .archiveRideRow b{
+  color:#fff1df;font-family:var(--winter-font,Inter,sans-serif);
+}
+#archiveDetailSheet[data-wintertraum="true"] .archiveRideRow small{
+  color:#c5d6df;font-family:var(--winter-font,Inter,sans-serif);
+}
+
+@media(max-width:650px){
+  #recapSheet[data-wintertraum="true"],
+  #archiveDetailSheet[data-wintertraum="true"]{
+    align-items:flex-end;padding:0;
+  }
+  #recapSheet[data-wintertraum="true"] .sheetCard,
+  #archiveDetailSheet[data-wintertraum="true"] .sheetCard{
+    width:100%;max-height:95dvh;border-bottom:0;
+    border-radius:19px 19px 0 0;
+    padding:12px 12px calc(23px + env(safe-area-inset-bottom));
+  }
+  #recapSheet[data-wintertraum="true"] .wtRecapHero{
+    min-height:325px;padding:25px 20px;
+    background-position:center 41%;
+  }
+  #recapSheet[data-wintertraum="true"] .wtRecapMetrics,
+  #recapSheet[data-wintertraum="true"] .wtRecapNerd .nerdGrid,
+  #archiveDetailSheet[data-wintertraum="true"] .archiveHeroFacts,
+  #archiveDetailSheet[data-wintertraum="true"] .nerdGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  #recapSheet[data-wintertraum="true"] .wtRecapChapter{padding:18px 15px}
+  #recapSheet[data-wintertraum="true"] .wtRecapMoment{
+    grid-template-columns:28px minmax(0,1fr);gap:8px;
+  }
+  #recapSheet[data-wintertraum="true"] .wtRecapMomentEnd{
+    grid-column:2;text-align:left;margin-top:-7px;
+  }
+  #archiveDetailSheet[data-wintertraum="true"] .wtArchiveIntro{min-height:245px;padding:22px}
+}
+@media(max-width:360px){
+  #recapSheet[data-wintertraum="true"] .wtRecapHero{
+    padding:20px 16px;min-height:310px;
+  }
+  #recapSheet[data-wintertraum="true"] .wtRecapHero h3{font-size:33px}
+  #recapSheet[data-wintertraum="true"] .wtRecapMetrics .recapStat{
+    padding:12px 9px;
+  }
+  #recapSheet[data-wintertraum="true"] .wtRecapHighlights>div{
+    grid-template-columns:minmax(0,1fr);gap:5px;
+  }
+  #recapSheet[data-wintertraum="true"] .wtRecapHighlights strong{text-align:left}
+}
+@media(prefers-reduced-motion:no-preference){
+  #recapSheet[data-wintertraum="true"].show .sheetCard{
+    animation:wt-recap-enter .32s ease-out both;
+  }
+  @keyframes wt-recap-enter{
+    from{opacity:.8;transform:translateY(12px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+}
+#recapSheet[data-wintertraum="true"] :is(button,a):focus-visible,
+#archiveDetailSheet[data-wintertraum="true"] :is(button,a):focus-visible{
+  outline:3px solid #f2d39c;outline-offset:3px;
+}
