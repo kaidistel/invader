@@ -1,5 +1,5 @@
-/* NÄHEN Wintertraum — slightly richer, opt-in-controllable atmospheric snow.
-   Single transparent canvas, no library, no DOM elements per snowflake.
+/* NÄHEN Wintertraum — textured, layered, opt-in-controllable atmospheric snow.
+   Six pre-rendered soft snow sprites, a single transparent canvas, no library.
    Automatically pauses when off-screen, hidden, in a modal or reduced motion. */
 (() => {
   "use strict";
@@ -21,6 +21,7 @@
   }
 
   let flakes = [];
+  let snowSprites = null;
   let width = 0;
   let height = 0;
   let density = 1;
@@ -43,12 +44,88 @@
 
   const random = (min, max) => min + Math.random() * (max - min);
 
+  /* Render small translucent snow textures only once. The visible core is
+     softly irregular; far flakes are finer while near flakes have mild bokeh. */
+  function createSnowSprite(coreSize, layer) {
+    const sprite = document.createElement("canvas");
+    const padding = Math.ceil(coreSize * .75);
+    const full = coreSize + padding * 2;
+    sprite.width = full;
+    sprite.height = full;
+    const g = sprite.getContext("2d");
+    const center = full / 2;
+    const radius = coreSize / 2;
+    const halo = g.createRadialGradient(center, center, radius * .04,
+      center, center, radius * 1.35);
+    halo.addColorStop(0, "rgba(255,255,255,.98)");
+    halo.addColorStop(.27, "rgba(247,252,255,.82)");
+    halo.addColorStop(.60, "rgba(230,241,251,.35)");
+    halo.addColorStop(1, "rgba(211,232,248,0)");
+
+    g.fillStyle = halo;
+    g.beginPath();
+    g.arc(center, center, radius * 1.35, 0, Math.PI * 2);
+    g.fill();
+
+    // Few irregular highlights per texture, not hundreds of DOM particles.
+    const dots = layer === "near" ? 7 : layer === "mid" ? 5 : 3;
+    g.globalAlpha = layer === "far" ? .11 : .17;
+    for (let i = 0; i < dots; i++) {
+      const dx = random(-.45, .45) * radius;
+      const dy = random(-.45, .45) * radius;
+      const grain = radius * random(.09, .25);
+      g.fillStyle = "rgba(255,255,255,.84)";
+      g.beginPath();
+      g.arc(center + dx, center + dy, grain, 0, Math.PI * 2);
+      g.fill();
+    }
+    g.globalAlpha = 1;
+    if (layer !== "far") {
+      const core = g.createRadialGradient(center, center, 0,
+        center, center, radius * .42);
+      core.addColorStop(0, "rgba(255,255,255,.22)");
+      core.addColorStop(1, "rgba(255,255,255,0)");
+      g.fillStyle = core;
+      g.beginPath();
+      g.arc(center, center, radius * .42, 0, Math.PI * 2);
+      g.fill();
+    }
+    return sprite;
+  }
+
+  function buildSnowSprites() {
+    snowSprites = {
+      far: [createSnowSprite(8, "far"), createSnowSprite(10, "far")],
+      mid: [createSnowSprite(14, "mid"), createSnowSprite(16, "mid")],
+      near: [createSnowSprite(22, "near"), createSnowSprite(26, "near")]
+    };
+  }
+
+  function pickSnowSprite(layer) {
+    const variants = snowSprites && snowSprites[layer];
+    return variants ? variants[Math.floor(Math.random() * variants.length)] : null;
+  }
+
   function makeFlake(enterFromTop = false) {
-    const size = random(.95, 2.7);
+    const roll = Math.random();
+    // Mostly distant flakes, with occasional softly out-of-focus foreground.
+    const layer = roll < .56 ? "far" : roll < .92 ? "mid" : "near";
+    const sizes = { far: [4.5, 8], mid: [8, 13], near: [13, 19] };
+    const speeds = { far: [10, 18], mid: [16, 26], near: [23, 35] };
+    const alphas = { far: [.18, .34], mid: [.34, .56], near: [.52, .78] };
+    const sways = { far: [.4, 1.6], mid: [1, 3.1], near: [2, 5.4] };
     return {
-      x: random(0, width), y: enterFromTop ? random(-height * .3, -3) : random(0, height),
-      radius: size, opacity: random(.30, .72), fall: random(13, 31) * (2.2 / (size + .7)),
-      sway: random(.7, 5), phase: random(0, Math.PI * 2), drift: random(-2.5, 1.5)
+      x: random(0, width),
+      y: enterFromTop ? random(-height * .3, -3) : random(0, height),
+      radius: random(...sizes[layer]),
+      opacity: random(...alphas[layer]),
+      fall: random(...speeds[layer]),
+      sway: random(...sways[layer]),
+      phase: random(0, Math.PI * 2),
+      drift: layer === "far" ? random(-1.6, .8) :
+        layer === "near" ? random(-3.2, 2) : random(-2.4, 1.4),
+      layer,
+      sprite: pickSnowSprite(layer)
     };
   }
 
@@ -65,6 +142,7 @@
     canvas.width = Math.round(width * ratio);
     canvas.height = Math.round(height * ratio);
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    if (!snowSprites) buildSnowSprites();
 
     // Around 27-30 flakes on a typical phone, max 80 on large desktop monitors.
     const count = Math.min(80, Math.max(18, Math.round((width * height) / 12500)));
@@ -98,14 +176,21 @@
       if (flake.y > height + 6) {
         flake.y = random(-20, -3);
         flake.x = random(0, width);
+        flake.sprite = pickSnowSprite(flake.layer);
       }
       if (flake.x < -7) flake.x = width + 5;
       if (flake.x > width + 7) flake.x = -5;
 
-      ctx.beginPath();
-      ctx.fillStyle = "rgba(241,249,255," + flake.opacity.toFixed(2) + ")";
-      ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
-      ctx.fill();
+      // Draw a cached textured sprite. No per-frame gradients or blur filters.
+      const sprite = flake.sprite;
+      if (sprite) {
+        const scale = flake.layer === "far" ? 2.2 :
+          flake.layer === "near" ? 2.7 : 2.4;
+        const size = flake.radius * scale;
+        ctx.globalAlpha = flake.opacity;
+        ctx.drawImage(sprite, flake.x - size / 2, flake.y - size / 2, size, size);
+        ctx.globalAlpha = 1;
+      }
     }
     drawnFrames++;
   }
@@ -165,7 +250,13 @@
 
   window.NAEHEN_WINTER_SNOW = Object.freeze({
     refresh,
-    getState: () => ({ enabled, running, flakes: flakes.length, frames: drawnFrames, reducedMotion: motion.matches })
+    getState: () => ({
+      enabled, running, flakes: flakes.length, frames: drawnFrames, reducedMotion: motion.matches,
+      spriteVariants: snowSprites ? 6 : 0,
+      layers: { far: flakes.filter(f => f.layer === "far").length,
+        mid: flakes.filter(f => f.layer === "mid").length,
+        near: flakes.filter(f => f.layer === "near").length }
+    })
   });
   refresh();
 })();
