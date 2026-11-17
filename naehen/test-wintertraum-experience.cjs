@@ -18,7 +18,7 @@ assert.ok(html.includes('wintertraum-details.css?v=174')&&html.includes('class="
 assert.ok(sw.includes("'./wintertraum-details.css'"),"Offline winter detail screen must be cached");
 assert.ok(html.indexOf('wintertraum-atelier.css?v=174') < html.indexOf('wintertraum-details.css?v=174'),"Detail override must load after winter skin");
 assert.ok(detailCSS.includes('.winterDetailKicker{display:none}')&&detailCSS.includes('body[data-park="phantasialand"][data-season="wintertraum"] #rideSheet'),"Winter sheet must be seasonal only");
-for(const token of ['#rideTitle','#rideDetailWait','#rideQuickPass','#rideExtraFacts','#srCommunity','#rideQueueBtn','.worldArt','.close']){
+for(const token of ['#rideTitle','.rideDetailWait','#rideQuickPass','#rideExtraFacts','#srCommunity','#rideQueueBtn','.worldArt','.close']){
  assert.ok(detailCSS.includes(token),"Existing detail UI not restyled: "+token);
 }
 assert.ok(detailCSS.includes('prefers-reduced-motion:no-preference'),"Detail animation must respect reduced motion");
