@@ -3,6 +3,7 @@
  * Only applies when Phantasialand's Wintertraum is active.
  * Keeps original ride imagery, timer, live waits, facts, SR, Quick Pass and links.
  */
+.winterDetailKicker{display:none}
 body[data-park="phantasialand"][data-season="wintertraum"] #rideSheet{
   --wt-detail-surface:#102337;
   --wt-detail-border:#bfa477;
