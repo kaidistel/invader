@@ -3,6 +3,8 @@ on:
   push:
     paths:
       - 'naehen/wintertraum-atelier.css'
+      - 'naehen/wintertraum-details.css'
+      - 'naehen/test-wintertraum-detail-browser.cjs'
       - 'naehen/test-wintertraum-browser.cjs'
       - 'naehen/index.html'
       - '.github/workflows/wintertraum-visual.yml'
@@ -23,11 +25,13 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Verify mobile, tablet and desktop layout with Chromium
         run: node naehen/test-wintertraum-browser.cjs
+      - name: Verify Wintertraum attraction detail views in Chromium
+        run: node naehen/test-wintertraum-detail-browser.cjs
       - name: Publish six viewport screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: wintertraum-responsive-screenshots
+          name: wintertraum-responsive-and-detail-screenshots
           path: naehen/wintertraum-responsive-qa/*.png
           if-no-files-found: ignore
           retention-days: 14
