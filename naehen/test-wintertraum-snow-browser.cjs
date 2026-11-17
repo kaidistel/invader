@@ -88,7 +88,7 @@ fs.writeFileSync(file,html);
 
    // Accessibility: respects OS motion settings without overriding the stored choice.
    await page.emulateMedia({reducedMotion:"reduce"});
-   await page.waitForFunction(()=>!window.NAEHEN_WINTER_SNOW.getState().running);
+   await page.waitForFunction(()=>!window.NAEHEN_WINTER_SNOW.getState().running && document.getElementById("winterSnowToggle").disabled);
    assert.equal(await page.locator("#winterSnowToggle").isDisabled(),true);
    assert.equal(await page.locator("#winterSnowCanvas").isVisible(),false);
    await page.emulateMedia({reducedMotion:"no-preference"});
