@@ -10,7 +10,7 @@ fs.mkdirSync(screenshots,{recursive:true});
 const file=path.join(root,".wintertraum-snow-qa.html");
 let html=fs.readFileSync(path.join(root,"index.html"),"utf8");
 html=html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,"");
-html=html.replace("</body>",'<script defer src="./wintertraum-snow.js?v=177"></script></body>');
+html=html.replace("</body>",'<script defer src="./wintertraum-snow.js?v=178"></script></body>');
 fs.writeFileSync(file,html);
 (async()=>{
  const browser=await chromium.launch({headless:true,args:["--no-sandbox"]});
@@ -54,6 +54,11 @@ fs.writeFileSync(file,html);
    assert.ok(state.flakes>=Math.min(80,Math.max(18,Math.round((width*900)/12500)))-1,width+": snow density not increased");
    assert.equal(await page.locator("#winterSnowCanvas").evaluate(el=>getComputedStyle(el).opacity),"0.65",width+": snow opacity mismatch");
    assert.ok(state.visiblePixels>25,width+": snow is not visibly rendered to canvas");
+   assert.equal(state.spriteVariants,6,width+": snow must use six pre-rendered textures");
+   assert.equal(state.layers.far+state.layers.mid+state.layers.near,state.flakes,
+     width+": all snowflakes must have a valid depth layer");
+   assert.ok(state.layers.far>0&&state.layers.mid>0,
+     width+": at least distant and middle-depth flakes should be visible");
    assert.ok(state.scrollbarWidth<=width+3,width+": snow button causes horizontal page overflow");
    assert.ok(state.btnWidth>=42,width+": snow switch tap target too small");
    await page.screenshot({path:path.join(screenshots,"wintertraum-snow-"+width+"px.png"),animations:"disabled"});
