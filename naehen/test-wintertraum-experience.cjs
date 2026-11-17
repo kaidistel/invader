@@ -61,7 +61,7 @@ const snow=read("wintertraum-snow.js"),snowCss=read("wintertraum-snow.css");
 assert.ok(html.includes('id="winterSnowCanvas"')&&html.includes('id="winterSnowToggle"'),"Snow controls must exist");
 assert.ok(html.includes('wintertraum-snow.js?v=176')&&html.includes('wintertraum-snow.css?v=176'),"Snow feature must be versioned");
 assert.ok(sw.includes("'./wintertraum-snow.css'")&&sw.includes("'./wintertraum-snow.js'"),"Snow effect must work offline");
-assert.ok(snow.includes('winterParkVisible')&&snow.includes('data-season')===false&&snow.includes('dataset.season === "wintertraum"'),"Snowfall must only run in Wintertraum");
+assert.ok(snow.includes('winterParkVisible')&&snow.includes('dataset.park === "phantasialand"')&&snow.includes('dataset.season === "wintertraum"'),"Snowfall must only run in Phantasialand Wintertraum");
 assert.ok(snow.includes('requestAnimationFrame')&&snow.includes("document.hidden"),"Snow animation must be driven by rAF and pause when invisible");
 assert.ok(snow.includes('prefers-reduced-motion: reduce')&&snowCss.includes("prefers-reduced-motion:reduce"),"Respect reduced motion");
 assert.ok(snowCss.includes("pointer-events:none")&&snowCss.includes('#winterSnowCanvas[hidden]'),"Snow canvas must not block controls");
