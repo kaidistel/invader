@@ -1,0 +1,48 @@
+/* NÄHEN · Wintertraum snow (optional atmospheric layer).
+   Rendered as one canvas; never intercepts taps, swipes or clicks. */
+#winterSnowCanvas[hidden],
+#winterSnowToggle[hidden]{display:none!important}
+body[data-park="phantasialand"][data-season="wintertraum"] #winterSnowCanvas{
+  position:fixed;inset:0;z-index:8;
+  width:100%;height:100%;pointer-events:none;
+  user-select:none;contain:strict;
+  opacity:.50; /* Visible over photographs, quiet over typography. */
+}
+body[data-park="phantasialand"][data-season="wintertraum"] #winterSnowToggle{
+  display:grid;place-items:center;flex:0 0 auto;
+  width:44px;height:44px;min-width:44px;min-height:44px;
+  padding:0;margin:0;border-radius:9px;
+  border:1px solid #cbb2889e;background:#132b41;
+  color:#c8dbeb;cursor:pointer;
+  font:normal 23px/1 "Segoe UI Symbol",sans-serif;
+  box-shadow:0 0 0 0 transparent;
+  transition:background-color .18s ease,box-shadow .18s ease,color .18s ease;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] #winterSnowToggle[aria-pressed="true"]{
+  color:#fff5dd;border-color:#e7c895;
+  background:radial-gradient(circle at 50% 30%,#355e75,#142f46 75%);
+  box-shadow:inset 0 1px #effaff3b,0 0 14px #9eceff2b;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] #winterSnowToggle:disabled{
+  opacity:.55;cursor:not-allowed;box-shadow:none;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] #winterSnowToggle:focus-visible{
+  outline:3px solid #f4d397;outline-offset:3px;
+}
+@media(max-width:390px){
+  body[data-park="phantasialand"][data-season="wintertraum"] .topbarActions{gap:6px}
+  body[data-park="phantasialand"][data-season="wintertraum"] .topbar .parkSwitch{
+    width:42px;min-width:42px;padding:0;font-size:0;
+    display:grid;place-items:center;
+  }
+  body[data-park="phantasialand"][data-season="wintertraum"] .topbar .parkSwitch::before{
+    content:"←";font:700 18px/1 var(--winter-font,Inter,sans-serif);
+  }
+  body[data-park="phantasialand"][data-season="wintertraum"] #winterSnowToggle{
+    width:42px;height:42px;min-width:42px;min-height:42px;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  body[data-park="phantasialand"][data-season="wintertraum"] #winterSnowCanvas{display:none!important}
+  body[data-park="phantasialand"][data-season="wintertraum"] #winterSnowToggle{transition:none}
+}
