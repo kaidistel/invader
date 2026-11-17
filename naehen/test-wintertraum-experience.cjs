@@ -12,17 +12,21 @@ assert.ok(html.indexOf('class="hero"') < html.indexOf('id="nightPlanner"') &&
 assert.ok(app.includes('WINTERTRAUM_ACTIVE')&&app.includes('wtRideActions'),"Retain conditional winter mode and ride logging");
 assert.ok(app.includes('isWinterRideCard ? favoriteButton : ""'),"Winter favorite must be on ticket, not inside details");
 assert.ok(app.includes('winterShows.hidden = !(parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE)'),"Winter show isolation");
-assert.ok(html.includes('wintertraum-atelier.css?v=174'),"New design stylesheet must be used");
+assert.ok(html.includes('wintertraum-atelier.css?v=175'),"New design stylesheet must be used");
 assert.ok(!html.includes('wintertraum-experience.css'),"Old skin must not layer over new one");
-assert.ok(html.includes('wintertraum-details.css?v=174')&&html.includes('class="winterDetailKicker"'),"Winter details and seasonal label required");
+assert.ok(html.includes('wintertraum-details.css?v=175')&&html.includes('class="winterDetailKicker"'),"Winter details and seasonal label required");
 assert.ok(sw.includes("'./wintertraum-details.css'"),"Offline winter detail screen must be cached");
-assert.ok(html.indexOf('wintertraum-atelier.css?v=174') < html.indexOf('wintertraum-details.css?v=174'),"Detail override must load after winter skin");
+assert.ok(html.indexOf('wintertraum-atelier.css?v=175') < html.indexOf('wintertraum-details.css?v=175'),"Detail override must load after winter skin");
 assert.ok(detailCSS.includes('.winterDetailKicker{display:none}')&&detailCSS.includes('body[data-park="phantasialand"][data-season="wintertraum"] #rideSheet'),"Winter sheet must be seasonal only");
 for(const token of ['#rideTitle','.rideDetailWait','#rideQuickPass','#rideExtraFacts','#srCommunity','#rideQueueBtn','.worldArt','.close']){
  assert.ok(detailCSS.includes(token),"Existing detail UI not restyled: "+token);
 }
 assert.ok(detailCSS.includes('prefers-reduced-motion:no-preference'),"Detail animation must respect reduced motion");
-assert.ok(sw.includes("naehen-v174")&&sw.includes("'./wintertraum-atelier.css'"),"PWA must precache newest skin");
+assert.ok(detailCSS.includes('-webkit-text-fill-color:#fff2dd!important'),"Winter title must override transparent FLY lettering");
+assert.ok(detailCSS.includes('clip-path:none!important'),"Taron stone-edge title clipping must be removed in winter");
+assert.ok(detailCSS.includes('#rideTitle::before')&&detailCSS.includes('content:none!important'),"Old title ornaments should be hidden");
+assert.ok(detailCSS.includes('position:absolute!important;top:16px!important;right:16px!important'),"Close action must stay at photo top");
+assert.ok(sw.includes("naehen-v175")&&sw.includes("'./wintertraum-atelier.css'"),"PWA must precache newest skin");
 for(const attr of ["ridesToday","showsToday","queueToday","srToday"])assert.ok(html.includes('id="'+attr+'"'),"Stat values intact");
 assert.equal((html.match(/data-wt-symbol=/g)||[]).length,4,"Four editorial stat ornaments");
 for(const photo of ["wintertraum-berlin-original.jpg","wintertraum-taron-original.jpg","wintertraum-fly-original.jpg"]){
@@ -52,5 +56,5 @@ assert.ok(!css.includes('--winter-font:"Fraunces"'),"The previous decorative bod
 assert.ok(css.includes('--winter-font:"Inter",Arial,system-ui,sans-serif;'),"Readable sans-serif fallback must remain available");
 assert.ok(css.includes("@media(max-width:390px)")&&css.includes("@media(max-width:650px)"),"Responsive breakpoints");
 assert.ok(css.includes('body[data-park="phantasialand"][data-season="wintertraum"]'),"Theme must be park+season scoped");
-assert.ok(html.indexOf('night-planner.css?v=174')<html.indexOf('wintertraum-atelier.css?v=174'),"Latest skin must load last");
+assert.ok(html.indexOf('night-planner.css?v=175')<html.indexOf('wintertraum-atelier.css?v=175'),"Latest skin must load last");
 console.log("PASS Wintertraum Atelier: original UX, original photos, component redesign, PWA and season isolation");
