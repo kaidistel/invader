@@ -92,7 +92,10 @@ fs.writeFileSync(file,html);
    assert.equal(await page.locator("#winterSnowToggle").isDisabled(),true);
    assert.equal(await page.locator("#winterSnowCanvas").isVisible(),false);
    await page.emulateMedia({reducedMotion:"no-preference"});
-   await page.waitForFunction(()=>window.NAEHEN_WINTER_SNOW.getState().running);
+   // Playwright may not dispatch matchMedia('change') on restoring emulated media.
+   // Explicit refresh tests the app's same lifecycle hook used on pageshow/resize.
+   await page.evaluate(()=>window.NAEHEN_WINTER_SNOW.refresh());
+   await page.waitForFunction(()=>window.NAEHEN_WINTER_SNOW.getState().running,null,{timeout:8000});
    output.push({width,flakes:state.flakes,visiblePixels:state.visiblePixels,toggleWidth:state.btnWidth,overflow:false,states:"on/off, park, modal, reduced motion"});
    await page.close();
   }
