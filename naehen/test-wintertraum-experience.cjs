@@ -12,11 +12,11 @@ assert.ok(html.indexOf('class="hero"') < html.indexOf('id="nightPlanner"') &&
 assert.ok(app.includes('WINTERTRAUM_ACTIVE')&&app.includes('wtRideActions'),"Retain conditional winter mode and ride logging");
 assert.ok(app.includes('isWinterRideCard ? favoriteButton : ""'),"Winter favorite must be on ticket, not inside details");
 assert.ok(app.includes('winterShows.hidden = !(parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE)'),"Winter show isolation");
-assert.ok(html.includes('wintertraum-atelier.css?v=177'),"New design stylesheet must be used");
+assert.ok(html.includes('wintertraum-atelier.css?v=178'),"New design stylesheet must be used");
 assert.ok(!html.includes('wintertraum-experience.css'),"Old skin must not layer over new one");
-assert.ok(html.includes('wintertraum-details.css?v=177')&&html.includes('class="winterDetailKicker"'),"Winter details and seasonal label required");
+assert.ok(html.includes('wintertraum-details.css?v=178')&&html.includes('class="winterDetailKicker"'),"Winter details and seasonal label required");
 assert.ok(sw.includes("'./wintertraum-details.css'"),"Offline winter detail screen must be cached");
-assert.ok(html.indexOf('wintertraum-atelier.css?v=177') < html.indexOf('wintertraum-details.css?v=177'),"Detail override must load after winter skin");
+assert.ok(html.indexOf('wintertraum-atelier.css?v=178') < html.indexOf('wintertraum-details.css?v=178'),"Detail override must load after winter skin");
 assert.ok(detailCSS.includes('.winterDetailKicker{display:none}')&&detailCSS.includes('body[data-park="phantasialand"][data-season="wintertraum"] #rideSheet'),"Winter sheet must be seasonal only");
 for(const token of ['#rideTitle','.rideDetailWait','#rideQuickPass','#rideExtraFacts','#srCommunity','#rideQueueBtn','.worldArt','.close']){
  assert.ok(detailCSS.includes(token),"Existing detail UI not restyled: "+token);
@@ -26,7 +26,7 @@ assert.ok(detailCSS.includes('-webkit-text-fill-color:#fff2dd!important'),"Winte
 assert.ok(detailCSS.includes('clip-path:none!important'),"Taron stone-edge title clipping must be removed in winter");
 assert.ok(detailCSS.includes('#rideTitle::before')&&detailCSS.includes('content:none!important'),"Old title ornaments should be hidden");
 assert.ok(detailCSS.includes('position:absolute!important;top:16px!important;right:16px!important'),"Close action must stay at photo top");
-assert.ok(sw.includes("naehen-v177")&&sw.includes("'./wintertraum-atelier.css'"),"PWA must precache newest skin");
+assert.ok(sw.includes("naehen-v178")&&sw.includes("'./wintertraum-atelier.css'"),"PWA must precache newest skin");
 for(const attr of ["ridesToday","showsToday","queueToday","srToday"])assert.ok(html.includes('id="'+attr+'"'),"Stat values intact");
 assert.equal((html.match(/data-wt-symbol=/g)||[]).length,4,"Four editorial stat ornaments");
 for(const photo of ["wintertraum-berlin-original.jpg","wintertraum-taron-original.jpg","wintertraum-fly-original.jpg"]){
@@ -56,17 +56,21 @@ assert.ok(!css.includes('--winter-font:"Fraunces"'),"The previous decorative bod
 assert.ok(css.includes('--winter-font:"Inter",Arial,system-ui,sans-serif;'),"Readable sans-serif fallback must remain available");
 assert.ok(css.includes("@media(max-width:390px)")&&css.includes("@media(max-width:650px)"),"Responsive breakpoints");
 assert.ok(css.includes('body[data-park="phantasialand"][data-season="wintertraum"]'),"Theme must be park+season scoped");
-assert.ok(html.indexOf('night-planner.css?v=177')<html.indexOf('wintertraum-atelier.css?v=177'),"Latest skin must load last");
+assert.ok(html.indexOf('night-planner.css?v=178')<html.indexOf('wintertraum-atelier.css?v=178'),"Latest skin must load last");
 const snow=read("wintertraum-snow.js"),snowCss=read("wintertraum-snow.css");
 assert.ok(html.includes('id="winterSnowCanvas"')&&html.includes('id="winterSnowToggle"'),"Snow controls must exist");
-assert.ok(html.includes('wintertraum-snow.js?v=177')&&html.includes('wintertraum-snow.css?v=177'),"Snow feature must be versioned");
+assert.ok(html.includes('wintertraum-snow.js?v=178')&&html.includes('wintertraum-snow.css?v=178'),"Snow feature must be versioned");
 assert.ok(sw.includes("'./wintertraum-snow.css'")&&sw.includes("'./wintertraum-snow.js'"),"Snow effect must work offline");
 assert.ok(snow.includes('winterParkVisible')&&snow.includes('dataset.park === "phantasialand"')&&snow.includes('dataset.season === "wintertraum"'),"Snowfall must only run in Phantasialand Wintertraum");
 assert.ok(snow.includes('requestAnimationFrame')&&snow.includes("document.hidden"),"Snow animation must be driven by rAF and pause when invisible");
 assert.ok(snow.includes('prefers-reduced-motion: reduce')&&snowCss.includes("prefers-reduced-motion:reduce"),"Respect reduced motion");
 assert.ok(snowCss.includes("pointer-events:none")&&snowCss.includes('#winterSnowCanvas[hidden]'),"Snow canvas must not block controls");
 assert.ok(snow.includes('Math.min(80, Math.max(18'),"Snow particles must remain bounded for mobile performance");
-assert.ok(snow.includes("random(.95, 2.7)")&&snow.includes("opacity: random(.30, .72)"),"Snowflakes should use slightly more visible particle sizes and brightness");
+assert.ok(snow.includes("function createSnowSprite")&&snow.includes("createRadialGradient"),"Winter snow must have soft pre-rendered texture");
+assert.ok(snow.includes('far: [createSnowSprite(8, "far")')&&snow.includes('near: [createSnowSprite(22, "near")'),"Snow must include multiple sprite variants in distance layers");
+assert.ok(snow.includes("sprite: pickSnowSprite(layer)")&&snow.includes("ctx.drawImage(sprite"),"Snowfall must render textured sprites instead of flat circles");
+assert.ok(!snow.includes("ctx.arc(flake.x, flake.y, flake.radius"),"Old flat-dot drawing should be gone");
+assert.ok(snow.includes("Math.min(80, Math.max(18"),"Keep particle counts bounded");
 assert.ok(snowCss.includes("opacity:.65;"),"Snow overlay must keep the stronger but restrained winter visibility");
 assert.ok(snow.includes('naehen:wintertraum:snowfall'),"Snow switch preference must persist");
 console.log("PASS Wintertraum Atelier: original UX, original photos, component redesign, PWA and season isolation");
