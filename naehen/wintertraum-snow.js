@@ -83,7 +83,7 @@
 
   function draw(time) {
     if (!running) return;
-    if (!shouldAnimate()) { stop(); return; }
+    if (!shouldAnimate()) { refresh(); return; }
     raf = window.requestAnimationFrame(draw);
     // Cap drawing at about 30fps; tab throttling cannot cause huge particle jumps.
     if (time - last < 32) return;
