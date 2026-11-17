@@ -1,6 +1,6 @@
 /* NÄHEN Wintertraum — textured, layered, opt-in-controllable atmospheric snow.
    Six pre-rendered soft snow sprites, a single transparent canvas, no library.
-   Automatically pauses when off-screen, hidden, in a modal or reduced motion. */
+   Pauses off-screen, in unrelated dialogs, or for reduced motion; continues in Wintertraum detail sheets. */
 (() => {
   "use strict";
 
@@ -36,11 +36,17 @@
     document.body.dataset.season === "wintertraum" &&
     !app.classList.contains("hidden");
 
-  const modalOpen = () => document.body.classList.contains("modalOpen") ||
-    !!document.querySelector(".sheet.show,.gate.show,.auth.show");
+  const winterDetailOpen = () =>
+    !!document.querySelector("#rideSheet.show, #nightPlannerSheet.show");
+
+  // A ride or evening-plan sheet is part of the winter experience.
+  // Pause for account/settings dialogs, the install gate and unrelated overlays.
+  const modalBlocksSnow = () =>
+    !!document.querySelector(".gate.show,.auth.show,.sheet.show:not(#rideSheet):not(#nightPlannerSheet)") ||
+    (document.body.classList.contains("modalOpen") && !winterDetailOpen());
 
   const shouldAnimate = () => winterParkVisible() && enabled &&
-    !motion.matches && !document.hidden && !modalOpen();
+    !motion.matches && !document.hidden && !modalBlocksSnow();
 
   const random = (min, max) => min + Math.random() * (max - min);
 
@@ -206,6 +212,13 @@
 
   function refresh() {
     const visible = winterParkVisible();
+    // Elevate the existing noninteractive snow layer above the winter sheet.
+    // The canvas returns to its normal position on closing the detail.
+    if (winterDetailOpen() && !modalBlocksSnow()) {
+      canvas.dataset.detailOverlay = "true";
+    } else {
+      delete canvas.dataset.detailOverlay;
+    }
     button.hidden = !visible;
     button.disabled = !!motion.matches;
     button.setAttribute("aria-pressed", String(visible && enabled && !motion.matches));
