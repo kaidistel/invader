@@ -93,6 +93,64 @@ fs.writeFileSync(file,html);
    await page.evaluate(()=>document.body.classList.remove("modalOpen"));
    await page.waitForFunction(()=>window.NAEHEN_WINTER_SNOW.getState().running);
 
+   // Both seasonal details must retain the real snowfall above the sheet.
+   for(const sheetId of ["rideSheet","nightPlannerSheet"]){
+     await page.evaluate(id=>{
+       const sheet=document.getElementById(id);
+       sheet.classList.add("show");
+       document.body.classList.add("modalOpen");
+       if(id==="rideSheet"){
+         sheet.dataset.park="phantasialand";
+         sheet.dataset.world="taron";
+         document.getElementById("rideTitle").textContent="Taron";
+         document.getElementById("worldArtImage").src="./assets/wintertraum-taron-original.jpg";
+       }
+     },sheetId);
+     await page.waitForFunction(()=>window.NAEHEN_WINTER_SNOW.getState().running &&
+       document.getElementById("winterSnowCanvas").dataset.detailOverlay==="true",null,{timeout:8000});
+     const detail=await page.evaluate(id=>{
+       const canvas=document.getElementById("winterSnowCanvas");
+       const sheet=document.getElementById(id);
+       const close=sheet.querySelector(".close");
+       const r=close.getBoundingClientRect();
+       return {
+         snowZ:Number(getComputedStyle(canvas).zIndex),
+         sheetZ:Number(getComputedStyle(sheet).zIndex),
+         snowPointer:getComputedStyle(canvas).pointerEvents,
+         closeReached:document.elementFromPoint(r.left+r.width/2,r.top+r.height/2)===close,
+         visible:!canvas.hidden
+       };
+     },sheetId);
+     assert.ok(detail.snowZ>detail.sheetZ,width+": snowfall behind "+sheetId);
+     assert.equal(detail.snowPointer,"none",width+": snow must not capture taps in "+sheetId);
+     assert.equal(detail.visible,true,width+": snow stopped inside "+sheetId);
+     assert.equal(detail.closeReached,true,width+": close button blocked in "+sheetId);
+     if(sheetId==="rideSheet")await page.screenshot({
+       path:path.join(screenshots,"wintertraum-snow-ride-detail-"+width+"px.png"),
+       animations:"disabled"
+     });
+     await page.evaluate(id=>{
+       document.getElementById(id).classList.remove("show");
+       document.body.classList.remove("modalOpen");
+     },sheetId);
+     await page.waitForFunction(()=>window.NAEHEN_WINTER_SNOW.getState().running &&
+       !("detailOverlay" in document.getElementById("winterSnowCanvas").dataset));
+   }
+
+   // Unrelated overlays still pause the animation, even if a winter detail is open.
+   await page.evaluate(()=>{
+     document.getElementById("rideSheet").classList.add("show");
+     document.getElementById("queueSheet").classList.add("show");
+     document.body.classList.add("modalOpen");
+   });
+   await page.waitForFunction(()=>!window.NAEHEN_WINTER_SNOW.getState().running);
+   await page.evaluate(()=>{
+     document.getElementById("rideSheet").classList.remove("show");
+     document.getElementById("queueSheet").classList.remove("show");
+     document.body.classList.remove("modalOpen");
+   });
+   await page.waitForFunction(()=>window.NAEHEN_WINTER_SNOW.getState().running);
+
    // Accessibility: respects OS motion settings without overriding the stored choice.
    await page.emulateMedia({reducedMotion:"reduce"});
    await page.waitForFunction(()=>!window.NAEHEN_WINTER_SNOW.getState().running && document.getElementById("winterSnowToggle").disabled);
