@@ -8,6 +8,11 @@ body[data-park="phantasialand"][data-season="wintertraum"] #winterSnowCanvas{
   user-select:none;contain:strict;
   opacity:.65; /* More atmospheric snow, still quiet above controls. */
 }
+/* The same snowfall continues above the Wintertraum ride and evening-plan sheets.
+   Other overlays pause the animation; pointer events still pass straight through. */
+body[data-park="phantasialand"][data-season="wintertraum"] #winterSnowCanvas[data-detail-overlay="true"]{
+  z-index:35; /* Winter sheets are z-index:30; toast notifications remain at 60. */
+}
 body[data-park="phantasialand"][data-season="wintertraum"] #winterSnowToggle{
   display:grid;place-items:center;flex:0 0 auto;
   width:44px;height:44px;min-width:44px;min-height:44px;
