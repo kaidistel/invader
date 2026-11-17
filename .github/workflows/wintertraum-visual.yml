@@ -4,6 +4,9 @@ on:
     paths:
       - 'naehen/wintertraum-atelier.css'
       - 'naehen/wintertraum-details.css'
+      - 'naehen/wintertraum-snow.css'
+      - 'naehen/wintertraum-snow.js'
+      - 'naehen/test-wintertraum-snow-browser.cjs'
       - 'naehen/test-wintertraum-detail-browser.cjs'
       - 'naehen/test-wintertraum-browser.cjs'
       - 'naehen/index.html'
@@ -27,6 +30,8 @@ jobs:
         run: node naehen/test-wintertraum-browser.cjs
       - name: Verify Wintertraum attraction detail views in Chromium
         run: node naehen/test-wintertraum-detail-browser.cjs
+      - name: Verify interactive Wintertraum snow on mobile and desktop
+        run: node naehen/test-wintertraum-snow-browser.cjs
       - name: Publish six viewport screenshots
         if: always()
         uses: actions/upload-artifact@v4
