@@ -10,7 +10,7 @@ fs.mkdirSync(screenshots,{recursive:true});
 const file=path.join(root,".wintertraum-snow-qa.html");
 let html=fs.readFileSync(path.join(root,"index.html"),"utf8");
 html=html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,"");
-html=html.replace("</body>",'<script defer src="./wintertraum-snow.js?v=179"></script></body>');
+html=html.replace("</body>",'<script defer src="./wintertraum-snow.js?v=180"></script></body>');
 fs.writeFileSync(file,html);
 (async()=>{
  const browser=await chromium.launch({headless:true,args:["--no-sandbox"]});
@@ -94,9 +94,10 @@ fs.writeFileSync(file,html);
    await page.waitForFunction(()=>window.NAEHEN_WINTER_SNOW.getState().running);
 
    // Both seasonal details must retain the real snowfall above the sheet.
-   for(const sheetId of ["rideSheet","nightPlannerSheet"]){
+   for(const sheetId of ["rideSheet","nightPlannerSheet","recapSheet","archiveDetailSheet"]){
      await page.evaluate(id=>{
        const sheet=document.getElementById(id);
+       if(id==="recapSheet" || id==="archiveDetailSheet") sheet.dataset.wintertraum="true";
        sheet.classList.add("show");
        document.body.classList.add("modalOpen");
        if(id==="rideSheet"){
