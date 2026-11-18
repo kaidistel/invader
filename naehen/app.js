@@ -88,7 +88,11 @@
     PARKS[module.park.slug] = module.park;
   });
   if (EUROPA_HALLOWINTER_ACTIVE && PARK_MODULES["europa-park"]?.worlds?.["voltron-nevera"]) {
-    PARK_MODULES["europa-park"].worlds["voltron-nevera"].artUrl = EUROPA_HALLOWINTER_ART;
+    const voltron = PARK_MODULES["europa-park"].worlds["voltron-nevera"];
+    voltron.hallowinterFallbackArtUrl = voltron.artUrl || "";
+    voltron.artUrl = EUROPA_HALLOWINTER_ART;
+    voltron.imageSourceUrl = "https://www.europapark.de/de/freizeitpark/hallowinter-im-europa-park";
+    voltron.imageCredit = "Europa-Park";
   }
   if (EUROPA_HALLOWINTER_ACTIVE && PARKS["europa-park"]) {
     const europa = PARKS["europa-park"];
@@ -861,8 +865,10 @@
         if (module.worlds?.[rideId] && imageUrl) module.worlds[rideId].artUrl = imageUrl;
       });
       if (parkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE && module.worlds?.["voltron-nevera"]) {
-        // Official 2026 seasonal Voltron photo wins only during HALLOWinter.
-        module.worlds["voltron-nevera"].artUrl = EUROPA_HALLOWINTER_ART;
+        // Remember the live art manifest as fallback if the seasonal hotlink fails.
+        const voltron = module.worlds["voltron-nevera"];
+        voltron.hallowinterFallbackArtUrl = voltron.artUrl || "";
+        voltron.artUrl = EUROPA_HALLOWINTER_ART;
       }
 
       if (manifest.parkCardImage) {
@@ -2190,7 +2196,10 @@
       const currentRide = visibleRides.find(ride => ride.id === rideId);
       const originalRideArt = worldForRide(rideId);
       const regularArt = originalRideArt?.artUrl || (originalRideArt?.art ? "./assets/" + originalRideArt.art + ".webp" : "");
-      const candidates = [...(wintertraumRideImage(rideId) && regularArt ? [regularArt] : []), ...(currentRide?.imageFallbackUrls || []), ...(rideArtFallback ? [rideArtFallback] : [])];
+      const candidates = [...(wintertraumRideImage(rideId) && regularArt ? [regularArt] : []),
+        ...(activeParkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE && rideId === "voltron-nevera" && originalRideArt?.hallowinterFallbackArtUrl
+          ? [originalRideArt.hallowinterFallbackArtUrl] : []),
+        ...(currentRide?.imageFallbackUrls || []), ...(rideArtFallback ? [rideArtFallback] : [])];
       let index = 0;
       const tryNext = () => {
         if (index < candidates.length) img.src = candidates[index++];
@@ -3853,7 +3862,10 @@
       if (artSrc) {
         const detailFallback = venueIsFair() ? "" : (activeParkConfig()?.cardImage || "./assets/park-picker-bg.webp");
         const regularArt = world?.artUrl || (world?.art ? "./assets/" + world.art + ".webp" : "");
-        const candidates = [...(wintertraumRideImage(selectedDetailRide.id) && regularArt ? [regularArt] : []), ...(selectedDetailRide.imageFallbackUrls || []), ...(detailFallback ? [detailFallback] : [])];
+        const candidates = [...(wintertraumRideImage(selectedDetailRide.id) && regularArt ? [regularArt] : []),
+          ...(activeParkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE && selectedDetailRide.id === "voltron-nevera" && world?.hallowinterFallbackArtUrl
+            ? [world.hallowinterFallbackArtUrl] : []),
+          ...(selectedDetailRide.imageFallbackUrls || []), ...(detailFallback ? [detailFallback] : [])];
         let index = 0;
         worldArtImage.onerror = () => {
           if (index < candidates.length) worldArtImage.src = candidates[index++];
