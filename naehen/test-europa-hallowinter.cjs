@@ -14,8 +14,8 @@ assert.ok(css.includes('body[data-park="europa-park"][data-season="hallowinter"]
 assert.ok(!css.includes('body[data-park="phantasialand"]'),"Phantasialand protected");
 assert.ok(css.includes(".hwSeasonColumns")&&css.includes(".hwVisitorNote")&&css.includes(".hwSeasonHeader"),"Transitional design modules required");
 assert.ok(css.includes("prefers-reduced-motion:no-preference"),"Subtle motion must respect reduced-motion");
-assert.ok(css.includes(".parkChoice[data-park=\\"europa-park\\"][data-season=\\"hallowinter\\"]"),"Seasonal park card must be distinct");
-assert.ok(app.includes("module.worlds[\\"voltron-nevera\\"].artUrl = EUROPA_HALLOWINTER_ART") || app.includes('voltron.artUrl = EUROPA_HALLOWINTER_ART'),"Seasonal Voltron art must apply in the detail and ride card");
+assert.ok(css.includes('.parkChoice[data-park="europa-park"][data-season="hallowinter"]'),"Seasonal park card must be distinct");
+assert.ok(app.includes('voltron.artUrl = EUROPA_HALLOWINTER_ART'),"Seasonal Voltron art must apply in ride cards and detail");
 assert.ok(app.includes("hallowinterFallbackArtUrl"),"Existing art must remain fallback");
 assert.ok(app.includes("if (manifest.parkCardImage)"),"Live ride art manifest must remain supported");
 assert.ok(ep.includes('liveDataUrl:"./live-europa-park.json"') && ep.includes('cardSourceRide:"voltron-nevera"'),"Maintain original live wait integration and park image flow");
