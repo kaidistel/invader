@@ -126,7 +126,7 @@ body[data-park="phantasialand"][data-season="wintertraum"] .nightPlanner{
   min-height:260px;margin:0 0 42px;padding:29px clamp(21px,3.4vw,37px);
   background:
     linear-gradient(90deg,rgba(6,20,36,.98) 0%,rgba(7,23,41,.94) 40%,rgba(8,24,41,.44) 78%,rgba(7,20,35,.27) 100%),
-    url("./assets/wintertraum-taron-original.jpg") center 43%/cover no-repeat;
+    url("./assets/wintertraum-night-planner-2026.webp") center 43%/cover no-repeat;
   color:#f8f0e1;border:1px solid rgba(203,177,129,.65);border-radius:14px;
   box-shadow:0 12px 34px rgba(1,8,20,.32);
 }
@@ -574,7 +574,7 @@ body[data-park="phantasialand"][data-season="wintertraum"] :is(a,button,input,se
     grid-template-columns:minmax(0,1fr);
     background:
       linear-gradient(90deg,rgba(7,22,40,.97),rgba(7,23,39,.91) 65%,rgba(7,20,36,.72)),
-      url("./assets/wintertraum-taron-original.jpg") center 44%/cover no-repeat;
+      url("./assets/wintertraum-night-planner-2026.webp") center 44%/cover no-repeat;
   }
   body[data-park="phantasialand"][data-season="wintertraum"] .npr-heading{padding-top:0}
   body[data-park="phantasialand"][data-season="wintertraum"] .npr-heading h2{font-size:46px}

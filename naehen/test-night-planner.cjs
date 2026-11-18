@@ -35,7 +35,7 @@ assert(html.includes("night-planner.css?v=182"),"Missing updated winter styleshe
 assert(app.includes("NAEHEN_NIGHT_PLANNER?.init"),"App init missing");
 assert(app.includes("refreshNightPlanner();"),"Live update missing");
 assert(app.includes("ice[\\s-]*skate"),"Skate hire not filtered");
-assert(sw.includes("naehen-v183")&&sw.includes("'./night-planner-core.js'"),"Old cache");
+assert(sw.includes("naehen-v184")&&sw.includes("'./night-planner-core.js'"),"Old cache");
 assert(ui.includes("data-npr-quick")&&ui.includes("data-npr-showtime"),"Missing planner inputs");
 assert(css.includes(".npr-option-grid")&&css.includes(".wintertraumLead"),"Missing planner styles");
 console.log("PASS Night Ride Planner: scheduled shows, queue, walking, Quick Pass, closures, inputs, cache");

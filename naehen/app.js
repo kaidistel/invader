@@ -19,10 +19,12 @@
   const EUROPA_HALLOWINTER_ART = "https://www.hallo-muenchen.de/assets/images/44/204/44204509-halloween-fahrspass-im-multi-launch-coaster-voltron-nevera-powered-by-rimac-PnBG.jpg";
   const WINTERTRAUM_HERO = "./assets/wintertraum-berlin-original.jpg";
   const WINTERTRAUM_RIDE_ART = {
-    "taron": "./assets/wintertraum-taron-original.jpg",
+    // User-supplied Wintertraum photography; optimized local copies for crisp cards and details.
+    "taron": "./assets/wintertraum-taron-2026.webp",
     "fly": "./assets/wintertraum-fly-original.jpg",
-    "black-mamba": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/deep-in-africa/black-mamba/cf-winter-black-mamba_05.jpg",
-    "mystery-castle": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/mystery/mystery-castle/mobile/hm-winter-mystery-castle_03.jpg",
+    "black-mamba": "./assets/wintertraum-black-mamba-2026.webp",
+    "colorado-adventure": "./assets/wintertraum-colorado-adventure-2026.webp",
+    "mystery-castle": "./assets/wintertraum-mystery-castle-2026.webp",
     "chiapas": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/mexico/ga-winter-mexico_04.jpg",
     "wellenflug": "https://www.phantasialand.de/files/uploads/presse/bilder/wintertraum/ga-phantasialand-wintertraum-berlin-wellenflug_01.jpg",
     "maus-au-chocolat": "https://static.phlcdn.de/files/uploads/themenpark/images/winter/berlin/maus-au-chocolat/gap-maus-au-chocolat-winter_01.jpg",
