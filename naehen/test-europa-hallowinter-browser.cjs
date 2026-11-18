@@ -35,18 +35,16 @@ function createApp(date){
        const season=parkCard?.dataset.season;
        const cardImg=parkCard?.querySelector(".parkChoiceArt")?.getAttribute("src");
        await window.__EUROPA_QA__.openPark("europa-park",{pushHistory:false});
-       const section=document.getElementById("hallowinterSection");
        const hero=document.querySelector("#homeView>.hero");
        const rect=hero.getBoundingClientRect();
-       const intro=section.getBoundingClientRect();
        const style=getComputedStyle(hero);
        const totalRides=document.querySelectorAll("#rides .ride").length;
        const voltron=document.querySelector('#rides .ride[data-detail="voltron-nevera"]');
        const voltronSrc=voltron?.querySelector(".rideArt")?.getAttribute("src");
        return {
-         season,cardImg,activeSeason:document.body.dataset.season,sectionShown:!section.hidden,
+         season,cardImg,activeSeason:document.body.dataset.season,legacyInfoExists:!!document.getElementById("hallowinterSection"),
          title:document.getElementById("parkDayHeadline").textContent,
-         introWidth:intro.width,heroWidth:rect.width,heroLeft:rect.left,heroRight:rect.right,
+         heroWidth:rect.width,heroLeft:rect.left,heroRight:rect.right,
          fullPageWidth:document.documentElement.scrollWidth,
          headerStyle:style.backgroundImage,headerHeight:rect.height,
          decorFont:getComputedStyle(hero.querySelector("h1")).fontFamily,
@@ -58,12 +56,12 @@ function createApp(date){
      const tag=width+"px";
      assert.equal(result.season,"hallowinter",tag+" picker season");
      assert.equal(result.activeSeason,"hallowinter",tag+" active season");
-     assert.equal(result.sectionShown,true,tag+" section hidden");
+     assert.equal(result.legacyInfoExists,false,tag+" obsolete information section");
      assert.ok(result.title.includes("HALLOWinter"),tag+" winter intro missing");
      assert.equal(result.voltronCount,1,tag+" Voltron duplicate or missing");
      assert.ok(result.voltronSrc?.includes("halloween-fahrspass-im-multi-launch-coaster-voltron-nevera-powered-by-rimac-PnBG.jpg"),tag+" Voltron card should be seasonal photo");
      assert.ok(result.headerStyle.includes("halloween-fahrspass-im-multi-launch-coaster-voltron-nevera-powered-by-rimac-PnBG.jpg"),tag+" seasonal hero photo missing");
-     assert.ok(result.decorFont.includes("Cormorant Garamond"),tag+" editorial type missing");
+     assert.ok(result.decorFont.includes("Cinzel"),tag+" HALLOWinter display font missing");
      assert.ok(result.fullPageWidth<=width+4,tag+" horizontal overflow "+result.fullPageWidth);
      assert.ok(result.heroLeft>=-2&&result.heroRight<=width+2,tag+" hero outside viewport");
      assert.ok(result.headerHeight>350,tag+" hero collapsed");
@@ -95,14 +93,12 @@ function createApp(date){
      await window.__EUROPA_QA__.openPark("europa-park",{pushHistory:false});
      return {
        enabled:window.__EUROPA_QA__.gate,season:document.body.dataset.season,
-       story:document.getElementById("hallowinterSection").hidden,
        art:window.__EUROPA_QA__.parkModuleFor("europa-park").worlds["voltron-nevera"].artUrl||"",
        count:document.querySelectorAll("#rides .ride[data-detail='voltron-nevera']").length
      };
    });
    assert.equal(off.enabled,false,"HALLOWinter should end on 27 Nov");
    assert.equal(off.season,undefined,"Europa Park December should not inherit HALLOWinter");
-   assert.equal(off.story,true,"HALLOWinter editorial section must hide after 27 Nov");
    assert.ok(!off.art.includes("halloween-fahrspass-im-multi-launch-coaster-voltron-nevera-powered-by-rimac-PnBG.jpg"),"Voltron original art must return after season");
    assert.equal(off.count,1,"Attraction remains in the normal season");
    await outside.close();
