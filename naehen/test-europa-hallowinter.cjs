@@ -9,7 +9,7 @@ assert.ok(app.includes('document.body.dataset.season = "hallowinter"'),"Europa P
 assert.ok(app.includes('delete document.body.dataset.season'),"Other park seasons unaffected");
 assert.ok(app.includes('hallowinterSection.hidden = !(parkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE)'),"Dedicated section must be hidden outside the seasonal Europa-Park");
 assert.ok(html.includes('id="hallowinterSection"')&&html.includes('aria-labelledby="hallowinterTitle"'),"Season section must exist and be accessible");
-assert.ok(html.includes('hallowinter.css?v=181')&&sw.includes("'./hallowinter.css'")&&sw.includes("naehen-v181"),"HALLOWinter CSS cached in PWA release");
+assert.ok(html.includes('hallowinter.css?v=182')&&sw.includes("'./hallowinter.css'")&&sw.includes("naehen-v182"),"HALLOWinter CSS cached in PWA release");
 assert.ok(css.includes('body[data-park="europa-park"][data-season="hallowinter"]'),"Theme scoped exclusively to Europa Park HALLOWinter");
 assert.ok(!css.includes('body[data-park="phantasialand"]'),"Phantasialand protected");
 assert.ok(css.includes(".hwSeasonColumns")&&css.includes(".hwVisitorNote")&&css.includes(".hwSeasonHeader"),"Transitional design modules required");
@@ -22,6 +22,8 @@ assert.ok(ep.includes('liveDataUrl:"./live-europa-park.json"') && ep.includes('c
 assert.ok(app.includes("startLiveRefresh()")&&app.includes("loadLiveWaits()"),"Do not disable live queues");
 assert.ok(html.includes('https://www.europapark.de/de/freizeitpark/hallowinter-im-europa-park'),"Official source link required");
 assert.ok(html.includes("02.–27. NOVEMBER 2026")&&html.includes("11:00 – mind. 19:00 UHR"),"Official dates and hours required");
-const url="https://www.europapark.de/sites/default/files/styles/large/public/media_image/2026-01/europa-park-hallowinter-voltron.jpg?itok=7O0WvH7k";
+const url="https://www.hallo-muenchen.de/assets/images/44/204/44204509-halloween-fahrspass-im-multi-launch-coaster-voltron-nevera-powered-by-rimac-PnBG.jpg";
 assert.ok(css.includes(url)&&app.includes(url),"Use matching official 2026 HALLOWinter Voltron photo");
-console.log("PASS Europa-Park HALLOWinter 2026: date gate, official Voltron art, isolated editorial theme, live data and offline v181");
+assert.ok(css.includes("opacity:.9") && css.includes("hw-cover-reveal"),"Hallowinter clear ride art and motion required");
+assert.ok(sw.includes("'./europa-park-images.json'"),"Attraction photo manifest should remain cached");
+console.log("PASS Europa-Park HALLOWinter 2026: gate, Voltron photo, sharper image cards, theme, live data and offline v182");
