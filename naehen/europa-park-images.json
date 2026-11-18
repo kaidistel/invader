@@ -1,8 +1,8 @@
 {
   "version": "2026-hallowinter-182",
-  "source": "Attraction-specific official Europa-Park and Europa-Park press photography; source links point to the original hosted images.",
+  "source": "Attraktionsbezogene Fotos mit geprüften Direktlinks; aus Europa-Park-Bildmaterial und HALLOWinter-Fotogalerien.",
   "rides": {
-    "blue-fire-megacoaster": "https://presse.europapark.com/uploads/pics/13478-BlueFire1.jpg",
+    "blue-fire-megacoaster": "https://androland.com/images/Europa_Park/HalloWinter/EP_HALLOWinter_Blue-Fire1.jpg",
     "wodan-timburcoaster": "https://www.europapark.de/sites/default/files/import/attraction/947/Europa-Park_Wodan-Timburcoaster_Island.jpg",
     "silver-star": "https://www.europapark.de/sites/default/files/import/attraction/563/SilverStar_Frankreich_Europa-Park.jpg",
     "eurosat-cancan-coaster": "https://www.europapark.de/sites/default/files/import/attraction/571/EurosatCanCanCoaster_Frankreich_Europa-Park.jpg"
