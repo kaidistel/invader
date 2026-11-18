@@ -6,6 +6,9 @@ on:
       - 'naehen/wintertraum-details.css'
       - 'naehen/wintertraum-recap.css'
       - 'naehen/test-wintertraum-recap-browser.cjs'
+      - 'naehen/hallowinter.css'
+      - 'naehen/test-europa-hallowinter-browser.cjs'
+      - 'naehen/test-europa-hallowinter.cjs'
       - 'naehen/wintertraum-snow.css'
       - 'naehen/wintertraum-snow.js'
       - 'naehen/test-wintertraum-snow-browser.cjs'
@@ -36,6 +39,8 @@ jobs:
         run: node naehen/test-wintertraum-snow-browser.cjs
       - name: Verify Wintertraum completed-day recap and archive in Chromium
         run: node naehen/test-wintertraum-recap-browser.cjs
+      - name: Verify Europa-Park HALLOWinter and Voltron in Chromium
+        run: node naehen/test-europa-hallowinter-browser.cjs
       - name: Publish six viewport screenshots
         if: always()
         uses: actions/upload-artifact@v4
