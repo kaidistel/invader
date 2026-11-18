@@ -1041,8 +1041,6 @@
     if (parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE) document.body.dataset.season = "wintertraum";
     else if (parkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE) document.body.dataset.season = "hallowinter";
     else delete document.body.dataset.season;
-    const hallowinterSection = $("#hallowinterSection");
-    if (hallowinterSection) hallowinterSection.hidden = !(parkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE);
     const winterShows = $("#wintertraumSection");
     if (winterShows) winterShows.hidden = !(parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE);
     const magicTime = $("#winterMagicTime");
