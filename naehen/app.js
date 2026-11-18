@@ -16,7 +16,7 @@
   const WINTERTRAUM_ACTIVE = WINTERTRAUM_DATE >= "2026-11-14" && WINTERTRAUM_DATE <= "2027-01-24";
   // Official 2026 transitional season: 2–27 November, 11–at least 19h.
   const EUROPA_HALLOWINTER_ACTIVE = WINTERTRAUM_DATE >= "2026-11-02" && WINTERTRAUM_DATE <= "2026-11-27";
-  const EUROPA_HALLOWINTER_ART = "https://www.europapark.de/sites/default/files/styles/large/public/media_image/2026-01/europa-park-hallowinter-voltron.jpg?itok=7O0WvH7k";
+  const EUROPA_HALLOWINTER_ART = "https://www.hallo-muenchen.de/assets/images/44/204/44204509-halloween-fahrspass-im-multi-launch-coaster-voltron-nevera-powered-by-rimac-PnBG.jpg";
   const WINTERTRAUM_HERO = "./assets/wintertraum-berlin-original.jpg";
   const WINTERTRAUM_RIDE_ART = {
     "taron": "./assets/wintertraum-taron-original.jpg",
