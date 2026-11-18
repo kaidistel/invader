@@ -52,6 +52,8 @@ jobs:
         run: node naehen/test-meppen-herbstkirmes-2026.cjs
       - name: Test Frost & Fun Mannheim 2026 without map
         run: node naehen/test-mannheim-frost-and-fun-2026.cjs
+      - name: Test Europa-Park HALLOWinter 2026 season and Voltron art
+        run: node naehen/test-europa-hallowinter.cjs
       - name: Test Phantasialand Wintertraum show tracking and layout
         run: node naehen/test-phantasialand-wintertraum.cjs
       - name: Test Wintertraum experience design and original photos
