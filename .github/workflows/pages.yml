@@ -106,7 +106,10 @@ jobs:
             "$GITHUB_WORKSPACE/naehen/europa-park-images.json" || echo "Art-Refresh nicht erreichbar – bestehendes Europa-Park-Manifest wird verwendet."
           test -s "$GITHUB_WORKSPACE/naehen/europa-park-images.json"
 
+      # Push processing is independent of publishing the park guide.
+      # A transient Supabase/upsert failure must not block the PWA release.
       - name: Evaluate NÄHEN push alerts
+        continue-on-error: true
         env:
           NAEHEN_SUPABASE_URL: ${{ secrets.NAEHEN_SUPABASE_URL }}
           NAEHEN_SUPABASE_SECRET_KEY: ${{ secrets.NAEHEN_SUPABASE_SECRET_KEY }}
