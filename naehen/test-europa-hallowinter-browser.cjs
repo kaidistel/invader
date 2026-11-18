@@ -61,8 +61,8 @@ function createApp(date){
      assert.equal(result.sectionShown,true,tag+" section hidden");
      assert.ok(result.title.includes("HALLOWinter"),tag+" winter intro missing");
      assert.equal(result.voltronCount,1,tag+" Voltron duplicate or missing");
-     assert.ok(result.voltronSrc?.includes("europa-park-hallowinter-voltron.jpg"),tag+" Voltron card should be seasonal photo");
-     assert.ok(result.headerStyle.includes("europa-park-hallowinter-voltron.jpg"),tag+" seasonal hero photo missing");
+     assert.ok(result.voltronSrc?.includes("halloween-fahrspass-im-multi-launch-coaster-voltron-nevera-powered-by-rimac-PnBG.jpg"),tag+" Voltron card should be seasonal photo");
+     assert.ok(result.headerStyle.includes("halloween-fahrspass-im-multi-launch-coaster-voltron-nevera-powered-by-rimac-PnBG.jpg"),tag+" seasonal hero photo missing");
      assert.ok(result.decorFont.includes("Cormorant Garamond"),tag+" editorial type missing");
      assert.ok(result.fullPageWidth<=width+4,tag+" horizontal overflow "+result.fullPageWidth);
      assert.ok(result.heroLeft>=-2&&result.heroRight<=width+2,tag+" hero outside viewport");
@@ -79,7 +79,7 @@ function createApp(date){
        });
        assert.equal(ride.open,true,tag+" Voltron details not open");
        assert.ok(ride.name.includes("Voltron"),tag+" Voltron name missing");
-       assert.ok(ride.img.includes("europa-park-hallowinter-voltron.jpg"),tag+" official Voltron photo not in detail");
+       assert.ok(ride.img.includes("halloween-fahrspass-im-multi-launch-coaster-voltron-nevera-powered-by-rimac-PnBG.jpg"),tag+" official Voltron photo not in detail");
        assert.ok(ride.control.includes("ANSTELLEN"),tag+" queue functionality missing");
        await page.screenshot({path:path.join(shots,"voltron-hallowinter-"+width+"px.png"),animations:"disabled"});
      }
@@ -103,7 +103,7 @@ function createApp(date){
    assert.equal(off.enabled,false,"HALLOWinter should end on 27 Nov");
    assert.equal(off.season,undefined,"Europa Park December should not inherit HALLOWinter");
    assert.equal(off.story,true,"HALLOWinter editorial section must hide after 27 Nov");
-   assert.ok(!off.art.includes("europa-park-hallowinter-voltron.jpg"),"Voltron original art must return after season");
+   assert.ok(!off.art.includes("halloween-fahrspass-im-multi-launch-coaster-voltron-nevera-powered-by-rimac-PnBG.jpg"),"Voltron original art must return after season");
    assert.equal(off.count,1,"Attraction remains in the normal season");
    await outside.close();
    console.log("PASS Europa-Park HALLOWinter responsive 320/375/430/768/1024/1440px and Voltron details; off-season isolation");
