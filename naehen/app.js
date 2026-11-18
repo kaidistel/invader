@@ -14,6 +14,9 @@
   }
   const WINTERTRAUM_DATE = phantasialandLocalDate();
   const WINTERTRAUM_ACTIVE = WINTERTRAUM_DATE >= "2026-11-14" && WINTERTRAUM_DATE <= "2027-01-24";
+  // Official 2026 transitional season: 2–27 November, 11–at least 19h.
+  const EUROPA_HALLOWINTER_ACTIVE = WINTERTRAUM_DATE >= "2026-11-02" && WINTERTRAUM_DATE <= "2026-11-27";
+  const EUROPA_HALLOWINTER_ART = "https://www.europapark.de/sites/default/files/media_image/2026-01/europa-park-hallowinter-voltron.jpg";
   const WINTERTRAUM_HERO = "./assets/wintertraum-berlin-original.jpg";
   const WINTERTRAUM_RIDE_ART = {
     "taron": "./assets/wintertraum-taron-original.jpg",
@@ -84,6 +87,15 @@
     PARK_MODULES[module.park.slug] = module;
     PARKS[module.park.slug] = module.park;
   });
+  if (EUROPA_HALLOWINTER_ACTIVE && PARKS["europa-park"]) {
+    const europa = PARKS["europa-park"];
+    europa.cardImageFallbackUrls = [europa.cardImage].filter(Boolean);
+    europa.cardImage = EUROPA_HALLOWINTER_ART;
+    europa.heroImage = EUROPA_HALLOWINTER_ART;
+    europa.heroImageFallbackUrls = [europa.cardImageFallback, "./assets/park-picker-bg.webp"].filter(Boolean);
+    europa.cardCopy = "HALLOWinter · Kürbisglut trifft Winterfrost · 2.–27. November 2026.";
+    europa.disclaimer = "Kein offizielles Angebot des Europa-Park. Saisoninfos und HALLOWinter-Foto: © Europa-Park.";
+  }
 
   function parkModuleFor(parkSlug = activeParkSlug || "phantasialand") {
     return PARK_MODULES[parkSlug] || null;
@@ -846,7 +858,15 @@
         if (module.worlds?.[rideId] && imageUrl) module.worlds[rideId].artUrl = imageUrl;
       });
 
-      if (manifest.parkCardImage) park.cardImage = manifest.parkCardImage;
+      if (manifest.parkCardImage) {
+        if (parkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE) {
+          park.cardImageFallback = manifest.parkCardImage;
+          park.heroImageFallbackUrls = [manifest.parkCardImage, "./assets/park-picker-bg.webp"];
+          // The live art manifest should not overwrite the dedicated seasonal image.
+        } else {
+          park.cardImage = manifest.parkCardImage;
+        }
+      }
       module._artManifestLoaded = true;
     } catch (error) {
       console.warn("Park-Art konnte nicht geladen werden", parkSlug, error);
@@ -913,7 +933,8 @@
     if(heading) heading.textContent=category==="fair"?"Kirmessen":"Freizeitparks";
     grid.innerHTML = available.map((park) => {
       const fair = park.kind === "fair";
-      return "<button class=\"parkChoice\" type=\"button\" data-park=\"" + escapeHtml(park.slug) + "\" data-kind=\"" + (fair ? "fair" : "park") + "\"" + (park.slug === "phantasialand" && WINTERTRAUM_ACTIVE ? " data-season=\"wintertraum\"" : "") + ">" +
+      return "<button class=\"parkChoice\" type=\"button\" data-park=\"" + escapeHtml(park.slug) + "\" data-kind=\"" + (fair ? "fair" : "park") + "\"" + (park.slug === "phantasialand" && WINTERTRAUM_ACTIVE ? " data-season=\"wintertraum\"" :
+        park.slug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE ? " data-season=\"hallowinter\"" : "") + ">" +
         (park.cardImage
           ? "<img referrerpolicy=\"no-referrer\" class=\"parkChoiceArt\" src=\"" + escapeHtml(park.cardImage) + "\" alt=\"\" loading=\"eager\">"
           : "<img class=\"parkChoiceArt\" alt=\"\" loading=\"eager\" hidden>") +
@@ -1005,7 +1026,10 @@
     await loadParkArtManifest(parkSlug);
     document.body.dataset.park = parkSlug;
     if (parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE) document.body.dataset.season = "wintertraum";
+    else if (parkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE) document.body.dataset.season = "hallowinter";
     else delete document.body.dataset.season;
+    const hallowinterSection = $("#hallowinterSection");
+    if (hallowinterSection) hallowinterSection.hidden = !(parkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE);
     const winterShows = $("#wintertraumSection");
     if (winterShows) winterShows.hidden = !(parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE);
     const magicTime = $("#winterMagicTime");
@@ -1048,9 +1072,12 @@
 
     const dayWord = visitDayWord(parkSlug);
     const eyebrow = $("#parkDayEyebrow");
-    if (eyebrow) eyebrow.textContent = park.name + (parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE ? " · WINTERTRAUM 2026/27" : " · " + dayWord);
+    if (eyebrow) eyebrow.textContent = park.name +
+      (parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE ? " · WINTERTRAUM 2026/27" :
+        parkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE ? " · HALLOWinter 2026" : " · " + dayWord);
     const dayIndex = $("#visitDayIndex");
-    if (dayIndex) dayIndex.textContent = parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE ? "WINTERTRAUM · DEIN PARKTAG" : "01 / " + (venueIsFair(parkSlug) ? "KIRMESTAG" : "PARKDAY");
+    if (dayIndex) dayIndex.textContent = parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE ? "WINTERTRAUM · DEIN PARKTAG" :
+      parkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE ? "HALLOWinter · 02 — 27 NOV 2026" : "01 / " + (venueIsFair(parkSlug) ? "KIRMESTAG" : "PARKDAY");
     const archiveTitle = $("#archiveViewTitle");
     if (archiveTitle) archiveTitle.textContent = dayWord + "-Archiv";
     const archiveIntroTitle = $("#archiveIntroTitle");
@@ -1759,6 +1786,13 @@
       headline.textContent = parkDay
         ? "Wintertraum seit " + new Date(parkDay.started_at || parkDay.startedAt || Date.now()).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })
         : "Dein Wintertraum.";
+    }
+    if (activeParkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE) {
+      const subtitle = $("#parkDayEyebrow");
+      if (subtitle) subtitle.textContent = "EUROPA-PARK · ZWISCHEN DEN JAHRESZEITEN";
+      headline.textContent = parkDay
+        ? "HALLOWinter seit " + new Date(parkDay.started_at || parkDay.startedAt || Date.now()).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })
+        : "HALLOWinter. Zwei Welten.";
     }
   }
 
