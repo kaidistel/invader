@@ -16,7 +16,7 @@
   const WINTERTRAUM_ACTIVE = WINTERTRAUM_DATE >= "2026-11-14" && WINTERTRAUM_DATE <= "2027-01-24";
   // Official 2026 transitional season: 2–27 November, 11–at least 19h.
   const EUROPA_HALLOWINTER_ACTIVE = WINTERTRAUM_DATE >= "2026-11-02" && WINTERTRAUM_DATE <= "2026-11-27";
-  const EUROPA_HALLOWINTER_ART = "https://www.europapark.de/sites/default/files/media_image/2026-01/europa-park-hallowinter-voltron.jpg";
+  const EUROPA_HALLOWINTER_ART = "https://www.europapark.de/sites/default/files/styles/large/public/media_image/2026-01/europa-park-hallowinter-voltron.jpg?itok=7O0WvH7k";
   const WINTERTRAUM_HERO = "./assets/wintertraum-berlin-original.jpg";
   const WINTERTRAUM_RIDE_ART = {
     "taron": "./assets/wintertraum-taron-original.jpg",
@@ -87,6 +87,9 @@
     PARK_MODULES[module.park.slug] = module;
     PARKS[module.park.slug] = module.park;
   });
+  if (EUROPA_HALLOWINTER_ACTIVE && PARK_MODULES["europa-park"]?.worlds?.["voltron-nevera"]) {
+    PARK_MODULES["europa-park"].worlds["voltron-nevera"].artUrl = EUROPA_HALLOWINTER_ART;
+  }
   if (EUROPA_HALLOWINTER_ACTIVE && PARKS["europa-park"]) {
     const europa = PARKS["europa-park"];
     europa.cardImageFallbackUrls = [europa.cardImage].filter(Boolean);
@@ -857,6 +860,10 @@
       Object.entries(manifest.rides || {}).forEach(([rideId, imageUrl]) => {
         if (module.worlds?.[rideId] && imageUrl) module.worlds[rideId].artUrl = imageUrl;
       });
+      if (parkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE && module.worlds?.["voltron-nevera"]) {
+        // Official 2026 seasonal Voltron photo wins only during HALLOWinter.
+        module.worlds["voltron-nevera"].artUrl = EUROPA_HALLOWINTER_ART;
+      }
 
       if (manifest.parkCardImage) {
         if (parkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE) {
