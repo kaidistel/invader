@@ -1,521 +1,545 @@
-/* Europa-Park HALLOWinter 2026 · a distinct transitional autumn-to-winter atmosphere.
-   Original photographic header courtesy Europa-Park. Active only Nov 2-27, 2026. */
+/* NÄHEN · Europa-Park HALLOWinter 2026
+   A full seasonal skin, NOT another informational block.
+   Scoped to Nov 02–27 through app.js body[data-season="hallowinter"].
+   Cinzel for display, Inter for operational text; attraction identity via imagery and accents. */
 :root{
   --hw-voltron-photo:url("https://www.hallo-muenchen.de/assets/images/44/204/44204509-halloween-fahrspass-im-multi-launch-coaster-voltron-nevera-powered-by-rimac-PnBG.jpg");
 }
-#hallowinterSection[hidden]{display:none!important}
 body[data-park="europa-park"][data-season="hallowinter"]{
-  --accent:#efb178;--accent2:#bedfe0;--line:rgba(207,173,149,.43);
-  --text:#f7ede3;--muted:#c7d4d5;--panel:#20202b;--panel2:#242936;
-  background:#100f1a;color-scheme:dark;
+  --hw-display:"Cinzel",Georgia,serif;
+  --hw-ui:"Inter",Arial,system-ui,sans-serif;
+  --hw-ember:#f4a15f;--hw-gold:#ffd7a3;--hw-ice:#a0dae6;
+  --hw-night:#081522;--hw-midnight:#111e31;--hw-stroke:#dba77668;
+  --accent:#f4a15f;--accent2:#a0dae6;
+  --text:#fff0e0;--muted:#c9d8df;--line:#dba77668;
+  --panel:#152234;--panel2:#243248;
+  background:#08121d;color:#fff0e0;color-scheme:dark;
+  font-family:var(--hw-ui);
+}
+body[data-park="europa-park"][data-season="hallowinter"] :is(button,input,select,textarea){
+  font-family:var(--hw-ui);
+}
+body[data-park="europa-park"][data-season="hallowinter"] #app{
+  isolation:isolate;
 }
 body[data-park="europa-park"][data-season="hallowinter"] .parkAtmosphere{
   background:
-    radial-gradient(ellipse at 80% 8%,rgba(174,215,220,.13),transparent 46%),
-    linear-gradient(180deg,rgba(14,15,28,.34),rgba(18,15,27,.79) 50%,#100f1a 92%),
-    var(--hw-voltron-photo) center 38%/cover no-repeat,
-    var(--park-hero-image) center 42%/cover no-repeat;
+    radial-gradient(ellipse at 4% 25%,#fa833820,transparent 39%),
+    radial-gradient(ellipse at 98% 5%,#9be0e936,transparent 42%),
+    linear-gradient(180deg,#0c1526a6 0%,#0a1624ee 56%,#08121d 95%),
+    var(--park-hero-image) center 10%/cover no-repeat;
+  filter:none;
+}
+body[data-park="europa-park"][data-season="hallowinter"] :is(.topbar,.nav){
+  border-color:#d8a16b75;
+  background:linear-gradient(118deg,#281b29f0,#10283af5);
+  box-shadow:0 12px 32px #0105107d,inset 0 1px #ffdfb521;
+  backdrop-filter:blur(18px);
 }
 body[data-park="europa-park"][data-season="hallowinter"] .topbar{
-  border-bottom:1px solid rgba(224,166,115,.4);padding-bottom:15px;
+  padding:15px clamp(13px,2vw,22px);border:1px solid #d8a16b75;
+  border-radius:18px;margin-bottom:18px;
 }
+body[data-park="europa-park"][data-season="hallowinter"] .topbar .brand{
+  color:#fff1da;
+  text-shadow:0 0 18px #fc974960;
+}
+body[data-park="europa-park"][data-season="hallowinter"] .topbar .brand b{color:#ffbb73}
 body[data-park="europa-park"][data-season="hallowinter"] :is(.parkSwitch,.avatar){
-  background:#242433e8;color:#fff0da;border:1px solid #b3917a82;border-radius:9px;
+  background:#101e30dc;color:#ffebd2;
+  border:1px solid #efae7a8a;border-radius:12px;
+}
+body[data-park="europa-park"][data-season="hallowinter"] .nav{
+  border-radius:20px;
+  padding:7px;
+}
+body[data-park="europa-park"][data-season="hallowinter"] .nav button{
+  color:#c9dde4;border-radius:14px;
+}
+body[data-park="europa-park"][data-season="hallowinter"] .nav button.active{
+  background:linear-gradient(125deg,#f8c083,#ec8b53);
+  color:#162032;box-shadow:0 5px 18px #dc784760;
 }
 body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero{
   display:flex;flex-direction:column;justify-content:space-between;
-  min-height:432px;gap:36px;padding:27px clamp(18px,4vw,38px) 24px;
-  border:1px solid rgba(238,177,120,.7);border-radius:15px;
-  background:
-    linear-gradient(95deg,rgba(16,16,30,.94) 0%,rgba(21,18,32,.78) 39%,rgba(20,21,34,.23) 100%),
-    linear-gradient(0deg,rgba(13,18,33,.83),transparent 65%),
-    var(--hw-voltron-photo) 50% 43%/cover no-repeat,
-    var(--park-hero-image) center/cover no-repeat;
-  box-shadow:0 22px 60px rgba(0,0,0,.48),inset 0 1px #fff3;
+  min-height:clamp(520px,54vw,650px);gap:24px;
+  margin-bottom:32px;padding:clamp(24px,4.3vw,50px);
   position:relative;isolation:isolate;overflow:hidden;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero:before{
-  content:"";position:absolute;z-index:0;inset:11px;width:auto;height:auto;left:11px;right:11px;
-  border:1px solid #f6d1a33c;border-radius:9px;background:none;pointer-events:none;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero:after{
-  content:"HALLOWinter 2026";position:absolute;z-index:1;right:27px;top:24px;
-  border:1px solid #e5b3848a;border-radius:4px;background:#1a1929d9;
-  color:#f8cda6;padding:9px 12px;
-  font:800 10px/1.2 Inter,sans-serif;letter-spacing:1.1px;pointer-events:none;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .heroIndex{
-  color:#ffd4a8;font:800 10px/1.5 Inter,sans-serif;letter-spacing:1.4px;
-  border-bottom:1px solid #edb882;padding-bottom:9px;max-width:75%;width:fit-content;
-  position:relative;z-index:1;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .heroLine{
-  position:relative;z-index:1;align-items:flex-end;margin-top:auto;gap:15px;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .eyebrow{
-  color:#edc09d;font:700 10px/1.5 Inter,sans-serif;letter-spacing:1.2px;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero h1{
-  max-width:600px;margin:9px 0 11px;color:#fff0d9;
-  font:500 clamp(35px,5.4vw,63px)/1.07 "Cormorant Garamond",Georgia,serif;
-  letter-spacing:-1.1px;text-shadow:0 4px 20px #0008;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero #parkDayBtn{
-  min-height:46px;min-width:142px;padding:12px 14px;border-radius:7px;
-  border:1px solid #fbe0b8;background:#ebaa71;color:#2a1e28;
-  font:800 11px/1.2 Inter,sans-serif;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero #parkDayBtn.secondary{
-  border-color:#e2b689;background:#172739e8;color:#ffe5c7;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .stats{
-  position:relative;z-index:1;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .stat{
-  min-width:0;padding:13px;border:1px solid #dab49e78;border-radius:8px;
-  background:#131f30d9;backdrop-filter:blur(5px);
-}
-body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .stat strong{
-  color:#ffdbac;font:750 clamp(20px,3vw,29px)/1.3 Inter,sans-serif;letter-spacing:-.7px;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .stat span{
-  color:#dce2e1;font:600 11px/1.4 Inter,sans-serif;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #hallowinterSection{
-  display:grid;gap:13px;margin:18px 0 26px;font-family:Inter,sans-serif;
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonHeader{
-  display:grid;grid-template-columns:minmax(0,1fr) 162px;gap:26px;
-  position:relative;overflow:hidden;align-items:center;
-  padding:clamp(21px,4vw,36px);
-  border:1px solid rgba(212,169,141,.58);border-radius:12px;
-  background:radial-gradient(ellipse at 100% 5%,#b9dfda22,transparent 42%),
-    linear-gradient(112deg,#2c2234,#162633 82%);
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonHeader:before{
-  content:"";position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,#d48653 5%,#eeb278 50%,#b9dbdd);
-}
-body[data-park="europa-park"][data-season="hallowinter"] :is(.hwKicker,.hwNoteOverline){
-  color:#f2b888;font:800 10px/1.4 Inter,sans-serif;letter-spacing:1.35px;
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonHeader h2{
-  max-width:680px;margin:11px 0;
-  color:#fff0de;font:500 clamp(31px,4.3vw,46px)/1.1 "Cormorant Garamond",Georgia,serif;
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonHeader h2 em{
-  color:#ffc18e;font-weight:600;
-}
-body[data-park="europa-park"][data-season="hallowinter"] :is(.hwSeasonHeader p,.hwStoryText p,.hwVisitorNote p){
-  margin:0;color:#cbd9da;font:500 12px/1.75 Inter,sans-serif;
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonTimes{
-  display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonTimes span{
-  color:#f8e1c4;padding:9px 11px;border:1px solid #d4ae8e77;border-radius:5px;
-  background:#1424379c;font:800 10px/1.3 Inter,sans-serif;letter-spacing:.4px;
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonMark{
-  min-height:175px;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:16px;color:#f5bf85;border:1px solid #f5ba8577;
-  border-radius:82px 82px 12px 12px;background:#162b3c99;transform:rotate(2deg);
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonMark span{
-  font:900 15px Inter,sans-serif;letter-spacing:2px;
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonMark strong{
-  color:#d7e9ed;font:italic 600 40px/1 "Cormorant Garamond",Georgia,serif;
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonMark small{
-  color:#ffd1a2;font:700 12px Inter,sans-serif;letter-spacing:2px;margin-top:9px;
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonColumns{
-  display:grid;grid-template-columns:1.15fr .85fr;gap:13px;
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwStory,
-body[data-park="europa-park"][data-season="hallowinter"] .hwVisitorNote{
-  min-width:0;border:1px solid #b2a4a164;border-radius:11px;overflow:hidden;
-  background:linear-gradient(150deg,#162834,#121e2c);
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwStoryImage{
-  height:190px;
-  background:linear-gradient(0deg,#162834,transparent 75%),
-    var(--hw-voltron-photo) 50% 55%/cover no-repeat,
+  border:1px solid #f7be828f;border-radius:27px;
+  background:
+    radial-gradient(ellipse at 1% 1%,#f5a26319,transparent 55%),
+    linear-gradient(95deg,#07111ff7 0%,#101625d6 31%,#10172966 61%,#09131b14 90%),
+    linear-gradient(0deg,#0b1726f2,transparent 62%),
+    var(--hw-voltron-photo) 56% 45%/cover no-repeat,
     var(--park-hero-image) center/cover no-repeat;
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwStoryText{
-  padding:17px 21px 21px;
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwStoryText>span{
-  color:#b9dce0;font:800 10px Inter,sans-serif;letter-spacing:1px;
-}
-body[data-park="europa-park"][data-season="hallowinter"] :is(.hwStoryText h3,.hwVisitorNote h3){
-  margin:10px 0 11px;color:#fff0df;
-  font:500 clamp(26px,3.2vw,33px)/1.15 "Cormorant Garamond",Georgia,serif;
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwVisitorNote{
-  display:flex;flex-direction:column;align-items:flex-start;gap:10px;
-  padding:clamp(19px,3vw,26px);
-  background:radial-gradient(ellipse at 100% 0%,#ea965521,transparent 50%),#29232e;
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwVisitorDetails{
-  display:grid;gap:11px;margin:8px 0;
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwVisitorDetails span{
-  color:#f3d4b3;font:600 11px/1.55 Inter,sans-serif;
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwVisitorNote a{
-  display:flex;gap:8px;align-items:center;justify-content:space-between;
-  min-height:44px;margin-top:auto;padding:12px 14px;width:100%;
-  background:#efb37f;color:#251d28;border:1px solid #f9d8b4;
-  border-radius:6px;font:800 11px/1.4 Inter,sans-serif;text-decoration:none;
-}
-body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonCredit{
-  text-align:right;color:#bac4cb;font:500 10px/1.55 Inter,sans-serif;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #homeView>.sectionHead h2{
-  color:#fff0e1;font:500 clamp(25px,3.3vw,33px)/1.15 "Cormorant Garamond",Georgia,serif;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #homeView>.sectionHead span{color:#d9bda4}
-body[data-park="europa-park"][data-season="hallowinter"] #rides .ride{
-  border-color:#c29e9473;border-radius:11px;
-  background:linear-gradient(100deg,#2b2133e8,#1c2d3ceb),#191d2a;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #rides .rideArt{
-  filter:saturate(.97) contrast(1.1);opacity:.33;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #rides .ride .wait{
-  border:1px solid #bd9a817a;border-radius:7px;background:#162736e8;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #rides .ride .wait strong{color:#f8d6b0}
-body[data-park="europa-park"][data-season="hallowinter"] #rides .ride .btn.secondary{
-  border:1px solid #edb18188;border-radius:6px;background:#3b303ccc;color:#ffe3bf;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #rides .ride .btn.ghost{color:#dae6e8}
-body[data-park="europa-park"][data-season="hallowinter"] #rideSheet{
-  background:#080d1edd;backdrop-filter:blur(8px);
-}
-body[data-park="europa-park"][data-season="hallowinter"] #rideSheet .sheetCard{
-  border-color:#e8b280a8!important;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #rideSheet .worldArt:after{
-  background:linear-gradient(180deg,transparent 0%,#261e332a 55%,var(--ep-bg,#171a19) 100%)!important;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #rideSheet .close{
-  background:#1a1a30e9;color:#ffe5c9;border:1px solid #f8c69d9c;
-}
-.parkChoice[data-park="europa-park"][data-season="hallowinter"]{
-  border-color:#f3ac75ad;background:#282331;border-radius:13px;
-}
-.parkChoice[data-park="europa-park"][data-season="hallowinter"] .parkChoiceArt{
-  object-position:center 43%;filter:saturate(1.09) contrast(1.08);
-}
-.parkChoice[data-park="europa-park"][data-season="hallowinter"]:before{
-  background:linear-gradient(95deg,#221b2eea 0%,#171b2c75 65%,#161f2c24),
-    linear-gradient(0deg,#1c1829da,transparent 65%);
-}
-.parkChoice[data-park="europa-park"][data-season="hallowinter"]:after{
-  content:"HALLOWinter · 02—27 NOV";position:absolute;z-index:4;
-  top:17px;right:17px;left:auto;bottom:auto;display:block;width:auto;height:auto;
-  padding:8px 11px;background:#211a2cd9;color:#f6cda5;
-  border:1px solid #ebad7b9c;border-radius:4px;
-  font:800 9px/1.3 Inter,sans-serif;letter-spacing:.8px;
-  pointer-events:none;transform:none;
-}
-.parkChoice[data-park="europa-park"][data-season="hallowinter"] .parkChoiceMeta{color:#f4c093}
-.parkChoice[data-park="europa-park"][data-season="hallowinter"] h2{
-  color:#fff2de;text-shadow:0 4px 16px #0008;
-}
-.parkChoice[data-park="europa-park"][data-season="hallowinter"] .parkChoiceOpen{
-  color:#ffe1ba;border-top-color:#eab37c66;
-}
-body[data-park="europa-park"][data-season="hallowinter"] :is(a,button):focus-visible{
-  outline:3px solid #ffd49d;outline-offset:3px;
-}
-@media(max-width:710px){
-  body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonHeader{
-    grid-template-columns:1fr;gap:12px;
-  }
-  body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonMark{display:none}
-  body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonColumns{grid-template-columns:1fr}
-}
-@media(max-width:530px){
-  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero{
-    min-height:410px;padding:21px 16px 17px;
-    background-position:center,center,64% center,center;
-  }
-  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero:after{
-    top:21px;right:18px;padding:7px 8px;font-size:8px;
-  }
-  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .heroIndex{
-    max-width:61%;font-size:9px;
-  }
-  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .heroLine{
-    display:grid;justify-items:start;gap:13px;
-  }
-  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero h1{
-    font-size:clamp(34px,8.8vw,46px);
-  }
-  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .stats{gap:6px}
-  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .stat{padding:10px 7px}
-  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .stat strong{font-size:20px}
-  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .stat span{font-size:9px}
-  body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonHeader{padding:21px 18px}
-}
-@media(max-width:350px){
-  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero:after{
-    font-size:7px;right:17px;
-  }
-  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero #parkDayBtn{min-width:0}
-}
-@media(prefers-reduced-motion:no-preference){
-  body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonHeader{
-    animation:hw-intro .4s ease-out both;
-  }
-  @keyframes hw-intro{
-    from{opacity:.72;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}
-  }
-}
-
-
-/* v182 · HALLOWinter Art Direction — crisp imagery, warm flame / cool frost.
-   The Voltron foreground uses the photograph supplied as a visual reference. */
-:root{--hw-season-photo:url("https://www.europapark.de/sites/default/files/media_image/2026-01/europa-park-hallowinter-voltron.jpg")}
-body[data-park="europa-park"][data-season="hallowinter"]{
-  --accent:#f6b26c;--accent2:#b8ebeb;--line:#d9a97c63;
-  --text:#fff3e8;--muted:#d5e3e6;--panel:#1b2636;--panel2:#152538;
-  background:#0b1320;
-}
-body[data-park="europa-park"][data-season="hallowinter"] .parkAtmosphere{
-  background:radial-gradient(ellipse at 85% 8%,#a6e9ee22,transparent 44%),
-   linear-gradient(180deg,#101321bd 0%,#0b1320ec 70%,#0b1320 100%),
-   var(--hw-season-photo) center top/cover no-repeat;
-}
-body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero{
-  min-height:clamp(490px,55vw,660px);
-  padding:clamp(22px,3.6vw,44px);gap:22px;
-  border:1px solid #f8bf85aa;border-radius:26px;
-  background:linear-gradient(90deg,#101424f7 0%,#101827d9 25%,#17203276 53%,#14203517 79%),
-   linear-gradient(0deg,#0b1525f0 0%,transparent 50%),
-   var(--hw-voltron-photo) 58% 46%/cover no-repeat,
-   var(--hw-season-photo) center/cover no-repeat;
-  box-shadow:0 30px 80px #03050dc0,0 0 0 5px #efaa6630,inset 0 0 65px #040a1799;
+  box-shadow:0 28px 70px #0009,0 0 0 5px #d9944f20;
 }
 body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero:before{
-  inset:12px;border:1px solid #f7c9944d;border-radius:17px;
-  background:linear-gradient(135deg,#eebd8732,transparent 30%,#b1ece922 95%);
+  content:"";position:absolute;inset:12px;
+  pointer-events:none;width:auto;height:auto;
+  border-radius:18px;border:1px solid #ffd9a74b;
+  background:linear-gradient(138deg,#e58c4b2b,transparent 30%,#a1dbe824);
+  z-index:0;
 }
 body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero:after{
-  content:"✦  HALLOWINTER  /  2026";top:clamp(24px,3.5vw,42px);right:clamp(24px,3.5vw,42px);
-  padding:10px 14px;letter-spacing:1.4px;
-  color:#ffdbad;background:#121827d9;border:1px solid #f3b77cba;border-radius:999px;
-  box-shadow:0 4px 22px #0007;
+  content:"✦  HALLOWINTER  ·  2026";position:absolute;top:clamp(25px,4vw,49px);right:clamp(25px,4vw,49px);
+  width:auto;height:auto;left:auto;bottom:auto;
+  border:1px solid #ffd6a99e;border-radius:999px;
+  padding:9px 15px;background:#111b2acc;
+  color:#ffdbaf;font:800 10px/1.3 var(--hw-ui);letter-spacing:1.5px;
+  box-shadow:0 8px 24px #0007;z-index:2;pointer-events:none;
 }
 body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .heroIndex{
-  color:#ffe2b9;max-width:62%;border:0;letter-spacing:2.1px;
+  max-width:62%;width:fit-content;position:relative;z-index:1;
+  border:0;padding:0;color:#ffd9ad;
+  font:800 11px/1.4 var(--hw-ui);letter-spacing:2.15px;
 }
 body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .heroLine{
-  flex:1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:22px;
-  margin:0;max-width:100%;
+  display:flex;flex:1;align-items:center;justify-content:space-between;
+  gap:24px;margin:0;position:relative;z-index:1;
 }
 body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .heroLine>div{
-  max-width:min(620px,72%);padding-block:48px;
+  max-width:min(620px,74%);
 }
 body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .eyebrow{
-  font-size:11px;letter-spacing:2.3px;color:#ffc995;text-shadow:0 2px 12px #000;
+  color:#ffe0b4;font:700 11px/1.6 var(--hw-ui);
+  letter-spacing:2.15px;text-transform:uppercase;
 }
 body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero h1{
-  max-width:590px;margin:15px 0;
-  font:500 clamp(48px,7vw,94px)/.96 "Cormorant Garamond",Georgia,serif;
-  letter-spacing:-2.3px;text-shadow:0 4px 12px #04050cea,0 12px 48px #03050bd9;
+  max-width:630px;margin:13px 0 15px;
+  font:600 clamp(44px,6vw,78px)/1.05 var(--hw-display)!important;
+  letter-spacing:-2.4px;color:#fff0dc;
+  text-shadow:0 4px 12px #000d,0 0 45px #e38a522d;
   text-wrap:balance;
 }
 body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero #parkDayBtn{
-  align-self:center;min-height:52px;min-width:175px;border-radius:999px;
-  background:linear-gradient(125deg,#ffcd9b,#ed9860);border-color:#ffe0b7;
-  box-shadow:0 9px 32px #05050da0;transition:transform .2s,box-shadow .2s;
+  min-width:175px;min-height:54px;border-radius:13px;
+  background:linear-gradient(115deg,#ffce90,#f19b5d);
+  color:#1a2230;border:1px solid #ffe0af;
+  font:800 12px/1.2 var(--hw-ui);
+  box-shadow:0 12px 34px #0007;
 }
-body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero #parkDayBtn:hover{
-  transform:translateY(-2px);box-shadow:0 13px 40px #070512cc;
+body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero #parkDayBtn.secondary{
+  background:linear-gradient(110deg,#19324b,#2a3449);
+  border-color:#ffc28a;color:#ffe1bc;
 }
 body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .stats{
-  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;
-  margin:0;max-width:560px;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  max-width:570px;gap:10px;margin:0;
+  position:relative;z-index:1;
+  border:0;background:none;
 }
 body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .stat{
-  border:1px solid #d3c2b25e;border-radius:14px;background:#0d1728d9;
-  box-shadow:inset 0 1px #ffffff21;backdrop-filter:blur(10px);
-  padding:13px 17px;
+  min-width:0;padding:17px;border:1px solid #e5b68779;
+  background:#0d1b2ddc;border-radius:14px;
+  backdrop-filter:blur(10px);box-shadow:inset 0 1px #fff2;
 }
 body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .stat strong{
-  font:750 clamp(25px,3vw,36px)/1.1 Inter,sans-serif;color:#ffe4c3;
+  color:#ffe2b5;font:800 clamp(23px,3vw,36px)/1.15 var(--hw-ui);
 }
-body[data-park="europa-park"][data-season="hallowinter"] #hallowinterSection{gap:17px;margin:24px 0 36px}
-body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonHeader{
-  grid-template-columns:minmax(0,1fr) minmax(130px,25%);gap:28px;
-  min-height:290px;padding:clamp(25px,4vw,48px);border-radius:23px;
-  border:1px solid #efb17c7d;
-  background:radial-gradient(ellipse at 4% 85%,#eb854f40,transparent 48%),
-   radial-gradient(ellipse at 95% 8%,#a4e6ef42,transparent 48%),
-   linear-gradient(110deg,#2b1c2b,#132c3a);
-  box-shadow:inset 0 1px #ffffff1e;
+body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .stat span{
+  color:#cce2e8;font:600 11px/1.45 var(--hw-ui);
 }
-body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonHeader:before{
-  height:4px;background:linear-gradient(90deg,#e6783c,#f4be8e 44%,#a7e6f1);
+body[data-park="europa-park"][data-season="hallowinter"] #homeView>.sectionHead{
+  margin:30px 3px 18px;gap:18px;
+  padding:0 0 13px;border-bottom:1px solid #e6ae7c63;
 }
-body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonHeader h2{
-  font-size:clamp(38px,5.3vw,69px);line-height:1.01;max-width:830px;text-wrap:balance;
+body[data-park="europa-park"][data-season="hallowinter"] :is(#homeView>.sectionHead h2,#logView h2,#archiveView h2,#allDaysView h2,#profileView h2,.archiveIntro h2,#queueSheet h2){
+  color:#fff0d7;
+  font:600 clamp(26px,3.7vw,43px)/1.15 var(--hw-display)!important;
+  letter-spacing:-.9px;text-shadow:0 3px 14px #0007;
 }
-body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonHeader h2 em{color:#ffc08c}
-body[data-park="europa-park"][data-season="hallowinter"] :is(.hwSeasonHeader p,.hwStoryText p,.hwVisitorNote p){
-  font-size:clamp(13px,1.1vw,15px);line-height:1.7;
+body[data-park="europa-park"][data-season="hallowinter"] #homeView>.sectionHead span{
+  color:#a9dfea;font:700 10px/1.4 var(--hw-ui);letter-spacing:.8px;
 }
-body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonMark{
-  min-height:200px;border-radius:90px 90px 19px 19px;
-  background:linear-gradient(155deg,#e986473c,#173c5285 70%);
-  border:1px solid #ffc89b7b;transform:rotate(4deg);
-  box-shadow:0 10px 42px #050a1c5c,inset 0 0 25px #d4f4f114;
+body[data-park="europa-park"][data-season="hallowinter"] .rideTools{
+  gap:11px;margin:0 0 21px;
 }
-body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonMark strong{font-size:clamp(42px,5vw,64px)}
-body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonColumns{grid-template-columns:1.25fr .75fr;gap:17px}
-body[data-park="europa-park"][data-season="hallowinter"] :is(.hwStory,.hwVisitorNote){
-  border-radius:19px;border-color:#d2b3a35e;box-shadow:0 13px 28px #03061466;
+body[data-park="europa-park"][data-season="hallowinter"] .searchLabel{
+  min-height:52px;border:1px solid #d6a47880;border-radius:13px;
+  background:#13253adf;box-shadow:inset 0 1px #ffffff12;
 }
-body[data-park="europa-park"][data-season="hallowinter"] .hwStoryImage{
-  height:clamp(210px,24vw,315px);
-  background:linear-gradient(0deg,#172d3b 0%,#15273520 60%),
-    var(--hw-season-photo) center 47%/cover no-repeat;
+body[data-park="europa-park"][data-season="hallowinter"] .searchLabel:focus-within{
+  outline:2px solid #ffd3a0;outline-offset:2px;
 }
-body[data-park="europa-park"][data-season="hallowinter"] .hwStoryText{padding:22px clamp(21px,3vw,32px) 30px}
-body[data-park="europa-park"][data-season="hallowinter"] :is(.hwStoryText h3,.hwVisitorNote h3){
-  font-size:clamp(28px,3.1vw,42px);line-height:1.06;
+body[data-park="europa-park"][data-season="hallowinter"] .searchLabel input{
+  color:#fff3df;font:500 14px var(--hw-ui);
 }
-body[data-park="europa-park"][data-season="hallowinter"] .hwVisitorNote{
-  padding:clamp(24px,3.5vw,40px);
-  background:radial-gradient(circle at 100% 0%,#ef985c27,transparent 56%),#222532;
+body[data-park="europa-park"][data-season="hallowinter"] .searchLabel input::placeholder{color:#b8c8d5}
+body[data-park="europa-park"][data-season="hallowinter"] .rideTools>button{
+  border:1px solid #daaa7e8c;border-radius:12px;
+  background:#17273b;color:#ffe2c2;font:800 11px var(--hw-ui);
 }
-body[data-park="europa-park"][data-season="hallowinter"] .hwVisitorDetails span{font-size:13px}
-body[data-park="europa-park"][data-season="hallowinter"] .hwVisitorNote a{
-  border-radius:12px;min-height:48px;font-size:12px;
+body[data-park="europa-park"][data-season="hallowinter"] .rideTools>button[aria-pressed="true"]{
+  background:#f5b477;color:#111b2a;
 }
 body[data-park="europa-park"][data-season="hallowinter"] #rides{
-  gap:17px;grid-template-columns:repeat(2,minmax(0,1fr));
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(13px,2vw,19px);
 }
 body[data-park="europa-park"][data-season="hallowinter"] #rides .ride{
-  min-height:235px;padding:23px;border-radius:18px;
-  background:#152131;border:1px solid #bd9e896b;box-shadow:0 14px 30px #0006;
-  transition:transform .22s,border-color .22s,box-shadow .22s;
+  position:relative;min-height:260px;min-width:0;
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(70px,96px);
+  padding:21px;border:1px solid #d6a37874;border-radius:20px;
+  background:#132136;overflow:hidden;isolation:isolate;
+  box-shadow:0 15px 35px #0008,inset 0 1px #fff2;
+  transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease;
 }
-body[data-park="europa-park"][data-season="hallowinter"] #rides .ride:after{
-  background:linear-gradient(0deg,#0c1828f7 0%,#102035d4 35%,#12253c26 82%)!important;
+body[data-park="europa-park"][data-season="hallowinter"] #rides .ride::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:-1;
+  border-top:3px solid #e2a36b7a;border-radius:19px;
 }
-body[data-park="europa-park"][data-season="hallowinter"] #rides .rideArt{
-  opacity:.9;filter:saturate(1.1) contrast(1.06);object-position:center 43%;
+body[data-park="europa-park"][data-season="hallowinter"] #rides .ride::after{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(90deg,#0a1529e8 0%,#132235c4 28%,#182b4073 65%,#0a17263b),
+    linear-gradient(0deg,#071422fb 0%,#07142295 43%,transparent 90%)!important;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rides .ride .rideArt{
+  opacity:1!important;filter:saturate(1.1) contrast(1.07)!important;
+  object-fit:cover;object-position:center 43%;image-rendering:auto;
 }
 body[data-park="europa-park"][data-season="hallowinter"] #rides .ride:hover{
-  transform:translateY(-4px);border-color:#f9c38b;box-shadow:0 17px 38px #0009;
+  transform:translateY(-4px);border-color:#ffd09a;
+  box-shadow:0 19px 42px #000a,0 0 22px #e6a1682c;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rides .ride .rideMain{
+  min-width:0;z-index:1;display:flex;flex-direction:column;justify-content:space-between;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rides .ride .rideTop{
+  display:flex;min-width:0;align-items:flex-start;
 }
 body[data-park="europa-park"][data-season="hallowinter"] #rides .ride h3{
-  font-size:clamp(22px,2.2vw,29px);text-shadow:0 2px 12px #000;
+  max-width:100%;margin:3px 0 7px;
+  color:#fff1dc!important;
+  font:600 clamp(20px,2.1vw,27px)/1.13 var(--hw-display)!important;
+  letter-spacing:-.55px;text-wrap:balance;
+  text-shadow:0 3px 10px #000d,0 0 18px #0009;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rides .ride .zone{
+  color:#aee1e8;font:700 10px/1.55 var(--hw-ui)!important;
+  letter-spacing:.5px;text-shadow:0 2px 9px #000e;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rides .ride .meta{
+  display:flex;align-items:center;align-content:flex-end;flex-wrap:wrap;
+  gap:7px;margin-top:auto;padding-top:12px;
+  color:#e6d6c7;font-family:var(--hw-ui)!important;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rides .ride .meta .btn{
+  min-height:40px!important;border-radius:9px!important;
+  padding:10px 11px!important;font:800 10px/1.2 var(--hw-ui)!important;
+  letter-spacing:.2px;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rides .ride .btn.secondary{
+  background:linear-gradient(110deg,#f9c18d,#eda06b);
+  color:#142136;border:1px solid #ffdbb0;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rides .ride .btn.ghost{
+  background:#13263bca;color:#ffe9cf;border:1px solid #e4ae7e81;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rides .ride .fav{
+  background:#0c1928dc;border:1px solid #e1b4879e;
+  color:#ffe0b1;border-radius:12px;
+  backdrop-filter:blur(8px);
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rides .ride .fav.on{
+  background:#efb17a;color:#152235;
 }
 body[data-park="europa-park"][data-season="hallowinter"] #rides .ride .wait{
-  background:#13273ddc;border-radius:12px;border-color:#eab48773;backdrop-filter:blur(10px);
+  z-index:1;align-self:end;min-height:93px;
+  padding:11px 6px;border:1px solid #f1b77b90;border-radius:12px;
+  background:#102136e0;backdrop-filter:blur(10px);
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rides .ride .wait strong{
+  color:#ffe1b4;font:800 clamp(25px,2.5vw,36px)/1 var(--hw-ui);
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rides .ride .wait small{
+  color:#badce5;font:700 9px/1.4 var(--hw-ui);
 }
 body[data-park="europa-park"][data-season="hallowinter"] #rides .ride[data-detail="voltron-nevera"]{
-  border-color:#f5ba8dc1;box-shadow:0 15px 35px #0008,0 0 0 2px #e8a16b22;
+  border-color:#a4e6efc9;
+  box-shadow:0 17px 38px #0008,0 0 0 2px #80ddec2d;
 }
-body[data-park="europa-park"][data-season="hallowinter"] #rides .ride[data-detail="voltron-nevera"] .rideArt{
-  object-position:center 39%;
+body[data-park="europa-park"][data-season="hallowinter"] #rides .ride[data-detail="voltron-nevera"]::before{
+  border-top-color:#a2e5f0c0;
 }
-body[data-park="europa-park"][data-season="hallowinter"] #rideSheet[data-park="europa-park"]{
-  --ep-bg:#152337;--ep-bg2:#0b121d;--ep-panel:#132338ec;
+body[data-park="europa-park"][data-season="hallowinter"] :is(#logView,#archiveView,#allDaysView,#profileView){
+  color:#ffead4;
 }
-body[data-park="europa-park"][data-season="hallowinter"] #rideSheet[data-world="voltron-nevera"]{
-  --ep-bg:#152532;--ep-bg2:#070f17;--ep-accent:#8ce3ec;--ep-title:#fff2d9;
+body[data-park="europa-park"][data-season="hallowinter"] :is(.logItem,.profileBox,.archiveDayCard,.archiveRecord,.archiveIntro){
+  border-color:#d6a77867!important;border-radius:17px;
+  background:linear-gradient(140deg,#202134e9,#10283ae9)!important;
+  color:#fff0dd;box-shadow:inset 0 1px #fff1,0 10px 24px #0005;
 }
-body[data-park="europa-park"][data-season="hallowinter"] #rideSheet[data-world="voltron-nevera"] .worldArt{
-  height:clamp(380px,55vh,530px)!important;
+body[data-park="europa-park"][data-season="hallowinter"] :is(.profileBox h3,.archiveDayTop h3){
+  color:#ffebd5;font-family:var(--hw-display)!important;
 }
-body[data-park="europa-park"][data-season="hallowinter"] #rideSheet[data-world="voltron-nevera"] .worldArt>img{
-  object-position:center 37%!important;filter:contrast(1.07) saturate(1.13)!important;
+body[data-park="europa-park"][data-season="hallowinter"] :is(.logItem small,.archiveIntro p,.archiveDayStats span){
+  color:#c1dce6;
 }
-body[data-park="europa-park"][data-season="hallowinter"] #rideSheet[data-world="voltron-nevera"] .worldArt:after{
-  background:linear-gradient(180deg,#05101c0a 0%,#07111c13 38%,#142533ab 77%,#152532 100%)!important;
+body[data-park="europa-park"][data-season="hallowinter"] :is(.btn.primary,.btn.secondary,.seg button.on){
+  border-radius:11px;
 }
-body[data-park="europa-park"][data-season="hallowinter"] #rideSheet[data-world="voltron-nevera"] .sheetCard{
-  padding-top:clamp(300px,49vh,435px);border-top:5px solid #f5a96c!important;
-  background:radial-gradient(circle at 100% 8%,#d6864c27,transparent 35%),
-    repeating-linear-gradient(145deg,#96d9e007 0 1px,transparent 1px 20px),
-    linear-gradient(#152532,#070f17)!important;
+body[data-park="europa-park"][data-season="hallowinter"] #rideSheet{
+  background:#040b16dd;backdrop-filter:blur(14px);
+  --hw-detail-bg:#101b2b;
 }
-body[data-park="europa-park"][data-season="hallowinter"] #rideSheet[data-world="voltron-nevera"] #rideTitle{
-  border-left:5px solid #fab171!important;clip-path:none!important;
-  padding:12px 20px!important;background:linear-gradient(90deg,#0c2235ee,#0c223577)!important;
-  letter-spacing:.04em!important;
+body[data-park="europa-park"][data-season="hallowinter"] #rideSheet .sheetCard{
+  position:relative;overflow:auto;
+  background:
+    radial-gradient(circle at 93% 12%,#a1dae520,transparent 44%),
+    radial-gradient(circle at 0% 60%,#f58c4624,transparent 39%),
+    repeating-linear-gradient(125deg,#f9c38b08 0 1px,transparent 1px 24px),
+    linear-gradient(160deg,#1a2537,#0b1726 80%)!important;
+  border:1px solid #dbad7d9c!important;border-top:5px solid #edab75!important;
+  border-radius:25px 25px 10px 10px;
+  color:#fff1df!important;
+  padding-top:clamp(285px,48vh,405px);
+  box-shadow:0 0 45px #f2b17418,0 27px 75px #000a;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rideSheet .worldArt{
+  display:block!important;
+  inset:0 0 auto!important;height:clamp(345px,53vh,470px)!important;
+  width:100%!important;border:0!important;border-radius:19px 19px 0 0!important;
+  clip-path:none!important;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rideSheet .worldArt>img{
+  width:100%!important;height:100%!important;left:0!important;
+  object-fit:cover!important;object-position:center 42%;
+  opacity:1!important;filter:saturate(1.11) contrast(1.05)!important;
+  border:0!important;border-radius:0!important;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rideSheet .worldArt:after{
+  background:linear-gradient(180deg,#09131f16 0%,#09131f0c 33%,#101b2bc4 76%,#101b2b 100%)!important;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rideSheet .worldArt:before{
+  content:"HALLOWINTER   ·   EUROPA-PARK";z-index:3;
+  position:absolute;top:22px;left:23px;
+  border:1px solid #f4bb88ae;border-radius:999px;
+  padding:8px 12px;background:#0b182ad9;
+  color:#ffd5a6;font:800 9px/1.3 var(--hw-ui);
+  letter-spacing:1.15px;text-shadow:0 2px 10px #0009;
+  box-shadow:0 5px 19px #0006;
+  pointer-events:none;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rideSheet .close{
+  position:absolute;z-index:4;top:16px;right:16px;
+  background:#102237e8!important;border:1px solid #ffd1a58e!important;
+  border-radius:12px!important;color:#ffedda!important;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rideSheet #rideTitle{
+  width:100%!important;margin:9px 0 20px!important;
+  padding:10px 16px!important;max-width:100%;
+  font:600 clamp(29px,4.1vw,48px)/1.11 var(--hw-display)!important;
+  letter-spacing:-.8px!important;text-transform:none!important;text-align:left!important;
+  color:#ffebd7!important;-webkit-text-fill-color:#ffebd7!important;
+  text-shadow:0 2px 16px #000d!important;
+  background:linear-gradient(90deg,#e69a5e35,transparent 88%)!important;
+  border:0!important;border-left:4px solid #f2b37f!important;
+  border-radius:0 12px 12px 0!important;clip-path:none!important;
+  box-shadow:none!important;transform:none!important;
+  overflow-wrap:break-word;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rideSheet :is(#rideZone,#worldCaption,.waitCaption){
+  font-family:var(--hw-ui)!important;
+  color:#aee0e9!important;font-weight:700!important;
+  letter-spacing:1.15px;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rideSheet .rideDetailWait{
+  color:#ffe0b0!important;
+  background:#152438c7!important;
+  border:1px solid #f1b8819a!important;border-radius:13px;
+  text-shadow:0 1px 13px #edaa7544;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rideSheet :is(#rideDetailStatus,.srBox,.message,#rideExtraFacts){
+  color:#fff0de!important;
+  background:#15273be8!important;
+  border:1px solid #d8ab7a75!important;border-radius:13px;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rideSheet :is(.btn.primary,.btn.secondary,#rideQueueBtn){
+  background:linear-gradient(105deg,#ffcb90,#ee9d63)!important;
+  border:1px solid #ffe0af!important;color:#162033!important;
+  border-radius:12px!important;
+  font:800 12px var(--hw-ui)!important;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #rideSheet :is(.srBox .meta,.srBox .mini,#rideDetailStatus){
+  font-family:var(--hw-ui)!important;
+}
+body[data-park="europa-park"][data-season="hallowinter"] :is(#queueSheet,#recapSheet,#archiveDetailSheet){
+  background:#050c17df;backdrop-filter:blur(11px);
+}
+body[data-park="europa-park"][data-season="hallowinter"] :is(#queueSheet,#recapSheet,#archiveDetailSheet) .sheetCard{
+  background:radial-gradient(circle at 100% 0%,#97dbe722,transparent 38%),
+    linear-gradient(145deg,#261c2a,#10263b)!important;
+  border:1px solid #e8ae7b88!important;border-top:4px solid #e8aa76!important;
+  border-radius:21px 21px 10px 10px;color:#fff0df;
+}
+body[data-park="europa-park"][data-season="hallowinter"] :is(#queueSheet,#recapSheet,#archiveDetailSheet) h2{
+  font-family:var(--hw-display)!important;color:#fff0df!important;
+}
+body[data-park="europa-park"][data-season="hallowinter"] :is(#queueSheet,#recapSheet,#archiveDetailSheet) :is(.seg button,.btn,.form input){
+  border-color:#e7a46c81;border-radius:10px;
 }
 .parkChoice[data-park="europa-park"][data-season="hallowinter"]{
-  border-radius:22px;border-color:#f4bc84be;box-shadow:0 15px 42px #0006;
+  border:1px solid #f0b47fba;border-radius:20px;
+  box-shadow:0 17px 42px #01071384;
 }
 .parkChoice[data-park="europa-park"][data-season="hallowinter"] .parkChoiceArt{
-  filter:contrast(1.08) saturate(1.12);object-position:center 39%;
+  object-position:center 43%;
+  opacity:1;filter:saturate(1.11) contrast(1.09);
 }
 .parkChoice[data-park="europa-park"][data-season="hallowinter"]:before{
-  background:linear-gradient(90deg,#0b1529ee 0%,#10243c91 43%,#14213626 100%),
-    linear-gradient(0deg,#0b1427dc,transparent 62%);
+  background:linear-gradient(90deg,#0a1426e8 0%,#1323368f 49%,#102c3a1a 100%),
+    linear-gradient(0deg,#0b182bd6,transparent 65%);
 }
-@media(max-width:800px){
-  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero{min-height:550px;background-position:center,center,57% center}
-  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .heroLine>div{max-width:85%}
-  body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonColumns{grid-template-columns:1fr}
+.parkChoice[data-park="europa-park"][data-season="hallowinter"]:after{
+  content:"HALLOWINTER  ·  NOV 2026";
+  position:absolute;z-index:4;top:17px;right:17px;left:auto;bottom:auto;
+  width:auto;height:auto;padding:9px 12px;
+  border:1px solid #ffc58f9c;border-radius:999px;
+  background:#111b2fda;color:#ffddb3;
+  font:800 9px/1.4 "Inter",Arial,sans-serif;letter-spacing:1.1px;
+  pointer-events:none;transform:none;
 }
-@media(max-width:600px){
-  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero{
-    min-height:600px;padding:23px 20px 20px;border-radius:19px;
-    background:linear-gradient(0deg,#0d1625fa 0%,#0c1926c7 36%,#142a3817 100%),
-      var(--hw-voltron-photo) 59% 34%/cover no-repeat,
-      var(--hw-season-photo) center/cover no-repeat;
-  }
-  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero:before{
-    inset:9px;border-radius:12px;
-  }
-  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero:after{
-    top:19px;right:18px;left:auto;max-width:60%;font-size:8px;padding:8px 11px;
-  }
+.parkChoice[data-park="europa-park"][data-season="hallowinter"] h2{
+  font:600 clamp(26px,3vw,38px)/1.17 "Cinzel",Georgia,serif!important;
+  color:#fff2d9;text-shadow:0 4px 17px #000d;
+}
+.parkChoice[data-park="europa-park"][data-season="hallowinter"] :is(.parkChoiceMeta,.parkChoiceOpen){
+  color:#ffdaae;font-family:"Inter",Arial,sans-serif!important;
+}
+body[data-park="europa-park"][data-season="hallowinter"] :is(button,a,input):focus-visible{
+  outline:3px solid #ffcf93;outline-offset:3px;
+}
+@media(max-width:900px){
   body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .heroLine{
-    display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;gap:6px;
+    flex-direction:column;align-items:flex-start;justify-content:center;
   }
   body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .heroLine>div{
-    padding:0;max-width:100%;width:100%;
-  }
-  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero h1{
-    font-size:clamp(40px,10vw,60px);letter-spacing:-1px;
+    max-width:78%;
   }
   body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero #parkDayBtn{
-    align-self:stretch;width:100%;min-height:48px;
+    min-height:48px;
+  }
+}
+@media(max-width:700px){
+  body[data-park="europa-park"][data-season="hallowinter"] #rides{
+    grid-template-columns:1fr;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #rides .ride{
+    min-height:236px;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero{
+    min-height:560px;background-position:center,center,center,60% center,center;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .heroLine>div{
+    max-width:100%;
+  }
+}
+@media(max-width:530px){
+  body[data-park="europa-park"][data-season="hallowinter"] .topbar{
+    padding:11px 12px;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero{
+    min-height:575px;border-radius:19px;padding:22px 17px 20px;
+    background:linear-gradient(0deg,#071420fb 0%,#0c1b2bdb 39%,#0a172730 85%),
+      var(--hw-voltron-photo) 59% 32%/cover no-repeat,
+      var(--park-hero-image) center/cover no-repeat;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero:before{
+    inset:8px;border-radius:13px;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero:after{
+    top:18px;right:15px;max-width:61%;
+    padding:7px 9px;font-size:8px;letter-spacing:.6px;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .heroIndex{
+    max-width:49%;font-size:9px;letter-spacing:1px;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .heroLine{
+    flex:1;justify-content:flex-end;align-items:stretch;gap:11px;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .heroLine>div{
+    padding:0;max-width:100%;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero h1{
+    font-size:clamp(31px,8.1vw,49px)!important;
+    line-height:1.08!important;letter-spacing:-1.3px;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .eyebrow{
+    font-size:9px;letter-spacing:1.2px;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero #parkDayBtn{
+    width:100%;min-width:0;min-height:46px;
   }
   body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .stats{
-    grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;
+    gap:5px;grid-template-columns:repeat(3,minmax(0,1fr));
   }
   body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .stat{
-    padding:9px 6px;border-radius:10px;
+    padding:10px 6px;border-radius:10px;
   }
-  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .stat strong{font-size:clamp(18px,5.1vw,26px)}
-  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .stat span{font-size:9px}
-  body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonHeader{
-    display:block;min-height:0;padding:28px 23px;border-radius:19px;
+  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .stat strong{
+    font-size:clamp(17px,5vw,26px);
   }
-  body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonHeader h2{font-size:clamp(35px,9.6vw,49px)}
-  body[data-park="europa-park"][data-season="hallowinter"] .hwSeasonMark{display:none}
-  body[data-park="europa-park"][data-season="hallowinter"] .hwStoryImage{height:230px}
-  body[data-park="europa-park"][data-season="hallowinter"] #rides{grid-template-columns:1fr;gap:13px}
-  body[data-park="europa-park"][data-season="hallowinter"] #rides .ride{min-height:225px;padding:18px}
-  body[data-park="europa-park"][data-season="hallowinter"] #rideSheet[data-world="voltron-nevera"] .worldArt{height:390px!important}
-  body[data-park="europa-park"][data-season="hallowinter"] #rideSheet[data-world="voltron-nevera"] .sheetCard{padding-top:305px}
+  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero .stat span{
+    font-size:9px;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #rides .ride{
+    min-height:222px;padding:16px 14px;
+    grid-template-columns:minmax(0,1fr) minmax(64px,78px);
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #rides .ride h3{
+    font-size:clamp(19px,5.7vw,25px)!important;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #rides .ride .meta .btn{
+    padding:8px 9px!important;min-height:36px!important;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #rides .ride .wait{
+    min-height:80px;padding:8px 3px;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #rideSheet .sheetCard{
+    padding-top:320px;
+    border-radius:17px 17px 8px 8px;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #rideSheet .worldArt{
+    height:390px!important;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #rideSheet #rideTitle{
+    font-size:clamp(27px,7vw,36px)!important;
+  }
+}
+@media(max-width:350px){
+  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero:after{
+    font-size:7px;padding:6px 7px;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] .rideTools{
+    gap:6px;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #rides .ride{
+    grid-template-columns:minmax(0,1fr) 64px;padding:13px;
+  }
 }
 @media(prefers-reduced-motion:no-preference){
   body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero{
-    animation:hw-cover-reveal .8s cubic-bezier(.16,1,.3,1) both;
+    animation:hw-entrance .7s cubic-bezier(.18,1,.28,1) both;
   }
-  @keyframes hw-cover-reveal{from{opacity:.7;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  body[data-park="europa-park"][data-season="hallowinter"] #rides .ride{
+    animation:hw-tile-in .5s both;
+  }
+  body[data-park="europa-park"][data-season="hallowinter"] #rides .ride:nth-child(3n + 2){
+    animation-delay:.07s;
+  }
+  @keyframes hw-entrance{
+    from{opacity:.6;transform:translateY(10px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+  @keyframes hw-tile-in{
+    from{opacity:.65;transform:translateY(8px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  body[data-park="europa-park"][data-season="hallowinter"] #homeView>.hero,
+  body[data-park="europa-park"][data-season="hallowinter"] #rides .ride{
+    animation:none!important;transition:none!important;
+  }
 }
