@@ -10,7 +10,7 @@ fs.mkdirSync(screenshots,{recursive:true});
 const file=path.join(root,".wintertraum-snow-qa.html");
 let html=fs.readFileSync(path.join(root,"index.html"),"utf8");
 html=html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,"");
-html=html.replace("</body>",'<script defer src="./wintertraum-snow.js?v=180"></script></body>');
+html=html.replace("</body>",'<script defer src="./wintertraum-snow.js?v=181"></script></body>');
 fs.writeFileSync(file,html);
 (async()=>{
  const browser=await chromium.launch({headless:true,args:["--no-sandbox"]});
