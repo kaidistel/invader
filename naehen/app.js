@@ -2522,43 +2522,90 @@
     return key >= "2026-11-02" && key <= "2026-11-27" ? "hallowinter" : "";
   }
 
-  function protocolArtwork(rideId, parkSlug, season = "") {
-    const winterPhotos = {
-      "taron":"./assets/wintertraum-taron-2026.webp",
-      "black-mamba":"./assets/wintertraum-black-mamba-2026.webp",
-      "colorado-adventure":"./assets/wintertraum-colorado-adventure-2026.webp",
-      "mystery-castle":"./assets/wintertraum-mystery-castle-2026.webp",
-      "fly":"./assets/wintertraum-fly-original.jpg"
-    };
-    let src = "";
-    if (parkSlug === "phantasialand" && season === "wintertraum") {
-      src = winterPhotos[rideId] || (String(rideId).startsWith("wintershow-")
-        ? "./assets/wintertraum-night-planner-2026.webp" : "");
-    }
-    if (!src) {
-      const world = worldForRide(rideId, parkSlug);
-      src = world?.artUrl || (world?.art ? "./assets/" + world.art + ".webp" : "");
-    }
-    if (!src) {
-      const park = PARKS[parkSlug] || {};
-      src = park.cardImage || park.heroImage || (parkSlug === "phantasialand"
-        ? "./assets/park.webp" : "./assets/park-picker-bg.webp");
-    }
-    return /^(?:\.\/assets\/[a-z0-9_./-]+|https:\/\/[^\s"'<>]+)$/i.test(src) ? src : "";
+  function protocolSessionRideId(session, parkSlug) {
+    const saved = String(session?.rideId || "");
+    if (saved && (worldForRide(saved, parkSlug) ||
+        (parkSlug === "phantasialand" && WINTERTRAUM_RIDE_ART[saved]) ||
+        canonicalRideForPark(saved, parkSlug))) return saved;
+    const fromName = session?.rideName ? slugRide(session.rideName, parkSlug) : "";
+    return fromName && (worldForRide(fromName, parkSlug) || canonicalRideForPark(fromName, parkSlug))
+      ? fromName : saved;
   }
 
-  function protocolPhoto(rideId, parkSlug, season = "") {
-    const src = protocolArtwork(rideId, parkSlug, season);
-    return src ? "<img class=\"protocolPhoto\" src=\"" + escapeHtml(src) +
-      "\" alt=\"\" aria-hidden=\"true\" loading=\"lazy\" decoding=\"async\">" : "";
+  function protocolPhotoCandidates(rideId, parkSlug, season = "", allowParkFallback = false) {
+    const id = String(rideId || "");
+    const candidateUrls = [];
+    const add = url => {
+      if (typeof url !== "string") return;
+      // Only use documented HTTPS images or known local project assets.
+      if (!/^(?:\.\/assets\/[a-z0-9_./-]+\.(?:png|jpe?g|webp|avif)|https:\/\/[^\s"'<>]+)$/i.test(url)) return;
+      if (!candidateUrls.includes(url)) candidateUrls.push(url);
+    };
+    const world = id ? worldForRide(id, parkSlug) : null;
+    const ride = id ? canonicalRideForPark(id, parkSlug) : null;
+    if (parkSlug === "phantasialand" && season === "wintertraum") {
+      add(WINTERTRAUM_RIDE_ART[id]);
+      if (id.startsWith("wintershow-")) add("./assets/wintertraum-night-planner-2026.webp");
+    }
+    if (parkSlug === "europa-park" && season === "hallowinter" && id === "voltron-nevera")
+      add(EUROPA_HALLOWINTER_ART);
+    add(world?.artUrl);
+    if (world?.art) add("./assets/" + world.art + ".webp");
+    add(world?.hallowinterFallbackArtUrl);
+    add(ride?.imageUrl);
+    (ride?.imageFallbackUrls || []).forEach(add);
+    // Never show an unrelated coaster for another ride. Day covers with no
+    // available ride photo may use a neutral park image as a last resort.
+    if (!candidateUrls.length && allowParkFallback) {
+      const park = PARKS[parkSlug] || {};
+      add(park.cardImage);
+      add(park.heroImage);
+      add(parkSlug === "phantasialand" ? "./assets/park.webp" : "./assets/park-picker-bg.webp");
+    }
+    return candidateUrls;
+  }
+
+  function protocolArtwork(rideId, parkSlug, season = "") {
+    return protocolPhotoCandidates(rideId, parkSlug, season)[0] || "";
+  }
+
+  function protocolPhoto(rideId, parkSlug, season = "", allowParkFallback = false) {
+    const candidates = protocolPhotoCandidates(rideId, parkSlug, season, allowParkFallback);
+    if (!candidates.length) return "";
+    // The remaining candidates are tried on image error, using the same
+    // safe DOM error handler as all archive/log cards, including older visits.
+    return "<img class=\"protocolPhoto\" src=\"" + escapeHtml(candidates[0]) +
+      "\" data-protocol-fallbacks=\"" + escapeHtml(JSON.stringify(candidates.slice(1))) +
+      "\" referrerpolicy=\"no-referrer\" alt=\"\" aria-hidden=\"true\" loading=\"lazy\" decoding=\"async\">";
   }
 
   function protocolDayPhoto(entry, parkSlug, season = "") {
     const sessionsForDay = entry?.sessions || [];
-    const featured = sessionsForDay.find(session =>
-      session.status === "ridden" && !isShowSession(session)) || sessionsForDay[0];
-    return protocolPhoto(featured?.rideId || "", parkSlug, season);
+    const candidates = sessionsForDay.filter(session =>
+      session.status === "ridden" && !isShowSession(session));
+    const featured = candidates.find(session => protocolArtwork(
+      protocolSessionRideId(session, parkSlug), parkSlug, season)) ||
+      sessionsForDay.find(session => protocolArtwork(
+        protocolSessionRideId(session, parkSlug), parkSlug, season));
+    const id = featured ? protocolSessionRideId(featured, parkSlug) : "";
+    return protocolPhoto(id, parkSlug, season, !featured);
   }
+
+  // Image load failures must not produce broken icons or substitute a photo
+  // of the wrong attraction. Capture errors from dynamically rendered cards.
+  document.addEventListener("error", event => {
+    const img = event.target;
+    if (!img?.classList?.contains("protocolPhoto")) return;
+    let candidates = [];
+    try { candidates = JSON.parse(img.dataset.protocolFallbacks || "[]"); } catch (_) {}
+    const next = candidates.shift();
+    if (next) {
+      img.dataset.protocolFallbacks = JSON.stringify(candidates);
+      img.src = next;
+    } else {
+      img.remove();
+    }
+  }, true);
 
   function protocolCardAttrs(parkSlug, season) {
     return ' data-protocol-park="' + escapeHtml(parkSlug) + '" data-protocol-season="' +
@@ -2741,7 +2788,7 @@
           ? "Preis fehlt" : formatEuro(session.priceEuro);
         const state = session.status === "ridden" ? "genäht" : session.status === "aborted" ? "vernäht" : "offen";
         const operator = operatorForSession(session, parkSlug);
-        return "<div class=\"archiveRideRow protocolTimelineRow\">" + protocolPhoto(session.rideId, parkSlug, protocolSeasonForDay(day, parkSlug)) +
+        return "<div class=\"archiveRideRow protocolTimelineRow\">" + protocolPhoto(protocolSessionRideId(session, parkSlug), parkSlug, protocolSeasonForDay(day, parkSlug)) +
           "<div><b>" + escapeHtml(session.rideName) +
           "</b><small>" + escapeHtml(rideTimeLabel(session)) + " · " + escapeHtml(state) + "</small>" +
           (operator ? "<small class=\"archiveOperator\">Schausteller: " + escapeHtml(operator) + "</small>" : "") +
@@ -2782,7 +2829,7 @@
           const duration = isShowSession(session) ? "✓ Gesehen" : (session.duration === null || session.duration === undefined ? "–" : Number.isFinite(Number(session.duration)) ? minutesRounded(session.duration) + " min" : "–");
           const state = isShowSession(session) ? "Show" : session.status === "ridden" ? "genäht" : session.status === "aborted" ? "vernäht" : "offen";
           const operator = operatorForSession(session, parkSlug);
-          return "<div class=\"archiveRideRow protocolTimelineRow\">" + protocolPhoto(session.rideId, parkSlug, protocolSeasonForDay(day, parkSlug)) +
+          return "<div class=\"archiveRideRow protocolTimelineRow\">" + protocolPhoto(protocolSessionRideId(session, parkSlug), parkSlug, protocolSeasonForDay(day, parkSlug)) +
             "<div><b>" + escapeHtml(session.rideName) + "</b>" +
             "<small>" + escapeHtml(rideTimeLabel(session)) + " · " +
             (isShowSession(session) ? "✨ Wintershow" : session.type === "single" ? "Single Rider" : "Regular") + "</small>" +
@@ -3021,7 +3068,7 @@
       const logSlug = session.parkSlug || activeParkSlug || "phantasialand";
       const season = protocolSeasonForDay(parkDay || {started_at:session.startedAt}, logSlug);
       return "<div class=\"logItem\"" + protocolCardAttrs(logSlug, season) + ">" +
-        protocolPhoto(session.rideId, logSlug, season) +
+        protocolPhoto(protocolSessionRideId(session, logSlug), logSlug, season) +
         "<div class=\"logEntryInfo\"><b>" + escapeHtml(session.rideName) + "</b>" +
         (operator ? "<small class=\"logOperator\">Schausteller: " + escapeHtml(operator) + "</small>" : "") +
         (ticketNote ? "<small>" + escapeHtml(ticketNote) + "</small>" : "") +
@@ -4391,7 +4438,7 @@
       const queue = show ? "✓ Gesehen" :
         (Number.isFinite(Number(session.duration)) && session.duration !== null && session.duration !== undefined
           ? minutesRounded(session.duration) + " min Queue" : "Fahrt eingetragen");
-      return '<div class="wtRecapMoment">' + protocolPhoto(session.rideId, "phantasialand", "wintertraum") +
+      return '<div class="wtRecapMoment">' + protocolPhoto(protocolSessionRideId(session, "phantasialand"), "phantasialand", "wintertraum") +
         '<span class="wtRecapMomentIcon" aria-hidden="true">' +
         (show ? "✦" : "❄") + '</span><div><strong>' + title +
         '</strong><small>' + time + ' · ' + escapeHtml(description) +
