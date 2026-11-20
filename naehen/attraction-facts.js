@@ -18,7 +18,8 @@
   group(coaster,"Achterbahn","alpenexpress-enzian ba-a-a-express blue-fire-megacoaster euro-mir eurosat-cancan-coaster matterhorn-blitz pegasus schweizer-bobbahn silver-star voltron-nevera wodan-timburcoaster wasserachterbahn-poseidon");
   group(ep,"Suspended Powered Coaster","arthur");
   group(ep,"Wasserattraktion","atlantica-supersplash fjord-rafting tiroler-wildwasserbahn whale-adventures-northern-lights quipse-paddle-boats");
-  group(ep,"Themenfahrt / Dark Ride","castello-dei-medici madame-freudenreich-curiosites marionetten-bootsfahrt pic colo-mondo piraten-in-batavia schlittenfahrt-schneefloeckchen snorri-touren wichtelhausen elfenfahrt".replace("pic colo-mondo","piccolo-mondo"));
+  group(ep,"Themenfahrt / Dark Ride","castello-dei-medici madame-freudenreich-curiosites marionetten-bootsfahrt piccolo-mondo piraten-in-batavia schlittenfahrt-schneefloeckchen snorri-touren wichtelhausen elfenfahrt");
+  group(ep,"Themenfahrt / Bootsfahrt","josefinas-kaiserliche-zauberreise");
   group(ep,"Interaktive Themenfahrt","abenteuer-atlantis grand-prix-edventure");
   group(ep,"Parkbahn / Rundfahrt","ep-express monorail-bahn panoramabahn donau-dampfer jim-knopf-reise-durch-lummerland old-mac-donalds-tractor-fun oldtimer-fahrt silverstone-piste lada-autodrom");
   group(ep,"Karussell / Rundfahrgeschäft","british-carousel muel-muels-karussell koffiekopjes liechtensteiner-ballonfahrt roter-baron spinning-dragons");
