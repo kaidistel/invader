@@ -2504,6 +2504,13 @@
       ? "Lokale Daten geladen · synchronisiere weitere Besuche …"
       : "Alle gespeicherten Besuche auf diesem Gerät.";
     renderGlobalArchive();
+    // Archive can be opened before selecting a park. Hydrate attraction art
+    // then repaint; otherwise Europa-Park cards stay on generic placeholders.
+    const artParks = Object.keys(PARKS).filter(slug =>
+      PARKS[slug]?.artManifestUrl && !parkModuleFor(slug)?._artManifestLoaded);
+    if (artParks.length) Promise.allSettled(artParks.map(loadParkArtManifest)).then(() => {
+      if (requestId === globalArchiveRequest) renderGlobalArchive();
+    });
     if (!localMode && supa && currentUserId()) loadGlobalCloudArchive(requestId, currentUserId());
   }
 
@@ -2574,7 +2581,7 @@
     if (!candidates.length) return "";
     // The remaining candidates are tried on image error, using the same
     // safe DOM error handler as all archive/log cards, including older visits.
-    return "<img class=\"protocolPhoto\" src=\"" + escapeHtml(candidates[0]) +
+    return "<img class=\"protocolPhoto\" data-protocol-ride=\"" + escapeHtml(String(rideId || "")) + "\" src=\"" + escapeHtml(candidates[0]) +
       "\" data-protocol-fallbacks=\"" + escapeHtml(JSON.stringify(candidates.slice(1))) +
       "\" referrerpolicy=\"no-referrer\" alt=\"\" aria-hidden=\"true\" loading=\"lazy\" decoding=\"async\">";
   }
