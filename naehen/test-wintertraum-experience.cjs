@@ -26,7 +26,7 @@ assert.ok(detailCSS.includes('-webkit-text-fill-color:#fff2dd!important'),"Winte
 assert.ok(detailCSS.includes('clip-path:none!important'),"Taron stone-edge title clipping must be removed in winter");
 assert.ok(detailCSS.includes('#rideTitle::before')&&detailCSS.includes('content:none!important'),"Old title ornaments should be hidden");
 assert.ok(detailCSS.includes('position:absolute!important;top:16px!important;right:16px!important'),"Close action must stay at photo top");
-assert.ok(sw.includes("naehen-v186")&&sw.includes("'./wintertraum-atelier.css'"),"PWA must precache newest skin");
+assert.ok(sw.includes("naehen-v187")&&sw.includes("'./wintertraum-atelier.css'"),"PWA must precache newest skin");
 for(const attr of ["ridesToday","showsToday","queueToday","srToday"])assert.ok(html.includes('id="'+attr+'"'),"Stat values intact");
 assert.equal((html.match(/data-wt-symbol=/g)||[]).length,4,"Four editorial stat ornaments");
 for(const photo of ["wintertraum-berlin-original.jpg","wintertraum-taron-original.jpg","wintertraum-fly-original.jpg"]){
