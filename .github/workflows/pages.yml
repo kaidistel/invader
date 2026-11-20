@@ -56,6 +56,11 @@ jobs:
         run: node naehen/test-europa-hallowinter.cjs
       - name: Test Europa-Park and Phantasialand attraction facts
         run: node naehen/test-attraction-facts.cjs
+      - name: Test photographic ride logs and archive protocols
+        run: |
+          node naehen/test-protocol-design.cjs
+          node naehen/test-global-archive-dom.cjs
+          node naehen/test-unified-archive.cjs
       - name: Test Phantasialand Wintertraum show tracking and layout
         run: node naehen/test-phantasialand-wintertraum.cjs
       - name: Test Wintertraum experience design and original photos
