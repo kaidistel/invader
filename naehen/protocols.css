@@ -1,0 +1,323 @@
+/* NÄHEN v186 · Photo-led protocols. Overlay opacity affects imagery only,
+   never text, times, status, or delete/archive controls. */
+#logView,#archiveView,#allDaysView{--protocol-ink:#f6f3eb;--protocol-muted:#cbd8de}
+#logView>.sectionHead,
+#archiveView>.archiveIntro,
+#allDaysView>.allDaysIntro{
+  position:relative;isolation:isolate;overflow:hidden;
+  border:1px solid rgba(218,185,132,.52);border-radius:19px;
+  padding:clamp(18px,3vw,27px);
+  background:
+    linear-gradient(92deg,rgba(8,20,32,.97) 0%,rgba(11,26,39,.89) 53%,rgba(12,27,42,.56) 100%),
+    var(--park-hero-image,url("./assets/park-picker-bg.webp")) center 44%/cover no-repeat,
+    #142534;
+  box-shadow:0 14px 34px #0006,inset 0 1px #fff2;
+}
+#logView>.sectionHead{margin:0 0 20px;min-height:106px;align-items:end;flex-wrap:wrap;gap:10px}
+#logView>.sectionHead:after,
+#archiveView>.archiveIntro:before,
+#allDaysView>.allDaysIntro:before{
+  content:"";position:absolute;inset:10px;z-index:-1;
+  border:1px solid rgba(235,207,168,.18);border-radius:12px;
+  pointer-events:none;
+}
+#logView>.sectionHead h2,#archiveView>.archiveIntro h2,#allDaysView>.allDaysIntro h2{
+  position:relative;color:#fff1d8!important;
+  text-shadow:0 3px 18px #000c;
+}
+#logView>.sectionHead>span,
+#archiveView>.archiveIntro :is(.eyebrow,p),
+#allDaysView>.allDaysIntro :is(.eyebrow,p){
+  position:relative;color:#dfd6c6!important;text-shadow:0 2px 12px #000b;
+}
+#archiveView>.archiveIntro:after{opacity:.18}
+#allDaysView>.allDaysIntro{
+  background:
+    linear-gradient(100deg,rgba(9,19,32,.97),rgba(10,27,39,.77) 57%,rgba(11,28,40,.47)),
+    url("./assets/park-picker-bg.webp") center 42%/cover no-repeat,#142434;
+}
+body[data-park="phantasialand"][data-season="wintertraum"] #logView>.sectionHead,
+body[data-park="phantasialand"][data-season="wintertraum"] #archiveView>.archiveIntro{
+  background:
+    linear-gradient(93deg,rgba(6,23,41,.97),rgba(10,33,55,.82) 58%,rgba(11,30,50,.48)),
+    url("./assets/wintertraum-night-planner-2026.webp") center 46%/cover no-repeat,#152b41;
+}
+body[data-park="europa-park"][data-season="hallowinter"] #logView>.sectionHead,
+body[data-park="europa-park"][data-season="hallowinter"] #archiveView>.archiveIntro{
+  background:
+    linear-gradient(93deg,rgba(20,20,35,.97),rgba(26,26,43,.82) 58%,rgba(15,31,46,.48)),
+    var(--hw-voltron-photo) center 45%/cover no-repeat,#1c2435;
+}
+
+/* Protokoll-Fahrt: independent image layer + dark overlay + foreground text. */
+#log{display:grid;gap:12px}
+#log .logItem,
+#parkArchiveList .archiveDayCard,
+#allDaysList .archiveDayCard,
+.archiveTimeline .protocolTimelineRow,
+#recapSheet[data-wintertraum="true"] .wtRecapMoment{
+  position:relative;isolation:isolate;overflow:hidden;
+  color:var(--protocol-ink,#f6f3eb);
+  background:#142638;
+}
+#log .logItem{
+  display:flex;align-items:center;justify-content:space-between;gap:15px;
+  min-height:126px;padding:20px 20px 20px 23px;
+  border:1px solid rgba(199,173,134,.43);
+  border-radius:17px;box-shadow:0 10px 25px #0005,inset 0 1px #fff1;
+  transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease;
+}
+#log .logItem:before,
+#parkArchiveList .archiveDayCard:before,
+#allDaysList .archiveDayCard:before,
+.archiveTimeline .protocolTimelineRow:before,
+#recapSheet[data-wintertraum="true"] .wtRecapMoment:before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  width:auto;height:auto;border-radius:inherit;transform:none;
+  background:linear-gradient(93deg,rgba(8,21,34,.96),rgba(11,25,38,.80) 57%,rgba(12,25,38,.44)),
+    linear-gradient(0deg,rgba(7,17,29,.88),transparent 74%);
+}
+#log .logItem:after{
+  content:"";position:absolute;inset:15px auto 15px 0;z-index:2;
+  width:3px;border-radius:0 8px 8px 0;
+  background:linear-gradient(#f3d4a5,#d48d53);
+  box-shadow:0 0 16px #f2ab5870;pointer-events:none;
+}
+.protocolPhoto{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center 44%;
+  opacity:.83;filter:saturate(.99) contrast(1.07);
+  pointer-events:none;z-index:0;user-select:none;
+}
+#log .logEntryInfo,#log .logEntryActions{
+  position:relative;z-index:2;min-width:0;
+}
+#log .logEntryInfo{flex:1;display:grid;align-content:center;gap:5px}
+#log .logEntryInfo>b{
+  display:block;color:#fff3dd;font:750 clamp(15px,2.7vw,19px)/1.2 Inter,system-ui,sans-serif;
+  text-shadow:0 2px 9px #000d;overflow-wrap:anywhere;
+}
+#log .logEntryInfo small{
+  display:block;color:#d2e1e5;font:550 11px/1.5 Inter,system-ui,sans-serif;
+}
+#log .logEntryActions{
+  display:grid;align-content:center;justify-items:end;gap:7px;
+  min-width:88px;text-align:right;
+}
+#log .logEntryActions>b{
+  color:#f5d19b;font:800 clamp(15px,2.5vw,19px)/1.2 Inter,system-ui,sans-serif;
+  font-variant-numeric:tabular-nums;
+}
+#log .logEntryActions small{
+  padding:5px 8px;border:1px solid rgba(208,228,223,.18);
+  border-radius:999px;color:#e6edf0;background:rgba(15,41,53,.76);
+  font:650 10px/1.25 Inter,system-ui,sans-serif;
+  white-space:normal;
+}
+#log .logDeleteBtn{
+  position:relative;z-index:3;margin-top:3px;
+  border-radius:10px;background:rgba(55,25,33,.91);
+  border-color:rgba(245,141,142,.62);color:#ffc5c5;
+}
+#log .logItem:hover,
+#parkArchiveList .archiveDayCard:hover,
+#allDaysList .archiveDayCard:hover{
+  transform:translateY(-2px);border-color:rgba(243,200,145,.8);
+  box-shadow:0 17px 32px #0008,0 0 0 1px #ffdaa41e;
+}
+
+/* Each archived visit is its own photographic cover card. */
+#parkArchiveList .archiveDayCard,
+#allDaysList .archiveDayCard{
+  display:block;min-height:205px;padding:clamp(18px,2.5vw,26px);
+  border:1px solid rgba(199,178,145,.53);
+  border-radius:19px;color:#fff0e0;
+  background:#102335;
+  box-shadow:0 12px 30px #0005;
+  transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease;
+}
+#parkArchiveList .archiveDayCard:before,
+#allDaysList .archiveDayCard:before{
+  background:linear-gradient(95deg,rgba(7,19,31,.97),rgba(8,25,39,.85) 58%,rgba(10,27,40,.47)),
+    linear-gradient(0deg,rgba(4,14,24,.88),transparent 80%);
+}
+#parkArchiveList .archiveDayCard .archiveDayTop,
+#allDaysList .archiveDayCard .archiveDayTop,
+#parkArchiveList .archiveDayCard .archiveDayStats,
+#allDaysList .archiveDayCard .archiveDayStats,
+#parkArchiveList .archiveDayCard .archiveDayFoot,
+#allDaysList .archiveDayCard .archiveDayFoot{
+  position:relative;z-index:2;
+}
+#parkArchiveList .archiveDayCard .archiveDayTop h3,
+#allDaysList .archiveDayCard .archiveDayTop h3{
+  color:#fff3df;margin:8px 0 0;
+  font:650 clamp(21px,3.7vw,30px)/1.2 "Cormorant Garamond",Georgia,serif;
+  text-shadow:0 3px 14px #000c;
+}
+#parkArchiveList .archiveDayCard .eyebrow,
+#allDaysList .archiveDayCard .eyebrow{
+  color:#f2cd9c;font:800 10px/1.3 Inter,system-ui,sans-serif;
+  letter-spacing:1px;text-shadow:0 2px 8px #000b;
+}
+#parkArchiveList .archiveDayCard .archiveChevron,
+#allDaysList .archiveDayCard .archiveChevron{
+  display:grid;place-items:center;width:35px;height:35px;flex:0 0 auto;
+  border-radius:50%;background:rgba(26,51,67,.73);
+  border:1px solid rgba(244,209,164,.35);
+  color:#ffdea8;font-size:29px;line-height:1;
+}
+#parkArchiveList .archiveDayCard .archiveDayStats,
+#allDaysList .archiveDayCard .archiveDayStats{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:7px;margin:18px 0 0;
+}
+#parkArchiveList .archiveDayCard .archiveDayStats span,
+#allDaysList .archiveDayCard .archiveDayStats span{
+  min-width:0;padding:11px;border:1px solid rgba(189,209,214,.25);
+  border-radius:10px;background:rgba(13,33,49,.78);
+  color:#ccdae0;font:550 10px/1.35 Inter,system-ui,sans-serif;
+  backdrop-filter:blur(5px);
+}
+#parkArchiveList .archiveDayCard .archiveDayStats b,
+#allDaysList .archiveDayCard .archiveDayStats b{
+  color:#ffdda7;font:800 15px/1.3 Inter,system-ui,sans-serif;
+  font-variant-numeric:tabular-nums;
+}
+#parkArchiveList .archiveDayCard .archiveDayFoot,
+#allDaysList .archiveDayCard .archiveDayFoot{
+  margin-top:17px;color:#f0e6d7;
+  font:600 11px/1.5 Inter,system-ui,sans-serif;
+}
+#parkArchiveList .archiveDayCard .archiveDayFoot b,
+#allDaysList .archiveDayCard .archiveDayFoot b{color:#f4d29b}
+#parkArchiveList .archiveDayCard[data-protocol-season="wintertraum"],
+#allDaysList .archiveDayCard[data-protocol-season="wintertraum"],
+#log .logItem[data-protocol-season="wintertraum"]{
+  border-color:rgba(164,204,220,.57);background:#102c41;
+}
+#parkArchiveList .archiveDayCard[data-protocol-season="hallowinter"],
+#allDaysList .archiveDayCard[data-protocol-season="hallowinter"],
+#log .logItem[data-protocol-season="hallowinter"]{
+  border-color:rgba(244,169,113,.59);background:#2b2030;
+}
+
+/* Individual rides / shows inside archived-day details. */
+.archiveTimeline .protocolTimelineRow{
+  min-height:90px;margin:8px 0;padding:17px 14px;
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;
+  border:1px solid rgba(171,191,201,.31);
+  border-radius:12px;background:#142c3d;
+}
+.archiveTimeline .protocolTimelineRow:before{
+  background:linear-gradient(95deg,rgba(8,21,35,.98),rgba(9,23,35,.85) 62%,rgba(10,25,40,.53));
+}
+.archiveTimeline .protocolTimelineRow>div{
+  position:relative;z-index:2;min-width:0;
+}
+.archiveTimeline .protocolTimelineRow b{
+  color:#fff0db;font:750 13px/1.45 Inter,system-ui,sans-serif;
+  overflow-wrap:anywhere;
+}
+.archiveTimeline .protocolTimelineRow small{color:#c6dce3;font:500 10px/1.45 Inter,system-ui,sans-serif}
+.archiveTimeline .protocolTimelineRow>div:last-child b{
+  color:#f3d09a;font-variant-numeric:tabular-nums;
+}
+#archiveDetailSheet .protocolDetailHero{
+  position:relative;isolation:isolate;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;
+  gap:11px;min-height:195px;margin:12px 0 18px;padding:clamp(18px,3vw,26px);
+  border:1px solid rgba(240,200,148,.59);border-radius:14px;
+  background:#15283b;
+}
+#archiveDetailSheet .protocolDetailHero:before{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(90deg,rgba(9,20,33,.97),rgba(9,24,39,.68) 66%,rgba(9,26,41,.29)),
+    linear-gradient(0deg,rgba(8,22,36,.87),transparent 77%);
+}
+#archiveDetailSheet .protocolDetailHero :is(.protocolDetailKicker,strong){
+  position:relative;z-index:2;color:#f5ddba;text-shadow:0 3px 14px #000a;
+}
+#archiveDetailSheet .protocolDetailKicker{
+  font:800 10px/1.35 Inter,system-ui,sans-serif;letter-spacing:1.25px;text-transform:uppercase;
+}
+#archiveDetailSheet .protocolDetailHero strong{
+  color:#fff1db;font:600 clamp(25px,4.2vw,37px)/1.16 "Cormorant Garamond",Georgia,serif;
+}
+
+/* Wintertraum end-of-day recap also inherits the right ride/shows as subtle photos. */
+#recapSheet[data-wintertraum="true"] .wtRecapMoment{
+  min-height:69px;padding:11px 12px;
+  border:1px solid rgba(159,196,205,.20);border-radius:9px;
+  margin-bottom:7px;grid-template-columns:31px minmax(0,1fr) auto;
+}
+#recapSheet[data-wintertraum="true"] .wtRecapMoment:before{
+  background:linear-gradient(90deg,rgba(13,36,55,.96),rgba(14,38,58,.87) 72%,rgba(17,43,62,.65));
+}
+#recapSheet[data-wintertraum="true"] .wtRecapMoment>:not(.protocolPhoto){
+  position:relative;z-index:2;min-width:0;
+}
+#log .logItem .protocolPhoto,
+#parkArchiveList .archiveDayCard .protocolPhoto,
+#allDaysList .archiveDayCard .protocolPhoto,
+.archiveTimeline .protocolTimelineRow .protocolPhoto,
+#recapSheet[data-wintertraum="true"] .wtRecapMoment .protocolPhoto,
+#archiveDetailSheet .protocolDetailHero .protocolPhoto{
+  position:absolute!important;z-index:0!important;inset:0!important;
+  width:100%!important;height:100%!important;object-fit:cover!important;
+  opacity:.88!important;filter:saturate(1.08) contrast(1.05)!important;
+}
+
+/* Inherit the original season; a past visit must still look seasonal. */
+#parkArchiveList .archiveDayCard[data-protocol-season="wintertraum"]:before,
+#allDaysList .archiveDayCard[data-protocol-season="wintertraum"]:before{
+  background:linear-gradient(95deg,rgba(7,22,42,.98),rgba(8,37,60,.84) 56%,rgba(10,33,52,.43)),
+    linear-gradient(0deg,rgba(7,22,39,.83),transparent 78%);
+}
+#parkArchiveList .archiveDayCard[data-protocol-season="hallowinter"]:before,
+#allDaysList .archiveDayCard[data-protocol-season="hallowinter"]:before{
+  background:linear-gradient(95deg,rgba(24,15,30,.98),rgba(35,28,43,.83) 57%,rgba(21,30,46,.47)),
+    linear-gradient(0deg,rgba(17,17,31,.83),transparent 78%);
+}
+:is(#log .logItem,#parkArchiveList .archiveDayCard,#allDaysList .archiveDayCard,
+    .archiveTimeline .protocolTimelineRow,#recapSheet[data-wintertraum="true"] .wtRecapMoment) .protocolPhoto{
+  transition:transform .35s ease;
+}
+:is(#log .logItem,#parkArchiveList .archiveDayCard,#allDaysList .archiveDayCard):hover .protocolPhoto{
+  transform:scale(1.035);
+}
+@media(max-width:600px){
+  #logView>.sectionHead{min-height:92px;padding:20px}
+  #log .logItem{min-height:118px;padding:16px;gap:9px}
+  #log .logEntryInfo>b{font-size:15px}
+  #log .logEntryActions{min-width:76px}
+  #log .logEntryActions>b{font-size:15px}
+  #parkArchiveList .archiveDayCard,#allDaysList .archiveDayCard{
+    min-height:190px;padding:17px;
+  }
+  #recapSheet[data-wintertraum="true"] .wtRecapMoment{
+    grid-template-columns:28px minmax(0,1fr);
+  }
+  #recapSheet[data-wintertraum="true"] .wtRecapMomentEnd{grid-column:2}
+}
+@media(max-width:360px){
+  #parkArchiveList .archiveDayCard .archiveDayStats,
+  #allDaysList .archiveDayCard .archiveDayStats{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  #parkArchiveList .archiveDayCard .archiveDayStats span:last-child,
+  #allDaysList .archiveDayCard .archiveDayStats span:last-child{grid-column:1/-1}
+  #log .logItem{padding:14px 12px}
+  #log .logEntryActions{min-width:68px}
+  .archiveTimeline .protocolTimelineRow{padding:13px 11px;gap:8px}
+}
+@media(prefers-reduced-motion:reduce){
+  #log .logItem,#parkArchiveList .archiveDayCard,#allDaysList .archiveDayCard,
+  .protocolPhoto{transition:none!important;animation:none!important}
+  :is(#log .logItem,#parkArchiveList .archiveDayCard,#allDaysList .archiveDayCard):hover{
+    transform:none!important
+  }
+}
+:is(#logView,#archiveView,#allDaysView) :is(button,a):focus-visible{
+  outline:3px solid #f0cb92;outline-offset:3px
+}
