@@ -81,7 +81,7 @@ assert.equal(fakeImage.src,"./assets/taron.webp","First fallback must keep ride 
 imageErrorHandlers[0]({target:fakeImage});
 assert.equal(fakeImage.removed,true,"Broken photo removed cleanly if no ride-specific image works");
 
-for(const token of ["protocolPhoto(session.rideId, logSlug, season)","protocolDayPhoto(entry, slug","protocolTimelineRow","archiveVisual","wtRecapMoment","protocolCardAttrs("]){
+for(const token of ["protocolPhoto(protocolSessionRideId(session, logSlug), logSlug, season)","protocolDayPhoto(entry, slug","protocolTimelineRow","archiveVisual","wtRecapMoment","protocolCardAttrs("]){
   assert.ok(app.includes(token),"App integration missing: "+token);
 }
 for(const token of ["#log .logItem",".archiveDayCard",".protocolPhoto",".protocolTimelineRow",".wtRecapMoment",".protocolDetailHero","@media(max-width:360px)","prefers-reduced-motion:reduce"]){
