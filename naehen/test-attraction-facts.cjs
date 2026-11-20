@@ -53,8 +53,8 @@ assert.ok(app.includes("ATTRAKTIONS-STECKBRIEF")&&app.includes("rideFactSources"
   "Sourced detail facts must be rendered");
 const html=read("index.html"),sw=read("sw.js"),css=read("attraction-facts.css");
 assert.ok(html.includes('attraction-facts.js?v=185')&&html.includes('attraction-facts.css?v=185'));
-assert.ok(html.indexOf('attraction-facts.js?v=185')<html.indexOf('app.js?v=186'),"Catalog must load first");
-assert.ok(sw.includes("naehen-v186")&&sw.includes("'./attraction-facts.js'")&&sw.includes("'./attraction-facts.css'"));
+assert.ok(html.indexOf('attraction-facts.js?v=185')<html.indexOf('app.js?v=187'),"Catalog must load first");
+assert.ok(sw.includes("naehen-v187")&&sw.includes("'./attraction-facts.js'")&&sw.includes("'./attraction-facts.css'"));
 assert.ok(css.includes("parkRideSpecs")&&css.includes("rideFactGrid"));
 console.log("PASS attraction facts: "+epIds.length+" Europa-Park rides, "+phlIds.length+
   " Phantasialand rides, documented technical data, visible sourced details and offline v185");
