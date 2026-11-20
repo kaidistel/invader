@@ -10,14 +10,15 @@ const app=read("app.js"),css=read("protocols.css"),html=read("index.html"),sw=re
 const start=app.indexOf("  function protocolSeasonForDay(");
 const end=app.indexOf("  function renderGlobalArchive(", start);
 assert.ok(start>0 && end>start,"Protocol helpers must load before the global archive");
-const functions=new Function("isWintertraumDay","worldForRide","PARKS","escapeHtml",
+const functions=new Function("isWintertraumDay","worldForRide","PARKS","escapeHtml","isShowSession",
   app.slice(start,end)+"\nreturn {protocolSeasonForDay,protocolArtwork,protocolPhoto,protocolDayPhoto,protocolCardAttrs};");
 const h = functions(
   (day,slug)=>slug==="phantasialand" && new Date(day?.started_at || day?.startedAt || 0).getUTCFullYear()===2026 &&
     new Date(day?.started_at || day?.startedAt || 0).getUTCMonth()===11,
   (ride,slug)=>({artUrl:slug==="europa-park"?"https://example.org/ep-ride.webp":"./assets/ride-photo.webp"}),
   {"phantasialand":{cardImage:"./assets/park.webp"},"europa-park":{cardImage:"./assets/park-picker-bg.webp"}},
-  s=>String(s).replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;")
+  s=>String(s).replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;"),
+  session=>String(session?.rideId || "").startsWith("wintershow-")
 );
 assert.equal(h.protocolSeasonForDay({started_at:"2026-11-18T12:00:00Z"},"europa-park"),"hallowinter");
 assert.equal(h.protocolSeasonForDay({started_at:"2026-12-03T12:00:00Z"},"europa-park"),"");
