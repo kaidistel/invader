@@ -321,3 +321,37 @@ body[data-park="europa-park"][data-season="hallowinter"] #archiveView>.archiveIn
 :is(#logView,#archiveView,#allDaysView) :is(button,a):focus-visible{
   outline:3px solid #f0cb92;outline-offset:3px
 }
+
+
+/* v187 · Ride identity beats a generic park photograph.
+   Keep the right half visually vivid; all copy sits above the overlay. */
+#log .logItem:before{
+  background:linear-gradient(92deg,rgba(8,21,34,.94) 0%,rgba(11,25,38,.75) 55%,rgba(12,25,38,.22) 100%),
+    linear-gradient(0deg,rgba(7,17,29,.77),transparent 80%);
+}
+.archiveTimeline .protocolTimelineRow:before{
+  background:linear-gradient(95deg,rgba(8,21,35,.95) 0%,rgba(9,23,35,.78) 62%,rgba(10,25,40,.27) 100%);
+}
+#recapSheet[data-wintertraum="true"] .wtRecapMoment:before{
+  background:linear-gradient(90deg,rgba(13,36,55,.96),rgba(14,38,58,.77) 72%,rgba(17,43,62,.40));
+}
+#log .logItem .protocolPhoto,
+.archiveTimeline .protocolTimelineRow .protocolPhoto,
+#recapSheet[data-wintertraum="true"] .wtRecapMoment .protocolPhoto{
+  opacity:1!important;filter:saturate(1.09) contrast(1.06)!important;
+}
+#parkArchiveList .archiveDayCard:before,
+#allDaysList .archiveDayCard:before{
+  background:linear-gradient(95deg,rgba(7,19,31,.95),rgba(8,25,39,.76) 58%,rgba(10,27,40,.29)),
+    linear-gradient(0deg,rgba(4,14,24,.78),transparent 80%);
+}
+.protocolPhoto[data-protocol-ride="taron"]{object-position:54% 48%!important}
+.protocolPhoto[data-protocol-ride="black-mamba"]{object-position:56% 44%!important}
+.protocolPhoto[data-protocol-ride="colorado-adventure"]{object-position:51% 48%!important}
+.protocolPhoto[data-protocol-ride="mystery-castle"]{object-position:50% 42%!important}
+.protocolPhoto[data-protocol-ride="voltron-nevera"]{object-position:60% 42%!important}
+.protocolPhoto[data-protocol-ride="fly"]{object-position:53% 43%!important}
+#log .logItem:has(.protocolPhoto) .logEntryInfo>b,
+.archiveTimeline .protocolTimelineRow:has(.protocolPhoto) b{
+  text-shadow:0 2px 11px #000f;
+}
