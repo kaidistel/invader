@@ -26,12 +26,14 @@ const facts=(day,sessions)=>({rides:1,queueMs:sessions[0].duration,
  parkMs:new Date(day.ended_at)-new Date(day.started_at),topRide:{name:sessions[0].rideName,count:1}});
 const recap=(n,label)=>"<span>"+n+" "+label+"</span>";
 const render=new Function("one","many","entries","parks","isFair","facts","recap",
- "const $=one,$$=many,globalArchiveEntries=entries,PARKS=parks,venueIsFair=isFair,buildDayFacts=facts,recapStat=recap,escapeHtml=String,formatDurationHuman=String,parkDayDateLabel=day=>day.started_at;let globalArchiveFilter='all';\n"+
+ "const $=one,$$=many,globalArchiveEntries=entries,PARKS=parks,venueIsFair=isFair,buildDayFacts=facts,recapStat=recap,escapeHtml=String,formatDurationHuman=String,parkDayDateLabel=day=>day.started_at,protocolCardAttrs=(slug,season)=>' data-protocol-park=\"'+slug+'\"',protocolSeasonForDay=()=>'',protocolDayPhoto=()=>'';let globalArchiveFilter='all';\n"+
  extract("  function renderGlobalArchive() {","  function openGlobalArchiveFromPicker(")+
  "\nreturn {renderGlobalArchive,setFilter:x=>globalArchiveFilter=x};")(one,many,entries,parks,isFair,facts,recap);
 render.renderGlobalArchive();
 assert.ok(dom["#allDaysList"].innerHTML.includes('data-all-days-id="park"'));
 assert.ok(dom["#allDaysList"].innerHTML.includes('data-all-days-id="fair"'));
+assert.ok(dom["#allDaysList"].innerHTML.includes('data-protocol-park="phantasialand"'));
+assert.ok(dom["#allDaysList"].innerHTML.includes('data-protocol-park="gallimarkt-leer-2026"'));
 render.setFilter("fair");render.renderGlobalArchive();
 assert.ok(dom["#allDaysList"].innerHTML.includes('data-all-days-id="fair"'));
 assert.ok(!dom["#allDaysList"].innerHTML.includes('data-all-days-id="park"'));
