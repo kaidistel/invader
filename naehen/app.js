@@ -572,7 +572,8 @@
   }
 
   function rideSpeedKmh(rideId, parkSlug = activeParkSlug || "phantasialand") {
-    const value = Number(rideConfigForPark(parkSlug)?.[rideId]?.speedKmh);
+    const raw = rideConfigForPark(parkSlug)?.[rideId]?.speedKmh ?? attractionFactsForPark(rideId, parkSlug)?.speedKmh;
+    const value = raw === null || raw === undefined ? NaN : Number(raw);
     return Number.isFinite(value) && value > 0 ? value : null;
   }
 
@@ -668,10 +669,21 @@
     element.dataset.theme = config.theme;
   }
 
+  function attractionFactsForPark(rideId, parkSlug = activeParkSlug || "phantasialand") {
+    return window.NAEHEN_ATTRACTION_FACTS?.[parkSlug]?.[rideId] || null;
+  }
+
   function enrichRide(ride, parkSlug = activeParkSlug || "phantasialand") {
     const config = rideConfigForPark(parkSlug)[ride.id] || { singleRider: false };
+    // Facts are canonical static data, independent of whether the current queue is live.
+    const facts = attractionFactsForPark(ride.id, parkSlug);
+    if (facts) Object.assign(ride, facts);
     ride.singleRider = !!config.singleRider;
-    ride.speedKmh = Number.isFinite(Number(config.speedKmh)) ? Number(config.speedKmh) : null;
+    const speed = config.speedKmh ?? facts?.speedKmh;
+    ride.speedKmh = speed !== null && speed !== undefined && Number.isFinite(Number(speed)) && Number(speed) > 0 ? Number(speed) : null;
+    if (!ride.technicalSourceUrl) {
+      ride.technicalSourceUrl = parkModuleFor(parkSlug)?.worlds?.[ride.id]?.officialUrl || "";
+    }
     ride.parkSlug = parkSlug;
     return ride;
   }
@@ -2168,7 +2180,7 @@
         "<div class=\"rideMain\">" +
           "<div class=\"rideTop\">" +
             (isWinterRideCard ? "" : favoriteButton) +
-            "<div><h3>" + escapeHtml(ride.name) + "</h3><div class=\"zone\">" + escapeHtml(operatorLine + updated) + "</div></div>" +
+            "<div><h3>" + escapeHtml(ride.name) + "</h3><div class=\"zone\">" + escapeHtml(operatorLine + updated) + "</div>" + parkRideSpecPreview(ride) + "</div>" +
           "</div>" +
           "<div class=\"meta\">" + newBadge + priceBadge + sr +
             (hasPublicLive ? "<span class=\"trend " + ride.trend + "\">" + escapeHtml(trendText) + "</span><span class=\"rideMetaDivider\">·</span>" : "") +
@@ -3774,71 +3786,104 @@
     }
   }
 
+  function parkFactValue(value, unit = "") {
+    if (value === undefined || value === null || value === "") return "";
+    if (typeof value === "number") return value.toLocaleString("de-DE", {maximumFractionDigits:2}) + (unit ? " " + unit : "");
+    return String(value) + (unit ? " " + unit : "");
+  }
+
+  function parkRideSpecPreview(ride) {
+    if (venueIsFair() || !ride?.type) return "";
+    const previews = [
+      ["⚡", ride.speedKmh, "km/h"],
+      ["↟", ride.heightM ?? ride.towerHeightM, "m"],
+      ["⌁", ride.trackLengthM, "m"]
+    ].filter(([,value])=>Number.isFinite(value) && value > 0).slice(0,3);
+    const values=previews.map(([icon,value,unit])=>
+      "<span><i aria-hidden=\"true\">" + icon + "</i> " + escapeHtml(parkFactValue(value,unit)) + "</span>"
+    ).join("");
+    return values ? "<div class=\"parkRideSpecs\" aria-label=\"Technische Eckdaten\">" + values + "</div>" : "";
+  }
+
   function renderRideExtraFacts(ride, world) {
     const box = $("#rideExtraFacts");
     if (!box) return;
-
+    const fair = venueIsFair();
     const hasFacts = ride && (
-      ride.operatorFull || ride.operator || ride.manufacturer || ride.type ||
+      ride.type || ride.operatorFull || ride.operator || ride.manufacturer ||
       ride.year || ride.dimensions || ride.capacity || ride.rideIndexUrl ||
-      ride.priceEuro !== undefined
+      ride.technicalSourceUrl || ride.priceEuro !== undefined
     );
-
     if (!hasFacts) {
       box.innerHTML = "";
       box.classList.add("hidden");
       return;
     }
 
-    const fair = venueIsFair();
     const facts = [];
+    const add=(label,value,extraClass="")=>{
+      if (value !== undefined && value !== null && value !== "") facts.push([label,String(value),extraClass]);
+    };
     if (fair) {
-      facts.push(["Fahrpreis", ridePriceText(ride), "price"]);
-      const combo = fairComboForRide(ride.id);
-      if (combo) facts.push(["Kombiticket · " + combo.label,
-        formatEuro(manualFairPrice("combo:" + combo.id) ?? combo.priceEuro), "price"]);
+      add("Fahrpreis",ridePriceText(ride),"price");
+      const combo=fairComboForRide(ride.id);
+      if (combo) add("Kombiticket · "+combo.label,formatEuro(manualFairPrice("combo:"+combo.id) ?? combo.priceEuro),"price");
     }
-    if (ride.operatorFull || ride.operator) facts.push(["Schausteller", ride.operatorFull || ride.operator, "operator"]);
-    if (ride.manufacturer) facts.push(["Hersteller", ride.manufacturer, ""]);
-    if (ride.type) facts.push(["Typ", ride.type, ""]);
-    if (ride.year) facts.push(["Baujahr", String(ride.year), ""]);
-    if (ride.dimensions) facts.push(["Maße (B × T × H)", ride.dimensions, ""]);
-    if (ride.capacity) facts.push(["Kapazität", ride.capacity, ""]);
+    add(fair ? "Schausteller" : "Themenbereich", fair
+      ? ride.operatorFull || ride.operator
+      : ride.zone);
+    add("Attraktionstyp",ride.type);
+    add("Hersteller",ride.manufacturer);
+    add("Eröffnung",ride.year);
+    add("Höchstgeschwindigkeit",parkFactValue(ride.speedKmh,"km/h"));
+    add("Anlagenhöhe",parkFactValue(ride.heightM,"m"));
+    add("Turmhöhe",parkFactValue(ride.towerHeightM,"m"));
+    add("Streckenlänge",parkFactValue(ride.trackLengthM,"m"));
+    add("Fahrtzeit",ride.duration ? ride.duration+" Min." : "");
+    add("Inversionen",ride.inversions);
+    add("Launches",ride.launches);
+    add("Max. G-Kräfte",parkFactValue(ride.maxG,"g"));
+    add("Mindestgröße",parkFactValue(ride.minHeightCm,"cm"));
+    add("Maximalgröße",parkFactValue(ride.maxHeightCm,"cm"));
+    add("Mindestalter",parkFactValue(ride.minAgeYears,"Jahre"));
+    add("Fahrzeugbesetzung",ride.vehicles);
+    add("Theoretische Kapazität",parkFactValue(ride.capacityPerHour,"Personen/Std."));
+    add("Besonderheit",ride.special);
+    if (fair) {
+      add("Maße (B × T × H)",ride.dimensions);
+      add("Kapazität",ride.capacity);
+    }
 
-    const factHtml = facts.map(([label, value, extraClass]) =>
+    const factHtml = facts.map(([label,value,extraClass]) =>
       "<div class=\"rideFactCard " + escapeHtml(extraClass || "") + "\">" +
-        "<span>" + escapeHtml(label) + "</span><b>" + escapeHtml(value) + "</b>" +
-      "</div>"
+      "<span>" + escapeHtml(label) + "</span><b>" + escapeHtml(value) + "</b></div>"
     ).join("");
 
-    const links = [];
-    if (ride.rideIndexUrl) {
-      links.push("<a href=\"" + escapeHtml(ride.rideIndexUrl) + "\" target=\"_blank\" rel=\"noopener\">Ride-Index Steckbrief ↗</a>");
-    }
-    if (ride.technicalSourceUrl && ride.technicalSourceUrl !== ride.rideIndexUrl) {
-      links.push("<a href=\"" + escapeHtml(ride.technicalSourceUrl) + "\" target=\"_blank\" rel=\"noopener\">Technische Daten · Quelle ↗</a>");
-    }
-    if (world?.imageSourceUrl || ride.imageSourceUrl) {
-      const sourceUrl = world?.imageSourceUrl || ride.imageSourceUrl;
-      const credit = world?.imageCredit || ride.imageCredit || "Bildquelle";
-      links.push("<a href=\"" + escapeHtml(sourceUrl) + "\" target=\"_blank\" rel=\"noopener\">Bild: " + escapeHtml(credit) + " ↗</a>");
-      if (ride.imageLicenseUrl) {
-        links.push("<a href=\"" + escapeHtml(ride.imageLicenseUrl) + "\" target=\"_blank\" rel=\"noopener\">Bildlizenz ↗</a>");
-      }
-    }
+    const links=[];
+    const seen=new Set();
+    const link=(url,label)=>{
+      if (typeof url !== "string" || !/^https:\/\//i.test(url) || seen.has(url)) return;
+      seen.add(url);
+      links.push("<a href=\"" + escapeHtml(url) + "\" target=\"_blank\" rel=\"noopener noreferrer\">"+escapeHtml(label)+" ↗</a>");
+    };
+    if (ride.rideIndexUrl) link(ride.rideIndexUrl,"Ride-Index");
+    if (ride.technicalSourceUrl) link(ride.technicalSourceUrl,"Technische Daten · Quelle");
+    if (ride.safetySourceUrl) link(ride.safetySourceUrl,"Offizielle Größen- und Altersregeln");
+    const imgSrc=world?.imageSourceUrl || ride.imageSourceUrl;
+    if(imgSrc) link(imgSrc,"Bildquelle: "+(world?.imageCredit || ride.imageCredit || "Original"));
+    if (ride.imageLicenseUrl) link(ride.imageLicenseUrl,"Bildlizenz");
 
+    const infoNote=!fair && (ride.minHeightCm || ride.minAgeYears || ride.maxHeightCm)
+      ? "<p class=\"parkFactNote\">Alters- und Größenregeln können zusätzliche Begleitpflichten enthalten. Maßgeblich sind die aktuellen Hinweise der Attraktion vor Ort.</p>"
+      : "";
     box.innerHTML =
-      (fair ? "<div class=\"rideFactsEyebrow\">TECHNIK · FAHRGESCHÄFTSDATEN</div>" +
-        "<div class=\"fairTechGrid\">" + fairTechnicalDetails(ride).map(([symbol, label, value]) =>
-          "<div class=\"fairTechCell\"><span aria-hidden=\"true\">" + symbol + "</span><small>" +
-          escapeHtml(label) + "</small><b>" + escapeHtml(value) + "</b></div>"
-        ).join("") + "</div>" : "") +
-      "<div class=\"rideFactGrid\">" + factHtml + "</div>" +
-      (fair
-        ? "<div class=\"ridePriceNote\">Technikwerte nur aus belegten Quellen. Fahrpreise sind Vorschläge; du kannst sie bei jeder Fahrt ändern.</div>"
-        : "") +
-      (links.length ? "<div class=\"rideFactSources\">" + links.join("") + "</div>" : "");
-
+      "<div class=\"rideFactsEyebrow\">" + (fair ? "TECHNIK · FAHRGESCHÄFTSDATEN" : "ATTRAKTIONS-STECKBRIEF · BELEGTE DATEN") + "</div>" +
+      (fair ? "<div class=\"fairTechGrid\">" + fairTechnicalDetails(ride).map(([symbol,label,value])=>
+        "<div class=\"fairTechCell\"><span aria-hidden=\"true\">"+symbol+"</span><small>"+escapeHtml(label)+"</small><b>"+escapeHtml(value)+"</b></div>"
+      ).join("")+"</div>" : "") +
+      "<div class=\"rideFactGrid\">" + factHtml + "</div>" + infoNote +
+      (fair ? "<div class=\"ridePriceNote\">Technikwerte nur aus belegten Quellen. Fahrpreise sind Vorschläge und bei jeder Fahrt änderbar.</div>" : "") +
+      (links.length ? "<div class=\"rideFactSources\">"+links.join("")+"</div>" : "");
     box.classList.remove("hidden");
   }
 
