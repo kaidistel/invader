@@ -1536,6 +1536,9 @@
       ticketComboId: row.ticket_metadata?.comboId || null,
       ticketComboRole: row.ticket_metadata?.role || null,
       ticketPurchaseId: row.ticket_metadata?.purchaseId || null,
+      admissionType: row.ticket_metadata?.admissionType || null,
+      admissionLabel: row.ticket_metadata?.admissionLabel || null,
+      reservationNote: row.ticket_metadata?.reservationNote || null,
       parkDayId: row.park_day_id,
       synced: true
     };
@@ -1560,7 +1563,7 @@
       } else {
         // A cloud without ticket_metadata must not erase locally remembered combo purchases.
         const merged = Object.assign({}, cloud);
-        for (const field of ["ticketComboId", "ticketComboRole", "ticketPurchaseId"]) {
+        for (const field of ["ticketComboId", "ticketComboRole", "ticketPurchaseId", "admissionType", "admissionLabel", "reservationNote"]) {
           if (!merged[field] && local[field]) merged[field] = local[field];
         }
         combined.set(key, merged);
@@ -1584,9 +1587,17 @@
       wait_seconds: Number.isFinite(Number(session.duration)) && session.duration !== null
         ? Math.max(0, Math.round(session.duration / 1000)) : null,
       status: session.status,
-      ...(session.ticketComboId ? {ticket_metadata:{
-        comboId:session.ticketComboId, role:session.ticketComboRole,
-        purchaseId:session.ticketPurchaseId || null
+      ...(session.ticketComboId || session.admissionType ? { ticket_metadata: {
+        ...(session.ticketComboId ? {
+          comboId: session.ticketComboId,
+          role: session.ticketComboRole,
+          purchaseId: session.ticketPurchaseId || null
+        } : {}),
+        ...(session.admissionType ? {
+          admissionType: session.admissionType,
+          admissionLabel: session.admissionLabel || "Virtual Line",
+          reservationNote: session.reservationNote || null
+        } : {})
       }} : {})
     };
   }
@@ -2839,7 +2850,8 @@
           return "<div class=\"archiveRideRow protocolTimelineRow\">" + protocolPhoto(protocolSessionRideId(session, parkSlug), parkSlug, protocolSeasonForDay(day, parkSlug)) +
             "<div><b>" + escapeHtml(session.rideName) + "</b>" +
             "<small>" + escapeHtml(rideTimeLabel(session)) + " · " +
-            (isShowSession(session) ? "✨ Wintershow" : session.type === "single" ? "Single Rider" : "Regular") + "</small>" +
+            (isShowSession(session) ? "✨ Wintershow" : escapeHtml(sessionQueueModeLabel(session))) + "</small>" +
+            admissionNoteHtml(session) +
             (operator ? "<small class=\"archiveOperator\">Schausteller: " + escapeHtml(operator) + "</small>" : "") +
             "</div><div><b>" + escapeHtml(duration) + "</b><small>" + escapeHtml(state) + "</small></div></div>";
         }).join("")
@@ -3056,6 +3068,19 @@
     }
   }
 
+  function admissionNoteHtml(session) {
+    if (session?.admissionType !== "virtual_line") return "";
+    const title = session.admissionLabel || "Virtual Line";
+    const note = session.reservationNote ? " · " + session.reservationNote : "";
+    return '<small class="logAdmissionBadge">🎟 ' + escapeHtml(title + note) + '</small>';
+  }
+
+  function sessionQueueModeLabel(session) {
+    return session?.admissionType === "virtual_line"
+      ? "🎟 Virtual Line"
+      : session?.type === "single" ? "👤 Single Rider" : "Regular";
+  }
+
   function renderLog() {
     const container = $("#log");
     if (!container) return;
@@ -3079,7 +3104,8 @@
         "<div class=\"logEntryInfo\"><b>" + escapeHtml(session.rideName) + "</b>" +
         (operator ? "<small class=\"logOperator\">Schausteller: " + escapeHtml(operator) + "</small>" : "") +
         (ticketNote ? "<small>" + escapeHtml(ticketNote) + "</small>" : "") +
-        "<small>" + (isShowSession(session) ? "✨ Wintershow" : venueIsFair(session.parkSlug || activeParkSlug) ? "Fahrt" : (session.type === "single" ? "👤 Single Rider" : "Regular")) + " · " +
+        admissionNoteHtml(session) +
+        "<small>" + (isShowSession(session) ? "✨ Wintershow" : venueIsFair(session.parkSlug || activeParkSlug) ? "Fahrt" : sessionQueueModeLabel(session)) + " · " +
         new Date(session.startedAt).toLocaleTimeString("de-DE", {hour:"2-digit",minute:"2-digit"}) +
         "</small></div><div class=\"logEntryActions\"><b>" + escapeHtml(duration) + "</b><small>" +
         escapeHtml(state) + "</small>" + (deletable ? "<button type=\"button\" class=\"logDeleteBtn\" data-delete-log-id=\"" + escapeHtml(String(session.id)) + "\" aria-label=\"Eintrag " + escapeHtml(session.rideName) + " löschen\">🗑 Löschen</button>" : "") +
