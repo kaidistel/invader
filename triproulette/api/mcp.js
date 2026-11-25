@@ -1,7 +1,7 @@
 // Read-only server-side MCP transport; no booking methods or arbitrary upstream URLs.
 const ENDPOINT='https://mcp.lastminute.com/mcp';
 const ORIGIN='https://kaidistel.github.io';
-const sessions=new Map(), limits=new Map();
+const limits=new Map();
 function rate(key){const now=Date.now(),slot=limits.get(key)||{n:0,t:now};if(now-slot.t>60000){slot.n=0;slot.t=now}slot.n++;limits.set(key,slot);if(limits.size>2000)limits.clear();return slot.n<=45}
 export default async function handler(req,res){
  const origin=req.headers.origin;
@@ -17,9 +17,16 @@ export default async function handler(req,res){
  if(!['initialize','notifications/initialized','tools/list','tools/call'].includes(b.method))return res.status(403).end();
  if(b.method==='tools/call'){
   const a=b.params?.arguments||{}, iso=/^\d{4}-\d{2}-\d{2}$/;
+  const tool=b.params?.name;
+  if(tool==='select_hotel_options'){
+   if(!/^\d{1,20}$/.test(String(a.search_id))||!/^\d{1,20}$/.test(String(a.hotel_internal_id))||!iso.test(a.date_from)||!iso.test(a.date_to)||!(Date.parse(a.date_to)>Date.parse(a.date_from))||Object.keys(a).some(k=>!['search_id','hotel_internal_id','date_from','date_to'].includes(k)))return res.status(400).json({error:'Invalid room inquiry'});
+  }else if(tool==='generate_booking_link'){
+   if(!/^[a-zA-Z0-9_:.=-]{1,500}$/.test(String(a.pricing_id))||!/^[-a-zA-Z0-9_:.=+\/]{1,1000}$/.test(String(a.rate_id))||Object.keys(a).some(k=>!['pricing_id','rate_id'].includes(k)))return res.status(400).json({error:'Invalid link inquiry'});
+  }else{
   if(b.params?.name!=='search_flight_and_hotel_package'||!(/^[A-Z]{3}$/.test(a.origin)&&/^[A-Z]{3}$/.test(a.destination))||!iso.test(a.date_from)||!iso.test(a.date_to)||!(Date.parse(a.date_to)>Date.parse(a.date_from))||Date.parse(a.date_to)-Date.parse(a.date_from)>30*86400000||![1,2].includes(Number(a.adults)))return res.status(400).json({error:'Invalid package search'});
   const allowed=['origin','destination','date_from','date_to','adults','ch_ages','lang','sort','max_results','accommodation_type'];if(Object.keys(a).some(k=>!allowed.includes(k)))return res.status(400).end();
   if(a.max_results!==undefined&&(!Number.isFinite(Number(a.max_results))||Number(a.max_results)>10))return res.status(400).end();
+  }
  }
  try{
   const headers={'Content-Type':'application/json','Accept':'application/json, text/event-stream'};
