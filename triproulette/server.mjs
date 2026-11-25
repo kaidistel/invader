@@ -4,7 +4,7 @@ const root=new URL('./',import.meta.url), endpoint='https://mcp.lastminute.com/m
 const server=http.createServer(async(req,res)=>{
 try{
  const path=new URL(req.url,'http://127.0.0.1').pathname;
- if(req.method==='GET'&&['/','/index.html','/live.js','/quality.js','/themes.js','/smart.js','/speed.js','/world-data.js','/world.js','/world.css'].includes(path)){
+ if(req.method==='GET'&&['/','/index.html','/live.js','/quality.js','/themes.js','/smart.js','/speed.js','/world-data.js','/world.js','/world.css','/travel.css'].includes(path)){
   const file=path==='/'?'index.html':path.slice(1);
   const body=await readFile(new URL(file,root));
   res.writeHead(200,{'Content-Type':file.endsWith('.js')?'text/javascript; charset=utf-8':file.endsWith('.css')?'text/css; charset=utf-8':'text/html; charset=utf-8','Cache-Control':'no-store'});return res.end(body)
