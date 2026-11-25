@@ -1,0 +1,42 @@
+name: TripRoulette smoke test
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'triproulette/**'
+      - '.github/workflows/triproulette-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: |
+          node --check triproulette/live.js
+          node --check triproulette/server.mjs
+      - name: Check local HTTP server
+        run: |
+          node triproulette/server.mjs &
+          pid=$!
+          trap 'kill "$pid" || true' EXIT
+          curl --retry 5 --retry-connrefused --retry-delay 1 --fail -s http://127.0.0.1:8765/ | grep -q 'Wohin? Überall.'
+          curl --fail -s http://127.0.0.1:8765/live.js -o /tmp/live.js
+          node --check /tmp/live.js
+      - name: Probe provider browser preflight
+        continue-on-error: true
+        run: |
+          curl --max-time 20 -sS -D /tmp/cors.txt -o /dev/null -X OPTIONS 'https://mcp.lastminute.com/mcp' -H 'Origin: https://kaidistel.github.io' -H 'Access-Control-Request-Method: POST' -H 'Access-Control-Request-Headers: content-type,mcp-protocol-version,mcp-session-id'
+          cat /tmp/cors.txt
+          grep -qi '^access-control-allow-origin: *\(\*\|https://kaidistel.github.io\)' /tmp/cors.txt
+      - name: Probe official MCP handshake
+        continue-on-error: true
+        run: |
+          curl --max-time 20 -sS -D /tmp/mcp-headers.txt -o /tmp/mcp-response.txt -X POST 'https://mcp.lastminute.com/mcp' -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -H 'Origin: https://kaidistel.github.io' --data '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"TripRoulette-smoke","version":"0.5"}}}' || true
+          test -s /tmp/mcp-response.txt
+          grep -qi 'protocolVersion' /tmp/mcp-response.txt
