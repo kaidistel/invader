@@ -62,7 +62,7 @@ function roomData(o,retry=false){
  o.detailPromise=(async()=>{try{
  const v=parse(await rpc('tools/call',{name:'select_hotel_options',arguments:{search_id:Number(o.searchId),hotel_internal_id:Number(o.hotelId),date_from:o.start,date_to:o.end}},false,signal));
  if(!v.success)throw Error(v.message||v.error||'Keine Flugdetails verfügbar');
- if(token===runId){o.detail=v;o.detailError='';o.cached=false;o.verifiedAt=Date.now();const rooms=Q.privateRooms(v);o.privateRoom=rooms[0]||null;if(o.privateRoom){o.price=Number(o.privateRoom.price);remember({origin:o.origin,target:[o.destination],w:[o.start,o.end]},profile,o.price);if(!firstAt)firstAt=Date.now()-searchStarted}saveSnapshot();scheduleDraw()}return v
+ if(token===runId){o.detail=v;o.detailError='';o.cached=false;o.verifiedAt=Date.now();const rooms=Q.privateRooms(v);o.privateRoom=rooms[0]||null;if(o.privateRoom){o.price=Number(o.privateRoom.price);remember({origin:o.origin,target:[o.destination],w:[o.start,o.end]},profile,o.price);if(!firstAt&&(!$('budgetOnly').checked||o.price<=profile.budget))firstAt=Date.now()-searchStarted}saveSnapshot();scheduleDraw()}return v
  }catch(e){if(token===runId){o.detailError=e.message;if(/HTTP 429/.test(e.message)){detailPaused=true;cooldown=Date.now()+65000;updateMore()}scheduleDraw()}throw e}finally{o.detailPromise=null}})();return o.detailPromise
 }
 function scheduleDraw(){if(redrawTimer)return;redrawTimer=setTimeout(()=>{redrawTimer=0;draw()},120)}
