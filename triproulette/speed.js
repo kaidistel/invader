@@ -31,5 +31,11 @@ function eligibleSnapshots(snapshots,p,jobs,now=Date.now(),ttl=300000){
  return [...out.values()].sort((a,b)=>a.price-b.price)
 }
 function groupOffers(rows){const groups=new Map();for(const o of rows){if(!groups.has(o.destination))groups.set(o.destination,[]);groups.get(o.destination).push(o)}return [...groups].map(([code,offers])=>({code,offers,best:offers.reduce((a,b)=>a.price<=b.price?a:b)}))}
-const api={createLimiter,profileKey,eligibleSnapshots,groupOffers,routeKey,offerKey};root.TripSpeed=api;if(typeof module==='object'&&module.exports)module.exports=api;
+
+const ROUTE_TTL=300000, ROUTE_LIMIT=400;
+function routeCacheKey(j,p){return JSON.stringify(['v3',j.origin,j.target[0],...j.w,Number(p.adults),p.destination==='ANY'?2:5,'de','1,2,3,5,6,7,8,9,12,13,14'])}
+function usableRoute(entry,now=Date.now()){return !!entry&&Number.isFinite(entry.at)&&entry.at<=now&&now-entry.at<ROUTE_TTL&&Array.isArray(entry.rows)&&entry.rows.length<=5}
+function planRoutes(jobs,p,cache,now=Date.now()){const hits=[],misses=[];for(const j of jobs){const entry=cache.get(routeCacheKey(j,p));if(!p.fresh&&usableRoute(entry,now))hits.push({j,entry});else misses.push(j)}return {hits,misses}}
+function packRoutes(cache,now=Date.now()){return [...cache].filter(([,e])=>usableRoute(e,now)).sort((a,b)=>b[1].at-a[1].at).slice(0,ROUTE_LIMIT)}
+const api={createLimiter,profileKey,eligibleSnapshots,groupOffers,routeKey,offerKey,routeCacheKey,usableRoute,planRoutes,packRoutes};root.TripSpeed=api;if(typeof module==='object'&&module.exports)module.exports=api;
 })(globalThis);

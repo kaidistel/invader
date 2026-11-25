@@ -8,7 +8,7 @@ function isPrivate(r){
  const name=String(r.room_name||r.name||'').normalize('NFKC').trim();
  const type=String(r.room_type||r.accommodation_type||'');
  const text=name+' '+type+' '+String(r.description||'');
- if(!name||no.test(text)||r.is_shared===true||r.shared_room===true||r.is_dormitory===true||r.is_private===false||r.private_room===false)return false;
+ if(!name||no.test(text)||/mehrbett|gemeinschaftszimmer|schlafsaal|dormitory|sharedroom|bunkbed/i.test(text)||r.is_shared===true||r.shared_room===true||r.is_dormitory===true||r.is_private===false||r.private_room===false)return false;
  return r.is_private===true||r.private_room===true||r.entire_unit===true||yes.test(name+' '+type)||compact.test(name);
 }
 function privateRooms(v){return (Array.isArray(v?.room_options)?v.room_options:[]).filter(r=>isPrivate(r)&&String(r.currency||v.currency).toUpperCase()==='EUR'&&Number.isFinite(Number(r.price))&&Number(r.price)>0).sort((a,b)=>Number(a.price)-Number(b.price))}
