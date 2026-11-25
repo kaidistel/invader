@@ -4,16 +4,16 @@ const root=new URL('./',import.meta.url), endpoint='https://mcp.lastminute.com/m
 const server=http.createServer(async(req,res)=>{
 try{
  const path=new URL(req.url,'http://127.0.0.1').pathname;
- if(req.method==='GET'&&['/','/index.html','/live.js','/quality.js','/themes.js','/smart.js','/speed.js'].includes(path)){
+ if(req.method==='GET'&&['/','/index.html','/live.js','/quality.js','/themes.js','/smart.js','/speed.js','/world-data.js','/world.js','/world.css'].includes(path)){
   const file=path==='/'?'index.html':path.slice(1);
   const body=await readFile(new URL(file,root));
-  res.writeHead(200,{'Content-Type':file.endsWith('.js')?'text/javascript; charset=utf-8':'text/html; charset=utf-8','Cache-Control':'no-store'});return res.end(body)
+  res.writeHead(200,{'Content-Type':file.endsWith('.js')?'text/javascript; charset=utf-8':file.endsWith('.css')?'text/css; charset=utf-8':'text/html; charset=utf-8','Cache-Control':'no-store'});return res.end(body)
  }
  if(req.method!=='POST'||path!=='/mcp'){res.writeHead(404);return res.end('Not found')}
  if(req.headers.origin&&!['http://127.0.0.1:8765','http://localhost:8765'].includes(req.headers.origin)){res.writeHead(403);return res.end('Origin not allowed')}
  let body='';for await(const c of req){body+=c;if(body.length>20000){res.writeHead(413);return res.end()}}
  const msg=JSON.parse(body);
- if(!['initialize','notifications/initialized','tools/list','tools/call'].includes(msg.method)||msg.method==='tools/call'&&msg.params?.name!=='search_flight_and_hotel_package'){res.writeHead(403);return res.end('Read-only package search only')}
+ if(!['initialize','notifications/initialized','tools/list','tools/call'].includes(msg.method)||msg.method==='tools/call'&&!['search_flight_and_hotel_package','select_hotel_options','generate_booking_link'].includes(msg.params?.name)){res.writeHead(403);return res.end('Read-only package search only')}
  const headers={'Content-Type':'application/json','Accept':'application/json, text/event-stream'};
  for(const key of ['mcp-session-id','mcp-protocol-version'])if(req.headers[key])headers[key]=req.headers[key];
  const abort=new AbortController();res.on('close',()=>abort.abort());
