@@ -7,7 +7,7 @@ export default async function handler(req,res){
  const origin=req.headers.origin;
  if(origin===ORIGIN){res.setHeader('Access-Control-Allow-Origin',ORIGIN);res.setHeader('Access-Control-Allow-Methods','POST, OPTIONS');res.setHeader('Access-Control-Allow-Headers','Content-Type, MCP-Protocol-Version, Mcp-Session-Id');res.setHeader('Access-Control-Expose-Headers','Mcp-Session-Id');res.setHeader('Vary','Origin')}
  res.setHeader('Cache-Control','no-store');
- if(origin&&origin!==ORIGIN)return res.status(403).json({error:'Origin not permitted'});
+ if(origin&&origin!==ORIGIN&&origin!=='https://triproulette-two.vercel.app')return res.status(403).json({error:'Origin not permitted'});
  if(req.method==='OPTIONS')return res.status(204).end();
  if(req.method!=='POST')return res.status(405).end();
  const key=String(req.headers['x-forwarded-for']||'unknown').split(',')[0].trim();

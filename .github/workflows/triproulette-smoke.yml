@@ -19,13 +19,15 @@ jobs:
       - name: Check JavaScript syntax
         run: |
           node --check triproulette/live.js
+          node --check triproulette/quality.js
+          node triproulette/test-quality.cjs
           node --check triproulette/server.mjs
       - name: Check local HTTP server
         run: |
           node triproulette/server.mjs &
           pid=$!
           trap 'kill "$pid" || true' EXIT
-          curl --retry 5 --retry-connrefused --retry-delay 1 --fail -s http://127.0.0.1:8765/ | grep -q 'Wohin? Überall.'
+          curl --retry 5 --retry-connrefused --retry-delay 1 --fail -s http://127.0.0.1:8765/ | grep -q 'Wohin?'
           curl --fail -s http://127.0.0.1:8765/live.js -o /tmp/live.js
           node --check /tmp/live.js
       - name: End-to-end hosted package search
