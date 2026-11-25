@@ -1,0 +1,5 @@
+const assert=require('node:assert/strict'),F=require('./speed.js');
+(async()=>{const l=F.createLimiter({max:1,gap:0,budget:40}),a=await l.acquire(),order=[];const search=l.acquire(2).then(r=>{order.push('search');r()}),room=l.acquire(1).then(r=>{order.push('room');r()});a();await Promise.all([search,room]);assert.deepEqual(order,['room','search']);
+const l2=F.createLimiter({max:4,gap:0,budget:3,windowMs:80}),rs=await Promise.all([l2.acquire(),l2.acquire(),l2.acquire()]);rs.forEach(r=>r());const t=Date.now(),r=await l2.acquire();assert.ok(Date.now()-t>=50);r();
+const l3=F.createLimiter({max:1,gap:0}),r3=await l3.acquire(),c=new AbortController(),p=l3.acquire(2,c.signal);c.abort();await assert.rejects(p,{name:'AbortError'});r3();assert.equal(l3.stats().queued,0);
+const p1={destination:'ANY',airport:['AMS','DUS'],start:'2026-12-11',end:'2026-12-15',min:3,max:4,adults:1};assert.equal(F.profileKey(p1),F.profileKey({...p1,airport:['DUS','AMS']}));assert.notEqual(F.profileKey(p1),F.profileKey({...p1,adults:2}));console.log('Priority scheduling, bounded rolling budget, cancellation and profile isolation passed');})().catch(e=>{console.error(e);process.exitCode=1});
