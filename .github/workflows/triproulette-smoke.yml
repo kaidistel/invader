@@ -58,5 +58,17 @@ jobs:
           args={'origin':'DUS','destination':'MLA','date_from':'2026-12-11','date_to':'2026-12-15','adults':1 if props['adults'].get('type') in ['integer','number'] else '1','ch_ages':'','lang':'de','sort':'price','max_results':3,'accommodation_type':'1,2,3,5,6,7,8,9,12,13,14'}
           response=rpc('tools/call',{'name':tool['name'],'arguments':{k:v for k,v in args.items() if k in props}},3)
           assert 'result' in response and not response['result'].get('isError'),str(response)[:800]
-          print('Provider response:',json.dumps(response,ensure_ascii=False)[:12000])
+          result=response['result'].get('structuredContent') or json.loads(response['result']['content'][0]['text'])
+          assert result['success'] and len(result['products_summary'])>0,result
+          print('Package results:',json.dumps(result['products_summary'],ensure_ascii=False)[:5000])
+          roomtool=next(t for t in tools['result']['tools'] if t['name']=='select_hotel_options')
+          def typed(t,k,v):
+              return str(v) if t['inputSchema']['properties'][k].get('type')=='string' else v
+          first=result['products_summary'][0]
+          roomargs={k:typed(roomtool,k,v) for k,v in {'search_id':result['search_id'],'hotel_internal_id':first['internal_id_hotel'],'date_from':'2026-12-11','date_to':'2026-12-15'}.items()}
+          room=rpc('tools/call',{'name':roomtool['name'],'arguments':roomargs},4)
+          assert 'result' in room and not room['result'].get('isError'),str(room)[:1000]
+          roomdata=room['result'].get('structuredContent') or json.loads(room['result']['content'][0]['text'])
+          print('Room schema:',json.dumps(roomtool['inputSchema']))
+          print('Room response:',json.dumps(roomdata,ensure_ascii=False)[:16000])
           PY
