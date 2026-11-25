@@ -23,12 +23,13 @@ jobs:
           node --check triproulette/themes.js
           node --check triproulette/smart.js
           node --check triproulette/speed.js
+          node --check triproulette/providers.js
+          node triproulette/test-providers.cjs
           node --check triproulette/world-data.js
           node --check triproulette/world.js
           node triproulette/test-world.cjs
           node triproulette/test-speed.cjs
           node triproulette/test-groups.cjs
-          node triproulette/test-route-cache.cjs
           node triproulette/test-smart.cjs
           node triproulette/test-themes.cjs
           node triproulette/test-quality.cjs
