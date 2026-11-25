@@ -21,6 +21,8 @@ jobs:
           node --check triproulette/live.js
           node --check triproulette/quality.js
           node --check triproulette/themes.js
+          node --check triproulette/smart.js
+          node triproulette/test-smart.cjs
           node triproulette/test-themes.cjs
           node triproulette/test-quality.cjs
           node --check triproulette/server.mjs
