@@ -27,6 +27,7 @@ jobs:
           node --check triproulette/world.js
           node triproulette/test-world.cjs
           node triproulette/test-speed.cjs
+          node triproulette/test-groups.cjs
           node triproulette/test-smart.cjs
           node triproulette/test-themes.cjs
           node triproulette/test-quality.cjs

@@ -21,5 +21,15 @@ function createLimiter({max=4,budget=40,windowMs=60000,gap=200,now=Date.now}={})
  return {acquire,stats:()=>({active,queued:queue.length,started:starts.filter(t=>now()-t<windowMs).length})}
 }
 function profileKey(p){return JSON.stringify([p.destination,p.airport.slice().sort(),p.start,p.end,+p.min,+p.max,+p.adults,!!p.school])}
-const api={createLimiter,profileKey};root.TripSpeed=api;if(typeof module==='object'&&module.exports)module.exports=api;
+
+function routeKey(o){return [o.origin,o.destination,o.start,o.end].join('|')}
+function offerKey(o){return routeKey(o)+'|'+o.hotelId}
+function eligibleSnapshots(snapshots,p,jobs,now=Date.now(),ttl=300000){
+ const valid=new Set(jobs.map(j=>[j.origin,j.target[0],...j.w].join('|'))),out=new Map();
+ for(const [key,s] of snapshots){let profile;try{profile=JSON.parse(key)}catch{continue}if(!Array.isArray(profile)||Number(profile[6])!==Number(p.adults)||!Array.isArray(s?.rows))continue;
+ for(const o of s.rows){if(!o||!valid.has(routeKey(o))||!Number.isFinite(o.verifiedAt)||now-o.verifiedAt>=ttl||now<o.verifiedAt)continue;const k=offerKey(o),old=out.get(k);if(!old||old.verifiedAt<o.verifiedAt)out.set(k,o)}}
+ return [...out.values()].sort((a,b)=>a.price-b.price)
+}
+function groupOffers(rows){const groups=new Map();for(const o of rows){if(!groups.has(o.destination))groups.set(o.destination,[]);groups.get(o.destination).push(o)}return [...groups].map(([code,offers])=>({code,offers,best:offers.reduce((a,b)=>a.price<=b.price?a:b)}))}
+const api={createLimiter,profileKey,eligibleSnapshots,groupOffers,routeKey,offerKey};root.TripSpeed=api;if(typeof module==='object'&&module.exports)module.exports=api;
 })(globalThis);
