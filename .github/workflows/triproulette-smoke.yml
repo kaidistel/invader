@@ -28,15 +28,35 @@ jobs:
           curl --retry 5 --retry-connrefused --retry-delay 1 --fail -s http://127.0.0.1:8765/ | grep -q 'Wohin? Überall.'
           curl --fail -s http://127.0.0.1:8765/live.js -o /tmp/live.js
           node --check /tmp/live.js
-      - name: Probe provider browser preflight
-        continue-on-error: true
+      - name: End-to-end hosted package search
         run: |
-          curl --max-time 20 -sS -D /tmp/cors.txt -o /dev/null -X OPTIONS 'https://mcp.lastminute.com/mcp' -H 'Origin: https://kaidistel.github.io' -H 'Access-Control-Request-Method: POST' -H 'Access-Control-Request-Headers: content-type,mcp-protocol-version,mcp-session-id'
-          cat /tmp/cors.txt
-          grep -qi '^access-control-allow-origin: *\(\*\|https://kaidistel.github.io\)' /tmp/cors.txt
-      - name: Probe official MCP handshake
-        continue-on-error: true
-        run: |
-          curl --max-time 20 -sS -D /tmp/mcp-headers.txt -o /tmp/mcp-response.txt -X POST 'https://mcp.lastminute.com/mcp' -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -H 'Origin: https://kaidistel.github.io' --data '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"TripRoulette-smoke","version":"0.5"}}}' || true
-          test -s /tmp/mcp-response.txt
-          grep -qi 'protocolVersion' /tmp/mcp-response.txt
+          python3 - <<'PY'
+          import json, urllib.request, urllib.error
+          endpoint='https://triproulette-two.vercel.app/api/mcp'
+          headers={'Content-Type':'application/json','Accept':'application/json','Origin':'https://kaidistel.github.io'}
+          def rpc(method,params,idx=None):
+              payload={'jsonrpc':'2.0','method':method,'params':params}
+              if idx is not None: payload['id']=idx
+              req=urllib.request.Request(endpoint,data=json.dumps(payload).encode(),headers=headers,method='POST')
+              try:
+                  with urllib.request.urlopen(req,timeout=35) as resp:
+                      session=resp.headers.get('Mcp-Session-Id')
+                      if session: headers['Mcp-Session-Id']=session
+                      assert resp.headers.get('Access-Control-Allow-Origin')=='https://kaidistel.github.io','CORS failure'
+                      raw=resp.read()
+                      return json.loads(raw) if raw else {}
+              except urllib.error.HTTPError as e:
+                  print('HTTP',e.code,e.read().decode()[:500]); raise
+          init=rpc('initialize',{'protocolVersion':'2025-03-26','capabilities':{},'clientInfo':{'name':'TripRoulette-smoke','version':'0.6'}},1)
+          assert init.get('result',{}).get('protocolVersion'),init
+          headers['MCP-Protocol-Version']=init['result']['protocolVersion']
+          rpc('notifications/initialized',{})
+          tools=rpc('tools/list',{},2)
+          tool=next(t for t in tools['result']['tools'] if t['name']=='search_flight_and_hotel_package')
+          print('Tool schema:',json.dumps(tool['inputSchema']))
+          props=tool['inputSchema']['properties']
+          args={'origin':'DUS','destination':'MLA','date_from':'2026-12-11','date_to':'2026-12-15','adults':1 if props['adults'].get('type') in ['integer','number'] else '1','ch_ages':'','lang':'de','sort':'price','max_results':3,'accommodation_type':'1,2,3,5,6,7,8,9,12,13,14'}
+          response=rpc('tools/call',{'name':tool['name'],'arguments':{k:v for k,v in args.items() if k in props}},3)
+          assert 'result' in response and not response['result'].get('isError'),str(response)[:800]
+          print('Provider response:',json.dumps(response,ensure_ascii=False)[:12000])
+          PY
