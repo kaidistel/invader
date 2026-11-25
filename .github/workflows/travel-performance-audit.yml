@@ -1,0 +1,68 @@
+name: Travel performance audit
+on:
+  push:
+    branches: [travel-performance-audit]
+    paths: ['.github/workflows/travel-performance-audit.yml']
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: Bounded read-only provider capability probe
+        run: |
+          python3 - <<'PY'
+          import json,time,urllib.request,urllib.error,datetime
+          endpoint='https://mcp.lastminute.com/mcp'
+          h={'Content-Type':'application/json','Accept':'application/json, text/event-stream'}
+          seq=0
+          def rpc(method,params,notify=False):
+              global seq
+              seq+=1
+              msg={'jsonrpc':'2.0','method':method,'params':params}
+              if not notify: msg['id']=seq
+              start=time.monotonic()
+              try:
+                  with urllib.request.urlopen(urllib.request.Request(endpoint,data=json.dumps(msg).encode(),headers=h,method='POST'),timeout=25) as r:
+                      if r.headers.get('Mcp-Session-Id'):h['Mcp-Session-Id']=r.headers['Mcp-Session-Id']
+                      if notify:return {},round(time.monotonic()-start,3)
+                      if 'text/event-stream' in r.headers.get('Content-Type',''):
+                          for line in r:
+                              if line.startswith(b'data:'):
+                                  v=json.loads(line[5:])
+                                  if v.get('id')==seq:break
+                          else:raise ValueError('no RPC response')
+                      else:v=json.load(r)
+                      return v,round(time.monotonic()-start,3)
+              except Exception as e:return {'error':str(e)},round(time.monotonic()-start,3)
+          def parse(v):
+              r=v.get('result',{})
+              if 'structuredContent' in r:return r['structuredContent']
+              try:return json.loads(r['content'][0]['text'])
+              except:return {'error':str(v.get('error') or r.get('content',''))[:240]}
+          v,t=rpc('initialize',{'protocolVersion':'2025-03-26','capabilities':{},'clientInfo':{'name':'NAEHEN-performance-audit','version':'1'}})
+          print('INIT',t,v.get('error','ok'),flush=True)
+          if not v.get('result'):raise SystemExit('Initialization failed')
+          h['MCP-Protocol-Version']=v['result']['protocolVersion']
+          rpc('notifications/initialized',{},True)
+          v,t=rpc('tools/list',{})
+          tools=v.get('result',{}).get('tools',[])
+          print('TOOLS',json.dumps([{'name':x['name'],'description':x.get('description','')[:500],'properties':x.get('inputSchema',{}).get('properties',{})} for x in tools]),flush=True)
+          start=(datetime.date.today()+datetime.timedelta(days=16)).isoformat()
+          end=(datetime.date.today()+datetime.timedelta(days=20)).isoformat()
+          base={'origin':'DUS','destination':'MLA','date_from':start,'date_to':end,'adults':'1','lang':'de','sort':'price','max_results':2}
+          def query(label,args):
+              v,t=rpc('tools/call',{'name':'search_flight_and_hotel_package','arguments':args})
+              d=parse(v)
+              print('PROBE',json.dumps({'label':label,'seconds':t,'success':d.get('success'),'prices':[x.get('price_total') for x in d.get('products_summary',[])],'range':d.get('price_range'),'message':str(d.get('message',d.get('error','')))[:300]}),flush=True)
+              return d
+          d=query('baseline',base)
+          if d.get('success') and d.get('products_summary'):
+              lo=min(x['price_total'] for x in d['products_summary'])
+              cap=max(1,int(lo*100)-10000)
+              query('price-comma',{**base,'price':'0,'+str(cap)})
+              query('price-dash',{**base,'price':'0-'+str(cap)})
+              query('price-single',{**base,'price':str(cap)})
+              query('baseline-repeat',base)
+          PY
