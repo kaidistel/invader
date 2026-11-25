@@ -39,6 +39,14 @@ jobs:
           curl --retry 5 --retry-connrefused --retry-delay 1 --fail -s http://127.0.0.1:8765/ | grep -q 'WORLD COMPANION'
           curl --fail -s http://127.0.0.1:8765/live.js -o /tmp/live.js
           node --check /tmp/live.js
+      - name: Mobile browser interaction test
+        run: |
+          npm install --prefix /tmp/naehen-browser --no-audit --no-fund playwright-core@1.51.1
+          node triproulette/server.mjs &
+          pid=$!
+          trap 'kill "$pid" || true' EXIT
+          curl --retry 5 --retry-connrefused --retry-delay 1 --fail -s http://127.0.0.1:8765/ -o /dev/null
+          PLAYWRIGHT_CORE=/tmp/naehen-browser/node_modules/playwright-core CHROME_PATH=$(command -v google-chrome || command -v chromium) node triproulette/test-browser.cjs
       - name: End-to-end hosted package search
         run: |
           python3 - <<'PY'
