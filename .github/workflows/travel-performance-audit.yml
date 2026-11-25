@@ -14,7 +14,7 @@ jobs:
         run: |
           python3 - <<'PY'
           import json,time,urllib.request,urllib.error,datetime
-          endpoint='https://mcp.lastminute.com/mcp'
+          endpoint='https://triproulette-two.vercel.app/api/mcp'
           h={'Content-Type':'application/json','Accept':'application/json, text/event-stream'}
           seq=0
           def rpc(method,params,notify=False):
@@ -51,7 +51,7 @@ jobs:
           print('TOOLS',json.dumps([{'name':x['name'],'description':x.get('description','')[:500],'properties':x.get('inputSchema',{}).get('properties',{})} for x in tools]),flush=True)
           start=(datetime.date.today()+datetime.timedelta(days=16)).isoformat()
           end=(datetime.date.today()+datetime.timedelta(days=20)).isoformat()
-          base={'origin':'DUS','destination':'MLA','date_from':start,'date_to':end,'adults':'1','lang':'de','sort':'price','max_results':2}
+          base={'origin':'DUS','destination':'MLA','date_from':start,'date_to':end,'adults':'1','lang':'de','sort':'price','max_results':2,'accommodation_type':'1,2,3,5,6,7,8,9,12,13,14'}
           def query(label,args):
               v,t=rpc('tools/call',{'name':'search_flight_and_hotel_package','arguments':args})
               d=parse(v)
@@ -61,8 +61,6 @@ jobs:
           if d.get('success') and d.get('products_summary'):
               lo=min(x['price_total'] for x in d['products_summary'])
               cap=max(1,int(lo*100)-10000)
-              query('price-comma',{**base,'price':'0,'+str(cap)})
-              query('price-dash',{**base,'price':'0-'+str(cap)})
-              query('price-single',{**base,'price':str(cap)})
+              query('price-field-proxy-check',{**base,'price':'0,'+str(cap)})
               query('baseline-repeat',base)
           PY
