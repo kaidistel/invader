@@ -56,6 +56,8 @@ jobs:
         run: node naehen/test-europa-hallowinter.cjs
       - name: Test Movie Park Hollywood Christmas 2026-27 season and winter availability
         run: node naehen/test-movie-christmas.cjs
+      - name: Test Movie Park snowfall, hidden Halloween mazes and minimal show panel
+        run: node naehen/test-movie-christmas-cleanup.cjs
       - name: Test Europa-Park and Phantasialand attraction facts
         run: node naehen/test-attraction-facts.cjs
       - name: Test photographic ride logs and archive protocols
