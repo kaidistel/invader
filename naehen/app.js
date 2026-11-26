@@ -31,6 +31,25 @@
     "doras-big-river-adventure", "stormy-cruise", "spongebob-splash-bash"
   ]);
   const MOVIE_CHRISTMAS_SPECIAL_IDS = new Set(["movie-park-studio-tour", "roxy-4d"]);
+  // Halloween Horror Festival content must never leak into Hollywood Christmas
+  // queues. Keep permanent indoor rides (Van Helsing's, Ghost Chasers, etc.).
+  // Historical Halloween sessions and archive entries are not modified.
+  const MOVIE_HALLOWEEN_MAZE_NAMES = Object.freeze([
+    "jason universe", "phobia", "blood moon trailer park",
+    "ahoj-brause horror lab", "ahoj brause horror lab",
+    "a quiet place", "hell house", "final stop",
+    "murder museum", "secrets of st. elmo", "secrets of st elmo",
+    "slaughterhouse", "circus of freaks", "horrorwood",
+    "halloween horror festival", "horror maze", "horror maze ",
+    "the lost temple", "unhallowed", "wrong turn"
+  ]);
+  function movieChristmasHorrorMaze(name, id) {
+    const normalized = [name, id].map(value => String(value || "")
+      .toLowerCase().replace(/[-_]+/g, " ").replace(/\s+/g," ").trim()).join(" | ");
+    return MOVIE_HALLOWEEN_MAZE_NAMES.some(maze =>
+      normalized.includes(maze.replace(/[-_]+/g, " ")));
+  }
+
   // Christmas-specific attraction artwork, with the regular ride image
   // retained as fallback and for visits outside the event period.
   const MOVIE_CHRISTMAS_RIDE_ART = Object.freeze({
@@ -173,6 +192,8 @@
     const normalizedName = String(name || "").toLowerCase().trim();
     const normalizedId = String(id || "");
     const module = parkModuleFor(parkSlug);
+    if (parkSlug === "movie-park-germany" && MOVIE_CHRISTMAS_ACTIVE &&
+        movieChristmasHorrorMaze(normalizedName, normalizedId)) return true;
     // "Ice Skate Hire" is a rental listing, not an attraction.
     if (parkSlug === "phantasialand" && /ice[\s-]*skate[\s-]*(?:hire|rental)|schlittschuh[\s-]*(?:verleih|ausleihe)|eislaufschuhverleih/i.test(normalizedName + " " + normalizedId)) return true;
     // Winter-only closures must not appear as available ride opportunities.
