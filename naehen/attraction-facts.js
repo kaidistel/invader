@@ -109,8 +109,210 @@
   };
   Object.entries(pd).forEach(([id,facts])=>Object.assign(phl[id]||(phl[id]={}),facts));
   Object.values(phl).forEach(v=>{v.safetySourceUrl=safety;});
+  // Movie Park Germany · 32 catalog attractions, reviewed 26.11.2026.
+  // Technical coaster figures: Roller Coaster DataBase (rcdb.com);
+  // speed, access and non-coaster facts: official Movie Park attraction pages.
+  // Foot/mph figures from RCDB are represented in rounded metric units.
+  // Never synthesize missing height, speed, capacity, duration or opening year.
+  const mpg={};
+  group(mpg,"Film-/Effektsimulator","journey-to-the-forbidden-chamber");
+  group(mpg,"Multi Dimension Coaster","movie-park-studio-tour");
+  group(mpg,"Freifallturm","the-high-fall");
+  group(mpg,"Wilde Maus / Achterbahn","ghost-chasers");
+  group(mpg,"Interaktiver Flugturm","splat-o-sphere");
+  group(mpg,"Suspended Family Coaster","jimmy-neutrons-atomic-flyer");
+  group(mpg,"Familienfahrgeschäft","zumas-zoomers paw-patrol-adventure-tour");
+  group(mpg,"Top Spin / Überschlagfahrgeschäft","nyc-transformer");
+  group(mpg,"Inverted Coaster","iron-claw");
+  group(mpg,"Junior Coaster","backyardigans-mission-to-mars");
+  group(mpg,"Riesenrad","santa-monica-wheel");
+  group(mpg,"Familienkarussell","sea-swing");
+  group(mpg,"Indoor-Achterbahn","van-helsings-factory");
+  group(mpg,"Interaktive Themenfahrt","rescue-112");
+  group(mpg,"Frisbee / Pendelfahrgeschäft","side-kick");
+  group(mpg,"Disk’O / Rundfahrgeschäft","crazy-surfer");
+  group(mpg,"Launch Coaster","star-trek-operation-enterprise");
+  group(mpg,"Kettenkarussell","pier-side-carousel");
+  group(mpg,"Holzachterbahn","the-bandit");
+  group(mpg,"Wildwasserbahn","doras-big-river-adventure");
+  group(mpg,"Wasser-Dark-Ride","area-51-top-secret");
+  group(mpg,"Interaktive Wasserfahrt","spongebob-splash-bash");
+  group(mpg,"Bewegungssimulator","time-riders");
+  group(mpg,"Flugkarussell","avatar-air-glider");
+  group(mpg,"Teetassenkarussell","fairy-world-spin");
+  group(mpg,"Rundfahrgeschäft / Boot","stormy-cruise");
+  group(mpg,"Höhenkarussell","skyes-high-flyer");
+  group(mpg,"Kinderfahrschule","teenage-mutant-ninja-turtles-license-to-drive");
+  group(mpg,"Themenfahrt / Rafting","excalibur-secrets-of-the-dark-forest");
+  group(mpg,"Spielplatz","spielplatz-santa-monica");
+  group(mpg,"4D-Kino","roxy-4d");
+  const mpSources={
+    "journey-to-the-forbidden-chamber":"journey-to-the-forbidden-chamber",
+    "movie-park-studio-tour":"movie-park-studio-tour",
+    "the-high-fall":"the-high-fall",
+    "ghost-chasers":"ghost-chasers",
+    "splat-o-sphere":"splat-o-sphere",
+    "jimmy-neutrons-atomic-flyer":"jimmy-neutrons-atomic-flyer",
+    "zumas-zoomers":"zumas-zoomers",
+    "nyc-transformer":"nyc-transformer",
+    "iron-claw":"ironclaw",
+    "backyardigans-mission-to-mars":"backyardigans-mission-to-mars",
+    "santa-monica-wheel":"santa-monica-wheel",
+    "sea-swing":"sea-swing",
+    "van-helsings-factory":"vanhelsings-factory",
+    "rescue-112":"rescue-112",
+    "side-kick":"side-kick",
+    "crazy-surfer":"crazy-surfer",
+    "paw-patrol-adventure-tour":"paw-patrol-adventure-tour",
+    "star-trek-operation-enterprise":"star-trek-operation-enterprise",
+    "pier-side-carousel":"pier-side-carousel",
+    "the-bandit":"the-bandit",
+    "doras-big-river-adventure":"doras-big-river-adventure",
+    "area-51-top-secret":"area-51-top-secret",
+    "spongebob-splash-bash":"spongeBob-splash-bash",
+    "time-riders":"time-riders",
+    "avatar-air-glider":"avatar-air-glider",
+    "fairy-world-spin":"fairy-world-spin",
+    "stormy-cruise":"stormy-cruise",
+    "skyes-high-flyer":"skyes-high-flyer",
+    "teenage-mutant-ninja-turtles-license-to-drive":"tmnt-license-to-drive",
+    "excalibur-secrets-of-the-dark-forest":"excalibur-secrets-of-the-dark-forest",
+    "spielplatz-santa-monica":"spielplatz-santa-monica",
+    "roxy-4d":"roxy-4d"
+  };
+  // Minima are with adult accompaniment where indicated in "special"; they
+  // are not unconditional solo-admission permissions.
+  const md={
+    "journey-to-the-forbidden-chamber":{
+      minHeightCm:100,
+      special:"Ab 130 cm allein; 100–129 cm nur mit Begleitung."
+    },
+    "movie-park-studio-tour":{
+      manufacturer:"Intamin",year:2021,heightM:12,trackLengthM:532,speedKmh:60,
+      duration:"2:00",inversions:0,launches:2,capacityPerHour:900,
+      vehicles:"12 Personen pro Zug",minHeightCm:110,minAgeYears:5,
+      special:"110–129 cm nur mit Begleitung · Drehplattform und Vor-/Rückwärtsbeschleunigung.",
+      technicalSourceUrl:"https://rcdb.com/18666.htm"
+    },
+    "the-high-fall":{
+      towerHeightM:60,speedKmh:98,minHeightCm:145,maxHeightCm:195,minAgeYears:10,
+      technicalSourceUrl:"https://www.movieparkgermany.de/erlebnisse/attraktionen/the-high-fall"
+    },
+    "ghost-chasers":{
+      manufacturer:"MACK Rides",year:2000,heightM:14,trackLengthM:370,speedKmh:45,
+      inversions:0,duration:"1:50",capacityPerHour:1120,vehicles:"4 Personen pro Wagen",
+      minHeightCm:120,maxHeightCm:195,minAgeYears:6,
+      technicalSourceUrl:"https://rcdb.com/966.htm"
+    },
+    "splat-o-sphere":{minHeightCm:120,minAgeYears:6},
+    "jimmy-neutrons-atomic-flyer":{
+      manufacturer:"Vekoma",year:2007,heightM:13,trackLengthM:295,speedKmh:47,
+      inversions:0,duration:"0:48",vehicles:"16 Personen pro Zug",
+      minHeightCm:95,maxHeightCm:205,minAgeYears:4,
+      special:"Unter 130 cm nur mit Begleitung.",
+      technicalSourceUrl:"https://rcdb.com/3675.htm"
+    },
+    "zumas-zoomers":{
+      special:"Kinder unter 90 cm und unter 4 Jahren nur mit Begleitung."
+    },
+    "nyc-transformer":{minHeightCm:140,maxHeightCm:195},
+    "iron-claw":{
+      manufacturer:"Vekoma",year:2001,heightM:33.3,trackLengthM:689,speedKmh:80,
+      inversions:5,duration:"1:36",capacityPerHour:1040,vehicles:"20 Personen pro Zug",
+      minHeightCm:130,maxHeightCm:195,minAgeYears:10,
+      technicalSourceUrl:"https://rcdb.com/969.htm"
+    },
+    "backyardigans-mission-to-mars":{
+      manufacturer:"Vekoma",year:1996,heightM:8.5,trackLengthM:207,speedKmh:35,
+      inversions:0,duration:"0:44",capacityPerHour:780,vehicles:"16 Personen pro Zug",
+      minHeightCm:90,minAgeYears:4,
+      special:"Unter 135 cm nur mit Begleitung.",
+      technicalSourceUrl:"https://rcdb.com/968.htm"
+    },
+    "santa-monica-wheel":{
+      heightM:20,special:"Unter 130 cm nur mit Begleitung."
+    },
+    "sea-swing":{minHeightCm:90,maxHeightCm:160},
+    "van-helsings-factory":{
+      manufacturer:"Gerstlauer",year:2011,heightM:8,trackLengthM:400,speedKmh:36,
+      inversions:0,capacityPerHour:848,vehicles:"4 Personen pro Wagen",
+      minHeightCm:120,minAgeYears:12,technicalSourceUrl:"https://rcdb.com/9539.htm"
+    },
+    "rescue-112":{special:"Unter 135 cm nur mit Begleitung."},
+    "side-kick":{minHeightCm:145,maxHeightCm:195},
+    "crazy-surfer":{
+      minHeightCm:120,minAgeYears:6,
+      special:"120–129 cm nur mit Begleitung."
+    },
+    "paw-patrol-adventure-tour":{
+      special:"Kinder unter 90 cm nur gemäß Begleitregelung des Parks."
+    },
+    "star-trek-operation-enterprise":{
+      manufacturer:"MACK Rides",year:2017,trackLengthM:720,speedKmh:90,
+      inversions:3,launches:3,vehicles:"20 Personen pro Zug",minHeightCm:130,minAgeYears:7,
+      special:"Multi-Pass-Launch und 40 m hoher Twisted Vertical Rollback.",
+      technicalSourceUrl:"https://rcdb.com/13796.htm"
+    },
+    "pier-side-carousel":{minHeightCm:120},
+    "the-bandit":{
+      manufacturer:"Roller Coaster Corporation of America",year:1999,heightM:27.8,
+      trackLengthM:1100,speedKmh:78,inversions:0,duration:"1:30",
+      vehicles:"30 Personen pro Zug",minHeightCm:120,minAgeYears:6,
+      technicalSourceUrl:"https://rcdb.com/967.htm"
+    },
+    "doras-big-river-adventure":{
+      minHeightCm:100,minAgeYears:2,
+      special:"100–119 cm nur mit Begleitung."
+    },
+    "area-51-top-secret":{
+      minHeightCm:90,special:"90–119 cm nur mit Begleitung."
+    },
+    "spongebob-splash-bash":{
+      minHeightCm:90,special:"90–119 cm nur mit Begleitung."
+    },
+    "time-riders":{minHeightCm:110,minAgeYears:4},
+    "avatar-air-glider":{
+      minHeightCm:120,minAgeYears:6,
+      special:"120–139 cm nur mit Begleitung."
+    },
+    "fairy-world-spin":{
+      minHeightCm:100,minAgeYears:2,
+      special:"Ab 100 cm, nur mit Begleitung."
+    },
+    "stormy-cruise":{
+      minAgeYears:4,
+      special:"Kinder von 100–129 cm nur mit Begleitung."
+    },
+    "skyes-high-flyer":{
+      minAgeYears:2,special:"Unter 135 cm nur mit Begleitung."
+    },
+    "teenage-mutant-ninja-turtles-license-to-drive":{
+      minHeightCm:121,maxHeightCm:150,
+      special:"Größenangaben beziehen sich auf den Trainings-Parcours."
+    },
+    "excalibur-secrets-of-the-dark-forest":{
+      minHeightCm:110,vehicles:"Bis zu 9 Personen pro Boot",
+      special:"110–139 cm nur mit Begleitung."
+    },
+    "spielplatz-santa-monica":{},
+    "roxy-4d":{
+      special:"Keine Mindestgröße laut Parkangaben."
+    }
+  };
+  for (const [id,facts] of Object.entries(md)) {
+    if (!mpg[id]) throw Error("Unbekannte Movie-Park-Attraktion in Technikdaten: "+id);
+    Object.assign(mpg[id],facts);
+  }
+  for(const [id,facts] of Object.entries(mpg)){
+    const slug=mpSources[id];
+    if (!slug) throw Error("Movie-Park-Quellenlink fehlt: "+id);
+    const official="https://www.movieparkgermany.de/erlebnisse/attraktionen/"+slug;
+    facts.safetySourceUrl=official;
+    if (!facts.technicalSourceUrl) facts.technicalSourceUrl=official;
+  }
   window.NAEHEN_ATTRACTION_FACTS=Object.freeze({
     "europa-park":Object.freeze(ep),
-    "phantasialand":Object.freeze(phl)
+    "phantasialand":Object.freeze(phl),
+    "movie-park-germany":Object.freeze(mpg)
   });
 })();
