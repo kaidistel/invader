@@ -11,16 +11,19 @@ const context={window:{}};
 vm.runInNewContext(read("movie-park-config.js"),context,{filename:"movie-park-config.js"});
 const park=context.window.NAEHEN_MOVIE_PARK;
 assert.ok(park?.rides?.length>=32 && park?.worlds,"Movie Park's configured attractions missing");
-const seasonCode=app.slice(app.indexOf("  // 21 officially announced event days"),app.indexOf("  const WINTERTRAUM_HERO"));
+const seasonCode=app.slice(app.indexOf("  // Holiday visuals begin 26 November"),app.indexOf("  const WINTERTRAUM_HERO"));
 assert.ok(seasonCode.includes("MOVIE_CHRISTMAS_BREAK_IDS"),"Movie Park season constants missing");
 const getState=new Function("WINTERTRAUM_DATE","location","activeParkSlug",seasonCode+
-  "\nreturn {active:MOVIE_CHRISTMAS_ACTIVE,preview:MOVIE_CHRISTMAS_PREVIEW,closed:MOVIE_CHRISTMAS_BREAK_IDS,special:MOVIE_CHRISTMAS_SPECIAL_IDS,zone:movieChristmasZone,hero:MOVIE_CHRISTMAS_HERO};");
+  "\nreturn {active:MOVIE_CHRISTMAS_ACTIVE,eventActive:MOVIE_CHRISTMAS_EVENT_ACTIVE,preview:MOVIE_CHRISTMAS_PREVIEW,closed:MOVIE_CHRISTMAS_BREAK_IDS,special:MOVIE_CHRISTMAS_SPECIAL_IDS,zone:movieChristmasZone,hero:MOVIE_CHRISTMAS_HERO};");
 const season=(date,search="")=>getState(date,{search},"movie-park-germany");
-assert.equal(season("2026-11-26").active,false,"Before launch must be normal Movie Park");
-assert.equal(season("2026-11-27").active,true,"Winter season must start Nov 27");
+assert.equal(season("2026-11-25").active,false,"Before Nov 26 Movie Park must have its regular theme");
+assert.equal(season("2026-11-26").active,true,"Christmas design must show by default from Nov 26");
+assert.equal(season("2026-11-26").eventActive,false,"Official event starts Nov 27, not Nov 26");
+assert.equal(season("2026-11-27").active,true,"Winter visual season remains on Nov 27");
+assert.equal(season("2026-11-27").eventActive,true,"Official winter availability begins Nov 27");
 assert.equal(season("2027-01-05").active,true,"Winter season must include Jan 5");
 assert.equal(season("2027-01-06").active,false,"Theme must switch off automatically");
-assert.equal(season("2026-11-26","?christmas=1").active,true,"Preview for the day before opening");
+assert.equal(season("2026-11-25","?christmas=1").active,true,"Out-of-season design preview still works");
 assert.equal(season("2027-02-01","?christmas=1").preview,true,"Preview must be explicitly opted in");
 assert.equal(season("2026-12-10").zone("The Old West"),"Wild West Christmas");
 assert.equal(season("2026-12-10").zone("Streets of New York"),"Rockefeller Plaza");
@@ -38,7 +41,7 @@ for(const id of ["movie-park-studio-tour","roxy-4d"])
   assert.ok(season("2026-12-10").special.has(id),"Christmas edition indicator missing "+id);
 for (const text of [
   'document.body.dataset.season = "hollywood-christmas"', 'christmasSection.hidden',
-  'MOVIE_CHRISTMAS_BREAK_IDS.has(ride.id)',
+  'MOVIE_CHRISTMAS_EVENT_ACTIVE && MOVIE_CHRISTMAS_BREAK_IDS.has(ride.id)',
   '"WINTERPAUSE"',
   'movieWinterBreak || (publicLive', 'movieChristmasZone(ride.zone, activeParkSlug)',
   'protocolSeasonForDay(day, parkSlug)', 'hollywood-christmas" : ""'
