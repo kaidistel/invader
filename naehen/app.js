@@ -17,6 +17,30 @@
   // Official 2026 transitional season: 2–27 November, 11–at least 19h.
   const EUROPA_HALLOWINTER_ACTIVE = WINTERTRAUM_DATE >= "2026-11-02" && WINTERTRAUM_DATE <= "2026-11-27";
   const EUROPA_HALLOWINTER_ART = "https://www.hallo-muenchen.de/assets/images/44/204/44204509-halloween-fahrspass-im-multi-launch-coaster-voltron-nevera-powered-by-rimac-PnBG.jpg";
+  // 21 officially announced event days within the seasonal range.
+  // Optional ?christmas=1 allows preview on the day before opening and after the event.
+  const MOVIE_CHRISTMAS_PREVIEW = new URLSearchParams(location.search).get("christmas") === "1";
+  const MOVIE_CHRISTMAS_ACTIVE = (WINTERTRAUM_DATE >= "2026-11-27" && WINTERTRAUM_DATE <= "2027-01-05") || MOVIE_CHRISTMAS_PREVIEW;
+  const MOVIE_CHRISTMAS_HERO = "https://www.movieparkgermany.de/content/dam/mpg/images/christmas-images/start/HERO%20MPG%20%284%29.jpg";
+  const MOVIE_CHRISTMAS_FALLBACK = "https://www.movieparkgermany.de/content/movie/de/plane-deinen-besuch/veranstaltungen/_jcr_content/responsiveGrid/cc32_distributivecar/1_card/image.coreimg.jpeg/1774256585449/mphc-banner--3-.jpeg";
+  // Exact official seasonal non-availability list; weather may affect additional rides.
+  const MOVIE_CHRISTMAS_BREAK_IDS = new Set([
+    "iron-claw", "nyc-transformer", "crazy-surfer", "area-51-top-secret",
+    "doras-big-river-adventure", "stormy-cruise", "spongebob-splash-bash"
+  ]);
+  const MOVIE_CHRISTMAS_SPECIAL_IDS = new Set(["movie-park-studio-tour", "roxy-4d"]);
+  const MOVIE_CHRISTMAS_ZONES = {
+    "The Hollywood Street Set": "Christmas Boulevard USA",
+    "The Hollywood Studio Set": "Hollywood Christmas Set",
+    "Streets of New York": "Rockefeller Plaza",
+    "The Old West": "Wild West Christmas",
+    "nickelodeon LAND": "Nickelodeon HoHoHoliday Land"
+  };
+  function movieChristmasZone(zone, slug = activeParkSlug) {
+    return slug === "movie-park-germany" && MOVIE_CHRISTMAS_ACTIVE
+      ? (MOVIE_CHRISTMAS_ZONES[zone] || zone) : zone;
+  }
+
   const WINTERTRAUM_HERO = "./assets/wintertraum-berlin-original.jpg";
   const WINTERTRAUM_RIDE_ART = {
     // User-supplied Wintertraum photography; optimized local copies for crisp cards and details.
@@ -104,6 +128,23 @@
     europa.heroImageFallbackUrls = [europa.cardImageFallback, "./assets/park-picker-bg.webp"].filter(Boolean);
     europa.cardCopy = "HALLOWinter · Kürbisglut trifft Winterfrost · 2.–27. November 2026.";
     europa.disclaimer = "Kein offizielles Angebot des Europa-Park. Saisoninfos und HALLOWinter-Foto: © Europa-Park.";
+  }
+
+  if (MOVIE_CHRISTMAS_ACTIVE && PARKS["movie-park-germany"]) {
+    const park = PARKS["movie-park-germany"];
+    const regularCard = park.cardImage;
+    park.cardImageFallback = regularCard;
+    park.cardImageFallbackUrls = [MOVIE_CHRISTMAS_FALLBACK, regularCard].filter(Boolean);
+    park.cardImage = MOVIE_CHRISTMAS_HERO;
+    park.heroImage = MOVIE_CHRISTMAS_HERO;
+    park.heroImageFallbackUrls = [MOVIE_CHRISTMAS_FALLBACK, regularCard].filter(Boolean);
+    park.cardCopy = "HOLLYWOOD CHRISTMAS · 27.11.26–05.01.27 · Amerikanische Weihnachtsfilmmagie.";
+    park.disclaimer = "Unabhängige Fan-App. Hollywood Christmas Fotos und Saisonhinweise: © Movie Park Germany.";
+    const world = PARK_MODULES["movie-park-germany"]?.worlds;
+    if (world?.["movie-park-studio-tour"])
+      world["movie-park-studio-tour"].line = "Filmset, Kamera, Action – und die Movie Park Studio Tour als Christmas Special Edition.";
+    if (world?.["roxy-4d"])
+      world["roxy-4d"].line = "Im Roxy läuft zur Weihnachtszeit Scrooge 4D: A Christmas Carol.";
   }
 
   function parkModuleFor(parkSlug = activeParkSlug || "phantasialand") {
@@ -961,7 +1002,8 @@
     grid.innerHTML = available.map((park) => {
       const fair = park.kind === "fair";
       return "<button class=\"parkChoice\" type=\"button\" data-park=\"" + escapeHtml(park.slug) + "\" data-kind=\"" + (fair ? "fair" : "park") + "\"" + (park.slug === "phantasialand" && WINTERTRAUM_ACTIVE ? " data-season=\"wintertraum\"" :
-        park.slug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE ? " data-season=\"hallowinter\"" : "") + ">" +
+        park.slug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE ? " data-season=\"hallowinter\"" :
+        park.slug === "movie-park-germany" && MOVIE_CHRISTMAS_ACTIVE ? " data-season=\"hollywood-christmas\"" : "") + ">" +
         (park.cardImage
           ? "<img referrerpolicy=\"no-referrer\" class=\"parkChoiceArt\" src=\"" + escapeHtml(park.cardImage) + "\" alt=\"\" loading=\"eager\">"
           : "<img class=\"parkChoiceArt\" alt=\"\" loading=\"eager\" hidden>") +
@@ -1054,7 +1096,10 @@
     document.body.dataset.park = parkSlug;
     if (parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE) document.body.dataset.season = "wintertraum";
     else if (parkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE) document.body.dataset.season = "hallowinter";
+    else if (parkSlug === "movie-park-germany" && MOVIE_CHRISTMAS_ACTIVE) document.body.dataset.season = "hollywood-christmas";
     else delete document.body.dataset.season;
+    const christmasSection = $("#movieChristmasSection");
+    if (christmasSection) christmasSection.hidden = !(parkSlug === "movie-park-germany" && MOVIE_CHRISTMAS_ACTIVE);
     const winterShows = $("#wintertraumSection");
     if (winterShows) winterShows.hidden = !(parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE);
     const magicTime = $("#winterMagicTime");
@@ -1099,10 +1144,12 @@
     const eyebrow = $("#parkDayEyebrow");
     if (eyebrow) eyebrow.textContent = park.name +
       (parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE ? " · WINTERTRAUM 2026/27" :
-        parkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE ? " · HALLOWinter 2026" : " · " + dayWord);
+        parkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE ? " · HALLOWinter 2026" :
+        parkSlug === "movie-park-germany" && MOVIE_CHRISTMAS_ACTIVE ? " · HOLLYWOOD CHRISTMAS 2026/27" : " · " + dayWord);
     const dayIndex = $("#visitDayIndex");
     if (dayIndex) dayIndex.textContent = parkSlug === "phantasialand" && WINTERTRAUM_ACTIVE ? "WINTERTRAUM · DEIN PARKTAG" :
-      parkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE ? "HALLOWinter · 02 — 27 NOV 2026" : "01 / " + (venueIsFair(parkSlug) ? "KIRMESTAG" : "PARKDAY");
+      parkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE ? "HALLOWinter · 02 — 27 NOV 2026" :
+      parkSlug === "movie-park-germany" && MOVIE_CHRISTMAS_ACTIVE ? "HOLLYWOOD CHRISTMAS · 2026 / 27" : "01 / " + (venueIsFair(parkSlug) ? "KIRMESTAG" : "PARKDAY");
     const archiveTitle = $("#archiveViewTitle");
     if (archiveTitle) archiveTitle.textContent = dayWord + "-Archiv";
     const archiveIntroTitle = $("#archiveIntroTitle");
@@ -1830,6 +1877,13 @@
         ? "HALLOWinter seit " + new Date(parkDay.started_at || parkDay.startedAt || Date.now()).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })
         : "HALLOWinter. Zwei Welten.";
     }
+    if (activeParkSlug === "movie-park-germany" && MOVIE_CHRISTMAS_ACTIVE) {
+      const subtitle = $("#parkDayEyebrow");
+      if (subtitle) subtitle.textContent = "MOVIE PARK · HO-HO-HOLLYWOOD";
+      headline.textContent = parkDay
+        ? "Hollywood Christmas seit " + new Date(parkDay.started_at || parkDay.startedAt || Date.now()).toLocaleTimeString("de-DE", { hour:"2-digit",minute:"2-digit" })
+        : "Your Christmas. Your Movie.";
+    }
   }
 
   function manualFairPrice(priceKey) {
@@ -2136,6 +2190,10 @@
     const visibleRides = rides
       .filter(ride => !isExcludedRide(ride.name, ride.id, activeParkSlug) && (activeFairZone === "all" || ride.zone === activeFairZone) && (!onlyFavorites || favorites.includes(ride.id)) && ride.name.toLowerCase().includes(rideSearch))
       .sort((a, b) => {
+        if (activeParkSlug === "movie-park-germany" && MOVIE_CHRISTMAS_ACTIVE) {
+          const diff = Number(MOVIE_CHRISTMAS_BREAK_IDS.has(a.id)) - Number(MOVIE_CHRISTMAS_BREAK_IDS.has(b.id));
+          if (diff) return diff;
+        }
         if (!hasPublicLive) {
           if (activeParkConfig()?.sortMode === "configured") return 0;
           return a.name.localeCompare(b.name, "de");
@@ -2164,28 +2222,32 @@
       const world = worldForRide(ride.id);
       const artSrc = wintertraumRideImage(ride.id) || (world ? (world.artUrl || (world.art ? "./assets/" + world.art + ".webp" : "")) : "");
       const hasLive = hasPublicLive && ride.source === "queue-times";
-      const closed = hasLive && !ride.isOpen;
-      const unknown = !hasLive || ride.isOpen === null;
-      const waitMain = closed ? "ZU" : unknown ? "–" : String(ride.wait);
-      const waitSub = closed ? "GESCHLOSSEN" : unknown ? "KEINE LIVE-DATEN" : "MIN · LIVE";
+      const winterBreak = activeParkSlug === "movie-park-germany" && MOVIE_CHRISTMAS_ACTIVE && MOVIE_CHRISTMAS_BREAK_IDS.has(ride.id);
+      const closed = winterBreak || (hasLive && !ride.isOpen);
+      const unknown = !winterBreak && (!hasLive || ride.isOpen === null);
+      const waitMain = winterBreak ? "✕" : closed ? "ZU" : unknown ? "–" : String(ride.wait);
+      const waitSub = winterBreak ? "WINTERPAUSE" : closed ? "GESCHLOSSEN" : unknown ? "KEINE LIVE-DATEN" : "MIN · LIVE";
       const arrow = ride.trend === "down" ? "↓" : ride.trend === "up" ? "↑" : "→";
-      const trendText = !hasLive ? "warte auf Live-Daten" : closed ? "aktuell geschlossen" : ride.delta ? arrow + " " + Math.abs(ride.delta) + " min" : "→ stabil";
+      const trendText = winterBreak ? "im Weihnachtsbetrieb nicht verfügbar" : !hasLive ? "warte auf Live-Daten" : closed ? "aktuell geschlossen" : ride.delta ? arrow + " " + Math.abs(ride.delta) + " min" : "→ stabil";
       const updated = hasPublicLive && ride.lastUpdated ? " · Stand " + new Date(ride.lastUpdated).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }) : "";
       const sr = ride.singleRider ? "<span class=\"rideSrLabel\">👤 SR</span><span class=\"rideMetaDivider\">·</span>" : "";
-      const newBadge = ride.new2026 ? "<span class=\"rideBadgeNew\">✦ NEU 2026</span>" : "";
+      const newBadge = (ride.new2026 ? "<span class=\"rideBadgeNew\">✦ NEU 2026</span>" : "") +
+        (winterBreak ? "<span class=\"mpcRideBadge mpcRideBadge--closed\">❄ WINTERPAUSE</span>" :
+         activeParkSlug === "movie-park-germany" && MOVIE_CHRISTMAS_ACTIVE && MOVIE_CHRISTMAS_SPECIAL_IDS.has(ride.id) ?
+          "<span class=\"mpcRideBadge\">✦ CHRISTMAS EDITION</span>" : "");
       const fair = venueIsFair();
       const combo = fairComboForRide(ride.id);
       const priceBadge = fair ? "<span class=\"ridePricePill\"><span>FAHRPREIS</span><b>" + escapeHtml(ridePriceText(ride)) + "</b></span>" +
         (combo ? "<span class=\"rideComboPill\">Kombi " + escapeHtml(formatEuro(manualFairPrice("combo:" + combo.id) ?? combo.priceEuro)) + "</span>" : "") : "";
       const operatorLine = fair && ride.operator
         ? "Schausteller: " + ride.operator + " · " + ride.zone
-        : ride.zone;
+        : movieChristmasZone(ride.zone, activeParkSlug);
       const queueDisabled = closed ? " disabled" : "";
       const isWinterRideCard = activeParkSlug === "phantasialand" && WINTERTRAUM_ACTIVE;
       const favoriteButton = "<button class=\"fav " + (fav ? "on" : "") + "\" data-fav=\"" + ride.id + "\" aria-label=\"Favorit für " + escapeHtml(ride.name) + "\" aria-pressed=\"" + fav + "\">★</button>";
-    const queueLabel = fair ? "FAHRT EINTRAGEN" : (closed ? "ZU" : "ANSTELLEN");
+    const queueLabel = fair ? "FAHRT EINTRAGEN" : (winterBreak ? "WINTERPAUSE" : closed ? "ZU" : "ANSTELLEN");
 
-      return "<article class=\"ride\" data-park=\"" + escapeHtml(activeParkSlug || "phantasialand") + "\" data-world=\"" + escapeHtml(ride.id) + "\" data-detail=\"" + escapeHtml(ride.id) + "\">" +
+      return "<article class=\"ride\" data-park=\"" + escapeHtml(activeParkSlug || "phantasialand") + "\" data-world=\"" + escapeHtml(ride.id) + "\" data-detail=\"" + escapeHtml(ride.id) + "\"" + (winterBreak ? " data-winter-break=\"true\"" : "") + ">" +
         (artSrc ? "<img referrerpolicy=\"no-referrer\" class=\"rideArt\" src=\"" + escapeHtml(artSrc) + "\" alt=\"\" loading=\"lazy\" decoding=\"async\">" : "") +
         (isWinterRideCard ? favoriteButton : "") +
         "<div class=\"rideMain\">" +
@@ -2529,7 +2591,7 @@
   // Never use session-supplied text as an image URL.
   function protocolSeasonForDay(day, parkSlug) {
     if (isWintertraumDay(day, parkSlug)) return "wintertraum";
-    if (parkSlug !== "europa-park") return "";
+    if (parkSlug !== "europa-park" && parkSlug !== "movie-park-germany") return "";
     const date = new Date(day?.started_at || day?.startedAt || "");
     if (!Number.isFinite(date.getTime())) return "";
     const parts = new Intl.DateTimeFormat("en-GB", {
@@ -2537,6 +2599,7 @@
     }).formatToParts(date);
     const part = type => parts.find(p => p.type === type)?.value || "";
     const key = part("year") + "-" + part("month") + "-" + part("day");
+    if (parkSlug === "movie-park-germany") return key >= "2026-11-27" && key <= "2027-01-05" ? "hollywood-christmas" : "";
     return key >= "2026-11-02" && key <= "2026-11-27" ? "hallowinter" : "";
   }
 
@@ -4099,8 +4162,11 @@
       }
     }
     $("#worldCaption").textContent = world?.line || "Deine nächste Nähung.";
+    const movieWinterBreak = activeParkSlug === "movie-park-germany" && MOVIE_CHRISTMAS_ACTIVE && MOVIE_CHRISTMAS_BREAK_IDS.has(selectedDetailRide.id);
     $("#rideTitle").textContent = selectedDetailRide.name;
-    $("#rideZone").textContent = world?.label || selectedDetailRide.zone || activeParkConfig()?.name || "Park";
+    $("#rideZone").textContent = activeParkSlug === "movie-park-germany" && MOVIE_CHRISTMAS_ACTIVE
+      ? movieChristmasZone(selectedDetailRide.zone, activeParkSlug) + " · HOLLYWOOD CHRISTMAS"
+      : world?.label || selectedDetailRide.zone || activeParkConfig()?.name || "Park";
 
     const publicLive = parkHasPublicLiveWaits();
     const waitCaption = $("#rideSheet .waitCaption");
@@ -4126,10 +4192,14 @@
       $("#rideDetailStatus").textContent = "Aktuell keine Live-Wartezeit verfügbar.";
     }
 
+    if (movieWinterBreak) {
+      $("#rideDetailStatus").textContent = "❄ Während Hollywood Christmas offiziell nicht verfügbar. Bei anderen Attraktionen ist die Öffnung zusätzlich wetterabhängig.";
+      if (publicLive) $("#rideDetailWait").textContent = "Winterpause";
+    }
     renderRideExtraFacts(selectedDetailRide, world);
 
-    $("#rideQueueBtn").disabled = publicLive && selectedDetailRide.source === "queue-times" && !selectedDetailRide.isOpen;
-    $("#rideQueueBtn").textContent = venueIsFair() ? "🧵 FAHRT EINTRAGEN" : "🧵 ANSTELLEN";
+    $("#rideQueueBtn").disabled = movieWinterBreak || (publicLive && selectedDetailRide.source === "queue-times" && !selectedDetailRide.isOpen);
+    $("#rideQueueBtn").textContent = movieWinterBreak ? "❄ WINTERPAUSE" : venueIsFair() ? "🧵 FAHRT EINTRAGEN" : "🧵 ANSTELLEN";
     $("#srCommunity").innerHTML = venueIsFair()
       ? ""
       : "<div class=\"message\">Single-Rider-Informationen laden…</div>";
