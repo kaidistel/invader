@@ -1,6 +1,6 @@
-/* NÄHEN Wintertraum — textured, layered, opt-in-controllable atmospheric snow.
-   Six pre-rendered soft snow sprites, a single transparent canvas, no library.
-   Pauses off-screen, in unrelated dialogs, or for reduced motion; continues in Wintertraum detail sheets. */
+/* NÄHEN seasonal snow — shared Wintertraum and Movie Park Hollywood Christmas.
+   Six prerendered soft flakes on one noninteractive canvas. Per-park preferences,
+   reduced-motion support and modal pause/resume. */
 (() => {
   "use strict";
 
@@ -10,9 +10,11 @@
   if (!canvas || !button || !app) return;
 
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const saveKey = "naehen:wintertraum:snowfall";
+  const parkSaveKey = () => document.body.dataset.park === "movie-park-germany"
+    ? "naehen:movie-christmas:snowfall" : "naehen:wintertraum:snowfall";
+  let currentSaveKey = parkSaveKey();
   let enabled = true;
-  try { enabled = localStorage.getItem(saveKey) !== "off"; } catch (_) {}
+  try { enabled = localStorage.getItem(currentSaveKey) !== "off"; } catch (_) {}
 
   const ctx = canvas.getContext("2d", { alpha: true });
   if (!ctx) {
@@ -31,26 +33,42 @@
   let drawnFrames = 0;
   let needsResize = true;
 
+  const movieChristmasVisible = () =>
+    document.body.dataset.park === "movie-park-germany" &&
+    document.body.dataset.season === "hollywood-christmas";
   const winterParkVisible = () =>
-    document.body.dataset.park === "phantasialand" &&
-    document.body.dataset.season === "wintertraum" &&
-    !app.classList.contains("hidden");
+    !app.classList.contains("hidden") && (
+      (document.body.dataset.park === "phantasialand" &&
+       document.body.dataset.season === "wintertraum") || movieChristmasVisible()
+    );
 
   const winterDetailOpen = () =>
     !!document.querySelector(
       '#rideSheet.show, #nightPlannerSheet.show, ' +
       '#recapSheet.show[data-wintertraum="true"], ' +
       '#archiveDetailSheet.show[data-wintertraum="true"]'
-    );
+    ) || (movieChristmasVisible() &&
+      !!document.querySelector('#recapSheet.show,#archiveDetailSheet.show'));
 
-  // Ride, planner, Wintertraum recap and seasonal archive all belong to
-  // the winter experience. Nonseasonal account/settings sheets still pause snow.
-  const modalBlocksSnow = () =>
-    !!document.querySelector(
-      '.gate.show,.auth.show,.sheet.show:not(#rideSheet):not(#nightPlannerSheet)' +
-      ':not(#recapSheet[data-wintertraum="true"])' +
-      ':not(#archiveDetailSheet[data-wintertraum="true"])'
-    ) || (document.body.classList.contains("modalOpen") && !winterDetailOpen());
+  // Seasonal ride/details remain snowy; unrelated account/login/settings sheets
+  // pause the animation to keep interaction crisp and avoid wasted work.
+  const modalBlocksSnow = () => {
+    if (document.querySelector(".gate.show,.auth.show")) return true;
+    const sheets = Array.from(document.querySelectorAll(".sheet.show"));
+    const blockingSheet = sheets.some(sheet => {
+      if (sheet.id === "rideSheet") return false;
+      if (sheet.id === "nightPlannerSheet") return !(
+        document.body.dataset.park === "phantasialand" &&
+        document.body.dataset.season === "wintertraum");
+      if (sheet.id === "recapSheet" || sheet.id === "archiveDetailSheet")
+        return !(
+          (sheet.dataset.wintertraum === "true") || movieChristmasVisible()
+        );
+      return true;
+    });
+    return blockingSheet ||
+      (document.body.classList.contains("modalOpen") && !winterDetailOpen());
+  };
 
   const shouldAnimate = () => winterParkVisible() && enabled &&
     !motion.matches && !document.hidden && !modalBlocksSnow();
@@ -218,6 +236,12 @@
   }
 
   function refresh() {
+    const newSaveKey = parkSaveKey();
+    if (newSaveKey !== currentSaveKey) {
+      currentSaveKey = newSaveKey;
+      try { enabled = localStorage.getItem(currentSaveKey) !== "off"; }
+      catch (_) { enabled = true; }
+    }
     const visible = winterParkVisible();
     // Elevate the existing noninteractive snow layer above the winter sheet.
     // The canvas returns to its normal position on closing the detail.
@@ -251,7 +275,7 @@
   button.addEventListener("click", () => {
     if (motion.matches) return;
     enabled = !enabled;
-    try { localStorage.setItem(saveKey, enabled ? "on" : "off"); } catch (_) {}
+    try { localStorage.setItem(currentSaveKey, enabled ? "on" : "off"); } catch (_) {}
     refresh();
   });
   window.addEventListener("resize", () => { needsResize = true; }, { passive: true });
