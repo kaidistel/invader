@@ -89,8 +89,8 @@ for(const token of ["#log .logItem",".archiveDayCard",".protocolPhoto",".protoco
 }
 assert.ok(css.includes("linear-gradient") && css.includes("opacity:.88!important"),
   "Readable overlays must sit above pictures, without changing foreground opacity");
-assert.ok(html.includes('protocols.css?v=188') && html.includes('app.js?v=191') &&
-  sw.includes("'./protocols.css'") && sw.includes("naehen-v191"),
+assert.ok(html.includes('protocols.css?v=188') && html.includes('app.js?v=192') &&
+  sw.includes("'./protocols.css'") && sw.includes("naehen-v192"),
   "PWA must ship the photo protocol redesign as version 186");
 assert.ok(app.includes('admissionType: row.ticket_metadata?.admissionType') &&
   app.includes('admissionType: session.admissionType') &&
