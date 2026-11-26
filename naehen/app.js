@@ -17,10 +17,12 @@
   // Official 2026 transitional season: 2–27 November, 11–at least 19h.
   const EUROPA_HALLOWINTER_ACTIVE = WINTERTRAUM_DATE >= "2026-11-02" && WINTERTRAUM_DATE <= "2026-11-27";
   const EUROPA_HALLOWINTER_ART = "https://www.hallo-muenchen.de/assets/images/44/204/44204509-halloween-fahrspass-im-multi-launch-coaster-voltron-nevera-powered-by-rimac-PnBG.jpg";
-  // 21 officially announced event days within the seasonal range.
-  // Optional ?christmas=1 allows preview on the day before opening and after the event.
+  // Holiday visuals begin 26 November on request. The official event and
+  // its ride availability begin on 27 November; do not conflate the two.
+  // Optional ?christmas=1 remains available for an out-of-season design preview.
   const MOVIE_CHRISTMAS_PREVIEW = new URLSearchParams(location.search).get("christmas") === "1";
-  const MOVIE_CHRISTMAS_ACTIVE = (WINTERTRAUM_DATE >= "2026-11-27" && WINTERTRAUM_DATE <= "2027-01-05") || MOVIE_CHRISTMAS_PREVIEW;
+  const MOVIE_CHRISTMAS_ACTIVE = (WINTERTRAUM_DATE >= "2026-11-26" && WINTERTRAUM_DATE <= "2027-01-05") || MOVIE_CHRISTMAS_PREVIEW;
+  const MOVIE_CHRISTMAS_EVENT_ACTIVE = WINTERTRAUM_DATE >= "2026-11-27" && WINTERTRAUM_DATE <= "2027-01-05";
   const MOVIE_CHRISTMAS_HERO = "https://www.movieparkgermany.de/content/dam/mpg/images/christmas-images/start/HERO%20MPG%20%284%29.jpg";
   const MOVIE_CHRISTMAS_FALLBACK = "https://www.movieparkgermany.de/content/movie/de/plane-deinen-besuch/veranstaltungen/_jcr_content/responsiveGrid/cc32_distributivecar/1_card/image.coreimg.jpeg/1774256585449/mphc-banner--3-.jpeg";
   // Exact official seasonal non-availability list; weather may affect additional rides.
@@ -2233,7 +2235,7 @@
       const world = worldForRide(ride.id);
       const artSrc = wintertraumRideImage(ride.id) || movieChristmasRideImage(ride.id) || (world ? (world.artUrl || (world.art ? "./assets/" + world.art + ".webp" : "")) : "");
       const hasLive = hasPublicLive && ride.source === "queue-times";
-      const winterBreak = activeParkSlug === "movie-park-germany" && MOVIE_CHRISTMAS_ACTIVE && MOVIE_CHRISTMAS_BREAK_IDS.has(ride.id);
+      const winterBreak = activeParkSlug === "movie-park-germany" && MOVIE_CHRISTMAS_EVENT_ACTIVE && MOVIE_CHRISTMAS_BREAK_IDS.has(ride.id);
       const closed = winterBreak || (hasLive && !ride.isOpen);
       const unknown = !winterBreak && (!hasLive || ride.isOpen === null);
       const waitMain = winterBreak ? "✕" : closed ? "ZU" : unknown ? "–" : String(ride.wait);
@@ -2610,7 +2612,7 @@
     }).formatToParts(date);
     const part = type => parts.find(p => p.type === type)?.value || "";
     const key = part("year") + "-" + part("month") + "-" + part("day");
-    if (parkSlug === "movie-park-germany") return key >= "2026-11-27" && key <= "2027-01-05" ? "hollywood-christmas" : "";
+    if (parkSlug === "movie-park-germany") return key >= "2026-11-26" && key <= "2027-01-05" ? "hollywood-christmas" : "";
     return key >= "2026-11-02" && key <= "2026-11-27" ? "hallowinter" : "";
   }
 
@@ -4174,7 +4176,7 @@
       }
     }
     $("#worldCaption").textContent = world?.line || "Deine nächste Nähung.";
-    const movieWinterBreak = activeParkSlug === "movie-park-germany" && MOVIE_CHRISTMAS_ACTIVE && MOVIE_CHRISTMAS_BREAK_IDS.has(selectedDetailRide.id);
+    const movieWinterBreak = activeParkSlug === "movie-park-germany" && MOVIE_CHRISTMAS_EVENT_ACTIVE && MOVIE_CHRISTMAS_BREAK_IDS.has(selectedDetailRide.id);
     $("#rideTitle").textContent = selectedDetailRide.name;
     $("#rideZone").textContent = activeParkSlug === "movie-park-germany" && MOVIE_CHRISTMAS_ACTIVE
       ? movieChristmasZone(selectedDetailRide.zone, activeParkSlug) + " · HOLLYWOOD CHRISTMAS"
