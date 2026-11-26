@@ -8,7 +8,7 @@ assert.ok(app.includes('EUROPA_HALLOWINTER_ACTIVE = WINTERTRAUM_DATE >= "2026-11
 assert.ok(app.includes('document.body.dataset.season = "hallowinter"'),"Europa Park must set HALLOWinter on open");
 assert.ok(app.includes('delete document.body.dataset.season'),"Other park seasons unaffected");
 assert.ok(!html.includes('id="hallowinterSection"')&&!html.includes('hwSeasonHeader'),"Remove redundant informational section entirely");
-assert.ok(html.includes('hallowinter.css?v=183')&&sw.includes("'./hallowinter.css'")&&sw.includes("naehen-v188"),"HALLOWinter CSS cached in PWA release");
+assert.ok(html.includes('hallowinter.css?v=183')&&sw.includes("'./hallowinter.css'")&&sw.includes("naehen-v189"),"HALLOWinter CSS cached in PWA release");
 assert.ok(css.includes('body[data-park="europa-park"][data-season="hallowinter"]'),"Theme scoped exclusively to Europa Park HALLOWinter");
 assert.ok(!css.includes('body[data-park="phantasialand"]'),"Phantasialand protected");
 assert.ok(css.includes("--hw-display:\"Cinzel\"")&&css.includes("--hw-ui:\"Inter\""),"Unified seasonal display and UI typography required");
