@@ -47,7 +47,7 @@ for (const text of [
   'protocolSeasonForDay(day, parkSlug)', 'hollywood-christmas" : ""'
 ]) assert.ok(app.includes(text),"Season behavior missing: "+text);
 assert.ok(html.includes('id="movieChristmasSection"') && html.includes('aria-labelledby="movieChristmasTitle"') &&
-  html.includes('movie-christmas.css?v=189'),"Christmas spotlight and stylesheet must load");
+  html.includes('movie-christmas.css?v=190'),"Christmas spotlight and stylesheet must load");
 assert.equal((html.match(/class="mpcFeature mpcFeature--/g)||[]).length,4,"Four real Christmas highlight posters");
 assert.ok(html.includes("SHOWS")||html.includes("Show"),"Show destinations must be visible");
 assert.ok(html.includes("HC26_Parkplan_Flyer_Web.pdf"),"Official 2026 winter map required");
@@ -61,6 +61,6 @@ for(const token of [
   'data-winter-break="true"','@media(max-width:530px)','prefers-reduced-motion:reduce'
 ]) assert.ok(css.includes(token),"Incomplete holiday UI: "+token);
 assert.equal((css.match(/\{/g)||[]).length,(css.match(/\}/g)||[]).length,"CSS braces mismatched");
-assert.ok(sw.includes("naehen-v189")&&sw.includes("'./movie-christmas.css'"),
+assert.ok(sw.includes("naehen-v190")&&sw.includes("'./movie-christmas.css'"),
   "The Christmas skin must ship with the service worker");
 console.log("PASS Movie Park Christmas: dates, preview, 32 rides, 7 winter breaks, 4 shows, UI, PWA v189");
