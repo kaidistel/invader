@@ -51,3 +51,45 @@ body[data-park="phantasialand"][data-season="wintertraum"] #winterSnowToggle:foc
   body[data-park="phantasialand"][data-season="wintertraum"] #winterSnowCanvas{display:none!important}
   body[data-park="phantasialand"][data-season="wintertraum"] #winterSnowToggle{transition:none}
 }
+
+
+/* Hollywood Christmas uses the same efficient canvas particles, but with its
+   own saved toggle state and a slightly softer opacity over bright film art. */
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #winterSnowCanvas{
+ position:fixed;inset:0;z-index:8;width:100%;height:100%;
+ pointer-events:none;user-select:none;contain:strict;
+ opacity:.54;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #winterSnowCanvas[data-detail-overlay="true"]{
+ z-index:35;pointer-events:none;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #winterSnowToggle{
+ display:grid;place-items:center;flex:0 0 auto;
+ width:44px;height:44px;min-width:44px;min-height:44px;
+ padding:0;margin:0;border-radius:12px;
+ border:1px solid #efcd9299;background:#152b40e8;
+ color:#f8dfba;cursor:pointer;
+ font:normal 23px/1 "Segoe UI Symbol",sans-serif;
+ transition:background-color .18s ease,box-shadow .18s ease,color .18s ease;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #winterSnowToggle[aria-pressed="true"]{
+ color:#fff9de;border-color:#f6dfa3;
+ background:radial-gradient(circle at 50% 25%,#527e91,#213a54 78%);
+ box-shadow:inset 0 1px #effaff44,0 0 15px #d5e8ff37;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #winterSnowToggle:focus-visible{
+ outline:3px solid #ffdc9d;outline-offset:3px;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #winterSnowToggle:disabled{
+ opacity:.53;cursor:not-allowed;box-shadow:none;
+}
+@media(max-width:390px){
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] .topbarActions{gap:6px}
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #winterSnowToggle{
+  width:40px;height:40px;min-width:40px;min-height:40px;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #winterSnowCanvas{display:none!important}
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #winterSnowToggle{transition:none!important}
+}
