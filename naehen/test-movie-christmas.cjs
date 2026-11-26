@@ -37,7 +37,7 @@ assert.ok(!season("2026-12-10").closed.has("van-helsings-factory"),"Do not wrong
 for(const id of ["movie-park-studio-tour","roxy-4d"])
   assert.ok(season("2026-12-10").special.has(id),"Christmas edition indicator missing "+id);
 for (const text of [
-  'data-season = "hollywood-christmas"', 'movieChristmasSection.hidden',
+  'document.body.dataset.season = "hollywood-christmas"', 'christmasSection.hidden',
   'MOVIE_CHRISTMAS_BREAK_IDS.has(ride.id)',
   '"WINTERPAUSE"',
   'movieWinterBreak || (publicLive', 'movieChristmasZone(ride.zone, activeParkSlug)',
