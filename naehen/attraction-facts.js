@@ -226,7 +226,7 @@
       manufacturer:"Vekoma",year:1996,heightM:8.5,trackLengthM:207,speedKmh:35,
       inversions:0,duration:"0:44",capacityPerHour:780,vehicles:"16 Personen pro Zug",
       minHeightCm:90,minAgeYears:4,
-      special:"Unter 135 cm nur mit Begleitung.",
+      special:"Unter 135 cm nur mit Begleitung. RCDB: 35 km/h; der Park beschreibt die Fahrt mit etwa 40 km/h.",
       technicalSourceUrl:"https://rcdb.com/968.htm"
     },
     "santa-monica-wheel":{
@@ -258,6 +258,7 @@
       manufacturer:"Roller Coaster Corporation of America",year:1999,heightM:27.8,
       trackLengthM:1100,speedKmh:78,inversions:0,duration:"1:30",
       vehicles:"30 Personen pro Zug",minHeightCm:120,minAgeYears:6,
+      special:"78 km/h laut Movie Park; RCDB führt gerundet 80 km/h.",
       technicalSourceUrl:"https://rcdb.com/967.htm"
     },
     "doras-big-river-adventure":{
