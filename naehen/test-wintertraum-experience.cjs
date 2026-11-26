@@ -81,9 +81,9 @@ assert.ok(app.includes("function winterRecapHtml")&&app.includes("wtRecapTimelin
 assert.ok(app.includes("recapSheet.dataset.wintertraum")&&app.includes("archiveSheet.dataset.wintertraum"),"Recap and archive must set style marker");
 assert.ok(snow.includes('#recapSheet.show[data-wintertraum="true"]')&&snow.includes('#archiveDetailSheet.show[data-wintertraum="true"]'),"Snow should continue in seasonal recap and archive");
 assert.ok(html.includes('id="winterSnowCanvas"')&&html.includes('id="winterSnowToggle"'),"Snow controls must exist");
-assert.ok(html.includes('wintertraum-snow.js?v=182')&&html.includes('wintertraum-snow.css?v=182'),"Snow feature must be versioned");
+assert.ok(html.includes('wintertraum-snow.js?v=191')&&html.includes('wintertraum-snow.css?v=191'),"Snow feature must be versioned");
 assert.ok(sw.includes("'./wintertraum-snow.css'")&&sw.includes("'./wintertraum-snow.js'"),"Snow effect must work offline");
-assert.ok(snow.includes('winterParkVisible')&&snow.includes('dataset.park === "phantasialand"')&&snow.includes('dataset.season === "wintertraum"'),"Snowfall must only run in Phantasialand Wintertraum");
+assert.ok(snow.includes('winterParkVisible')&&snow.includes('dataset.park === "phantasialand"')&&snow.includes('dataset.season === "wintertraum"'),"Phantasialand Wintertraum must remain a supported snowfall season");
 assert.ok(snow.includes('requestAnimationFrame')&&snow.includes("document.hidden"),"Snow animation must be driven by rAF and pause when invisible");
 assert.ok(snow.includes('prefers-reduced-motion: reduce')&&snowCss.includes("prefers-reduced-motion:reduce"),"Respect reduced motion");
 assert.ok(snowCss.includes("pointer-events:none")&&snowCss.includes('#winterSnowCanvas[hidden]'),"Snow canvas must not block controls");
@@ -97,7 +97,7 @@ assert.ok(snowCss.includes("opacity:.65;"),"Snow overlay must keep the stronger 
 assert.ok(snow.includes('naehen:wintertraum:snowfall'),"Snow switch preference must persist");
 assert.ok(snow.includes('const winterDetailOpen')&&snow.includes('#rideSheet.show, #nightPlannerSheet.show'),
   "Winter detail and planner should keep snow falling");
-assert.ok(snow.includes('modalBlocksSnow')&&snow.includes('.sheet.show:not(#rideSheet):not(#nightPlannerSheet)'),
+assert.ok(snow.includes('modalBlocksSnow')&&snow.includes('const blockingSheet')&&snow.includes('document.querySelectorAll(".sheet.show")'),
   "Other modals must still pause snowfall");
 assert.ok(snowCss.includes('#winterSnowCanvas[data-detail-overlay="true"]')&&snowCss.includes("z-index:35"),
   "Snow canvas must rise above sheets, but remain noninteractive");
