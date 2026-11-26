@@ -61,6 +61,6 @@ for(const token of [
   'data-winter-break="true"','@media(max-width:530px)','prefers-reduced-motion:reduce'
 ]) assert.ok(css.includes(token),"Incomplete holiday UI: "+token);
 assert.equal((css.match(/\{/g)||[]).length,(css.match(/\}/g)||[]).length,"CSS braces mismatched");
-assert.ok(sw.includes("naehen-v191")&&sw.includes("'./movie-christmas.css'"),
+assert.ok(sw.includes("naehen-v192")&&sw.includes("'./movie-christmas.css'"),
   "The Christmas skin must ship with the service worker");
 console.log("PASS Movie Park Christmas: dates, preview, 32 rides, 7 winter breaks, 4 shows, UI, PWA v191");
