@@ -1,4 +1,4 @@
-/* NÄHEN: geprüfte Attraktionsdaten · Stand 20.11.2026.
+/* NÄHEN: recherchierte Attraktionsdaten · EP/PHL: November 2026; Movie Park: 26.11.2026.
  * Messwerte sind keine Schätzungen. Nicht öffentlich bestätigte Werte fehlen absichtlich.
  * Europa-Park: offizielle Attraktionsseiten (europapark.de).
  * Phantasialand: offizielle Nutzungsübersicht (Mindest-/Maximalgrößen),
