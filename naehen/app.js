@@ -29,6 +29,17 @@
     "doras-big-river-adventure", "stormy-cruise", "spongebob-splash-bash"
   ]);
   const MOVIE_CHRISTMAS_SPECIAL_IDS = new Set(["movie-park-studio-tour", "roxy-4d"]);
+  // Christmas-specific attraction artwork, with the regular ride image
+  // retained as fallback and for visits outside the event period.
+  const MOVIE_CHRISTMAS_RIDE_ART = Object.freeze({
+    "movie-park-studio-tour": "https://cdn.coaster.cloud/attractions/Tt/r9/Ttr9PEZpGkgVK1WN1MnJhJ.jpg?class=large",
+    "roxy-4d": "https://images.squarespace-cdn.com/content/v1/670574bb6e9e9b2eac536828/38a68d3a-7cdb-4c71-be49-d0c8df4122b3/Scrooge-4D_Hero.jpg"
+  });
+  function movieChristmasRideImage(rideId, slug = activeParkSlug) {
+    return slug === "movie-park-germany" && MOVIE_CHRISTMAS_ACTIVE
+      ? (MOVIE_CHRISTMAS_RIDE_ART[rideId] || "") : "";
+  }
+
   const MOVIE_CHRISTMAS_ZONES = {
     "The Hollywood Street Set": "Christmas Boulevard USA",
     "The Hollywood Studio Set": "Hollywood Christmas Set",
@@ -2220,7 +2231,7 @@
     const cards = visibleRides.map((ride) => {
       const fav = favorites.includes(ride.id);
       const world = worldForRide(ride.id);
-      const artSrc = wintertraumRideImage(ride.id) || (world ? (world.artUrl || (world.art ? "./assets/" + world.art + ".webp" : "")) : "");
+      const artSrc = wintertraumRideImage(ride.id) || movieChristmasRideImage(ride.id) || (world ? (world.artUrl || (world.art ? "./assets/" + world.art + ".webp" : "")) : "");
       const hasLive = hasPublicLive && ride.source === "queue-times";
       const winterBreak = activeParkSlug === "movie-park-germany" && MOVIE_CHRISTMAS_ACTIVE && MOVIE_CHRISTMAS_BREAK_IDS.has(ride.id);
       const closed = winterBreak || (hasLive && !ride.isOpen);
@@ -2281,7 +2292,7 @@
       const currentRide = visibleRides.find(ride => ride.id === rideId);
       const originalRideArt = worldForRide(rideId);
       const regularArt = originalRideArt?.artUrl || (originalRideArt?.art ? "./assets/" + originalRideArt.art + ".webp" : "");
-      const candidates = [...(wintertraumRideImage(rideId) && regularArt ? [regularArt] : []),
+      const candidates = [...((wintertraumRideImage(rideId) || movieChristmasRideImage(rideId)) && regularArt ? [regularArt] : []),
         ...(activeParkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE && rideId === "voltron-nevera" && originalRideArt?.hallowinterFallbackArtUrl
           ? [originalRideArt.hallowinterFallbackArtUrl] : []),
         ...(currentRide?.imageFallbackUrls || []), ...(rideArtFallback ? [rideArtFallback] : [])];
@@ -2628,6 +2639,7 @@
       add(WINTERTRAUM_RIDE_ART[id]);
       if (id.startsWith("wintershow-")) add("./assets/wintertraum-night-planner-2026.webp");
     }
+    if (parkSlug === "movie-park-germany" && season === "hollywood-christmas") add(MOVIE_CHRISTMAS_RIDE_ART[id]);
     if (parkSlug === "europa-park" && season === "hallowinter" && id === "voltron-nevera")
       add(EUROPA_HALLOWINTER_ART);
     add(world?.artUrl);
@@ -4110,7 +4122,7 @@
     window.NAEHEN_NIGHT_PLANNER?.renderQuickPass(selectedDetailRide.id);
 
     const world = worldForRide(selectedDetailRide.id);
-    const artSrc = wintertraumRideImage(selectedDetailRide.id) || (world ? (world.artUrl || (world.art ? "./assets/" + world.art + ".webp" : "")) : "");
+    const artSrc = wintertraumRideImage(selectedDetailRide.id) || movieChristmasRideImage(selectedDetailRide.id) || (world ? (world.artUrl || (world.art ? "./assets/" + world.art + ".webp" : "")) : "");
     const rideSheet = $("#rideSheet");
     const worldArtImage = $("#worldArtImage");
     const worldProp = $("#worldProp");
@@ -4124,7 +4136,7 @@
       if (artSrc) {
         const detailFallback = venueIsFair() ? "" : (activeParkConfig()?.cardImage || "./assets/park-picker-bg.webp");
         const regularArt = world?.artUrl || (world?.art ? "./assets/" + world.art + ".webp" : "");
-        const candidates = [...(wintertraumRideImage(selectedDetailRide.id) && regularArt ? [regularArt] : []),
+        const candidates = [...((wintertraumRideImage(selectedDetailRide.id) || movieChristmasRideImage(selectedDetailRide.id)) && regularArt ? [regularArt] : []),
           ...(activeParkSlug === "europa-park" && EUROPA_HALLOWINTER_ACTIVE && selectedDetailRide.id === "voltron-nevera" && world?.hallowinterFallbackArtUrl
             ? [world.hallowinterFallbackArtUrl] : []),
           ...(selectedDetailRide.imageFallbackUrls || []), ...(detailFallback ? [detailFallback] : [])];
