@@ -113,3 +113,100 @@ body[data-park="phantasialand"] #rideSheet .rideFactSources a:hover{
   body[data-park="europa-park"] #rideSheet .rideFactGrid,
   body[data-park="phantasialand"] #rideSheet .rideFactGrid{grid-template-columns:1fr;}
 }
+
+
+/* v192 · Movie Park: real attraction stats on cards and detailed portals.
+   The same verified-data grid works in regular Hollywood and Christmas skins,
+   with slightly warmer marquee colors during Hollywood Christmas. */
+body[data-park="movie-park-germany"] #rides .parkRideSpecs{
+ display:flex;flex-wrap:wrap;gap:6px;margin:9px 0 5px;
+ max-width:100%;position:relative;z-index:2;
+}
+body[data-park="movie-park-germany"] #rides .parkRideSpecs span{
+ display:inline-flex;align-items:center;gap:4px;
+ min-height:25px;padding:5px 8px;max-width:100%;
+ border:1px solid rgba(235,209,165,.36);
+ border-radius:8px;background:rgba(11,28,44,.90);
+ box-shadow:inset 0 1px rgba(255,255,255,.09);
+ color:#fff1d9;text-shadow:0 2px 6px #000d;
+ font:750 10px/1.3 Inter,system-ui,sans-serif;
+ font-variant-numeric:tabular-nums;white-space:nowrap;
+ backdrop-filter:blur(5px);
+}
+body[data-park="movie-park-germany"] #rides .parkRideSpecs i{
+ font:inherit;font-style:normal;color:#f8ce90;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .parkRideSpecs span{
+ border-color:rgba(248,218,156,.65);
+ background:rgba(19,40,59,.90);
+ box-shadow:inset 0 1px rgba(255,255,255,.12),0 2px 10px #0005;
+}
+body[data-park="movie-park-germany"] #rideSheet #rideExtraFacts{
+ margin:17px 0 12px;padding:14px;
+ border:1px solid rgba(236,199,147,.45);
+ border-radius:15px;
+ background:linear-gradient(145deg,rgba(17,40,53,.96),rgba(12,26,43,.95));
+ box-shadow:inset 0 1px rgba(255,255,255,.06);
+}
+body[data-park="movie-park-germany"] #rideSheet .rideFactsEyebrow{
+ margin:2px 0 13px;
+ color:#f3cf95;letter-spacing:1.2px;
+ font:800 10px/1.4 Inter,system-ui,sans-serif;
+ text-transform:uppercase;
+}
+body[data-park="movie-park-germany"] #rideSheet .rideFactGrid{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;
+}
+body[data-park="movie-park-germany"] #rideSheet .rideFactCard{
+ min-width:0;margin:0;padding:12px;
+ border:1px solid rgba(222,181,125,.31);
+ border-radius:11px;background:rgba(14,32,49,.92);
+ box-shadow:inset 0 1px rgba(255,255,255,.05);
+ overflow-wrap:anywhere;
+}
+body[data-park="movie-park-germany"] #rideSheet .rideFactCard span{
+ display:block;margin-bottom:5px;
+ color:#bcd3d8;letter-spacing:.55px;text-transform:uppercase;
+ font:700 9px/1.4 Inter,system-ui,sans-serif;
+}
+body[data-park="movie-park-germany"] #rideSheet .rideFactCard b{
+ display:block;color:#ffefcf;
+ font:750 13px/1.48 Inter,system-ui,sans-serif;
+ font-variant-numeric:tabular-nums;
+}
+body[data-park="movie-park-germany"] #rideSheet .parkFactNote{
+ margin:12px 2px 5px;
+ color:#c7d4da;font:500 11px/1.6 Inter,system-ui,sans-serif;
+}
+body[data-park="movie-park-germany"] #rideSheet .rideFactSources{
+ display:flex;flex-wrap:wrap;gap:8px;margin:13px 0 0;
+}
+body[data-park="movie-park-germany"] #rideSheet .rideFactSources a{
+ display:inline-flex;align-items:center;justify-content:center;
+ min-height:36px;padding:9px 11px;
+ border:1px solid rgba(235,206,151,.46);
+ border-radius:9px;background:rgba(23,51,68,.90);
+ color:#ffdfab;text-decoration:none;
+ font:700 10px/1.4 Inter,system-ui,sans-serif;
+}
+body[data-park="movie-park-germany"] #rideSheet .rideFactSources a:hover{
+ background:rgba(45,76,88,.95);border-color:#f6cb90;
+}
+body[data-park="movie-park-germany"] #rideSheet .rideFactSources a:focus-visible{
+ outline:3px solid #f6d69d;outline-offset:3px;
+}
+@media(max-width:530px){
+ body[data-park="movie-park-germany"] #rides .parkRideSpecs{gap:4px;margin:6px 0 4px}
+ body[data-park="movie-park-germany"] #rides .parkRideSpecs span{
+  min-height:22px;padding:4px 6px;font-size:9px;
+ }
+ body[data-park="movie-park-germany"] #rideSheet #rideExtraFacts{padding:10px}
+ body[data-park="movie-park-germany"] #rideSheet .rideFactGrid{gap:7px}
+ body[data-park="movie-park-germany"] #rideSheet .rideFactCard{padding:10px}
+ body[data-park="movie-park-germany"] #rideSheet .rideFactCard b{font-size:12px}
+}
+@media(max-width:340px){
+ body[data-park="movie-park-germany"] #rideSheet .rideFactGrid{
+  grid-template-columns:1fr;
+ }
+}
