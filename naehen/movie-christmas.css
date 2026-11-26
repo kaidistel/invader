@@ -1,0 +1,554 @@
+/* NÄHEN · Movie Park's Hollywood Christmas 2026/27
+   Scoped seasonal art direction: American holiday film set, glowing marquee gold,
+   burgundy velvet, snow-blue neon and readable modern UI.  No effects elsewhere. */
+:root{--mpc-hero-photo:url("https://www.movieparkgermany.de/content/dam/mpg/images/christmas-images/start/HERO%20MPG%20%284%29.jpg");--mpc-parade-photo:url("https://www.movieparkgermany.de/content/movie/de/plane-deinen-besuch/veranstaltungen/_jcr_content/responsiveGrid/cc32_distributivecar/1_card/image.coreimg.jpeg/1774256585449/mphc-banner--3-.jpeg");--mpc-finale-photo:url("https://www.movieparkgermany.de/content/movie/en/christmas/_jcr_content/responsiveGrid/cc18_columns_copy_co/col_1/cc05_carrusel_copy/ca12-3/image.coreimg.jpeg/1733828632441/bilder-christmas-preview.jpeg");}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"]{
+ --accent:#f8cf87;--accent2:#a5e5e9;--line:#e4b97668;
+ --text:#fff3e1;--muted:#c9d5d9;--panel:#172634;--panel2:#24303b;
+ --mpc-font:"Limelight","Berkshire Swash",Georgia,serif;
+ --mpc-ui:"Inter",system-ui,sans-serif;
+ --mpc-cream:#ffedcd;--mpc-gold:#f9d79b;--mpc-green:#a4d8c6;--mpc-blue:#b8e4ee;--mpc-red:#b94555;
+ color-scheme:dark;background:#0b1524;color:var(--text);font-family:var(--mpc-ui);
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] :is(button,input,textarea,select){font-family:var(--mpc-ui)}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] .parkAtmosphere{
+ background:
+   radial-gradient(ellipse at 86% 4%,#7db9d234,transparent 37%),
+   radial-gradient(ellipse at 5% 23%,#ae37412c,transparent 43%),
+   linear-gradient(180deg,#0e1321d4,#0b1725ea 40%,#0b1524 82%),
+   var(--mpc-hero-photo) center 14%/cover no-repeat,#0b1524;
+ filter:none;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] .app{max-width:1180px}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] :is(.topbar,.nav){
+ border:1px solid #dcb88675;background:linear-gradient(115deg,#231927ee,#152b3bf4);
+ box-shadow:inset 0 1px #fff2,0 13px 28px #0007;
+ backdrop-filter:blur(16px);
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] .topbar{
+ margin-bottom:18px;border-radius:17px;padding:13px clamp(13px,3vw,24px);
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] :is(.brand,.brand b,.brandDot){color:#ffdc9b;text-shadow:0 0 24px #dca15852}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] .topbar .mini{color:#d5e0dc}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] :is(.avatar,.parkSwitch){
+ background:#162a3bcf;border:1px solid #dec08a94;border-radius:12px;color:#ffe9c9;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] .nav{border-radius:18px;padding:6px}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] .nav button{color:#c8dfe4;border-radius:12px}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] .nav button.active{
+ color:#192334;background:linear-gradient(110deg,#f9dfaa,#ecac70);
+ box-shadow:0 5px 16px #a95a384a;
+}
+/* Main billboard: atmosphere is the hero, not another explanatory panel. */
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero{
+ display:flex;flex-direction:column;justify-content:space-between;
+ position:relative;isolation:isolate;overflow:hidden;
+ min-height:clamp(470px,57vw,645px);gap:22px;margin-bottom:27px;
+ padding:clamp(22px,4.2vw,48px);
+ border:1px solid #f1cb8ca8;border-radius:25px;
+ background:
+   linear-gradient(92deg,#101726f1 0%,#1d1b2abc 38%,#17213442 78%),
+   linear-gradient(0deg,#0b1527f1 0%,transparent 66%),
+   var(--mpc-hero-photo) 56% 40%/cover no-repeat,
+   var(--mpc-parade-photo) center/cover no-repeat,#161c2f;
+ box-shadow:0 26px 62px #000a,0 0 0 5px #c7974432;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero:before{
+ content:"";pointer-events:none;position:absolute;inset:10px;width:auto;height:auto;
+ border:1px solid #fce1ac5c;border-radius:17px;
+ background:linear-gradient(135deg,#d9a14d1a,transparent 45%,#88c3cd15);
+ z-index:0;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero:after{
+ content:"✦  HOLLYWOOD CHRISTMAS  ·  2026/27";
+ position:absolute;z-index:2;right:clamp(20px,4vw,47px);top:clamp(21px,4vw,45px);
+ bottom:auto;left:auto;width:auto;height:auto;transform:none;
+ padding:10px 14px;border:1px solid #f3c990c0;border-radius:999px;
+ background:#12253acb;color:#ffddac;
+ font:750 10px/1.35 var(--mpc-ui);letter-spacing:1.1px;
+ box-shadow:0 7px 21px #0008;pointer-events:none;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero .heroIndex{
+ position:relative;z-index:1;max-width:55%;margin:0;
+ color:#f8dab4;font:800 10px/1.5 var(--mpc-ui);letter-spacing:1.6px;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero .heroLine{
+ position:relative;z-index:1;flex:1;
+ display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:21px;margin:0;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero .heroLine>div{max-width:640px}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero .eyebrow{
+ color:#e4e6d9;font:750 12px/1.4 var(--mpc-ui);letter-spacing:2px;text-transform:uppercase;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero h1{
+ max-width:790px;margin:12px 0 0;
+ color:#fff1d2;
+ font:500 clamp(38px,5.9vw,76px)/1.07 var(--mpc-font)!important;
+ letter-spacing:-1.6px;text-shadow:0 5px 19px #000c,0 0 30px #f4b77a38;
+ text-wrap:balance;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #parkDayBtn{
+ min-width:181px;min-height:51px;border-radius:12px;
+ background:linear-gradient(110deg,#ffdfa5,#eeac74);
+ border:1px solid #ffe6b5;color:#18283a;
+ font:800 12px/1.3 var(--mpc-ui);
+ box-shadow:0 10px 21px #0008;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #parkDayBtn.secondary{
+ background:#1b3245dc;color:#ffe0b0;border-color:#ffc78e;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero .stats{
+ position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+ max-width:610px;width:100%;margin:0;gap:9px;padding:0;
+ background:transparent;border:0;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero .stat{
+ min-width:0;padding:16px;border:1px solid #f5ca9579;border-radius:12px;
+ background:#0d2235d9;box-shadow:inset 0 1px #fff2;
+ backdrop-filter:blur(9px);
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero .stat strong{
+ font:800 clamp(24px,3vw,35px)/1.1 var(--mpc-ui);color:#ffe0ae;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero .stat span{
+ font:650 10px/1.5 var(--mpc-ui);color:#d0e7e8;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero .stat.winterShowStat[hidden]{display:none!important}
+/* The cinematic program: official show links, no fabricated schedule. */
+.movieChristmasSection[hidden]{display:none!important}
+.movieChristmasSection{
+ position:relative;isolation:isolate;margin:0 0 31px;
+ padding:clamp(17px,2.7vw,31px);
+ overflow:hidden;border:1px solid #e0b47f88;border-radius:23px;
+ background:
+   radial-gradient(circle at 100% 0%,#b77a4832,transparent 39%),
+   radial-gradient(circle at 4% 98%,#27849b24,transparent 43%),
+   linear-gradient(155deg,#1d1b2a,#111d30 71%);
+ box-shadow:0 18px 49px #0007;
+}
+.movieChristmasSection:before{
+ content:"";position:absolute;inset:9px;border:1px solid #ffe2a526;
+ border-radius:17px;pointer-events:none;
+}
+.mpcSectionIntro{
+ position:relative;display:flex;align-items:center;justify-content:space-between;gap:22px;
+ margin:0 0 24px;padding:2px 6px 21px;border-bottom:1px solid #deb88667;
+}
+.mpcIntroCopy{min-width:0;max-width:760px}
+.mpcOverline{
+ display:block;color:#a8dadd;font:750 10px/1.5 Inter,system-ui,sans-serif;
+ letter-spacing:2.1px;margin-bottom:11px;
+}
+.mpcSectionIntro h2{
+ font:500 clamp(30px,4.5vw,53px)/1.13 "Limelight",Georgia,serif;
+ letter-spacing:-1.15px;color:#ffeccc;margin:0 0 13px;text-wrap:balance;
+ text-shadow:0 3px 15px #0009;
+}
+.mpcSectionIntro h2 em{font-family:"Berkshire Swash",Georgia,serif;color:#f6cb90;font-weight:400}
+.mpcSectionIntro p{max-width:590px;margin:0;color:#ccdedf;font:500 14px/1.65 Inter,system-ui,sans-serif}
+.mpcIntroMeta{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.mpcIntroMeta span{
+ color:#f3dcc0;border:1px solid #e6bf8c73;padding:7px 10px;border-radius:9px;
+ background:#132b3ddd;font:750 10px/1.4 Inter,system-ui,sans-serif;letter-spacing:.3px;
+}
+.mpcIntroStamp{
+ flex:0 0 auto;min-width:170px;height:163px;display:flex;align-items:center;justify-content:center;flex-direction:column;
+ gap:3px;padding:14px;border:2px double #f2c88da2;border-radius:10px;
+ background:linear-gradient(155deg,#512630,#19283b);
+ color:#f8dcad;box-shadow:0 0 0 6px #b38b4e23,0 12px 20px #0007;
+ transform:rotate(5deg);text-align:center;
+}
+.mpcIntroStamp>span:first-child{font:800 13px Inter,sans-serif;letter-spacing:7px}
+.mpcIntroStamp strong{font:500 18px/1.2 "Limelight",serif}
+.mpcIntroStamp small{font:500 24px/1 "Berkshire Swash",Georgia,serif}
+.mpcIntroStamp>span:last-child{font:700 10px Inter,sans-serif;letter-spacing:2.4px;margin-top:8px}
+.mpcFeatures{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+.mpcFeature{
+ position:relative;isolation:isolate;min-width:0;min-height:298px;
+ display:flex;flex-direction:column;justify-content:space-between;
+ overflow:hidden;padding:15px 15px 19px;
+ border:1px solid #e6b98393;border-radius:15px;
+ background:#172a38;color:#ffecd5;text-decoration:none;
+ box-shadow:0 12px 30px #0007;
+ transition:transform .23s ease,border-color .23s ease,box-shadow .23s ease;
+}
+.mpcFeature img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:-2;opacity:.95}
+.mpcFeature:after{
+ content:"";position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(180deg,#0a1e2bb8 0%,#0d21302b 35%,#0b1c2fe9 81%,#0c192cf9 100%);
+}
+.mpcFeature:nth-child(2){border-color:#e4b884b2}
+.mpcFeature:nth-child(3){border-color:#9dd6e893}
+.mpcFeatureNumber{font:750 10px/1.4 Inter,system-ui,sans-serif;letter-spacing:1.2px;color:#fff4d9;text-shadow:0 2px 8px #000}
+.mpcFeatureBody{display:grid;gap:9px;position:relative;z-index:1}
+.mpcFeatureBody small{font:750 9px/1.3 Inter,system-ui,sans-serif;letter-spacing:1px;color:#aee8e7}
+.mpcFeatureBody strong{
+ font:600 clamp(17px,2vw,25px)/1.15 "Limelight",Georgia,serif;
+ color:#fff0d4;text-shadow:0 3px 12px #000d;text-wrap:balance;
+}
+.mpcFeatureBody>span{font:500 11px/1.55 Inter,system-ui,sans-serif;color:#d6e0df}
+.mpcFeatureArrow{
+ display:grid;place-items:center;position:absolute;top:11px;right:11px;
+ width:32px;height:32px;border:1px solid #ebcd9b80;border-radius:50%;
+ background:#102436c4;color:#ffdbac;font:700 19px/1 Inter,system-ui,sans-serif;
+}
+.mpcFeature:hover{transform:translateY(-4px);border-color:#ffe0ae;box-shadow:0 16px 31px #0009,0 0 18px #ffcb8230}
+.mpcFootnote{
+ position:relative;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:15px;
+ margin-top:17px;padding:12px 6px 0;border-top:1px solid #d5af7854;
+}
+.mpcFootnote>span{font:650 11px/1.6 Inter,system-ui,sans-serif;color:#d7e2e0;flex:1;min-width:230px}
+.mpcFootnote>div{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.mpcFootnote a{
+ display:inline-flex;align-items:center;min-height:37px;
+ padding:9px 13px;border:1px solid #ecc68b82;border-radius:9px;
+ background:#172e3e;color:#ffe0b7;text-decoration:none;
+ font:750 10px/1.3 Inter,system-ui,sans-serif;
+}
+.mpcFootnote a:hover{background:#324153}
+.mpcDisclaimer{margin:12px 6px 0;color:#b9c9d1;font:500 10px/1.55 Inter,system-ui,sans-serif}
+/* Compact lists and unimpeded queue interaction. */
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.sectionHead{
+ border-bottom:1px solid #e1b48176;padding-bottom:14px;margin:27px 2px 16px;gap:12px;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] :is(#homeView>.sectionHead h2,#logView h2,#archiveView h2,#allDaysView h2,#profileView h2,.archiveIntro h2,#queueSheet h2){
+ color:#ffedce;font:500 clamp(25px,3.8vw,40px)/1.2 "Limelight",Georgia,serif!important;
+ text-shadow:0 3px 16px #0009;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.sectionHead span{color:#9fe0e0;font:750 10px/1.4 Inter,system-ui,sans-serif}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] .rideTools{gap:9px;margin:0 0 19px}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] .searchLabel{
+ border:1px solid #e4b98790;border-radius:11px;min-height:51px;background:#15293bcf;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] .searchLabel:focus-within{outline:2px solid #f8d499;outline-offset:2px}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] .searchLabel input{color:#fff3df;font:500 14px var(--mpc-ui)}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] .searchLabel input::placeholder{color:#bed0d6}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] .rideTools>button{
+ border:1px solid #d8b4849a;border-radius:11px;background:#1a2e3c;color:#f6dfbd;
+ font:750 12px var(--mpc-ui);
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] .rideTools>button[aria-pressed=true]{background:#f1cb8c;color:#162636}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:clamp(12px,2vw,19px);
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride{
+ position:relative;isolation:isolate;overflow:hidden;min-width:0;min-height:270px;
+ grid-template-columns:minmax(0,1fr) minmax(74px,93px);
+ padding:19px;border:1px solid #d8bc8a7c;border-radius:19px;background:#172638;
+ box-shadow:0 14px 33px #0009,inset 0 1px #fff2;
+ transition:border-color .22s ease,transform .22s ease,box-shadow .22s ease;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride:before{
+ content:"";position:absolute;pointer-events:none;inset:0 0 auto;height:3px;width:100%;
+ background:linear-gradient(90deg,#d84f61,#f6d29a,#a3e6e1);
+ z-index:2;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride:after{
+ background:linear-gradient(90deg,#0b1628eb 0%,#12253cc0 45%,#0e203c40 100%),
+   linear-gradient(0deg,#091628ed 1%,#091628ad 43%,transparent 92%);
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride .rideArt{
+ opacity:1!important;filter:contrast(1.05) saturate(1.09);
+ object-fit:cover;object-position:center 45%;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride:hover{
+ border-color:#ffe1a3;transform:translateY(-3px);box-shadow:0 21px 42px #0009,0 0 24px #efbd7840;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride .rideMain{position:relative;z-index:2;min-width:0;display:flex;flex-direction:column;justify-content:space-between}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride h3{
+ color:#ffecd2!important;
+ font:600 clamp(21px,2.25vw,28px)/1.16 "Limelight",Georgia,serif!important;
+ letter-spacing:-.3px;text-wrap:balance;text-shadow:0 3px 13px #000e;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride .zone{
+ color:#afeced;font:650 10px/1.5 Inter,system-ui,sans-serif!important;letter-spacing:.3px;
+ text-shadow:0 2px 7px #000e;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride .fav{
+ top:12px;right:12px;background:#142b40c7;color:#ffdca2;border:1px solid #f2d0999e;
+ border-radius:12px;backdrop-filter:blur(7px);
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride .fav.on{background:#f3c985;color:#162636}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride .meta{
+ position:relative;z-index:2;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+ font-family:var(--mpc-ui);
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride .meta .btn{
+ min-height:39px!important;padding:8px 11px!important;border-radius:10px!important;
+ font:800 10px/1.2 var(--mpc-ui)!important;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride .btn.secondary{
+ background:linear-gradient(110deg,#f9d79b,#eeb475);
+ border:1px solid #ffe3b4;color:#142838;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride .btn.ghost{
+ color:#f4e3c8;border:1px solid #e6c49691;background:#172f40df;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride .btn:disabled{
+ background:#1d303cbf!important;border-color:#879eaa7a!important;color:#c3d1d2!important;opacity:.9!important;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride .wait{
+ position:relative;z-index:2;align-self:end;min-height:92px;
+ border:1px solid #f2cd9886;border-radius:13px;background:#10273bdc;
+ padding:10px 6px;backdrop-filter:blur(8px);
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride .wait strong{
+ color:#ffe4b2;font:800 clamp(22px,2.9vw,32px)/1 Inter,system-ui,sans-serif;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride .wait small{
+ color:#c3e3e6;font:700 9px/1.4 Inter,system-ui,sans-serif;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride[data-winter-break="true"]{
+ border-color:#7f9ca17c;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride[data-winter-break="true"] .rideArt{
+ filter:grayscale(.45) brightness(.77)!important;opacity:.54!important;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride[data-winter-break="true"] .wait{
+ border-color:#92aab178;background:#193343da;
+}
+.mpcRideBadge{
+ display:inline-flex;align-items:center;border:1px solid #f8cf9b80;
+ border-radius:7px;background:#563047c9;padding:5px 8px;
+ color:#ffe8b7;font:800 9px/1.4 Inter,system-ui,sans-serif!important;
+ letter-spacing:.2px;text-shadow:0 2px 5px #0008;
+}
+.mpcRideBadge--closed{border-color:#99bdc58a;color:#c5e1e6;background:#274254cc}
+/* Movie portals retain their original ride photos and per-world accents.
+   Shared marquee, velvet and ice accents make the season coherent. */
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rideSheet{
+ background:#070e1fda;backdrop-filter:blur(13px);
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rideSheet .sheetCard{
+ position:relative;overflow:auto;
+ min-height:680px;padding-top:clamp(285px,42vw,360px);
+ background:
+   radial-gradient(circle at 92% 10%,#a3d8dc24,transparent 43%),
+   radial-gradient(circle at 0% 60%,#bb43582a,transparent 38%),
+   linear-gradient(150deg,#261c2c,#111d32 74%)!important;
+ border:1px solid #e4b7798c!important;border-top:5px solid var(--mp-accent,#f2d298)!important;
+ border-radius:23px 23px 10px 10px;color:#fff2de!important;
+ box-shadow:0 0 42px #f1b87817,0 28px 80px #000a;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rideSheet .worldArt{
+ position:absolute!important;inset:0 0 auto!important;
+ width:100%!important;height:clamp(350px,48vw,447px)!important;
+ border:0!important;border-radius:18px 18px 0 0!important;clip-path:none!important;
+ overflow:hidden!important;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rideSheet .worldArt img{
+ width:100%!important;height:100%!important;left:0!important;
+ object-fit:cover!important;object-position:center 42%;
+ opacity:1!important;filter:saturate(1.09) contrast(1.07)!important;
+ border:0!important;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rideSheet .worldArt:after{
+ background:linear-gradient(180deg,#080d1912 0%,#101a2918 34%,#131e30c8 82%,#141c2e 100%)!important;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rideSheet .worldArt:before{
+ content:"✦  MOVIE PARK’S HOLLYWOOD CHRISTMAS  ·  2026/27";
+ position:absolute;z-index:3;top:19px;left:19px;
+ max-width:calc(100% - 88px);padding:9px 13px;
+ border-radius:999px;border:1px solid #f3c989b3;background:#15233ada;color:#f9dba7;
+ font:750 9px/1.35 Inter,system-ui,sans-serif;letter-spacing:.7px;
+ pointer-events:none;box-shadow:0 7px 19px #0007;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rideSheet .worldOrnament{
+ border:1px solid #ffd1a34b!important;border-radius:12px!important;
+ clip-path:none!important;box-shadow:none!important;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rideSheet .close{
+ z-index:5;top:13px;right:13px;background:#1b3146e6!important;
+ border:1px solid #efcd948e!important;border-radius:12px!important;color:#fff0d7!important;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rideSheet #rideTitle{
+ width:100%!important;max-width:100%;
+ margin:10px 0 20px!important;padding:11px 15px!important;
+ color:#ffedcb!important;-webkit-text-fill-color:#ffedcb!important;
+ background:linear-gradient(90deg,#63304388,transparent 95%)!important;
+ border:0!important;border-left:4px solid var(--mp-accent,#f2d298)!important;
+ border-radius:0 10px 10px 0!important;
+ font:550 clamp(27px,4.4vw,48px)/1.13 "Limelight",Georgia,serif!important;
+ text-transform:none!important;letter-spacing:-.6px!important;
+ text-align:left!important;transform:none!important;clip-path:none!important;
+ text-shadow:0 3px 15px #000d!important;box-shadow:none!important;
+ overflow-wrap:anywhere;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rideSheet :is(#rideZone,#worldCaption,.waitCaption){
+ color:#b8e4e7!important;
+ font:750 11px/1.55 Inter,system-ui,sans-serif!important;
+ letter-spacing:.5px;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rideSheet .rideDetailWait{
+ color:#ffddad!important;background:#152e40d6!important;
+ border:1px solid #e8c38b80!important;border-radius:13px!important;
+ padding:14px!important;font:800 clamp(30px,4.8vw,45px)/1.16 Inter,system-ui,sans-serif!important;
+ float:none!important;width:auto!important;height:auto!important;display:block!important;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rideSheet :is(#rideDetailStatus,.srBox,.message,#rideExtraFacts){
+ border:1px solid #c9ab7f70!important;border-radius:12px!important;
+ background:#14283acd!important;color:#f4e8d7!important;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rideSheet #rideQueueBtn{
+ border-radius:12px!important;
+ background:linear-gradient(110deg,#f5daa4,#e8ae76)!important;
+ border:1px solid #f6e2b9!important;color:#17283c!important;
+ font:800 12px/1.2 Inter,system-ui,sans-serif!important;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rideSheet #rideQueueBtn:disabled{
+ background:#405564c9!important;border-color:#abbec486!important;color:#e3e7e3!important;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] :is(#queueSheet,#archiveDetailSheet,#recapSheet){background:#060d1fd9;backdrop-filter:blur(10px)}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] :is(#queueSheet,#archiveDetailSheet,#recapSheet) .sheetCard{
+ background:radial-gradient(circle at 92% 0%,#e0ad5920,transparent 40%),linear-gradient(152deg,#271e31,#13263b 80%)!important;
+ border:1px solid #dbb78783!important;border-top:4px solid #f4ca8e!important;border-radius:20px 20px 10px 10px;
+ color:#fff0de!important;
+}
+/* Logs and archives: readable movie Christmas photo treatments. */
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] :is(#logView>.sectionHead,#archiveView>.archiveIntro){
+ background:
+   linear-gradient(95deg,#0e1a2dec 0%,#142438bf 64%,#1b2a3c6b),
+   var(--mpc-parade-photo) center 44%/cover no-repeat,#152a3a!important;
+ border-color:#e3bc877b!important;border-radius:17px;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] :is(#log .logItem,#parkArchiveList .archiveDayCard,#allDaysList .archiveDayCard){
+ border-color:#d4b68a76!important;border-radius:17px;
+}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] :is(#log .logItem,#parkArchiveList .archiveDayCard,#allDaysList .archiveDayCard):before{
+ background:linear-gradient(90deg,#081829f5,#0b2238cb 59%,#10334658);
+}
+#parkArchiveList .archiveDayCard[data-protocol-season="hollywood-christmas"],
+#allDaysList .archiveDayCard[data-protocol-season="hollywood-christmas"],
+#log .logItem[data-protocol-season="hollywood-christmas"]{
+ background:#152a42;border-color:#e0bb857f;
+}
+#parkArchiveList .archiveDayCard[data-protocol-season="hollywood-christmas"]:before,
+#allDaysList .archiveDayCard[data-protocol-season="hollywood-christmas"]:before{
+ background:linear-gradient(91deg,#0c182bf5,#102c45d1 58%,#25364a54),
+ linear-gradient(0deg,#121829e8,transparent 84%);
+}
+.parkChoice[data-park="movie-park-germany"][data-season="hollywood-christmas"]{
+ border:1px solid #edc38ca1;border-radius:20px;background:#17243a;
+ box-shadow:0 15px 40px #0009,0 0 0 3px #f5c98819;
+}
+.parkChoice[data-park="movie-park-germany"][data-season="hollywood-christmas"] .parkChoiceArt{
+ object-position:center 40%;opacity:1;filter:saturate(1.08) contrast(1.07);
+}
+.parkChoice[data-park="movie-park-germany"][data-season="hollywood-christmas"]:before{
+ background:linear-gradient(90deg,#0b172adf 0%,#13263cc4 48%,#11283b35 100%),linear-gradient(0deg,#081323d9,transparent);
+}
+.parkChoice[data-park="movie-park-germany"][data-season="hollywood-christmas"]:after{
+ content:"✦  HOLLYWOOD CHRISTMAS";
+ position:absolute;z-index:4;right:15px;top:15px;bottom:auto;left:auto;
+ width:auto;height:auto;transform:none;pointer-events:none;
+ padding:9px 12px;border:1px solid #f6cc90b0;border-radius:999px;
+ background:#162a41dc;color:#ffe1b5;font:750 9px/1.4 Inter,system-ui,sans-serif;
+ letter-spacing:.5px;
+}
+.parkChoice[data-park="movie-park-germany"][data-season="hollywood-christmas"] h2{
+ font:500 clamp(29px,3.8vw,43px)/1.12 "Limelight",Georgia,serif!important;
+ color:#ffedce;text-shadow:0 3px 14px #000d;
+}
+.parkChoice[data-park="movie-park-germany"][data-season="hollywood-christmas"] :is(.parkChoiceMeta,.parkChoiceOpen){color:#f3d09d;font-family:Inter,system-ui,sans-serif!important}
+body[data-park="movie-park-germany"][data-season="hollywood-christmas"] :is(button,a,input):focus-visible,
+.parkChoice[data-park="movie-park-germany"][data-season="hollywood-christmas"]:focus-visible{
+ outline:3px solid #f8ce92;outline-offset:3px;
+}
+@media(max-width:980px){
+ .mpcFeatures{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .mpcFeature{min-height:257px}
+}
+@media(max-width:700px){
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides{grid-template-columns:1fr}
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero{
+  min-height:550px;background-position:center,center,57% 43%,center;
+ }
+ .mpcIntroStamp{min-width:130px;height:135px}
+ .mpcIntroStamp strong{font-size:14px}
+ .mpcIntroStamp small{font-size:18px}
+}
+@media(max-width:530px){
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] .topbar{padding:10px 12px}
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero{
+  padding:21px 17px 19px;min-height:540px;border-radius:18px;
+  background:
+    linear-gradient(0deg,#0b1727f8 0%,#122036d6 51%,#13203b37 89%),
+    var(--mpc-hero-photo) 58% 30%/cover no-repeat,
+    var(--mpc-parade-photo) 56% 34%/cover no-repeat,#142239;
+ }
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero:before{inset:7px;border-radius:12px}
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero:after{
+  right:14px;top:18px;font-size:8px;letter-spacing:.35px;padding:7px 9px;max-width:58%;
+ }
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero .heroIndex{
+  max-width:43%;font-size:9px;letter-spacing:.4px;
+ }
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero .heroLine{
+  justify-content:flex-end;align-items:stretch;gap:15px;
+ }
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero h1{
+  font-size:clamp(30px,8vw,45px)!important;letter-spacing:-1px!important;
+ }
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero .eyebrow{font-size:10px;letter-spacing:1px}
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #parkDayBtn{width:100%;min-width:0}
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero .stats{gap:5px}
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero .stat{padding:11px 7px;border-radius:9px}
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero .stat strong{font-size:clamp(17px,5vw,24px)}
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero .stat span{font-size:9px}
+ .movieChristmasSection{padding:17px 12px;border-radius:17px}
+ .mpcSectionIntro{gap:9px;margin-bottom:15px}
+ .mpcIntroStamp{display:none}
+ .mpcSectionIntro h2{font-size:clamp(27px,7vw,38px)}
+ .mpcOverline{font-size:9px;letter-spacing:1px}
+ .mpcIntroMeta span{font-size:9px}
+ .mpcFeatures{grid-template-columns:1fr;gap:10px}
+ .mpcFeature{min-height:200px;padding:13px 14px}
+ .mpcFeatureBody strong{font-size:clamp(18px,5.6vw,25px)}
+ .mpcFootnote{gap:9px}
+ .mpcFootnote>div{width:100%}
+ .mpcFootnote a{flex:1;justify-content:center}
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride{
+  min-height:245px;padding:15px 13px;
+  grid-template-columns:minmax(0,1fr) minmax(66px,80px);
+ }
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride h3{
+  font-size:clamp(18px,5.4vw,24px)!important;
+ }
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride .meta .btn{
+  padding:8px 9px!important;min-height:37px!important;
+ }
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride .wait{
+  min-height:80px;padding:8px 3px;
+ }
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rideSheet .sheetCard{
+  padding-top:310px; border-radius:18px 18px 10px 10px;
+ }
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rideSheet .worldArt{
+  height:388px!important;
+ }
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rideSheet #rideTitle{
+  font-size:clamp(26px,7.1vw,39px)!important;
+ }
+}
+@media(max-width:340px){
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #homeView>.hero:after{font-size:7px;padding:5px 7px}
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride{grid-template-columns:minmax(0,1fr) 63px}
+}
+@media(prefers-reduced-motion:no-preference){
+ .movieChristmasSection{animation:mpc-appear .6s cubic-bezier(.15,1,.25,1) both}
+ .mpcFeature{animation:mpc-appear .5s both}
+ .mpcFeature:nth-child(2){animation-delay:.06s}
+ .mpcFeature:nth-child(3){animation-delay:.12s}
+ .mpcFeature:nth-child(4){animation-delay:.18s}
+ @keyframes mpc-appear{
+  from{opacity:.55;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ .mpcFeature,.movieChristmasSection,
+ body[data-park="movie-park-germany"][data-season="hollywood-christmas"] #rides .ride{
+  animation:none!important;transition:none!important;
+ }
+}
