@@ -148,6 +148,11 @@ jobs:
         with:
           path: '.'
 
+      # GitHub's artifact metadata API can lag behind a successful upload.
+      # Deploying immediately caused transient "No artifacts named github-pages" failures.
+      - name: Allow GitHub Pages artifact metadata to become available
+        run: sleep 20
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
