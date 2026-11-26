@@ -113,7 +113,7 @@ assert.ok(snowCss.includes('body[data-park="movie-park-germany"][data-season="ho
  snowCss.includes("prefers-reduced-motion:reduce") &&
  snowCss.includes('body[data-park="phantasialand"][data-season="wintertraum"]'),
  "Snow CSS must style both winter parks without leaking to other parks");
-assert.ok(sw.includes("naehen-v191") &&
+assert.ok(sw.includes("naehen-v192") &&
  html.includes('wintertraum-snow.js?v=191') &&
  html.includes('wintertraum-snow.css?v=191') &&
  html.includes('movie-christmas.css?v=191'),
